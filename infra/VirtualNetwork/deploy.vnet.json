@@ -1,0 +1,83 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "vnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the vnet that gets created."
+            }
+        },
+        "peeredVirtualNetworkId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the id of the network that should be peered."
+            }
+        }
+    },
+    "variables": {
+        "location": "[parameters('location')]",
+        "vnetName": "[parameters('vnetName')]",
+        "peeredVirtualNetworkId": "[parameters('peeredVirtualNetworkId')]"
+    },
+    "resources": [
+        {
+            "name": "[variables('vnetName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-05-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.1.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "datanode-storage-subnet",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/27",
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Disabled"
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [
+                    {
+                        "name": "datahub-vnet",
+                        "id": "[variables('peeredVirtualNetworkId')]",
+                        "properties": {
+                            "allowForwardedTraffic": true,
+                            "allowGatewayTransit": true,
+                            "allowVirtualNetworkAccess": true,
+                            "peeringState": "Connected",
+                            "remoteVirtualNetwork": {
+                                "id": "[variables('peeredVirtualNetworkId')]"
+                            },
+                            "useRemoteGateways": true
+                        }
+                    }
+                ]
+            }
+        }
+        // {
+        //     "name": "datanode-storage-nsg",
+        //     "type": "Microsoft.Network/networkSecurityGroups",
+        //     "apiVersion": "2019-11-01",
+        //     "location": "[variables('location')]",
+        //     "properties": {
+        //         "securityRules": [
+        //         ]
+        //     }
+        // }
+    ]
+}
