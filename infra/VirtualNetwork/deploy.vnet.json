@@ -40,34 +40,43 @@
                     "addressPrefixes": [
                         "10.1.0.0/16"
                     ]
+                }
+            },
+            "resources": [
+                {
+                    "type": "subnets",
+                    "apiVersion": "2020-05-01",
+                    "name": "datanode-storage-subnet",
+                    "location": "[variables('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+                    ],
+                    "properties": {
+                        "addressPrefix": "10.1.0.0/27",
+                        "privateEndpointNetworkPolicies": "Disabled",
+                        "privateLinkServiceNetworkPolicies": "Disabled"
+                    }
                 },
-                "subnets": [
-                    {
-                        "name": "datanode-storage-subnet",
-                        "properties": {
-                            "addressPrefix": "10.1.0.0/27",
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Disabled"
-                        }
+                {
+                    "type": "virtualNetworkPeerings",
+                    "apiVersion": "2020-05-01",
+                    "name": "datahub-peering",
+                    "location": "[variables('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+                    ],
+                    "properties": {
+                        "allowForwardedTraffic": true,
+                        "allowGatewayTransit": true,
+                        "allowVirtualNetworkAccess": true,
+                        "peeringState": "Connected",
+                        "remoteVirtualNetwork": {
+                            "id": "[variables('peeredVirtualNetworkId')]"
+                        },
+                        "useRemoteGateways": true
                     }
-                ],
-                "virtualNetworkPeerings": [
-                    {
-                        "name": "datahub-vnet",
-                        "id": "[variables('peeredVirtualNetworkId')]",
-                        "properties": {
-                            "allowForwardedTraffic": true,
-                            "allowGatewayTransit": true,
-                            "allowVirtualNetworkAccess": true,
-                            "peeringState": "Connected",
-                            "remoteVirtualNetwork": {
-                                "id": "[variables('peeredVirtualNetworkId')]"
-                            },
-                            "useRemoteGateways": true
-                        }
-                    }
-                ]
-            }
+                }
+            ]
         }
         // {
         //     "name": "datanode-storage-nsg",
