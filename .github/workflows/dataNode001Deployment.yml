@@ -88,8 +88,8 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
             --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
     
-    # Deploy storage account - prod
-    - name: Deploy storage account - prod
+    # Log out from Azure
+    - name: Log out from Azure
       uses: azure/CLI@v1
       with:
         azcliversion: latest
