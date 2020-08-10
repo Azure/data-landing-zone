@@ -43,3 +43,11 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
             --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
+    
+    # Deploy storage account - prod
+    - name: Deploy storage account - prod
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
