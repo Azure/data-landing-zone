@@ -73,7 +73,7 @@
                         "remoteVirtualNetwork": {
                             "id": "[variables('peeredVirtualNetworkId')]"
                         },
-                        "useRemoteGateways": true
+                        "useRemoteGateways": false
                     }
                 }
             ]
