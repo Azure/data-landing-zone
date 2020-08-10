@@ -48,29 +48,9 @@
                 },
                 "subnets": [
                     {
-                        "type": "subnets",
-                        "apiVersion": "2020-05-01",
-                        "name": "datanode-storage-subnet",
-                        "location": "[variables('location')]",
-                        "dependsOn": [
-                            "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
-                        ],
+                        "name": "datanode-subnet",
                         "properties": {
                             "addressPrefix": "10.1.0.0/27",
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Disabled"
-                        }
-                    },
-                    {
-                        "type": "subnets",
-                        "apiVersion": "2020-05-01",
-                        "name": "dataproduct001-subnet",
-                        "location": "[variables('location')]",
-                        "dependsOn": [
-                            "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
-                        ],
-                        "properties": {
-                            "addressPrefix": "10.1.1.0/27",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
@@ -79,15 +59,28 @@
                         }
                     },
                     {
-                        "type": "subnets",
-                        "apiVersion": "2020-05-01",
-                        "name": "dataproduct001-private-subnet",
-                        "location": "[variables('location')]",
-                        "dependsOn": [
-                            "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
-                        ],
+                        "name": "datanode-private-subnet",
+                        "properties": {
+                            "addressPrefix": "10.1.1.0/27",
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Disabled"
+                        }
+                    },
+                    {
+                        "name": "dataproduct001-subnet",
                         "properties": {
                             "addressPrefix": "10.1.2.0/27",
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'datanode-nsg')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "dataproduct001-private-subnet",
+                        "properties": {
+                            "addressPrefix": "10.1.3.0/27",
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled"
                         }
