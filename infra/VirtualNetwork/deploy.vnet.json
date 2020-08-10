@@ -14,18 +14,12 @@
             "metadata": {
                 "description": "Specifies the name of the vnet that gets created."
             }
-        },
-        "peeredVirtualNetworkId": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the id of the network that should be peered."
-            }
         }
     },
+    "functions": [],
     "variables": {
         "location": "[parameters('location')]",
-        "vnetName": "[parameters('vnetName')]",
-        "peeredVirtualNetworkId": "[parameters('peeredVirtualNetworkId')]"
+        "vnetName": "[parameters('vnetName')]"
     },
     "resources": [
         {
@@ -55,25 +49,6 @@
                         "addressPrefix": "10.1.0.0/27",
                         "privateEndpointNetworkPolicies": "Disabled",
                         "privateLinkServiceNetworkPolicies": "Disabled"
-                    }
-                },
-                {
-                    "type": "virtualNetworkPeerings",
-                    "apiVersion": "2020-05-01",
-                    "name": "datahub-peering",
-                    "location": "[variables('location')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
-                    ],
-                    "properties": {
-                        "allowForwardedTraffic": true,
-                        "allowGatewayTransit": true,
-                        "allowVirtualNetworkAccess": true,
-                        "peeringState": "Connected",
-                        "remoteVirtualNetwork": {
-                            "id": "[variables('peeredVirtualNetworkId')]"
-                        },
-                        "useRemoteGateways": false
                     }
                 }
             ]

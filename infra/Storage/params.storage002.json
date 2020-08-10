@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "storageAccountName": {
-            "value": "datanode001test"
+            "value": "datanode001curated"
         },
         "storageAccountType": {
             "value": "Standard_ZRS"

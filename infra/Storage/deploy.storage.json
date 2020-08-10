@@ -45,6 +45,7 @@
             }
         }
     },
+    "functions": [],
     "variables": {
         "location": "[parameters('location')]",
         "storageAccountName": "[parameters('storageAccountName')]",

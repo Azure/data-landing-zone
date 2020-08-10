@@ -14,16 +14,11 @@ env:
   AZURE_LOCATION: northeurope
 
 jobs:
-  deployment:
+  create-resource-group:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - name: Check Out Repository
-      id: checkout_repository
-      uses: actions/checkout@v2
-    
     # Login to Azure
     - name: Azure Login
       id: azure_login
@@ -40,6 +35,106 @@ jobs:
           echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP }}"
           az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP }}
     
+    # Log out from Azure
+    - name: Log out from Azure
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
+
+  validation:
+    needs: [ create-resource-group ]
+    runs-on: ubuntu-latest
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+    
+    # Login to Azure
+    - name: Azure Login
+      id: azure_login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # # Deploy key vault - validation
+    # - name: Deploy key vault - validation
+    #   uses: azure/CLI@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
+    
+    # Deploy storage account - raw - validation
+    - name: Deploy storage account - raw - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
+            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
+    
+    # Deploy storage account - curated - validation
+    - name: Deploy storage account - curated - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
+            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage002.json
+    
+    # Deploy storage account - workspace - validation
+    - name: Deploy storage account - workspace - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
+            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage003.json
+    
+    # Log out from Azure
+    - name: Log out from Azure
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
+
+  deployment:
+    needs: [ create-resource-group, validation ]
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+    
+    # Login to Azure
+    - name: Azure Login
+      id: azure_login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
     # # Deploy key vault
     # - name: Deploy key vault
     #   uses: azure/CLI@v1
@@ -52,8 +147,8 @@ jobs:
     #         --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
     #         --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
     
-    # Deploy storage account - dev
-    - name: Deploy storage account - dev
+    # Deploy storage account - raw
+    - name: Deploy storage account - raw
       uses: azure/CLI@v1
       with:
         azcliversion: latest
@@ -64,8 +159,8 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
             --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
     
-    # Deploy storage account - test
-    - name: Deploy storage account - test
+    # Deploy storage account - curated
+    - name: Deploy storage account - curated
       uses: azure/CLI@v1
       with:
         azcliversion: latest
@@ -74,10 +169,10 @@ jobs:
           az deployment group create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
+            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage002.json
     
-    # Deploy storage account - prod
-    - name: Deploy storage account - prod
+    # Deploy storage account - workspace
+    - name: Deploy storage account - workspace
       uses: azure/CLI@v1
       with:
         azcliversion: latest
@@ -86,7 +181,7 @@ jobs:
           az deployment group create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
+            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage003.json
     
     # Log out from Azure
     - name: Log out from Azure
