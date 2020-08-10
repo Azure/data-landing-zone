@@ -69,6 +69,7 @@ jobs:
     #     inlineScript: |
     #       echo "Creating deployment in resource group"
     #       az deployment group validate \
+    #         --mode Incremental \
     #         --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
     #         --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
     #         --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
@@ -81,6 +82,7 @@ jobs:
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group validate \
+            --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
             --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
@@ -93,6 +95,7 @@ jobs:
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group validate \
+            --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
             --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage002.json
@@ -105,6 +108,7 @@ jobs:
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group validate \
+            --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
             --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage003.json
@@ -143,6 +147,7 @@ jobs:
     #     inlineScript: |
     #       echo "Creating deployment in resource group"
     #       az deployment group create \
+    #         --mode Incremental \
     #         --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
     #         --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
     #         --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
@@ -155,6 +160,7 @@ jobs:
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
+            --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
             --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
@@ -167,6 +173,7 @@ jobs:
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
+            --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
             --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage002.json
@@ -179,6 +186,7 @@ jobs:
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
+            --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
             --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage003.json
