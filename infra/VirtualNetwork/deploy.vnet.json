@@ -59,7 +59,7 @@
                         }
                     },
                     {
-                        "name": "datanode-private-subnet",
+                        "name": "datanode-privatelink-subnet",
                         "properties": {
                             "addressPrefix": "10.1.1.0/27",
                             "privateEndpointNetworkPolicies": "Disabled",
@@ -78,7 +78,7 @@
                         }
                     },
                     {
-                        "name": "dataproduct001-private-subnet",
+                        "name": "dataproduct001-privatelink-subnet",
                         "properties": {
                             "addressPrefix": "10.1.3.0/27",
                             "privateEndpointNetworkPolicies": "Disabled",
