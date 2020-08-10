@@ -9,7 +9,7 @@
             "value": "datamesh001-keyvault"
         },
         "subnetResourceId": {
-            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datanode001-network/providers/Microsoft.Network/virtualNetworks/datanode001-vnet/subnets/datanode-keyvault-subnet"
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datanode001-network/providers/Microsoft.Network/virtualNetworks/datanode001-vnet/subnets/datanode-privatelink-subnet"
         },
         "privateDnsZoneResourceGroupId": {
             "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-global-dns"
