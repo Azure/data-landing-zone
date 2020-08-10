@@ -1,4 +1,4 @@
-name: Data Node 001 Deployment
+name: Data Node Deployment
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
       - 'infra/Storage/**'
       - 'infra/KeyVault/**'
       - 'infra/PrivateEndpoint/**'
-      - '.github/workflows/dataNode001Deployment.yml'
+      - '.github/workflows/dataNodeDeployment.yml'
 
 env:
   AZURE_RESOURCE_GROUP: datanode001-storage
