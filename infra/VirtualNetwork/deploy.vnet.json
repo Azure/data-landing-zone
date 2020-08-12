@@ -84,6 +84,25 @@
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled"
                         }
+                    },
+                    {
+                        "name": "dataproduct002-subnet",
+                        "properties": {
+                            "addressPrefix": "10.1.4.0/27",
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'datanode-nsg')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "dataproduct002-privatelink-subnet",
+                        "properties": {
+                            "addressPrefix": "10.1.5.0/27",
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Disabled"
+                        }
                     }
                 ]
             }
