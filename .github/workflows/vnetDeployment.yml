@@ -71,8 +71,8 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
             --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
     
-    # Deploy vnet peering - validation
-    - name: Deploy vnet peering - validation
+    # Deploy vnet peering 001 - validation
+    - name: Deploy vnet peering 001 - validation
       uses: azure/CLI@v1
       with:
         azcliversion: latest
@@ -81,7 +81,7 @@ jobs:
           az deployment group validate \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering.json
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering001.json
     
     # Log out from Azure
     - name: Log out from Azure
@@ -121,8 +121,8 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
             --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
     
-    # Deploy vnet peering
-    - name: Deploy vnet peering
+    # Deploy vnet peering 001
+    - name: Deploy vnet peering 001
       uses: azure/CLI@v1
       with:
         azcliversion: latest
@@ -131,7 +131,7 @@ jobs:
           az deployment group create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering.json
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering001.json
     
     # Log out from Azure
     - name: Log out from Azure
