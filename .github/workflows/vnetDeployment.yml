@@ -9,7 +9,7 @@ on:
       - '.github/workflows/vnetDeployment.yml'
 
 env:
-  AZURE_RESOURCE_GROUP: datanode001-network
+  AZURE_RESOURCE_GROUP: dn001-network
   AZURE_LOCATION: northeurope
 
 jobs:
@@ -27,6 +27,7 @@ jobs:
     
     # Create resource group
     - name: Create resource group
+      id: resource_group_network
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -36,6 +37,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
+      id: azure_logout
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -88,6 +90,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
+      id: azure_logout
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -140,6 +143,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
+      id: azure_logout
       uses: azure/cli@v1
       with:
         azcliversion: latest

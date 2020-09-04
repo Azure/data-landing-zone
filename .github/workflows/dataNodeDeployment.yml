@@ -34,6 +34,7 @@ jobs:
     
     # Create resource group
     - name: Create resource group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}
+      id: resource_group_storage
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -43,6 +44,7 @@ jobs:
     
     # Create resource group
     - name: Create resource group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
+      id: resource_group_management
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -52,6 +54,7 @@ jobs:
     
     # Create resource group
     - name: Create resource group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }}
+      id: resource_group_processing
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -61,6 +64,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
+      id: azure_logout
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -240,6 +244,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
+      id: azure_logout
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -419,6 +424,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
+      id: azure_logout
       uses: azure/cli@v1
       with:
         azcliversion: latest
