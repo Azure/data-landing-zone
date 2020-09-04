@@ -156,22 +156,44 @@
                     }
                 }
             }
+        },
+        {
+            "name": "SecretDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubName'))]"
+            ],
+            "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults/secrets",
+                            "name": "[concat(variables('keyVaultName'), '/eventHubNamespacePrimaryConnectionString')]",
+                            "apiVersion": "2019-09-01",
+                            "properties": {
+                                "contentType": "text/plain",
+                                "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', variables('eventHubName'), 'RootManageSharedAccessKey'), '2017-04-01').primaryConnectionString]",
+                                "attributes": {
+                                    "enabled": true
+                                }
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            },
+            "subscriptionId": "[split(variables('keyVaultId'), '/')[2]]",
+            "resourceGroup": "[split(variables('keyVaultId'), '/')[4]]"
         }
-        // {
-        //     "type": "Microsoft.KeyVault/vaults/secrets",
-        //     "name": "[concat(variables('keyVaultName'), '/eventHubNamespaceKey')]",
-        //     "apiVersion": "2019-09-01",
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubName'))]"
-        //     ],
-        //     "properties": {
-        //         "contentType": "text/plain",
-        //         "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', variables('eventHubName')), '2018-01-01-preview').keys[0].value]",
-        //         "attributes": {
-        //             "enabled": true
-        //         }
-        //     }
-        // }
     ],
     "outputs": {}
 }

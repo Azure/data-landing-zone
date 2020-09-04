@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "eventHubName": {
+            "value": "dataproduct001-eventhub001"
+        },
+        "eventHubSku": {
+            "value": "Standard"
+        },
+        "eventHubMinThroughputUnits": {
+            "value": 1
+        },
+        "eventHubMaxThroughputUnits": {
+            "value": 2
+        },
+        "keyVaultId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dataproduct001/providers/Microsoft.KeyVault/vaults/dataproduct001-kv001"
+        },
+        "subnetResourceId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datanode001-network/providers/Microsoft.Network/virtualNetworks/datanode001-vnet/subnets/dataproduct001-privatelink-subnet"
+        },
+        "privateDnsZoneResourceGroupId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-global-dns"
+        }
+    }
+}

@@ -25,9 +25,6 @@
         },
         "keyVaultId": {
             "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dataproduct001/providers/Microsoft.KeyVault/vaults/dataproduct001-kv001"
-        },
-        "cosmosDbId": {
-            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dataproduct001/providers/Microsoft.DocumentDB/databaseAccounts/dataproduct001-cosmos001"
         }
     }
 }

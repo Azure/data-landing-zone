@@ -23,7 +23,7 @@
         },
         "sqlDatabaseSku": {
             "type": "string",
-            "defaultValue": "GP_S_Gen5_1",
+            "defaultValue": "GP_Gen5",
             "metadata": {
                 "description": "Specifies the SKU of the SQL database which is typically a letter + number code (e.g. 'GP_S_Gen5_1')."
             }
@@ -131,7 +131,7 @@
         {
             "apiVersion": "2019-06-01-preview",
             "type": "Microsoft.Sql/servers/databases",
-            "name": "[concat (variables ('sqlServerName'),'/',variables('sqlDatabaseName'))]",
+            "name": "[concat(variables('sqlServerName'), '/', variables('sqlDatabaseName'))]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "[variables('sqlDatabaseSku')]",
@@ -152,19 +152,41 @@
             }
         },
         {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "name": "[concat(variables('keyVaultName'), '/sqlDatabaseConnectionString')]",
-            "apiVersion": "2019-09-01",
+            "name": "SecretDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServerName'), variables('sqlDatabaseName'))]"
             ],
             "properties": {
-                "contentType": "text/plain",
-                "value": "[concat('Server=tcp:', reference(variables('sqlServerId')).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('sqlDatabaseName'), ';Persist Security Info=False;User ID=', reference(variables('sqlServerId')).administratorLogin, ';Password=', reference(variables('sqlServerId')).administratorLoginPassword, ';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]",
-                "attributes": {
-                    "enabled": true
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults/secrets",
+                            "name": "[concat(variables('keyVaultName'), '/sqlDatabaseConnectionString')]",
+                            "apiVersion": "2019-09-01",
+                            "properties": {
+                                "contentType": "text/plain",
+                                "value": "[concat('Server=tcp:', reference(variables('sqlServerId'), '2019-06-01-preview').fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('sqlDatabaseName'), ';Persist Security Info=False;User ID=', reference(variables('sqlServerId'), '2019-06-01-preview').administratorLogin, ';Password=', reference(variables('sqlServerId'), '2019-06-01-preview').administratorLoginPassword, ';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]",
+                                "attributes": {
+                                    "enabled": true
+                                }
+                            }
+                        }
+                    ],
+                    "outputs": {}
                 }
-            }
+            },
+            "subscriptionId": "[split(variables('keyVaultId'), '/')[2]]",
+            "resourceGroup": "[split(variables('keyVaultId'), '/')[4]]"
         }
     ],
     "outputs": {}

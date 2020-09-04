@@ -3,22 +3,22 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "value": "" // TODO: Fill in parameter value
+            "value": "northeurope"
         },
         "sqlServerId": {
-            "value": "" // TODO: Fill in parameter value
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dataproduct001/providers/Microsoft.Sql/servers/dataproduct001-sqlserver002"
         },
         "sqlDatabaseName": {
-            "value": "" // TODO: Fill in parameter value
+            "value": "AdfMetastoreDB"
         },
         "sqlDatabaseSku": {
-            "value": "GP_S_Gen5_1"
+            "value": "GP_Gen5"
         },
         "sqlDatabaseTier": {
             "value": "GeneralPurpose"
         },
         "sqlDatabaseCapacity": {
-            "value": 0 // TODO: Fill in parameter value
+            "value": 2
         },
         "sqlDatabaseMaxSizeInBytes": {
             "value": 34359738368
@@ -42,7 +42,7 @@
             "value": -1
         },
         "keyVaultId": {
-            "value": "" // TODO: Fill in parameter value
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dataproduct001/providers/Microsoft.KeyVault/vaults/dataproduct001-kv001"
         }
     }
 }

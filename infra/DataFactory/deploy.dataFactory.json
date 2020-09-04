@@ -54,12 +54,6 @@
             "metadata": {
                 "description": "Specifies the resource id of the keyvault that should be linked to the data factory."
             }
-        },
-        "cosmosDbId": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the resource id of the cosmos db that should be linked to the data factory."
-            }
         }
     },
     "functions": [],
@@ -72,9 +66,7 @@
         "dataFactoryGitRootFolder": "[parameters('dataFactoryGitRootFolder')]",
         "dataFactoryGitType": "[parameters('dataFactoryGitType')]",
         "keyVaultId": "[parameters('keyVaultId')]",
-        "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]",
-        "cosmosDbId": "[parameters('cosmosDbId')]",
-        "cosmosDbName": "[last(split(variables('cosmosDbId'), '/'))]"
+        "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]"
     },
     "resources": [
         {
@@ -170,54 +162,6 @@
                         "parameters": {},
                         "typeProperties": {
                             "baseUrl": "[concat('https://', variables('keyVaultName'), '.vault.azure.net/')]"
-                        }
-                    }
-                },
-                {
-                    "condition": "[not(empty(variables('cosmosDbId')))]",
-                    "name": "[concat('default/', replace(variables('cosmosDbName'), '-', ''))]",
-                    "type": "managedVirtualNetworks/managedPrivateEndpoints",
-                    "apiVersion": "2018-06-01",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
-                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
-                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'azureManagedVnetIntegrationRuntime')]"
-                    ],
-                    "properties": {
-                        "privateLinkResourceId": "[variables('cosmosDbId')]",
-                        "groupId": "Sql"
-                    }
-                },
-                {
-                    "condition": "[not(empty(variables('cosmosDbId')))]",
-                    "name": "[replace(variables('cosmosDbName'), '-', '')]",
-                    "type": "linkedservices",
-                    "apiVersion": "2018-06-01",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
-                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
-                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'azureManagedVnetIntegrationRuntime')]",
-                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('cosmosDbName'), '-', ''))]"
-                    ],
-                    "properties": {
-                        "type": "CosmosDb",
-                        "annotations": [],
-                        "additionalProperties": {},
-                        "connectVia": {
-                            "type": "IntegrationRuntimeReference",
-                            "referenceName": "azureManagedVnetIntegrationRuntime"
-                        },
-                        "description": "Key Vault for data product",
-                        "parameters": {},
-                        "typeProperties": {
-                            "connectionString": {
-                                "type": "AzureKeyVaultSecret",
-                                "store": {
-                                    "referenceName": "[replace(variables('cosmosDbName'), '-', '')]",
-                                    "type": "LinkedServiceReference"
-                                },
-                                "secretName": "cosmosConnectionString"
-                            }
                         }
                     }
                 }
