@@ -1,4 +1,4 @@
-name: Virtual Network Deployment
+name: Network Deployment
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
     paths: 
       - 'infra/VirtualNetwork/**'
       - 'infra/VirtualNetworkPeering/**'
-      - '.github/workflows/vnetDeployment.yml'
+      - '.github/workflows/networkDeployment.yml'
 
 env:
   AZURE_RESOURCE_GROUP: dn001-network
