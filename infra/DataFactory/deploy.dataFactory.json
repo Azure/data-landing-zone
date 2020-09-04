@@ -1,0 +1,228 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "dataFactoryName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the data factory."
+            }
+        },
+        "dataFactoryGitAccount": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the account name for the repository connection."
+            }
+        },
+        "dataFactoryGitRepo": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the repo name for the repository connection."
+            }
+        },
+        "dataFactoryGitCollaborationBranch": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the collaboration branch name for the repository connection."
+            }
+        },
+        "dataFactoryGitRootFolder": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the root folder in the branch for the repository connection."
+            }
+        },
+        "dataFactoryGitType": {
+            "type": "string",
+            "allowedValues": [
+                "FactoryGitHubConfiguration",
+                "FactoryVSTSConfiguration"
+            ],
+            "metadata": {
+                "description": "Specifies the type of git connection."
+            }
+        },
+        "keyVaultId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of the keyvault that should be linked to the data factory."
+            }
+        },
+        "cosmosDbId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of the cosmos db that should be linked to the data factory."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[parameters('location')]",
+        "dataFactoryName": "[parameters('dataFactoryName')]",
+        "dataFactoryGitAccount": "[parameters('dataFactoryGitAccount')]",
+        "dataFactoryGitRepo": "[parameters('dataFactoryGitRepo')]",
+        "dataFactoryGitCollaborationBranch": "[parameters('dataFactoryGitCollaborationBranch')]",
+        "dataFactoryGitRootFolder": "[parameters('dataFactoryGitRootFolder')]",
+        "dataFactoryGitType": "[parameters('dataFactoryGitType')]",
+        "keyVaultId": "[parameters('keyVaultId')]",
+        "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]",
+        "cosmosDbId": "[parameters('cosmosDbId')]",
+        "cosmosDbName": "[last(split(variables('cosmosDbId'), '/'))]"
+    },
+    "resources": [
+        {
+            "name": "[variables('dataFactoryName')]",
+            "type": "Microsoft.DataFactory/factories",
+            "apiVersion": "2018-06-01",
+            "location": "[variables('location')]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                // "repoConfiguration": {
+                //     "accountName": "[variables('dataFactoryGitAccount')]",
+                //     "repositoryName": "[variables('dataFactoryGitRepo')]",
+                //     "collaborationBranch": "[variables('dataFactoryGitCollaborationBranch')]",
+                //     "rootFolder": "[variables('dataFactoryGitRootFolder')]",
+                //     "type": "[variables('dataFactoryGitType')]"
+                // },
+                "globalParameters": {
+                }
+            },
+            "resources": [
+                {
+                    "name": "default",
+                    "type": "managedVirtualNetworks",
+                    "apiVersion": "2018-06-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+                    ],
+                    "properties": {}
+                },
+                {
+                    "name": "azureManagedVnetIntegrationRuntime",
+                    "type": "integrationRuntimes",
+                    "apiVersion": "2018-06-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]"
+                    ],
+                    "properties": {
+                        "type": "Managed",
+                        "typeProperties": {
+                            "computeProperties": {
+                                "location": "[variables('location')]",
+                                "dataFlowProperties": {
+                                    "computeType": "General",
+                                    "coreCount": 8,
+                                    "timeToLive": 0
+                                }
+                            }
+                        },
+                        "managedVirtualNetwork": {
+                            "type": "ManagedVirtualNetworkReference",
+                            "referenceName": "default"
+                        }
+                    }
+                },
+                {
+                    "condition": "[not(empty(variables('keyVaultId')))]",
+                    "name": "[concat('default/', replace(variables('keyVaultName'), '-', ''))]",
+                    "type": "managedVirtualNetworks/managedPrivateEndpoints",
+                    "apiVersion": "2018-06-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'azureManagedVnetIntegrationRuntime')]"
+                    ],
+                    "properties": {
+                        "privateLinkResourceId": "[variables('keyVaultId')]",
+                        "groupId": "vault"
+                    }
+                },
+                {
+                    "condition": "[not(empty(variables('keyVaultId')))]",
+                    "name": "[replace(variables('keyVaultName'), '-', '')]",
+                    "type": "linkedservices",
+                    "apiVersion": "2018-06-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'azureManagedVnetIntegrationRuntime')]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('keyVaultName'), '-', ''))]"
+                    ],
+                    "properties": {
+                        "type": "AzureKeyVault",
+                        "annotations": [],
+                        "additionalProperties": {},
+                        "connectVia": {
+                            "type": "IntegrationRuntimeReference",
+                            "referenceName": "azureManagedVnetIntegrationRuntime"
+                        },
+                        "description": "Key Vault for data product",
+                        "parameters": {},
+                        "typeProperties": {
+                            "baseUrl": "[concat('https://', variables('keyVaultName'), '.vault.azure.net/')]"
+                        }
+                    }
+                },
+                {
+                    "condition": "[not(empty(variables('cosmosDbId')))]",
+                    "name": "[concat('default/', replace(variables('cosmosDbName'), '-', ''))]",
+                    "type": "managedVirtualNetworks/managedPrivateEndpoints",
+                    "apiVersion": "2018-06-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'azureManagedVnetIntegrationRuntime')]"
+                    ],
+                    "properties": {
+                        "privateLinkResourceId": "[variables('cosmosDbId')]",
+                        "groupId": "Sql"
+                    }
+                },
+                {
+                    "condition": "[not(empty(variables('cosmosDbId')))]",
+                    "name": "[replace(variables('cosmosDbName'), '-', '')]",
+                    "type": "linkedservices",
+                    "apiVersion": "2018-06-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'azureManagedVnetIntegrationRuntime')]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('cosmosDbName'), '-', ''))]"
+                    ],
+                    "properties": {
+                        "type": "CosmosDb",
+                        "annotations": [],
+                        "additionalProperties": {},
+                        "connectVia": {
+                            "type": "IntegrationRuntimeReference",
+                            "referenceName": "azureManagedVnetIntegrationRuntime"
+                        },
+                        "description": "Key Vault for data product",
+                        "parameters": {},
+                        "typeProperties": {
+                            "connectionString": {
+                                "type": "AzureKeyVaultSecret",
+                                "store": {
+                                    "referenceName": "[replace(variables('cosmosDbName'), '-', '')]",
+                                    "type": "LinkedServiceReference"
+                                },
+                                "secretName": "cosmosConnectionString"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "outputs": {}
+}

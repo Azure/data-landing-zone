@@ -50,7 +50,7 @@
                     {
                         "name": "datanode-subnet",
                         "properties": {
-                            "addressPrefix": "10.1.0.0/27",
+                            "addressPrefix": "10.1.0.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
@@ -61,7 +61,7 @@
                     {
                         "name": "datanode-privatelink-subnet",
                         "properties": {
-                            "addressPrefix": "10.1.1.0/27",
+                            "addressPrefix": "10.1.1.0/24",
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled"
                         }

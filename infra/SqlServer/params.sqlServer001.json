@@ -1,0 +1,40 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "sqlServerName": {
+            "value": "datanode001-sqlserver001"
+        },
+        "administratorLogin": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-mgmt/providers/Microsoft.KeyVault/vaults/datanode001-kv001"
+                },
+                "secretName": "sqlServerAdminUser"
+            }
+        },
+        "administratorLoginPassword": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datanode001/providers/Microsoft.KeyVault/vaults/datanode001-kv001"
+                },
+                "secretName": "sqlServerAdminPassword"
+            }
+        },
+        "sqlAdminGroupName": {
+            "value": ""
+        },
+        "sqlAdminGroupObjectID": {
+            "value": ""
+        },
+        "subnetResourceId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datanode001-network/providers/Microsoft.Network/virtualNetworks/datanode001-vnet/subnets/dataproduct001-privatelink-subnet"
+        },
+        "privateDnsZoneResourceGroupId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-global-dns"
+        }
+    }
+}

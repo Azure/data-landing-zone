@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "sqlServerId": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "sqlDatabaseName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "sqlDatabaseSku": {
+            "value": "GP_S_Gen5_1"
+        },
+        "sqlDatabaseTier": {
+            "value": "GeneralPurpose"
+        },
+        "sqlDatabaseCapacity": {
+            "value": 0 // TODO: Fill in parameter value
+        },
+        "sqlDatabaseMaxSizeInBytes": {
+            "value": 34359738368
+        },
+        "sqlDatabaseZoneRedundant": {
+            "value": false
+        },
+        "sqlDatabaseLicenseType": {
+            "value": "LicenseIncluded"
+        },
+        "sqlDatabaseReadReplicaCount": {
+            "value": 0
+        },
+        "sqlDatabaseMinCapacity": {
+            "value": "0.5"
+        },
+        "sqlDatabaseStorageAccountType": {
+            "value": "GRS"
+        },
+        "sqlDatabaseAutoPauseDelay": {
+            "value": -1
+        },
+        "keyVaultId": {
+            "value": "" // TODO: Fill in parameter value
+        }
+    }
+}

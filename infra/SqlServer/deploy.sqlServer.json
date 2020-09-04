@@ -1,0 +1,140 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "sqlServerName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the SQL server."
+            }
+        },
+        "administratorLogin": {
+            "type": "string",
+            "defaultValue": "sqladminuser",
+            "metadata": {
+                "description": "Specifies the login account name for the SQL server."
+            }
+        },
+        "administratorLoginPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Specifies the password for the SQL server."
+            }
+        },
+       "sqlAdminGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the Azure Active Directory group of the SQL admin group."
+            }
+        },
+        "sqlAdminGroupObjectID": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the Azure Active Directory objectID of the SQL admin group."
+            }
+        },
+        "subnetResourceId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the id of the subnet which the private endpoint uses."
+            }
+        },
+        "privateDnsZoneResourceGroupId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the resource group of the private dns zones."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[parameters('location')]",
+        "administratorLogin": "[parameters('administratorLogin')]",
+        "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+        "sqlServerName": "[parameters('sqlServerName')]",
+        "sqlAdminGroupName": "[parameters('sqlAdminGroupName')]",
+        "sqlAdminGroupObjectID": "[parameters('sqlAdminGroupObjectID')]",
+        "subnetResourceId": "[parameters('subnetResourceId')]",
+        "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
+        "privateDnsZoneResourceGroupName": "[last(split(variables('privateDnsZoneResourceGroupId'), '/'))]",
+        "templateUri": "https://raw.githubusercontent.com/Azure/data-product/main/infra/PrivateEndpoint/deploy.privateEndpoint.json?token=AIHRGTWSSZ32A6NYP3BPRNC7INX34"
+    },
+    "resources": [
+        {
+            "apiVersion": "2019-06-01-preview",
+            "type": "Microsoft.Sql/servers",
+            "location": "[variables('location')]",
+            "name": "[variables('sqlServerName')]",
+            "properties": {
+                "administratorLogin": "[variables('administratorLogin')]",
+                "administratorLoginPassword": "[variables('administratorLoginPassword')]",
+                "version": "12.0",
+                "minimalTlsVersion": "1.2",
+                "publicNetworkAccess": "Disabled"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "resources": [
+                {
+                    "condition": "[and(not(empty(variables('sqlAdminGroupObjectID'))), not(empty(variables('sqlAdminGroupObjectID'))))]",
+                    "type": "administrators",
+                    "apiVersion": "2019-06-01-preview",
+                    "name": "ActiveDirectory",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
+                    ],
+                    "properties": {
+                        "administratorType": "ActiveDirectory",
+                        "login": "[variables('sqlAdminGroupName')]",
+                        "sid": "[variables('sqlAdminGroupObjectID')]",
+                        "tenantId": "[subscription().tenantId]"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SqlServerPrivateEndpointDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templateUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "privateEndpointName": {
+                        "value": "[concat(variables('sqlServerName'), '-private-endpoint')]"
+                    },
+                    "privateEndpointLocation": {
+                        "value": "[variables('location')]"
+                    },
+                    "privateLinkServiceResourceId": {
+                        "value": "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
+                    },
+                    "privateLinkServiceGroupId": {
+                        "value": "sqlServer"
+                    },
+                    "subnetResourceId": {
+                        "value": "[variables('subnetResourceId')]"
+                    },
+                    "privateDnsZoneId": {
+                        "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.database.windows.net')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

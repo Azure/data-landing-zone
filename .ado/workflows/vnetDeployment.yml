@@ -6,13 +6,14 @@ trigger:
       - main
   paths:
     include:
-      - 'infra/VirtualNetwork/**'
-      - '.ado/workflows/vnetDeployment.yml'
+      - infra/VirtualNetwork/*
+      - infra/VirtualNetworkPeering/*
+      - .ado/workflows/vnetDeployment.yml
 
 variables:
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
   AZURE_SUBSCRIPTION_ID: '558bd446-4212-46a2-908c-9ab0a628705e'
-  AZURE_RESOURCE_GROUP_NAME: 'datanode001-network'
+  AZURE_RESOURCE_GROUP_NAME: 'dn001-network'
   AZURE_LOCATION: 'North Europe'
 
 stages:
@@ -68,8 +69,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnetPeering.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnetPeering001.json'
+            csmFile: 'infra/VirtualNetworkPeering/deploy.vnetPeering.json'
+            csmParametersFile: 'infra/VirtualNetworkPeering/params.vnetPeering001.json'
             deploymentMode: 'Validation'
 
   - stage: Deployment
@@ -126,6 +127,6 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnetPeering.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnetPeering001.json'
+            csmFile: 'infra/VirtualNetworkPeering/deploy.vnetPeering.json'
+            csmParametersFile: 'infra/VirtualNetworkPeering/params.vnetPeering001.json'
             deploymentMode: 'Incremental'

@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths: 
       - 'infra/VirtualNetwork/**'
+      - 'infra/VirtualNetworkPeering/**'
       - '.github/workflows/vnetDeployment.yml'
 
 env:
@@ -80,8 +81,8 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group validate \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering001.json
+            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering001.json
     
     # Log out from Azure
     - name: Log out from Azure
@@ -130,8 +131,8 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering001.json
+            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering001.json
     
     # Log out from Azure
     - name: Log out from Azure
