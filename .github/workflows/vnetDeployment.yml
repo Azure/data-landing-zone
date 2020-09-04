@@ -27,7 +27,7 @@ jobs:
     
     # Create resource group
     - name: Create resource group
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -36,7 +36,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -62,7 +62,8 @@ jobs:
     
     # Deploys vnet - validation
     - name: Deploy vnet - validation
-      uses: azure/CLI@v1
+      id: vnet_validation
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -74,7 +75,8 @@ jobs:
     
     # Deploy vnet peering 001 - validation
     - name: Deploy vnet peering 001 - validation
-      uses: azure/CLI@v1
+      id: vnet_peering_validation
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -86,7 +88,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -112,7 +114,8 @@ jobs:
     
     # Deploys vnet
     - name: Deploy vnet
-      uses: azure/CLI@v1
+      id: vnet_deployment
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -124,7 +127,8 @@ jobs:
     
     # Deploy vnet peering 001
     - name: Deploy vnet peering 001
-      uses: azure/CLI@v1
+      id: vnet_peering_deployment
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -136,7 +140,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
