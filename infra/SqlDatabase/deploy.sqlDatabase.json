@@ -100,12 +100,6 @@
             "metadata": {
                 "description": "Specifies the time in minutes after which database is automatically paused (only applies to serverless tier)."
             }
-        },
-        "keyVaultId": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the resource id of the key vault to store the storage access key."
-            }
         }
     },
     "functions": [],
@@ -123,9 +117,7 @@
         "sqlDatabaseMinCapacity": "[parameters('sqlDatabaseMinCapacity')]",
         "sqlDatabaseCapacity": "[parameters('sqlDatabaseCapacity')]",
         "sqlDatabaseStorageAccountType": "[parameters('sqlDatabaseStorageAccountType')]",
-        "sqlDatabaseAutoPauseDelay": "[parameters('sqlDatabaseAutoPauseDelay')]",
-        "keyVaultId": "[parameters('keyVaultId')]",
-        "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]"
+        "sqlDatabaseAutoPauseDelay": "[parameters('sqlDatabaseAutoPauseDelay')]"
     },
     "resources": [
         {
@@ -150,43 +142,6 @@
                 "storageAccountType": "[variables('sqlDatabaseStorageAccountType')]",
                 "minCapacity": "[variables('sqlDatabaseMinCapacity')]"
             }
-        },
-        {
-            "name": "SecretDeployment",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServerName'), variables('sqlDatabaseName'))]"
-            ],
-            "properties": {
-                "expressionEvaluationOptions": {
-                    "scope": "outer"
-                },
-                "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "parameters": {},
-                    "variables": {},
-                    "resources": [
-                        {
-                            "type": "Microsoft.KeyVault/vaults/secrets",
-                            "name": "[concat(variables('keyVaultName'), '/sqlDatabaseConnectionString')]",
-                            "apiVersion": "2019-09-01",
-                            "properties": {
-                                "contentType": "text/plain",
-                                "value": "[concat('Server=tcp:', reference(variables('sqlServerId'), '2019-06-01-preview').fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('sqlDatabaseName'), ';Persist Security Info=False;User ID=', reference(variables('sqlServerId'), '2019-06-01-preview').administratorLogin, ';Password=', reference(variables('sqlServerId'), '2019-06-01-preview').administratorLoginPassword, ';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]",
-                                "attributes": {
-                                    "enabled": true
-                                }
-                            }
-                        }
-                    ],
-                    "outputs": {}
-                }
-            },
-            "subscriptionId": "[split(variables('keyVaultId'), '/')[2]]",
-            "resourceGroup": "[split(variables('keyVaultId'), '/')[4]]"
         }
     ],
     "outputs": {}
