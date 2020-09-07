@@ -284,75 +284,75 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
             --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
     
-    # # Deploy sql server 001
-    # - name: Deploy sql server 001
-    #   id: sql_server_001_deployment
-    #   uses: azure/cli@v1
-    #   with:
-    #     azcliversion: latest
-    #     inlineScript: |
-    #       echo "Creating deployment in resource group"
-    #       az deployment group create \
-    #         --mode Incremental \
-    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-    #         --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
-    #         --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer001.json
+    # Deploy sql server 001
+    - name: Deploy sql server 001
+      id: sql_server_001_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
+            --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer001.json
     
-    # # Deploy sql server 002
-    # - name: Deploy sql server 002
-    #   id: sql_server_002_deployment
-    #   uses: azure/cli@v1
-    #   with:
-    #     azcliversion: latest
-    #     inlineScript: |
-    #       echo "Creating deployment in resource group"
-    #       az deployment group create \
-    #         --mode Incremental \
-    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-    #         --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
-    #         --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer002.json
+    # Deploy sql server 002
+    - name: Deploy sql server 002
+      id: sql_server_002_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
+            --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer002.json
     
-    # # Deploy sql database 001
-    # - name: Deploy sql database 001
-    #   id: sql_database_001_deployment
-    #   uses: azure/cli@v1
-    #   with:
-    #     azcliversion: latest
-    #     inlineScript: |
-    #       echo "Creating deployment in resource group"
-    #       az deployment group create \
-    #         --mode Incremental \
-    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-    #         --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
-    #         --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase001.json
+    # Deploy sql database 001
+    - name: Deploy sql database 001
+      id: sql_database_001_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
+            --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase001.json
     
-    # # Deploy sql database 002
-    # - name: Deploy sql database 002
-    #   id: sql_database_002_deployment
-    #   uses: azure/cli@v1
-    #   with:
-    #     azcliversion: latest
-    #     inlineScript: |
-    #       echo "Creating deployment in resource group"
-    #       az deployment group create \
-    #         --mode Incremental \
-    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-    #         --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
-    #         --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase002.json
+    # Deploy sql database 002
+    - name: Deploy sql database 002
+      id: sql_database_002_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
+            --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase002.json
     
-    # # Deploy databricks 001
-    # - name: Deploy databricks 001
-    #   id: databricks_001_deployment
-    #   uses: azure/cli@v1
-    #   with:
-    #     azcliversion: latest
-    #     inlineScript: |
-    #       echo "Creating deployment in resource group"
-    #       az deployment group create \
-    #         --mode Incremental \
-    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-    #         --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
-    #         --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks001.json
+    # Deploy databricks 001
+    - name: Deploy databricks 001
+      id: databricks_001_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
+            --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
+            --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks001.json
     
     # Deploy event hub 001
     - name: Deploy event hub 001
