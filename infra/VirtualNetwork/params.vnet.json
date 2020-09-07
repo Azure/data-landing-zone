@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "vnetName": {
-            "value": "datanode001-vnet"
+            "value": "dn001-vnet"
         }
     }
 }
