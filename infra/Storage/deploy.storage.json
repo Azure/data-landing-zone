@@ -275,9 +275,6 @@
                             "type": "Microsoft.KeyVault/vaults/secrets",
                             "name": "[concat(variables('keyVaultName'), '/storageAccountKey')]",
                             "apiVersion": "2019-09-01",
-                            "dependsOn": [
-                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-                            ],
                             "properties": {
                                 "contentType": "text/plain",
                                 "value": "[listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value]",

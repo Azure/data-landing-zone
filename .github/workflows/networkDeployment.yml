@@ -77,7 +77,7 @@ jobs:
     
     # Deploy vnet peering 001 - validation
     - name: Deploy vnet peering 001 - validation
-      id: vnet_peering_validation
+      id: vnet_peering_001_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -90,7 +90,7 @@ jobs:
     
     # Deploy vnet peering 002 - validation
     - name: Deploy vnet peering 002 - validation
-      id: vnet_peering_validation
+      id: vnet_peering_002_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -143,7 +143,7 @@ jobs:
     
     # Deploy vnet peering 001
     - name: Deploy vnet peering 001
-      id: vnet_peering_deployment
+      id: vnet_peering_001_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -156,7 +156,7 @@ jobs:
     
     # Deploy vnet peering 002
     - name: Deploy vnet peering 002
-      id: vnet_peering_deployment
+      id: vnet_peering_002_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
