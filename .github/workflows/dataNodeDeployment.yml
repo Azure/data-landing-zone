@@ -242,7 +242,7 @@ jobs:
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
             --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
-            --parameters $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory001.json
+            --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
     
     # Log out from Azure
     - name: Log out from Azure
@@ -422,7 +422,7 @@ jobs:
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
             --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
-            --parameters $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory001.json
+            --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
     
     # Log out from Azure
     - name: Log out from Azure
