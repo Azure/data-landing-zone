@@ -242,7 +242,7 @@
                         "value": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
                     },
                     "privateLinkServiceGroupId": {
-                        "value": "blob"
+                        "value": "dfs"
                     },
                     "subnetResourceId": {
                         "value": "[variables('subnetResourceId')]"
