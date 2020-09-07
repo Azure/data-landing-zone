@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "storageAccountName": {
-            "value": "dn001workspace"
+            "value": "dn001workspacesa"
         },
         "storageAccountType": {
             "value": "Standard_ZRS"

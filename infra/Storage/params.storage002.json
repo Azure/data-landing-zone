@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "storageAccountName": {
-            "value": "dn001curated"
+            "value": "dn001curatedsa"
         },
         "storageAccountType": {
             "value": "Standard_ZRS"
