@@ -14,12 +14,20 @@
             "metadata": {
                 "description": "Specifies the name of the vnet that gets created."
             }
+        },
+        "deployDatabricksNsg": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies whether the databricks NSG should be deployed."
+            }
         }
     },
     "functions": [],
     "variables": {
         "location": "[parameters('location')]",
-        "vnetName": "[parameters('vnetName')]"
+        "vnetName": "[parameters('vnetName')]",
+        "deployDatabricksNsg": "[parameters('deployDatabricksNsg')]"
     },
     "resources": [
         {
@@ -33,6 +41,7 @@
             }
         },
         {
+            "condition": "[variables('deployDatabricksNsg')]",
             "name": "dn001-databricks-nsg",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-05-01",
