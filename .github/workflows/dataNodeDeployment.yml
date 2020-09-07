@@ -115,6 +115,7 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
             --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
             --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer001.json
+      continue-on-error: true
     
     # Deploy sql server 002 - validation
     - name: Deploy sql server 002 - validation
@@ -129,6 +130,7 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
             --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
             --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer002.json
+      continue-on-error: true
     
     # Deploy sql database 001 - validation
     - name: Deploy sql database 001 - validation
