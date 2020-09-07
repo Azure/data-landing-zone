@@ -6,19 +6,19 @@
             "value": "northeurope"
         },
         "databricksName": {
-            "value": "datanode001-databricks"
+            "value": "dn001-databricks"
         },
         "databricksVnetId": {
-            "value": "/subscriptions/4acba331-889b-4626-91a1-b64fc7dd884f/resourceGroups/data-mesh-network/providers/Microsoft.Network/virtualNetworks/data-mesh-vnet"
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet"
         },
         "databricksManagedRgName": {
-            "value": "/subscriptions/4acba331-889b-4626-91a1-b64fc7dd884f/resourceGroups/data-mesh-001-databricks"
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-databricks"
         },
         "databricksPrivateSubnetId": {
-            "value": "data-mesh001-databricks-private"
+            "value": "dn001-databricks-private-subnet"
         },
         "databricksPublicSubnetId": {
-            "value": "data-mesh001-databricks-public"
+            "value": "dn001-databricks-public-subnet"
         }
     }
 }

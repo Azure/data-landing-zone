@@ -11,7 +11,7 @@
         "administratorLogin": {
             "reference": {
                 "keyVault": {
-                    "id": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-mgmt/providers/Microsoft.KeyVault/vaults/datanode001-kv001"
+                    "id": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
                 },
                 "secretName": "sqlServerAdminUser"
             }
@@ -19,7 +19,7 @@
         "administratorLoginPassword": {
             "reference": {
                 "keyVault": {
-                    "id": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datanode001/providers/Microsoft.KeyVault/vaults/datanode001-kv001"
+                    "id": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
                 },
                 "secretName": "sqlServerAdminPassword"
             }
@@ -31,10 +31,10 @@
             "value": ""
         },
         "subnetResourceId": {
-            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datanode001-network/providers/Microsoft.Network/virtualNetworks/datanode001-vnet/subnets/dataproduct001-privatelink-subnet"
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
         },
         "privateDnsZoneResourceGroupId": {
-            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-global-dns"
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-global-dns"
         }
     }
 }

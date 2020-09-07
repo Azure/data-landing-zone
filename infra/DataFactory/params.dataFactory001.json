@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "dataFactoryName": {
-            "value": "datanode001-datafactory001"
+            "value": "dn001-datafactory001"
         },
         "dataFactoryGitAccount": {
             "value": ""
@@ -24,7 +24,7 @@
             "value": "FactoryGitHubConfiguration"
         },
         "keyVaultId": {
-            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dataproduct001/providers/Microsoft.KeyVault/vaults/dataproduct001-kv001"
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
         }
     }
 }

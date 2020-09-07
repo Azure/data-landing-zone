@@ -15,9 +15,9 @@ on:
       - '.github/workflows/dataNodeDeployment.yml'
 
 env:
-  AZURE_RESOURCE_GROUP_NAME_STORAGE: 'datanode001-storage'
-  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'datanode001-mgmt'
-  AZURE_RESOURCE_GROUP_NAME_PROCESSING: 'datanode001-processing'
+  AZURE_RESOURCE_GROUP_NAME_STORAGE: 'dn001-storage'
+  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dn001-mgmt'
+  AZURE_RESOURCE_GROUP_NAME_PROCESSING: 'dn001-processing'
   AZURE_LOCATION: northeurope
 
 jobs:
