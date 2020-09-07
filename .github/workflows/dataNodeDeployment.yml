@@ -88,161 +88,161 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploy key vault 001 - validation
-    - name: Deploy key vault 001 - validation
-      id: key_vault_001_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
-            --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
+    # # Deploy key vault 001 - validation
+    # - name: Deploy key vault 001 - validation
+    #   id: key_vault_001_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
     
-    # Deploy sql server 001 - validation
-    - name: Deploy sql server 001 - validation
-      id: sql_server_001_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer001.json
-      continue-on-error: true
+    # # Deploy sql server 001 - validation
+    # - name: Deploy sql server 001 - validation
+    #   id: sql_server_001_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer001.json
+    #   continue-on-error: true
     
-    # Deploy sql server 002 - validation
-    - name: Deploy sql server 002 - validation
-      id: sql_server_002_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer002.json
-      continue-on-error: true
+    # # Deploy sql server 002 - validation
+    # - name: Deploy sql server 002 - validation
+    #   id: sql_server_002_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer002.json
+    #   continue-on-error: true
     
-    # Deploy sql database 001 - validation
-    - name: Deploy sql database 001 - validation
-      id: sql_database_001_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase001.json
+    # # Deploy sql database 001 - validation
+    # - name: Deploy sql database 001 - validation
+    #   id: sql_database_001_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase001.json
     
-    # Deploy sql database 002 - validation
-    - name: Deploy sql database 002 - validation
-      id: sql_database_002_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase002.json
+    # # Deploy sql database 002 - validation
+    # - name: Deploy sql database 002 - validation
+    #   id: sql_database_002_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase002.json
     
-    # Deploy databricks 001 - validation
-    - name: Deploy databricks 001 - validation
-      id: databricks_001_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-            --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
-            --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks001.json
+    # # Deploy databricks 001 - validation
+    # - name: Deploy databricks 001 - validation
+    #   id: databricks_001_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks001.json
     
-    # Deploy event hub 001 - validation
-    - name: Deploy event hub 001 - validation
-      id: event_hub_001_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-            --template-file $GITHUB_WORKSPACE/infra/EventHub/deploy.eventHub.json \
-            --parameters $GITHUB_WORKSPACE/infra/EventHub/params.eventHub001.json
+    # # Deploy event hub 001 - validation
+    # - name: Deploy event hub 001 - validation
+    #   id: event_hub_001_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/EventHub/deploy.eventHub.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/EventHub/params.eventHub001.json
     
-    # Deploy storage account 001 - raw - validation
-    - name: Deploy storage account 001 - raw - validation
-      id: storage_account_001_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
-            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
+    # # Deploy storage account 001 - raw - validation
+    # - name: Deploy storage account 001 - raw - validation
+    #   id: storage_account_001_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
     
-    # Deploy storage account 002 - curated - validation
-    - name: Deploy storage account 002 - curated - validation
-      id: storage_account_002_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
-            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage002.json
+    # # Deploy storage account 002 - curated - validation
+    # - name: Deploy storage account 002 - curated - validation
+    #   id: storage_account_002_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage002.json
     
-    # Deploy storage account 003 - workspace - validation
-    - name: Deploy storage account 003 - workspace - validation
-      id: storage_account_003_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
-            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage003.json
+    # # Deploy storage account 003 - workspace - validation
+    # - name: Deploy storage account 003 - workspace - validation
+    #   id: storage_account_003_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage003.json
     
-    # Deploy data factory 001 - validation
-    - name: Deploy data factory 001 - validation
-      id: data_factory_001_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-            --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
-            --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
+    # # Deploy data factory 001 - validation
+    # - name: Deploy data factory 001 - validation
+    #   id: data_factory_001_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
     
     # Log out from Azure
     - name: Log out from Azure
@@ -284,61 +284,61 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
             --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
     
-    # Deploy sql server 001
-    - name: Deploy sql server 001
-      id: sql_server_001_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer001.json
+    # # Deploy sql server 001
+    # - name: Deploy sql server 001
+    #   id: sql_server_001_deployment
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group create \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer001.json
     
-    # Deploy sql server 002
-    - name: Deploy sql server 002
-      id: sql_server_002_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer002.json
+    # # Deploy sql server 002
+    # - name: Deploy sql server 002
+    #   id: sql_server_002_deployment
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group create \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer002.json
     
-    # Deploy sql database 001
-    - name: Deploy sql database 001
-      id: sql_database_001_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase001.json
+    # # Deploy sql database 001
+    # - name: Deploy sql database 001
+    #   id: sql_database_001_deployment
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group create \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase001.json
     
-    # Deploy sql database 002
-    - name: Deploy sql database 002
-      id: sql_database_002_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase002.json
+    # # Deploy sql database 002
+    # - name: Deploy sql database 002
+    #   id: sql_database_002_deployment
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group create \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase002.json
     
     # Deploy databricks 001
     - name: Deploy databricks 001
