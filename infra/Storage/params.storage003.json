@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "storageAccountName": {
-            "value": "datanode001workspace"
+            "value": "dn001workspace"
         },
         "storageAccountType": {
             "value": "Standard_ZRS"
