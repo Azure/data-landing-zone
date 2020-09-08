@@ -256,6 +256,7 @@ jobs:
   deployment:
     needs: [ create-resource-group, validation ]
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
