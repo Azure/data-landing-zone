@@ -10,6 +10,11 @@
         },
         "deployDatabricksNsg": {
             "value": false
+        },
+        "dnsServerAdresses": {
+            "value": [
+                "10.0.0.4"
+            ]
         }
     }
 }

@@ -21,13 +21,20 @@
             "metadata": {
                 "description": "Specifies whether the databricks NSG should be deployed."
             }
+        },
+        "dnsServerAdresses": {
+            "type": "array",
+            "metadata": {
+                "description": "Specifies the addresses of DNS forwarders in the hub."
+            }
         }
     },
     "functions": [],
     "variables": {
         "location": "[parameters('location')]",
         "vnetName": "[parameters('vnetName')]",
-        "deployDatabricksNsg": "[parameters('deployDatabricksNsg')]"
+        "deployDatabricksNsg": "[parameters('deployDatabricksNsg')]",
+        "dnsServerAdresses": "[parameters('dnsServerAdresses')]"
     },
     "resources": [
         {
@@ -65,6 +72,9 @@
                     "addressPrefixes": [
                         "10.1.0.0/16"
                     ]
+                },
+                "dhcpOptions": {
+                    "dnsServers": "[variables('dnsServerAdresses')]"
                 },
                 "subnets": [
                     {
@@ -124,7 +134,8 @@
                             ]
                         }
                     }
-                ]
+                ],
+                ""
             }
         }
     ],
