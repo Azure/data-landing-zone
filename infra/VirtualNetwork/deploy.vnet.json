@@ -175,7 +175,7 @@
                     {
                         "name": "dn001-dd001-databricks-private-subnet",
                         "properties": {
-                            "addressPrefix": "10.1.3.0/24",
+                            "addressPrefix": "10.1.7.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
