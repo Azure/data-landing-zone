@@ -68,7 +68,7 @@ stages:
           name: sql_server_001_validation
           displayName: Deploy sql server 001 - validation
           enabled: true
-          continueOnError: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
@@ -86,7 +86,7 @@ stages:
           name: sql_server_002_validation
           displayName: Deploy sql server 002 - validation
           enabled: true
-          continueOnError: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
