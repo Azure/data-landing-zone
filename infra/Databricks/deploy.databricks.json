@@ -21,19 +21,19 @@
                 "description": "Specifies the ID of the vnet that should be used for vnet injection."
             }
         },
-        "databricksManagedRgName": {
+        "databricksManagedResourceGroupId": {
             "type": "string",
             "metadata": {
                 "description": "Specifies the name of the resource group that is managed by databricks."
             }
         },
-        "databricksPrivateSubnetId": {
+        "databricksPrivateSubnetName": {
             "type": "string",
             "metadata": {
                 "description": "Specifies the ID of the private subnet that should be used for vnet injection."
             }
         },
-        "databricksPublicSubnetId": {
+        "databricksPublicSubnetName": {
             "type": "string",
             "metadata": {
                 "description": "Specifies the ID of the public subnet that should be used for vnet injection."
@@ -43,10 +43,10 @@
     "variables": {
         "location": "[parameters('location')]",
         "databricksName": "[parameters('databricksName')]",
-        "databricksManagedRgName": "[parameters('databricksManagedRgName')]",
+        "databricksManagedResourceGroupId": "[parameters('databricksManagedResourceGroupId')]",
         "databricksVnetId": "[parameters('databricksVnetId')]",
-        "databricksPrivateSubnetId": "[parameters('databricksPrivateSubnetId')]",
-        "databricksPublicSubnetId": "[parameters('databricksPublicSubnetId')]"
+        "databricksPrivateSubnetName": "[parameters('databricksPrivateSubnetName')]",
+        "databricksPublicSubnetName": "[parameters('databricksPublicSubnetName')]"
     },
     "resources": [
         {
@@ -58,16 +58,16 @@
                 "name": "premium"
             },
             "properties": {
-                "managedResourceGroupId": "[variables('databricksManagedRgName')]",
+                "managedResourceGroupId": "[variables('databricksManagedResourceGroupId')]",
                 "parameters": {
                     "customVirtualNetworkId": {
                         "value": "[variables('databricksVnetId')]"
                     },
                     "customPublicSubnetName": {
-                        "value": "[variables('databricksPublicSubnetId')]"
+                        "value": "[variables('databricksPublicSubnetName')]"
                     },
                     "customPrivateSubnetName": {
-                        "value": "[variables('databricksPrivateSubnetId')]"
+                        "value": "[variables('databricksPrivateSubnetName')]"
                     },
                     "enableNoPublicIp": {
                         "value": false  // TODO: unauthorized in current setup

@@ -11,13 +11,13 @@
         "databricksVnetId": {
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet"
         },
-        "databricksManagedRgName": {
+        "databricksManagedResourceGroupId": {
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-databricks"
         },
-        "databricksPrivateSubnetId": {
+        "databricksPrivateSubnetName": {
             "value": "dn001-databricks-private-subnet"
         },
-        "databricksPublicSubnetId": {
+        "databricksPublicSubnetName": {
             "value": "dn001-databricks-public-subnet"
         }
     }
