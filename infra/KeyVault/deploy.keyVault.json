@@ -69,7 +69,7 @@
             }
         },
         {
-            "name": "KeyVaultPrivateEndpointDeployment",
+            "name": "PrivateEndpointDeployment",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "dependsOn": [

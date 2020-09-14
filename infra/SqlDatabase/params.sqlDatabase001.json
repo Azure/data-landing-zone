@@ -8,6 +8,14 @@
         "sqlServerId": {
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.Sql/servers/dn001-sqlserver001"
         },
+        "sqlServerAdministratorLoginPassword": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
+                },
+                "secretName": "sqlServerAdminPassword"
+            }
+        },
         "sqlDatabaseName": {
             "value": "HiveMetastoreDB"
         },
@@ -40,6 +48,9 @@
         },
         "sqlDatabaseAutoPauseDelay": {
             "value": -1
+        },
+        "keyVaultId": {
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
         }
     }
 }
