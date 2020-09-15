@@ -67,7 +67,7 @@
                 "description": "Specifies the resource id of the sql database that should be linked to the data factory."
             }
         },
-        "subnetResourceId": {
+        "subnetId": {
             "type": "string",
             "metadata": {
                 "description": "Specifies the id of the subnet which the private endpoint uses."
@@ -95,7 +95,7 @@
         "sqlServerId": "[parameters('sqlServerId')]",
         "sqlDatabaseId": "[parameters('sqlDatabaseId')]",
         "sqlDatabaseName": "[last(split(variables('sqlDatabaseId'), '/'))]",
-        "subnetResourceId": "[parameters('subnetResourceId')]",
+        "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
         "privateDnsZoneResourceGroupName": "[last(split(variables('privateDnsZoneResourceGroupId'), '/'))]",
         "templateUri": "https://raw.githubusercontent.com/Azure/data-node/main/infra/PrivateEndpoint/deploy.privateEndpoint.json?token=AIHRGTWCRZ57R55CGFXBL5K7NDLCA"
@@ -274,7 +274,7 @@
                         "value": "dataFactory"
                     },
                     "subnetResourceId": {
-                        "value": "[variables('subnetResourceId')]"
+                        "value": "[variables('subnetId')]"
                     },
                     "privateDnsZoneId": {
                         "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.datafactory.azure.net')]"
