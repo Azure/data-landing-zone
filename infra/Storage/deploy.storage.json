@@ -273,7 +273,7 @@
                     "resources": [
                         {
                             "type": "Microsoft.KeyVault/vaults/secrets",
-                            "name": "[concat(variables('keyVaultName'), '/storageAccountKey')]",
+                            "name": "[concat(variables('keyVaultName'), '/storageAccountKey', variables('storageAccountName'))]",
                             "apiVersion": "2019-09-01",
                             "properties": {
                                 "contentType": "text/plain",

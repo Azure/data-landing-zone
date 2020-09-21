@@ -104,7 +104,7 @@ stages:
           name: sql_database_001_validation
           displayName: Deploy sql database 001 - validation
           enabled: true
-          continueOnError: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
@@ -122,7 +122,7 @@ stages:
           name: sql_database_002_validation
           displayName: Deploy sql database 002 - validation
           enabled: true
-          continueOnError: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
@@ -240,7 +240,7 @@ stages:
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/deploy.dataFactory001.json'
+            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
             deploymentMode: 'Validation'
 
   - stage: Deployment
@@ -460,5 +460,5 @@ stages:
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/deploy.dataFactory001.json'
+            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
             deploymentMode: 'Incremental'
