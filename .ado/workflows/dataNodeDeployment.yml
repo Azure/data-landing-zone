@@ -153,6 +153,24 @@ stages:
             csmParametersFile: 'infra/Databricks/params.databricks001.json'
             deploymentMode: 'Validation'
         
+        # Deploy databricks 002 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: databricks_002_validation
+          displayName: Deploy databricks 002 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSING)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Databricks/deploy.databricks.json'
+            csmParametersFile: 'infra/Databricks/params.databricks002.json'
+            deploymentMode: 'Validation'
+        
         # Deploy event hub 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: event_hub_001_validation
@@ -371,6 +389,24 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/Databricks/deploy.databricks.json'
             csmParametersFile: 'infra/Databricks/params.databricks001.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy databricks 002
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: databricks_002_deployment
+          displayName: Deploy databricks 002
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSING)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Databricks/deploy.databricks.json'
+            csmParametersFile: 'infra/Databricks/params.databricks002.json'
             deploymentMode: 'Incremental'
         
         # Deploy event hub 001
