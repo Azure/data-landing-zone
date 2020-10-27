@@ -77,6 +77,13 @@ Add-DatabricksSecretScopeACL -ScopeName $secretScopeName -Principal "users" -Per
 # Add secrets to secret scope
 Write-Host "Adding Secrets to Secret Scope"
 $sqlServerConnectionURL = "jdbc:sqlserver://${sqlServerName}.database.windows.net:1433;database=${sqlDatabaseName};"
+
+Write-Host $logAnalyticsWorkspaceId
+Write-Host $logAnalyticsWorkspaceKey
+Write-Host $sqlServerUsername
+Write-Host $sqlServerPassword
+Write-Host $sqlServerConnectionURL
+
 Add-DatabricksSecret -ScopeName $secretScopeName -SecretName "logAnalyticsWorkspaceId" -StringValue $logAnalyticsWorkspaceId
 Add-DatabricksSecret -ScopeName $secretScopeName -SecretName "logAnalyticsWorkspaceKey" -StringValue $logAnalyticsWorkspaceKey
 Add-DatabricksSecret -ScopeName $secretScopeName -SecretName "hiveMetastoreConnectionUserName" -StringValue $sqlServerUsername
