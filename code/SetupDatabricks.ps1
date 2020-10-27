@@ -6,7 +6,7 @@ param (
 
     [Parameter(Mandatory = $true)]
     [String]
-    $locationId,
+    $hivemetastoreDetails,
 
     [Parameter(Mandatory = $true)]
     [String]
@@ -19,30 +19,6 @@ param (
     [Parameter(Mandatory = $true)]
     [String]
     $logAnalyticsWorkspaceKey,
-
-    [Parameter(Mandatory = $true)]
-    [String]
-    $subscriptionId,
-
-    [Parameter(Mandatory = $true)]
-    [String]
-    $resourceGroupName,
-
-    [Parameter(Mandatory = $true)]
-    [String]
-    $sqlServerName,
-
-    [Parameter(Mandatory = $true)]
-    [String]
-    $sqlDatabaseName,
-
-    [Parameter(Mandatory = $true)]
-    [String]
-    $sqlServerUsername,
-
-    [Parameter(Mandatory = $true)]
-    [String]
-    $sqlServerPassword,
 
     [Parameter(Position=1, ValueFromRemainingArguments)]
     $Remaining
@@ -63,6 +39,16 @@ $databricksDetailsObject = ConvertFrom-Json $databricksDetails
 $databricksWorkspaceName = $databricksDetailsObject.databricksWorkspaceName.value
 $databricksWorkspaceId = $databricksDetailsObject.databricksWorkspaceId.value
 $databricksApiUrl = $databricksDetailsObject.databricksApiUrl.value
+$databricksSubscriptionId = $databricksDetailsObject.subscriptionId.value
+$databricksResourceGroupName = $databricksDetailsObject.resourceGroupName.value
+
+# Parse HiveMetastore Details
+Write-Host "Parsing HiveMetastore Details"
+$hiveMetastoreDetailsObject = = ConvertFrom-Json $hiveMetastoreDetails
+$sqlServerName = $hiveMetastoreDetailsObject.sqlServerName.value
+$sqlDatabaseName = $hiveMetastoreDetailsObject.sqlDatabaseName.value
+$sqlServerUsername = $hiveMetastoreDetailsObject.sqlServerAdministratorLoginUsername.value
+$sqlServerPassword = $hiveMetastoreDetailsObject.sqlServerAdministratorLoginPassword.value
 
 # Login to Databricks Workspace using Service Principal
 Write-Host "Logging in to Databricks using Service Principal"
@@ -100,8 +86,8 @@ Add-DatabricksSecret -ScopeName $secretScopeName -SecretName "hiveMetastoreConne
 # Update Spark Monitoring Shell Script
 Write-Host "Updating Spark Monitoring Shell Script"
 $SparkMonitoringFileContent = Get-Content -Path "code/applicationLogging/spark-monitoring.sh"
-$SparkMonitoringFileContent = $SparkMonitoringFileContent -Replace "AZ_SUBSCRIPTION_ID=", "AZ_SUBSCRIPTION_ID=$subscriptionId"
-$SparkMonitoringFileContent = $SparkMonitoringFileContent -Replace "AZ_RSRC_GRP_NAME=", "AZ_RSRC_GRP_NAME=${resourceGroupName}"
+$SparkMonitoringFileContent = $SparkMonitoringFileContent -Replace "AZ_SUBSCRIPTION_ID=", "AZ_SUBSCRIPTION_ID=${databricksSubscriptionId}"
+$SparkMonitoringFileContent = $SparkMonitoringFileContent -Replace "AZ_RSRC_GRP_NAME=", "AZ_RSRC_GRP_NAME=${databricksResourceGroupName}"
 $SparkMonitoringFileContent = $SparkMonitoringFileContent -Replace "AZ_RSRC_NAME=", "AZ_RSRC_NAME=${databricksWorkspaceName}"
 $SparkMonitoringFileContent | Set-Content -Path "code/applicationLogging/spark-monitoring.sh"
 

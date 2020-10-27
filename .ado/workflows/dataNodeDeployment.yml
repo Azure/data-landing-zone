@@ -15,14 +15,22 @@ trigger:
       - infra/SqlServer/*
       - infra/PrivateEndpoint/*
       - .ado/workflows/dataNodeDeployment.yml
+      - code/*
 
 variables:
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
-  AZURE_SUBSCRIPTION_ID: '558bd446-4212-46a2-908c-9ab0a628705e'
-  AZURE_RESOURCE_GROUP_NAME_STORAGE: 'dn001-storage'
-  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dn001-mgmt'
-  AZURE_RESOURCE_GROUP_NAME_PROCESSING: 'dn001-processing'
-  AZURE_LOCATION: 'North Europe'
+  - name: AZURE_RESOURCE_MANAGER_CONNECTION_NAME
+    value: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
+  - name: AZURE_SUBSCRIPTION_ID
+    value: '558bd446-4212-46a2-908c-9ab0a628705e'
+  - name: AZURE_RESOURCE_GROUP_NAME_STORAGE
+    value: 'dn001-storage'
+  - name: AZURE_RESOURCE_GROUP_NAME_MANAGEMENT
+    value: 'dn001-mgmt'
+  - name: AZURE_RESOURCE_GROUP_NAME_PROCESSING
+    value: 'dn001-processing'
+  - name: AZURE_LOCATION
+    value: 'North Europe'
+  - group: 'logAnalyticsWorkspace'
 
 stages:
   - stage: Validation
@@ -354,6 +362,7 @@ stages:
             csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
             csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase001.json'
             deploymentMode: 'Incremental'
+            deploymentOutputs: 'hivemetastoreDetails'
         
         # Deploy sql database 002
         - task: AzureResourceManagerTemplateDeployment@3
@@ -408,6 +417,29 @@ stages:
             csmFile: 'infra/Databricks/deploy.databricks.json'
             csmParametersFile: 'infra/Databricks/params.databricks002.json'
             deploymentMode: 'Incremental'
+            deploymentOutputs: 'databricksDetails'
+        
+        # Setup databricks
+        - task: AzureCLI@2
+          name: setup_databricks
+          displayName: Setup databricks
+          enabled: true
+          continueOnError: false
+          inputs:
+            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            scriptType: pscore
+            scriptLocation: 'scriptPath'
+            scriptPath: '$(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1'
+            powerShellErrorActionPreference: 'stop'
+            addSpnToEnvironment: true
+            failOnStandardError: false
+            powerShellIgnoreLASTEXITCODE: false
+            arguments: >
+              -databricksDetails '$(databricksDetails)'
+              -hivemetastoreDetails '$(hivemetastoreDetails)'
+              -keyVaultId 'notSupportedViaSP'
+              -logAnalyticsWorkspaceId '$(LOG_ANALYTICS_WORKSPACE_ID)'
+              -logAnalyticsWorkspaceKey '$(LOG_ANALYTICS_WORKSPACE_KEY)'
         
         # Deploy event hub 001
         - task: AzureResourceManagerTemplateDeployment@3
