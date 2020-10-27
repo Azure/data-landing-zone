@@ -132,7 +132,11 @@
         "sqlDatabaseStorageAccountType": "[parameters('sqlDatabaseStorageAccountType')]",
         "sqlDatabaseAutoPauseDelay": "[parameters('sqlDatabaseAutoPauseDelay')]",
         "keyVaultId": "[parameters('keyVaultId')]",
-        "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]"
+        "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]",
+        "storageContainerId": "",
+        "storageAccountName": "",
+        "storageAccountContainerName": "",
+        "storageAccountKey": ""
     },
     "resources": [
         {
@@ -157,6 +161,24 @@
                 "storageAccountType": "[variables('sqlDatabaseStorageAccountType')]",
                 "minCapacity": "[variables('sqlDatabaseMinCapacity')]"
             }
+            // "resources": [
+            //     {
+            //         "type": "extensions",
+            //         "apiVersion": "2014-04-01",
+            //         "name": "Import",
+            //         "dependsOn": [
+            //             "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServerName'), variables('sqlDatabaseName'))]"
+            //         ],
+            //         "properties": {
+            //             "storageKeyType": "StorageAccessKey",
+            //             "storageKey": "[variables('storageAccountKey')]",
+            //             "storageUri": "[concat('https://', variables('storageAccountName'), '.blob.core.windows.net/', variables('storageAccountContainerName'), '/installSHIRGateway.ps1')]",
+            //             "administratorLogin": "[reference(resourceId('Microsoft.Sql/servers', variables('sqlServerName')), '2019-06-01-preview').administratorLogin]",
+            //             "administratorLoginPassword": "[variables('sqlServerAdministratorLoginPassword')]",
+            //             "operationMode": "Import"
+            //         }
+            //     }
+            // ]
         },
         {
             "name": "SecretDeployment",
