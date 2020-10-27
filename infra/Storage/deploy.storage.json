@@ -186,7 +186,7 @@
                 {
                     "type": "blobServices/containers",
                     "apiVersion": "2020-08-01-preview",
-                    "name": "[concat('default/', 'secure')]",
+                    "name": "[concat('default/', 'nonsecure')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
                     ],
@@ -197,7 +197,7 @@
                 {
                     "type": "blobServices/containers",
                     "apiVersion": "2020-08-01-preview",
-                    "name": "[concat('default/', 'nonsecure')]",
+                    "name": "[concat('default/', 'secure')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
                     ],

@@ -196,5 +196,22 @@
             "resourceGroup": "[split(variables('keyVaultId'), '/')[4]]"
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "sqlServerName": {
+            "type": "string",
+            "value": "[variables('sqlServerName')]"
+        },
+        "sqlDatabaseName": {
+            "type": "string",
+            "value": "[variables('sqlDatabaseName')]"
+        },
+        "sqlServerAdministratorLoginUsername": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Sql/servers', variables('sqlServerName')), '2019-06-01-preview').administratorLogin]"
+        },
+        "sqlServerAdministratorLoginPassword": {
+            "type": "securestring",
+            "value": "[variables('sqlServerAdministratorLoginPassword')]"
+        }
+    }
 }

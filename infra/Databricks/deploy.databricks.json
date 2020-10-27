@@ -101,6 +101,14 @@
         "databricksApiUrl": {
             "type": "string",
             "value": "[concat('https://', variables('location'), '.azuredatabricks.net')]"
+        },
+        "subscriptionId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName')).subscriptionId]"
+        },
+        "resourceGroupName": {
+            "type": "string",
+            "value": "[resourceGroup().name]"
         }
     }
 }
