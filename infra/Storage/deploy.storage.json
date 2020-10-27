@@ -66,7 +66,7 @@
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2020-08-01-preview",
             "name": "[variables('storageAccountName')]",
             "location": "[variables('location')]",
             "identity": {
@@ -123,7 +123,7 @@
             "resources": [
                 {
                     "type": "managementPolicies",
-                    "apiVersion": "2019-06-01",
+                    "apiVersion": "2020-08-01-preview",
                     "name": "default",
                     "dependsOn": [
                         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
@@ -166,7 +166,7 @@
                 },
                 {
                     "type": "blobServices",
-                    "apiVersion": "2019-06-01",
+                    "apiVersion": "2020-08-01-preview",
                     "name": "default",
                     "dependsOn": [
                         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
@@ -185,8 +185,8 @@
                 },
                 {
                     "type": "blobServices/containers",
-                    "apiVersion": "2019-06-01",
-                    "name": "[concat('default/', 'datadomain001')]",
+                    "apiVersion": "2020-08-01-preview",
+                    "name": "[concat('default/', 'secure')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
                     ],
@@ -196,19 +196,8 @@
                 },
                 {
                     "type": "blobServices/containers",
-                    "apiVersion": "2019-06-01",
-                    "name": "[concat('default/', 'datadomain002')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-                    ],
-                    "properties": {
-                        "publicAccess": "None"
-                    }
-                },
-                {
-                    "type": "blobServices/containers",
-                    "apiVersion": "2019-06-01",
-                    "name": "[concat('default/', 'datadomain003')]",
+                    "apiVersion": "2020-08-01-preview",
+                    "name": "[concat('default/', 'nonsecure')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
                     ],
@@ -221,7 +210,7 @@
         {
             "name": "PrivateEndpointDeployment",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
+            "apiVersion": "2020-06-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ],
@@ -256,7 +245,7 @@
         {
             "name": "SecretDeployment",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
+            "apiVersion": "2020-06-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ],
