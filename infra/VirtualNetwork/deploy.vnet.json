@@ -97,7 +97,7 @@
                         }
                     },
                     {
-                        "name": "dn001-databricks-public-subnet",
+                        "name": "dn001-databricks001-public-subnet",
                         "properties": {
                             "addressPrefix": "10.1.2.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
@@ -116,7 +116,7 @@
                         }
                     },
                     {
-                        "name": "dn001-databricks-private-subnet",
+                        "name": "dn001-databricks001-private-subnet",
                         "properties": {
                             "addressPrefix": "10.1.3.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
@@ -135,28 +135,9 @@
                         }
                     },
                     {
-                        "name": "dn001-dd001-subnet",
+                        "name": "dn001-databricks002-public-subnet",
                         "properties": {
                             "addressPrefix": "10.1.4.0/24",
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dn001-nsg')]"
-                            }
-                        }
-                    },
-                    {
-                        "name": "dn001-dd001-privatelink-subnet",
-                        "properties": {
-                            "addressPrefix": "10.1.5.0/24",
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Disabled"
-                        }
-                    },
-                    {
-                        "name": "dn001-dd001-databricks-public-subnet",
-                        "properties": {
-                            "addressPrefix": "10.1.6.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
@@ -173,9 +154,9 @@
                         }
                     },
                     {
-                        "name": "dn001-dd001-databricks-private-subnet",
+                        "name": "dn001-databricks002-private-subnet",
                         "properties": {
-                            "addressPrefix": "10.1.7.0/24",
+                            "addressPrefix": "10.1.5.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
@@ -189,6 +170,25 @@
                                     }
                                 }
                             ]
+                        }
+                    },
+                    {
+                        "name": "dn001-dd001-subnet",
+                        "properties": {
+                            "addressPrefix": "10.1.6.0/24",
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dn001-nsg')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "dn001-dd001-privatelink-subnet",
+                        "properties": {
+                            "addressPrefix": "10.1.7.0/24",
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Disabled"
                         }
                     }
                 ]

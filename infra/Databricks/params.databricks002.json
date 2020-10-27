@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "databricksName": {
+            "value": "dn001-databricks002-processing"
+        },
+        "databricksVnetId": {
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet"
+        },
+        "databricksManagedResourceGroupId": {
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-databricks"
+        },
+        "databricksPrivateSubnetName": {
+            "value": "dn001-databricks002-private-subnet"
+        },
+        "databricksPublicSubnetName": {
+            "value": "dn001-databricks002-public-subnet"
+        }
+    }
+}

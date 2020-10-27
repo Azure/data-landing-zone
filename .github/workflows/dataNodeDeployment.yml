@@ -174,6 +174,20 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
             --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks001.json
     
+    # Deploy databricks 002 - validation
+    - name: Deploy databricks 002 - validation
+      id: databricks_002_validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
+            --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
+            --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks002.json
+    
     # Deploy event hub 001 - validation
     - name: Deploy event hub 001 - validation
       id: event_hub_001_validation
@@ -354,6 +368,20 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
             --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
             --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks001.json
+    
+    # Deploy databricks 002 - validation
+    - name: Deploy databricks 002 - validation
+      id: databricks_002_validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
+            --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
+            --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks002.json
     
     # Deploy event hub 001
     - name: Deploy event hub 001

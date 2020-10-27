@@ -72,11 +72,35 @@
                     "enableNoPublicIp": {
                         "value": false  // TODO: unauthorized in current setup
                     }
+                    // "encryption": {
+                    //     "value": {
+                    //         "keySource": "Default"
+                    //     }
+                    // },
+                    // "prepareEncryption": {
+                    //     "value": true
+                    // },
+                    // "requireInfrastructureEncryption": {
+                    //     "value": true
+                    // }
                 },
                 "authorizations": [
                 ]
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "databricksWorkspaceName": {
+            "type": "string",
+            "value": "[variables('databricksName')]"
+        },
+        "databricksWorkspaceId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]"
+        },
+        "databricksApiUrl": {
+            "type": "string",
+            "value": "[concat('https://', variables('location'), '.azuredatabricks.net')]"
+        }
+    }
 }

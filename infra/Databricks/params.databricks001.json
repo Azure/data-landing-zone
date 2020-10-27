@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "databricksName": {
-            "value": "dn001-databricks"
+            "value": "dn001-databricks001-ingest"
         },
         "databricksVnetId": {
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet"
@@ -15,10 +15,10 @@
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-databricks"
         },
         "databricksPrivateSubnetName": {
-            "value": "dn001-databricks-private-subnet"
+            "value": "dn001-databricks001-private-subnet"
         },
         "databricksPublicSubnetName": {
-            "value": "dn001-databricks-public-subnet"
+            "value": "dn001-databricks001-public-subnet"
         }
     }
 }
