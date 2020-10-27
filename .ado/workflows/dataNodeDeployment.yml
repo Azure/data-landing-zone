@@ -19,9 +19,9 @@ trigger:
 
 variables:
   - name: AZURE_RESOURCE_MANAGER_CONNECTION_NAME
-    value: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
+    value: 'datanode001'
   - name: AZURE_SUBSCRIPTION_ID
-    value: '558bd446-4212-46a2-908c-9ab0a628705e'
+    value: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'
   - name: AZURE_RESOURCE_GROUP_NAME_STORAGE
     value: 'dn001-storage'
   - name: AZURE_RESOURCE_GROUP_NAME_MANAGEMENT

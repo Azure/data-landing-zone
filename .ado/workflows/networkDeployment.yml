@@ -11,10 +11,14 @@ trigger:
       - .ado/workflows/networkDeployment.yml
 
 variables:
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
-  AZURE_SUBSCRIPTION_ID: '558bd446-4212-46a2-908c-9ab0a628705e'
-  AZURE_RESOURCE_GROUP_NAME: 'dn001-network'
-  AZURE_LOCATION: 'North Europe'
+  - name: AZURE_RESOURCE_MANAGER_CONNECTION_NAME
+    value: 'datanode001'
+  - name: AZURE_SUBSCRIPTION_ID
+    value: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'
+  - name: AZURE_RESOURCE_GROUP_NAME
+    value: 'dn001-network'
+  - name: AZURE_LOCATION
+    value: 'North Europe'
 
 stages:
   - stage: Validation
