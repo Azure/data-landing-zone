@@ -466,6 +466,7 @@ stages:
               -keyVaultId 'notSupportedViaSP'
               -logAnalyticsWorkspaceId '$(LOG_ANALYTICS_WORKSPACE_ID)'
               -logAnalyticsWorkspaceKey '$(LOG_ANALYTICS_WORKSPACE_KEY)'
+              -sqlServerPassword '$(password)'
         
         # Deploy databricks 002
         - task: AzureResourceManagerTemplateDeployment@3
@@ -507,6 +508,7 @@ stages:
               -keyVaultId 'notSupportedViaSP'
               -logAnalyticsWorkspaceId '$(LOG_ANALYTICS_WORKSPACE_ID)'
               -logAnalyticsWorkspaceKey '$(LOG_ANALYTICS_WORKSPACE_KEY)'
+              -sqlServerPassword '$(password)'
         
         # Deploy event hub 001
         - task: AzureResourceManagerTemplateDeployment@3

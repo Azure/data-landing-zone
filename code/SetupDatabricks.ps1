@@ -20,6 +20,10 @@ param (
     [String]
     $logAnalyticsWorkspaceKey,
 
+    [Parameter(Mandatory = $true)]
+    [String]
+    $sqlServerPassword,
+
     [Parameter(Position=1, ValueFromRemainingArguments)]
     $Remaining
 )
@@ -48,7 +52,7 @@ $hiveMetastoreDetailsObject = ConvertFrom-Json $hiveMetastoreDetails
 $sqlServerName = $hiveMetastoreDetailsObject.sqlServerName.value
 $sqlDatabaseName = $hiveMetastoreDetailsObject.sqlDatabaseName.value
 $sqlServerUsername = $hiveMetastoreDetailsObject.sqlServerAdministratorLoginUsername.value
-$sqlServerPassword = $hiveMetastoreDetailsObject.sqlServerAdministratorLoginPassword.value
+# $sqlServerPassword = $hiveMetastoreDetailsObject.sqlServerAdministratorLoginPassword.value
 
 # Login to Databricks Workspace using Service Principal
 Write-Host "Logging in to Databricks using Service Principal"
