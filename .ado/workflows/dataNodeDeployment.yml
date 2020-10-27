@@ -399,6 +399,29 @@ stages:
             csmFile: 'infra/Databricks/deploy.databricks.json'
             csmParametersFile: 'infra/Databricks/params.databricks001.json'
             deploymentMode: 'Incremental'
+            deploymentOutputs: 'databricksDetails001'
+        
+        # Setup databricks 001
+        - task: AzureCLI@2
+          name: setup_databricks_001
+          displayName: Setup databricks 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            scriptType: pscore
+            scriptLocation: 'scriptPath'
+            scriptPath: '$(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1'
+            powerShellErrorActionPreference: 'stop'
+            addSpnToEnvironment: true
+            failOnStandardError: false
+            powerShellIgnoreLASTEXITCODE: false
+            arguments: >
+              -databricksDetails '$(databricksDetails001)'
+              -hivemetastoreDetails '$(hivemetastoreDetails)'
+              -keyVaultId 'notSupportedViaSP'
+              -logAnalyticsWorkspaceId '$(LOG_ANALYTICS_WORKSPACE_ID)'
+              -logAnalyticsWorkspaceKey '$(LOG_ANALYTICS_WORKSPACE_KEY)'
         
         # Deploy databricks 002
         - task: AzureResourceManagerTemplateDeployment@3
@@ -417,12 +440,12 @@ stages:
             csmFile: 'infra/Databricks/deploy.databricks.json'
             csmParametersFile: 'infra/Databricks/params.databricks002.json'
             deploymentMode: 'Incremental'
-            deploymentOutputs: 'databricksDetails'
+            deploymentOutputs: 'databricksDetails002'
         
-        # Setup databricks
+        # Setup databricks 002
         - task: AzureCLI@2
-          name: setup_databricks
-          displayName: Setup databricks
+          name: setup_databricks_002
+          displayName: Setup databricks 002
           enabled: true
           continueOnError: false
           inputs:
@@ -435,7 +458,7 @@ stages:
             failOnStandardError: false
             powerShellIgnoreLASTEXITCODE: false
             arguments: >
-              -databricksDetails '$(databricksDetails)'
+              -databricksDetails '$(databricksDetails002)'
               -hivemetastoreDetails '$(hivemetastoreDetails)'
               -keyVaultId 'notSupportedViaSP'
               -logAnalyticsWorkspaceId '$(LOG_ANALYTICS_WORKSPACE_ID)'
