@@ -9,20 +9,10 @@
             "value": "dn001-sqlserver002"
         },
         "administratorLogin": {
-            "reference": {
-                "keyVault": {
-                    "id": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
-                },
-                "secretName": "sqlServerAdminUser"
-            }
+            "value": "SqlServerMainUser"
         },
         "administratorLoginPassword": {
-            "reference": {
-                "keyVault": {
-                    "id": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
-                },
-                "secretName": "sqlServerAdminPassword"
-            }
+            "value": "<your-secure-password>"
         },
         "sqlAdminGroupName": {
             "value": ""

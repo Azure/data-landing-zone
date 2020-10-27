@@ -1,16 +1,8 @@
 # Define script arguments
 param (
-    [Parameter(Mandatory = $true)]
-    [String]
-    $VaultName,
-
-    [Parameter(Mandatory = $true)]
-    [String]
-    $SecretName,
-
     [Parameter(Mandatory=$false)]
     [Switch]
-    $Force
+    $GitHub
 )
 
 function New-Password {
@@ -191,21 +183,24 @@ function New-Password {
     }
 }
 
-# Get secret from key vault
-Write-Output "Getting secret from key vault"
-$Secret = Get-AzKeyVaultSecret -VaultName $VaultName -Name $SecretName
 
-if (($Null -eq $Secret) -or ($Force)) {
-    Write-Output "Secret does not exist yet. Creating new secret with name $SecretName."
+# Generate password
+Write-Output "Generating password"
+$Password = New-Password -Template "lusdA16dlu" | ConvertFrom-SecureString -AsPlainText
 
-    # Generate password
-    Write-Output "Generating password"
-    $Password = New-Password
+if ($GitHub) {
+    # Mask password
+    Write-Output "Masking password"
+    Write-Output "::add-mask::$Password"
 
-    # Create secret in key vault
-    Write-Output "Creating secret in key vault"
-    Set-AzKeyVaultSecret -VaultName $VaultName -Name $SecretName -SecretValue $Password
+    # Set output
+    Write-Output "Setting output"
+    Write-Output "::set-output name=password::$Password"
 }
 else {
-    Write-Output "Secret already exists. No need to create a new secret with name $SecretName."
+    Write-Output "$Password"
+
+    # Set output
+    Write-Output "Setting output"
+    Write-Output "##vso[task.setvariable variable=password;issecret=true]$Password"
 }

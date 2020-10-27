@@ -53,6 +53,20 @@ stages:
           continueOnError: false
           enabled: true
         
+        # Generate Password
+        - task: PowerShell@2
+          name: generate_password
+          displayName: Generate Password
+          enabled: true
+          continueOnError: false
+          inputs:
+            targetType: 'filePath'
+            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
+            errorActionPreference: 'stop'
+            failOnStderr: false
+            ignoreLASTEXITCODE: false
+            pwsh: true
+        
         # Deploy key vault 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: key_vault_001_validation
@@ -88,6 +102,8 @@ stages:
             csmFile: 'infra/SqlServer/deploy.sqlServer.json'
             csmParametersFile: 'infra/SqlServer/params.sqlServer001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -administratorLoginPassword "$(password)"
         
         # Deploy sql server 002 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -106,6 +122,8 @@ stages:
             csmFile: 'infra/SqlServer/deploy.sqlServer.json'
             csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -administratorLoginPassword "$(password)"
         
         # Deploy sql database 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -124,6 +142,8 @@ stages:
             csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
             csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -sqlServerAdministratorLoginPassword "$(password)"
         
         # Deploy sql database 002 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -142,6 +162,8 @@ stages:
             csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
             csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase002.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -sqlServerAdministratorLoginPassword "$(password)"
         
         # Deploy databricks 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -291,6 +313,20 @@ stages:
           continueOnError: false
           enabled: true
         
+        # Generate Password
+        - task: PowerShell@2
+          name: generate_password
+          displayName: Generate Password
+          enabled: true
+          continueOnError: false
+          inputs:
+            targetType: 'filePath'
+            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
+            errorActionPreference: 'stop'
+            failOnStderr: false
+            ignoreLASTEXITCODE: false
+            pwsh: true
+        
         # Deploy key vault 001
         - task: AzureResourceManagerTemplateDeployment@3
           name: key_vault_001_deployment
@@ -326,6 +362,8 @@ stages:
             csmFile: 'infra/SqlServer/deploy.sqlServer.json'
             csmParametersFile: 'infra/SqlServer/params.sqlServer001.json'
             deploymentMode: 'Incremental'
+            overrideParameters: >
+              -administratorLoginPassword "$(password)"
         
         # Deploy sql server 002
         - task: AzureResourceManagerTemplateDeployment@3
@@ -344,6 +382,8 @@ stages:
             csmFile: 'infra/SqlServer/deploy.sqlServer.json'
             csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
             deploymentMode: 'Incremental'
+            overrideParameters: >
+              -administratorLoginPassword "$(password)"
         
         # Deploy sql database 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -363,6 +403,8 @@ stages:
             csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase001.json'
             deploymentMode: 'Incremental'
             deploymentOutputs: 'hivemetastoreDetails'
+            overrideParameters: >
+              -sqlServerAdministratorLoginPassword "$(password)"
         
         # Deploy sql database 002
         - task: AzureResourceManagerTemplateDeployment@3
@@ -381,6 +423,8 @@ stages:
             csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
             csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase002.json'
             deploymentMode: 'Incremental'
+            overrideParameters: >
+              -sqlServerAdministratorLoginPassword "$(password)"
         
         # Deploy databricks 001
         - task: AzureResourceManagerTemplateDeployment@3
