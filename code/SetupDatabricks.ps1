@@ -44,7 +44,7 @@ $databricksResourceGroupName = $databricksDetailsObject.resourceGroupName.value
 
 # Parse HiveMetastore Details
 Write-Host "Parsing HiveMetastore Details"
-$hiveMetastoreDetailsObject = = ConvertFrom-Json $hiveMetastoreDetails
+$hiveMetastoreDetailsObject = ConvertFrom-Json $hiveMetastoreDetails
 $sqlServerName = $hiveMetastoreDetailsObject.sqlServerName.value
 $sqlDatabaseName = $hiveMetastoreDetailsObject.sqlDatabaseName.value
 $sqlServerUsername = $hiveMetastoreDetailsObject.sqlServerAdministratorLoginUsername.value
