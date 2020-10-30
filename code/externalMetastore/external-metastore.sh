@@ -38,7 +38,7 @@ cat << 'EOF' > /databricks/driver/conf/00-custom-spark.conf
 }
 EOF
 
-# REPLACE variables in the logging script which will be part of each clusters init script to enable logging
+# REPLACE variables in the spark config file to enable external Hive metastore connection 
 echo "Replacing files inside the Spark Config File"
 sed -i "s|<sql-connection-string>|${SQL_CONNECTION_STRING}|g" /databricks/driver/conf/00-custom-spark.conf
 sed -i "s|<sql-username>|${SQL_USERNAME}|g" /databricks/driver/conf/00-custom-spark.conf
