@@ -1,13 +1,13 @@
 Import-module .\Connect-AzureDevicelogin.ps1 -Force
 
-$ClientID = 'fb53ccd3-730e-483e-b64a-3f9a91631017'
-$TenantID = 'af26513a-fe59-4005-967d-bd744f659830' #common
+$ClientID = ''
+$TenantID = '' #common
 $Scopes = "https://graph.microsoft.com/Application.ReadWrite.All https://graph.microsoft.com/Directory.AccessAsUser.All https://graph.microsoft.com/Directory.ReadWrite.All"
 
 ## EA ADB template
-$ApplicationTemplate = "9c9818d2-2900-49e8-8ba4-22688be7c675"
+$ApplicationTemplate = ""
 $AdbEaName = "ADB Instance 100"
-$databricksInstance = "adb-3469363868528983.3.azuredatabricks.net"
+$databricksInstance = "<>.azuredatabricks.net"
 $PatToken = "{PAT TOKEN HERE}"
 
 ## AAD groups to add to workspace
