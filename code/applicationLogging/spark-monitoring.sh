@@ -18,8 +18,8 @@ SPARK_CONF_DIR=$SPARK_HOME/conf
 # header as part of the request
 tee -a "$SPARK_CONF_DIR/spark-env.sh" << EOF
 export DB_CLUSTER_ID=$DB_CLUSTER_ID
-export LOG_ANALYTICS_WORKSPACE_ID=$LOG_ANALYTICS_WORKSPACE_ID
-export LOG_ANALYTICS_WORKSPACE_KEY=$LOG_ANALYTICS_WORKSPACE_KEY
+export LOG_ANALYTICS_WORKSPACE_ID="${LOG_ANALYTICS_WORKSPACE_ID}"
+export LOG_ANALYTICS_WORKSPACE_KEY="${LOG_ANALYTICS_WORKSPACE_KEY}"
 export AZ_SUBSCRIPTION_ID=
 export AZ_RSRC_GRP_NAME=
 export AZ_RSRC_PROV_NAMESPACE=Microsoft.Databricks
@@ -34,6 +34,13 @@ SPARK_VERSION=$(cat /databricks/spark/VERSION 2> /dev/null || echo "")
 SPARK_VERSION=${SPARK_VERSION:-2.4.5}
 SPARK_SCALA_VERSION=$(ls /databricks/spark/assembly/target | cut -d '-' -f2 2> /dev/null || echo "")
 SPARK_SCALA_VERSION=${SPARK_SCALA_VERSION:-2.11}
+
+# Exit for unsupported Spark versions
+if [ $SPARK_VERSION != "2.4.5" ] && [ $SPARK_VERSION != "2.4.3" ] && [ $SPARK_VERSION != "3.0.0" ] && [ $SPARK_VERSION != "3.0.1" ];
+then
+    echo "Exit because of Spark version: ${SPARK_VERSION}"
+    exit 0
+fi
 
 # This variable configures the spark-monitoring library metrics sink.
 # Any valid Spark metric.properties entry can be added here as well.
