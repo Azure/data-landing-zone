@@ -30,7 +30,12 @@ variables:
     value: 'dn001-processing'
   - name: AZURE_LOCATION
     value: 'North Europe'
-  - group: 'logAnalyticsWorkspace'
+  - name: LOG_ANALYTICS_KEY_VAULT_ID
+    value: ''
+  - name: LOG_ANALYTICS_WORKSPACE_ID_SECRET_NAME
+    value: 'logAnalyticsWorkspaceId'
+  - name: LOG_ANALYTICS_WORKSPACE_KEY_SECRET_NAME
+    value: 'logAnalyticsWorkspaceKey'
 
 stages:
   - stage: Validation
@@ -344,6 +349,7 @@ stages:
             csmFile: 'infra/KeyVault/deploy.keyVault.json'
             csmParametersFile: 'infra/KeyVault/params.keyVault001.json'
             deploymentMode: 'Incremental'
+            deploymentOutputs: 'keyVaultDetails'
         
         # Deploy sql server 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -463,10 +469,10 @@ stages:
             arguments: >
               -databricksDetails '$(databricksDetails001)'
               -hivemetastoreDetails '$(hivemetastoreDetails)'
-              -keyVaultId 'notSupportedViaSP'
-              -logAnalyticsWorkspaceId '$(LOG_ANALYTICS_WORKSPACE_ID)'
-              -logAnalyticsWorkspaceKey '$(LOG_ANALYTICS_WORKSPACE_KEY)'
-              -sqlServerPassword '$(password)'
+              -HiveKeyVaultDetails '$(keyVaultDetails)'
+              -LogAnalyticsKeyVaultId '$(LOG_ANALYTICS_KEY_VAULT_ID)'
+              -LogAnalyticsWorkspaceIdSecretName '$(LOG_ANALYTICS_WORKSPACE_ID_SECRET_NAME)'
+              -LogAnalyticsWorkspaceKeySecretName '$(LOG_ANALYTICS_WORKSPACE_KEY_SECRET_NAME)'
         
         # Deploy databricks 002
         - task: AzureResourceManagerTemplateDeployment@3
@@ -505,10 +511,10 @@ stages:
             arguments: >
               -databricksDetails '$(databricksDetails002)'
               -hivemetastoreDetails '$(hivemetastoreDetails)'
-              -keyVaultId 'notSupportedViaSP'
-              -logAnalyticsWorkspaceId '$(LOG_ANALYTICS_WORKSPACE_ID)'
-              -logAnalyticsWorkspaceKey '$(LOG_ANALYTICS_WORKSPACE_KEY)'
-              -sqlServerPassword '$(password)'
+              -HiveKeyVaultDetails '$(keyVaultDetails)'
+              -LogAnalyticsKeyVaultId '$(LOG_ANALYTICS_KEY_VAULT_ID)'
+              -LogAnalyticsWorkspaceIdSecretName '$(LOG_ANALYTICS_WORKSPACE_ID_SECRET_NAME)'
+              -LogAnalyticsWorkspaceKeySecretName '$(LOG_ANALYTICS_WORKSPACE_KEY_SECRET_NAME)'
         
         # Deploy event hub 001
         - task: AzureResourceManagerTemplateDeployment@3

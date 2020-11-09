@@ -2,27 +2,27 @@
 param (
     [Parameter(Mandatory = $true)]
     [String]
-    $databricksDetails,
+    $DatabricksDetails,
 
     [Parameter(Mandatory = $true)]
     [String]
-    $hivemetastoreDetails,
+    $HivemetastoreDetails,
 
     [Parameter(Mandatory = $true)]
     [String]
-    $keyVaultId,
+    $HiveKeyVaultDetails,
 
     [Parameter(Mandatory = $true)]
     [String]
-    $logAnalyticsWorkspaceId,
+    $LogAnalyticsKeyVaultId,
 
     [Parameter(Mandatory = $true)]
     [String]
-    $logAnalyticsWorkspaceKey,
+    $LogAnalyticsWorkspaceIdSecretName,
 
     [Parameter(Mandatory = $true)]
     [String]
-    $sqlServerPassword,
+    $LogAnalyticsWorkspaceKeySecretName,
 
     [Parameter(Position=1, ValueFromRemainingArguments)]
     $Remaining
@@ -32,14 +32,9 @@ param (
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 Install-Module -Name DatabricksPS
 
-# Define Service Principal Credentials
-Write-Host "Defining Service Principal credentials"
-$password = ConvertTo-SecureString $env:servicePrincipalKey -AsPlainText -Force
-$credSp = New-Object System.Management.Automation.PSCredential ($env:servicePrincipalId, $password)
-
 # Parse Databricks Details
 Write-Host "Parsing Databricks Details"
-$databricksDetailsObject = ConvertFrom-Json $databricksDetails
+$databricksDetailsObject = ConvertFrom-Json $DatabricksDetails
 $databricksWorkspaceName = $databricksDetailsObject.databricksWorkspaceName.value
 $databricksWorkspaceId = $databricksDetailsObject.databricksWorkspaceId.value
 $databricksApiUrl = $databricksDetailsObject.databricksApiUrl.value
@@ -48,51 +43,48 @@ $databricksResourceGroupName = $databricksDetailsObject.resourceGroupName.value
 
 # Parse HiveMetastore Details
 Write-Host "Parsing HiveMetastore Details"
-$hiveMetastoreDetailsObject = ConvertFrom-Json $hiveMetastoreDetails
-$sqlServerName = $hiveMetastoreDetailsObject.sqlServerName.value
-$sqlDatabaseName = $hiveMetastoreDetailsObject.sqlDatabaseName.value
-$sqlServerUsername = $hiveMetastoreDetailsObject.sqlServerAdministratorLoginUsername.value
-# $sqlServerPassword = $hiveMetastoreDetailsObject.sqlServerAdministratorLoginPassword.value
+$hiveMetastoreDetailsObject = ConvertFrom-Json $HivemetastoreDetails
+$connectionStringSecretName = $hiveMetastoreDetailsObject.connectionStringSecretName.value
+$usernameSecretName = $hiveMetastoreDetailsObject.usernameSecretName.value
+$passwordSecretName = $hiveMetastoreDetailsObject.passwordSecretName.value
+
+# Parse Hive KeyVault Details
+Write-Host "Parsing Hive KeyVault Details"
+$hiveKeyVaultDetailsObject = ConvertFrom-Json $HiveKeyVaultDetails
+$hiveKeyVaultId = $hiveKeyVaultDetailsObject.keyVaultId.value
+
+# Define Service Principal Credentials
+Write-Host "Defining Service Principal credentials"
+$password = ConvertTo-SecureString $env:servicePrincipalKey -AsPlainText -Force
+$credSp = New-Object System.Management.Automation.PSCredential ($env:servicePrincipalId, $password)
 
 # Login to Databricks Workspace using Service Principal
 Write-Host "Logging in to Databricks using Service Principal"
 Set-DatabricksEnvironment -TenantID $env:tenantId -ClientID $env:servicePrincipalId -Credential $credSp -AzureResourceID $databricksWorkspaceId -ApiRootUrl $databricksApiUrl -ServicePrincipal
 
-# Generate Databricks PAT Token
-Write-Host "Generating Databricks PAT Token"
-$patToken = Add-DatabricksApiToken -LifetimeSeconds 1200 -Comment "Databricks Token for Setup"
-
-# Login to Databricks Workspace using PAT Token
-Write-Host "Logging in to Databricks using PAT Token"
-Set-DatabricksEnvironment -AccessToken $patToken.token_value -ApiRootUrl $databricksApiUrl
-
-# Create Databricks Secret Scope
-Write-Host "Creating Databricks Secret Scope"
-$secretScopeName = "adminSecretScopeNew"
+# Create Databricks Hive Secret Scope
+Write-Host "Creating Databricks Hive Secret Scope"
+$hiveSecretScopeName = "hiveSecretScope"
 try {
-    Write-Host "Add secret scope"
-    Add-DatabricksSecretScope -ScopeName $secretScopeName
+    Write-Host "Adding secret scope"
+    Add-DatabricksSecretScope -ScopeName $hiveSecretScopeName -AzureKeyVaultResourceID $hiveKeyVaultId
 }
 catch {
     Write-Host "Secret Scope already exists"
 }
-Add-DatabricksSecretScopeACL -ScopeName $secretScopeName -Principal "users" -Permission Read
+Add-DatabricksSecretScopeACL -ScopeName $hiveSecretScopeName -Principal "users" -Permission Read
 
-# Add secrets to secret scope
-Write-Host "Adding Secrets to Secret Scope"
-$sqlServerConnectionURL = "jdbc:sqlserver://${sqlServerName}.database.windows.net:1433;database=${sqlDatabaseName};"
-
-Write-Host $logAnalyticsWorkspaceId
-Write-Host $logAnalyticsWorkspaceKey
-Write-Host $sqlServerUsername
-Write-Host $sqlServerPassword
-Write-Host $sqlServerConnectionURL
-
-Add-DatabricksSecret -ScopeName $secretScopeName -SecretName "logAnalyticsWorkspaceId" -StringValue $logAnalyticsWorkspaceId
-Add-DatabricksSecret -ScopeName $secretScopeName -SecretName "logAnalyticsWorkspaceKey" -StringValue $logAnalyticsWorkspaceKey
-Add-DatabricksSecret -ScopeName $secretScopeName -SecretName "hiveMetastoreConnectionUserName" -StringValue $sqlServerUsername
-Add-DatabricksSecret -ScopeName $secretScopeName -SecretName "hiveMetastoreConnectionPassword" -StringValue $sqlServerPassword
-Add-DatabricksSecret -ScopeName $secretScopeName -SecretName "hiveMetastoreConnectionURL" -StringValue $sqlServerConnectionURL
+# Create Databricks Log Analytics Secret Scope
+Write-Host "Creating Databricks Log Analytics Secret Scope"
+$logAnalyticsSecretScopeName = "logAnalyticsSecretScope"
+try {
+    Write-Host "Adding secret scope"
+    Add-DatabricksSecretScope -ScopeName $logAnalyticsSecretScopeName -AzureKeyVaultResourceID $LogAnalyticsKeyVaultId
+}
+catch {
+    Write-Host "Secret Scope already exists"
+}
+Add-DatabricksSecretScopeACL -ScopeName $logAnalyticsSecretScopeName -Principal "users" -Permission Read
 
 # Update Spark Monitoring Shell Script
 Write-Host "Updating Spark Monitoring Shell Script"
@@ -155,46 +147,85 @@ foreach ($relativeFilePath in $relativeFilePaths) {
     Upload-DatabricksFSFile -Path "/hiveMetastoreJars_1.2.1/${relativeFilePath}" -LocalPath "${basePath}${relativeFilePath}" -Overwrite $true
 }
 
-# Upload Spark Monitoring Jar for testing
-Write-Host "Uploading Spark Monitoring Jar for testing"
-Upload-DatabricksFSFile -Path "/FileStore/job-jars/spark-monitoring-sample-1.0.0.jar" -LocalPath "code/applicationLogging/tests/spark-monitoring-sample-1.0.0.jar" -Overwrite $true
+# # Upload Spark Monitoring Jar for testing
+# Write-Host "Uploading Spark Monitoring Jar for testing"
+# Upload-DatabricksFSFile -Path "/FileStore/job-jars/spark-monitoring-sample-1.0.0.jar" -LocalPath "code/applicationLogging/tests/spark-monitoring-sample-1.0.0.jar" -Overwrite $true
 
-# Add Databricks Job for testing logging
-Write-Host "Add Databricks Job for testing logging"
-$jobName = "LogAnalyticsLoggingTest"
-$jobClusterDefinition = @{
-    "spark_version" = "6.6.x-scala2.11"
-    "node_type_id" = "Standard_D3_v2"
-    "num_workers" = 1
-}
-$jobLibraries = @( @{"jar" = "dbfs:/databricks/spark-monitoring/tests/spark-monitoring-sample-1.0.0.jar"} )
-$jobJarUri = "spark-monitoring-sample-1.0.0.jar"
-$jobJarMainClassName = "com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob"
-Add-DatabricksJob -Name $jobName -NewClusterDefinition $jobClusterDefinition -Libraries $jobLibraries -JarMainClassName $jobJarMainClassName -JarURI $jobJarUri
+# # Add Databricks Job for testing logging
+# Write-Host "Add Databricks Job for testing logging"
+# $jobName = "LogAnalyticsLoggingTest"
+# $jobClusterDefinition = @{
+#     "spark_version" = "6.6.x-scala2.11"
+#     "node_type_id" = "Standard_D3_v2"
+#     "num_workers" = 1
+# }
+# $jobLibraries = @( @{"jar" = "dbfs:/databricks/spark-monitoring/tests/spark-monitoring-sample-1.0.0.jar"} )
+# $jobJarUri = "spark-monitoring-sample-1.0.0.jar"
+# $jobJarMainClassName = "com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob"
+# Add-DatabricksJob -Name $jobName -NewClusterDefinition $jobClusterDefinition -Libraries $jobLibraries -JarMainClassName $jobJarMainClassName -JarURI $jobJarUri
 
-# Load General Cluster Policy
-Write-Host "Loading General Cluster Policy"
-$generalPolicy = Get-Content -Path "code/policies/generalPolicy.json" -Raw | Out-String | ConvertFrom-Json
-$generalPolicy = ConvertTo-Json $generalPolicy
+# Update Cluster Policy
+Write-Host "Updating Cluster Policies"
+$connectionUrlParameter = "spark_env_vars.SQL_CONNECTION_STRING"
+$userNameParameter = "spark_env_vars.SQL_USERNAME"
+$passwordParameter = "spark_env_vars.SQL_PASSWORD"
+$logAnalyticsWorkspaceIdParameter = "spark_env_vars.LOG_ANALYTICS_WORKSPACE_ID"
+$logAnalyticsWorkspaceKeyParameter = "spark_env_vars.LOG_ANALYTICS_WORKSPACE_KEY"
 
-# Define General Cluster Policy
-Write-Host "Defining General Cluster Policy"
-$policyName = "GeneralClusterPolicyNew"
+# Load All Purpose Policy
+Write-Host "Loading All Purpose Policy"
+$allPurposePolicy = Get-Content -Path "code/policies/allPurposePolicy.json" -Raw | Out-String | ConvertFrom-Json
+$allPurposePolicy.$connectionUrlParameter.value = "{{secrets/${hiveSecretScopeName}/${connectionStringSecretName}}}"
+$allPurposePolicy.$userNameParameter.value = "{{secrets/${hiveSecretScopeName}/${usernameSecretName}}}"
+$allPurposePolicy.$passwordParameter.value = "{{secrets/${hiveSecretScopeName}/${passwordSecretName}}}"
+$allPurposePolicy.$logAnalyticsWorkspaceIdParameter.value = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceIdSecretName}}}"
+$allPurposePolicy.$logAnalyticsWorkspaceKeyParameter.value = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceKeySecretName}}}"
+$allPurposePolicy = ConvertTo-Json $allPurposePolicy
+
+# Define All Purpose Policy
+Write-Host "Defining All Purpose Cluster Policy"
+$allPurposePolicyName = "AllPurposeClusterPolicy"
 try {
-    Add-DatabricksClusterPolicy -PolicyName $policyName -Definition $generalPolicy
+    Add-DatabricksClusterPolicy -PolicyName $allPurposePolicyName -Definition $allPurposePolicy
 }
 catch {
     $clusterPolicies = Get-DatabricksClusterPolicy
     $clusterId = ""
     foreach ($clusterPolicy in $clusterPolicies) {
-        if ($clusterPolicy.name -eq $policyName) {
+        if ($clusterPolicy.name -eq $allPurposePolicyName) {
             $clusterId = $clusterPolicy.policy_id
             Break;
         }
     }
-    Update-DatabricksClusterPolicy -PolicyID $clusterId -PolicyName $policyName -Definition $generalPolicy
+    Update-DatabricksClusterPolicy -PolicyID $clusterId -PolicyName $allPurposePolicyName -Definition $allPurposePolicy
 }
 
-# Test connection to Databricks
-# Write-Host "Testing connection to Databricks"
-# Test-DatabricksEnvironment
+# Load Job Policy
+Write-Host "Loading Job Policy"
+$jobPolicy = Get-Content -Path "code/policies/jobPolicy.json" -Raw | Out-String | ConvertFrom-Json
+$jobPolicy.$connectionUrlParameter.value = "{{secrets/${hiveSecretScopeName}/${connectionStringSecretName}}}"
+$jobPolicy.$userNameParameter.value = "{{secrets/${hiveSecretScopeName}/${usernameSecretName}}}"
+$jobPolicy.$passwordParameter.value = "{{secrets/${hiveSecretScopeName}/${passwordSecretName}}}"
+$jobPolicy.$logAnalyticsWorkspaceIdParameter.value = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceIdSecretName}}}"
+$jobPolicy.$logAnalyticsWorkspaceKeyParameter.value = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceKeySecretName}}}"
+$jobPolicy = ConvertTo-Json $jobPolicy
+
+# Define Job Policy
+Write-Host "Defining Job Cluster Policy"
+$jobPolicyName = "JobClusterPolicy"
+try {
+    Add-DatabricksClusterPolicy -PolicyName $jobPolicyName -Definition $jobPolicy
+}
+catch {
+    $clusterPolicies = Get-DatabricksClusterPolicy
+    $clusterId = ""
+    foreach ($clusterPolicy in $clusterPolicies) {
+        if ($clusterPolicy.name -eq $jobPolicyName) {
+            $clusterId = $clusterPolicy.policy_id
+            Break;
+        }
+    }
+    Update-DatabricksClusterPolicy -PolicyID $clusterId -PolicyName $jobPolicyName -Definition $jobPolicy
+}
+
+Write-Host "Successfully finished Databricks setup"
