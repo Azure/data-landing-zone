@@ -4,13 +4,8 @@
         "maxValue": 100
     },
     "cluster_type": {
-        "type": "whitelist",
-        "values": [
-            "all-purpose",
-            "job"
-        ],
-        "defaultValue": "all-purpose",
-        "hidden": false
+        "type": "fixed",
+        "value": "all-purpose"
     },
     "spark_conf.spark.databricks.cluster.profile": {
         "type": "fixed",
