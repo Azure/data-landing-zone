@@ -133,6 +133,9 @@
         "sqlDatabaseAutoPauseDelay": "[parameters('sqlDatabaseAutoPauseDelay')]",
         "keyVaultId": "[parameters('keyVaultId')]",
         "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]",
+        "connectionStringSecretName": "[concat(variables('sqlDatabaseName'), 'ConnectionString')]",
+        "usernameSecretName": "[concat(variables('sqlDatabaseName'), 'Username')]",
+        "passwordSecretName": "[concat(variables('sqlDatabaseName'), 'Password')]",
         "storageContainerId": "",
         "storageAccountName": "",
         "storageAccountContainerName": "",
@@ -200,11 +203,35 @@
                     "resources": [
                         {
                             "type": "Microsoft.KeyVault/vaults/secrets",
-                            "name": "[concat(variables('keyVaultName'), '/', variables('sqlDatabaseName'), 'ConnectionString')]",
+                            "name": "[concat(variables('keyVaultName'), '/', variables('connectionStringSecretName'))]",
                             "apiVersion": "2019-09-01",
                             "properties": {
                                 "contentType": "text/plain",
                                 "value": "[concat('Server=tcp:', reference(resourceId('Microsoft.Sql/servers', variables('sqlServerName')), '2019-06-01-preview').fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('sqlDatabaseName'), ';Persist Security Info=False;User ID=', reference(resourceId('Microsoft.Sql/servers', variables('sqlServerName')), '2019-06-01-preview').administratorLogin, ';Password=', variables('sqlServerAdministratorLoginPassword'), ';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]",
+                                "attributes": {
+                                    "enabled": true
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.KeyVault/vaults/secrets",
+                            "name": "[concat(variables('keyVaultName'), '/', variables('usernameSecretName'))]",
+                            "apiVersion": "2019-09-01",
+                            "properties": {
+                                "contentType": "text/plain",
+                                "value": "[reference(resourceId('Microsoft.Sql/servers', variables('sqlServerName')), '2019-06-01-preview').administratorLogin]",
+                                "attributes": {
+                                    "enabled": true
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.KeyVault/vaults/secrets",
+                            "name": "[concat(variables('keyVaultName'), '/', variables('passwordSecretName'))]",
+                            "apiVersion": "2019-09-01",
+                            "properties": {
+                                "contentType": "text/plain",
+                                "value": "[variables('sqlServerAdministratorLoginPassword')]",
                                 "attributes": {
                                     "enabled": true
                                 }
@@ -219,21 +246,17 @@
         }
     ],
     "outputs": {
-        "sqlServerName": {
+        "connectionStringSecretName": {
             "type": "string",
-            "value": "[variables('sqlServerName')]"
+            "value": "[variables('connectionStringSecretName')]"
         },
-        "sqlDatabaseName": {
+        "usernameSecretName": {
             "type": "string",
-            "value": "[variables('sqlDatabaseName')]"
+            "value": "[variables('usernameSecretName')]"
         },
-        "sqlServerAdministratorLoginUsername": {
+        "passwordSecretName": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Sql/servers', variables('sqlServerName')), '2019-06-01-preview').administratorLogin]"
-        },
-        "sqlServerAdministratorLoginPassword": {
-            "type": "securestring",
-            "value": "[variables('sqlServerAdministratorLoginPassword')]"
+            "value": "[variables('passwordSecretName')]"
         }
     }
 }
