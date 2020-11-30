@@ -117,7 +117,7 @@ function New-Password {
     [CmdletBinding()]
     param (
         [Parameter(ValueFromPipeline = $true, Position = 0)]
-        [string]$Template = "S16",
+        [string]$Template = "A16",
     
         [hashtable]$CustomCharacterSet = @{}
     )
@@ -198,9 +198,7 @@ if ($GitHub) {
     Write-Output "::set-output name=password::$Password"
 }
 else {
-    Write-Output "$Password"
-
     # Set output
     Write-Output "Setting output"
-    Write-Output "##vso[task.setvariable variable=password;issecret=true]$Password"
+    Write-Output "##vso[task.setvariable variable=password;issecret=true;isoutput=true;]$Password"
 }
