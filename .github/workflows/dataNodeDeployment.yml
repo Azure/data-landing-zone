@@ -16,9 +16,14 @@ on:
       - 'code/**'
 
 env:
-  AZURE_RESOURCE_GROUP_NAME_STORAGE: 'dn001-storage'
+  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'
   AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dn001-mgmt'
-  AZURE_RESOURCE_GROUP_NAME_PROCESSING: 'dn001-processing'
+  AZURE_RESOURCE_GROUP_NAME_STORAGE: 'dn001-storage'
+  AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE: 'dn001-secretstorage'
+  AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE: 'dn001-externalstorage'
+  AZURE_RESOURCE_GROUP_NAME_METADATA: 'dn001-metadata'
+  AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: 'dn001-processing-domain'
+  AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: 'dn001-processing-product'
   AZURE_LOCATION: northeurope
 
 jobs:
@@ -35,33 +40,73 @@ jobs:
     
     # Create resource group
     - name: Create resource group
-      id: resource_group_storage
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}"
-          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}
-    
-    # Create resource group
-    - name: Create resource group
       id: resource_group_management
       uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
-          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}"
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}\""
           az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
     
     # Create resource group
     - name: Create resource group
-      id: resource_group_processing
+      id: resource_group_storage
       uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
-          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }}"
-          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }}
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}
+    
+    # Create resource group
+    - name: Create resource group
+      id: resource_group_secretstorage
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE }}
+    
+    # Create resource group
+    - name: Create resource group
+      id: resource_group_externalstorage
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE }}
+    
+    # Create resource group
+    - name: Create resource group
+      id: resource_group_metadata
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+    
+    # Create resource group
+    - name: Create resource group
+      id: resource_group_processing_domain
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}
+    
+    # Create resource group
+    - name: Create resource group
+      id: resource_group_processing_product
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT }}
     
     # Log out from Azure
     - name: Log out from Azure
@@ -89,175 +134,240 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploy key vault 001 - validation
-    - name: Deploy key vault 001 - validation
+    # Deploy Key Vault 001 - validation
+    - name: Deploy Key Vault 001 - validation
       id: key_vault_001_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
-            --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
+        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
+        deploymentMode: Validate
     
-    # Deploy sql server 001 - validation
-    - name: Deploy sql server 001 - validation
+    # Deploy Key Vault 002 - validation
+    - name: Deploy Key Vault 002 - validation
+      id: key_vault_002_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
+        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault002.json
+        deploymentMode: Validate
+    
+    # Deploy Storage Account 001 - Raw - validation
+    - name: Deploy Storage Account 001 - Raw - validation
+      id: storage_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
+        deploymentMode: Validate
+    
+    # Deploy Storage Account 002 - Enriched & Curated - validation
+    - name: Deploy Storage Account 002 - Enriched & Curated - validation
+      id: storage_002_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.storage002.json
+        deploymentMode: Validate
+    
+    # Deploy Storage Account 003 - Workspace - validation
+    - name: Deploy Storage Account 003 - Workspace - validation
+      id: storage_003_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.storage003.json
+        deploymentMode: Validate
+    
+    # Deploy Secret Storage Account 001 - Raw - validation
+    - name: Deploy Secret Storage Account 001 - Raw - validation
+      id: secret_storage_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.secret_storage001.json
+        deploymentMode: Validate
+    
+    # Deploy Secret Storage Account 002 - Enriched & Curated - validation
+    - name: Deploy Secret Storage Account 002 - Enriched & Curated - validation
+      id: secret_storage_002_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.secret_storage002.json
+        deploymentMode: Validate
+    
+    # Deploy Secret Storage Account 003 - Workspace - validation
+    - name: Deploy Secret Storage Account 003 - Workspace - validation
+      id: secret_storage_003_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.secret_storage003.json
+        deploymentMode: Validate
+    
+    # Deploy External Storage Account 001 - validation
+    - name: Deploy External Storage Account 001 - validation
+      id: external_storage_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.external_storage001.json
+        deploymentMode: Validate
+    
+    # Generate Password
+    - name: Generate Password
+      id: generate_password
+      run: |
+        echo "Generating Password"
+        pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
+    
+    # Deploy SQL Server 001 - validation
+    - name: Deploy SQL Server 001 - validation
       id: sql_server_001_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer001.json
-      continue-on-error: true
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SqlServer/deploy.sqlServer.json
+        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer001.json administratorLoginPassword="${{ steps.generate_password.outputs.password }}"
+        deploymentMode: Validate
     
-    # Deploy sql server 002 - validation
-    - name: Deploy sql server 002 - validation
+    # Generate Password
+    - name: Generate Password
+      id: generate_password
+      run: |
+        echo "Generating Password"
+        pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
+    
+    # Deploy SQL Server 002 - validation
+    - name: Deploy SQL Server 002 - validation
       id: sql_server_002_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer002.json
-      continue-on-error: true
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SqlServer/deploy.sqlServer.json
+        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer002.json administratorLoginPassword="${{ steps.generate_password.outputs.password }}"
+        deploymentMode: Validate
     
-    # Deploy sql database 001 - validation
-    - name: Deploy sql database 001 - validation
+    # Deploy SQL Database 001 - validation
+    - name: Deploy SQL Database 001 - validation
       id: sql_database_001_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
+        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase001.json
+        deploymentMode: Validate
     
-    # Deploy sql database 002 - validation
-    - name: Deploy sql database 002 - validation
+    # Deploy SQL Database 002 - validation
+    - name: Deploy SQL Database 002 - validation
       id: sql_database_002_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
+        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase002.json
+        deploymentMode: Validate
     
-    # Deploy databricks 001 - validation
-    - name: Deploy databricks 001 - validation
+    # Deploy Databricks 001 - validation
+    - name: Deploy Databricks 001 - validation
       id: databricks_001_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-            --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
-            --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Databricks/deploy.databricks.json
+        parameters: ${{ github.workspace }}/infra/Databricks/params.databricks001.json
+        deploymentMode: Validate
     
-    # Deploy databricks 002 - validation
-    - name: Deploy databricks 002 - validation
+    # Deploy Databricks 002 - validation
+    - name: Deploy Databricks 002 - validation
       id: databricks_002_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-            --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
-            --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Databricks/deploy.databricks.json
+        parameters: ${{ github.workspace }}/infra/Databricks/params.databricks002.json
+        deploymentMode: Validate
     
-    # Deploy event hub 001 - validation
-    - name: Deploy event hub 001 - validation
-      id: event_hub_001_validation
-      uses: azure/cli@v1
+    # Deploy Event Hub 001 - validation
+    - name: Deploy Event Hub 001 - validation
+      id: eventhub_001_validation
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-            --template-file $GITHUB_WORKSPACE/infra/EventHub/deploy.eventHub.json \
-            --parameters $GITHUB_WORKSPACE/infra/EventHub/params.eventHub001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/EventHub/deploy.eventHub.json
+        parameters: ${{ github.workspace }}/infra/EventHub/params.eventHub001.json
+        deploymentMode: Validate
     
-    # Deploy storage account 001 - raw - validation
-    - name: Deploy storage account 001 - raw - validation
-      id: storage_account_001_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
-            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
-    
-    # Deploy storage account 002 - curated - validation
-    - name: Deploy storage account 002 - curated - validation
-      id: storage_account_002_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
-            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage002.json
-    
-    # Deploy storage account 003 - workspace - validation
-    - name: Deploy storage account 003 - workspace - validation
-      id: storage_account_003_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
-            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage003.json
-    
-    # Deploy data factory 001 - validation
-    - name: Deploy data factory 001 - validation
+    # Deploy Data Factory 001 - validation
+    - name: Deploy Data Factory 001 - validation
       id: data_factory_001_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-            --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
-            --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/DataFactory/deploy.dataFactory.json
+        parameters: ${{ github.workspace }}/infra/DataFactory/params.dataFactory001.json
+        deploymentMode: Validate
     
     # Log out from Azure
     - name: Log out from Azure
@@ -286,173 +396,240 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploy key vault 001
-    - name: Deploy key vault 001
+    # Deploy Key Vault 001
+    - name: Deploy Key Vault 001
       id: key_vault_001_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
-            --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
+        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
+        deploymentMode: Incremental
     
-    # Deploy sql server 001
-    - name: Deploy sql server 001
+    # Deploy Key Vault 002
+    - name: Deploy Key Vault 002
+      id: key_vault_002_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
+        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault002.json
+        deploymentMode: Incremental
+    
+    # Deploy Storage Account 001 - Raw
+    - name: Deploy Storage Account 001 - Raw
+      id: storage_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
+        deploymentMode: Incremental
+    
+    # Deploy Storage Account 002 - Enriched & Curated
+    - name: Deploy Storage Account 002 - Enriched & Curated
+      id: storage_002_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.storage002.json
+        deploymentMode: Incremental
+    
+    # Deploy Storage Account 003 - Workspace
+    - name: Deploy Storage Account 003 - Workspace
+      id: storage_003_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.storage003.json
+        deploymentMode: Incremental
+    
+    # Deploy Secret Storage Account 001 - Raw
+    - name: Deploy Secret Storage Account 001 - Raw
+      id: secret_storage_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.secret_storage001.json
+        deploymentMode: Incremental
+    
+    # Deploy Secret Storage Account 002 - Enriched & Curated
+    - name: Deploy Secret Storage Account 002 - Enriched & Curated
+      id: secret_storage_002_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.secret_storage002.json
+        deploymentMode: Incremental
+    
+    # Deploy Secret Storage Account 003 - Workspace
+    - name: Deploy Secret Storage Account 003 - Workspace
+      id: secret_storage_003_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.secret_storage003.json
+        deploymentMode: Incremental
+    
+    # Deploy External Storage Account 001
+    - name: Deploy External Storage Account 001
+      id: external_storage_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.external_storage001.json
+        deploymentMode: Incremental
+    
+    # Generate Password
+    - name: Generate Password
+      id: generate_password
+      run: |
+        echo "Generating Password"
+        pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
+    
+    # Deploy SQL Server 001
+    - name: Deploy SQL Server 001
       id: sql_server_001_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SqlServer/deploy.sqlServer.json
+        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer001.json administratorLoginPassword="${{ steps.generate_password.outputs.password }}"
+        deploymentMode: Incremental
     
-    # Deploy sql server 002
-    - name: Deploy sql server 002
+    # Generate Password
+    - name: Generate Password
+      id: generate_password
+      run: |
+        echo "Generating Password"
+        pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
+    
+    # Deploy SQL Server 002
+    - name: Deploy SQL Server 002
       id: sql_server_002_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlServer/deploy.sqlServer.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlServer/params.sqlServer002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SqlServer/deploy.sqlServer.json
+        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer002.json administratorLoginPassword="${{ steps.generate_password.outputs.password }}"
+        deploymentMode: Incremental
     
-    # Deploy sql database 001
-    - name: Deploy sql database 001
+    # Deploy SQL Database 001
+    - name: Deploy SQL Database 001
       id: sql_database_001_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
+        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase001.json
+        deploymentMode: Incremental
     
-    # Deploy sql database 002
-    - name: Deploy sql database 002
+    # Deploy SQL Database 002
+    - name: Deploy SQL Database 002
       id: sql_database_002_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SqlDatabase/deploy.sqlDatabase.json \
-            --parameters $GITHUB_WORKSPACE/infra/SqlDatabase/params.sqlDatabase002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
+        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase002.json
+        deploymentMode: Incremental
     
-    # Deploy databricks 001
-    - name: Deploy databricks 001
+    # Deploy Databricks 001
+    - name: Deploy Databricks 001
       id: databricks_001_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-            --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
-            --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Databricks/deploy.databricks.json
+        parameters: ${{ github.workspace }}/infra/Databricks/params.databricks001.json
+        deploymentMode: Incremental
     
-    # Deploy databricks 002 - validation
-    - name: Deploy databricks 002 - validation
-      id: databricks_002_validation
-      uses: azure/cli@v1
+    # Deploy Databricks 002
+    - name: Deploy Databricks 002
+      id: databricks_002_deployment
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-            --template-file $GITHUB_WORKSPACE/infra/Databricks/deploy.databricks.json \
-            --parameters $GITHUB_WORKSPACE/infra/Databricks/params.databricks002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Databricks/deploy.databricks.json
+        parameters: ${{ github.workspace }}/infra/Databricks/params.databricks002.json
+        deploymentMode: Incremental
     
-    # Deploy event hub 001
-    - name: Deploy event hub 001
-      id: event_hub_001_deployment
-      uses: azure/cli@v1
+    # Deploy Event Hub 001
+    - name: Deploy Event Hub 001
+      id: eventhub_001_deployment
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-            --template-file $GITHUB_WORKSPACE/infra/EventHub/deploy.eventHub.json \
-            --parameters $GITHUB_WORKSPACE/infra/EventHub/params.eventHub001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/EventHub/deploy.eventHub.json
+        parameters: ${{ github.workspace }}/infra/EventHub/params.eventHub001.json
+        deploymentMode: Incremental
     
-    # Deploy storage account 001 - raw
-    - name: Deploy storage account 001 - raw
-      id: storage_account_001_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
-            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
-    
-    # Deploy storage account 002 - curated
-    - name: Deploy storage account 002 - curated
-      id: storage_account_002_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
-            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage002.json
-    
-    # Deploy storage account 003 - workspace
-    - name: Deploy storage account 003 - workspace
-      id: storage_account_003_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }} \
-            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage003.json
-    
-    # Deploy data factory 001
-    - name: Deploy data factory 001
+    # Deploy Data Factory 001
+    - name: Deploy Data Factory 001
       id: data_factory_001_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSING }} \
-            --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
-            --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/DataFactory/deploy.dataFactory.json
+        parameters: ${{ github.workspace }}/infra/DataFactory/params.dataFactory001.json
+        deploymentMode: Incremental
     
     # Log out from Azure
     - name: Log out from Azure
