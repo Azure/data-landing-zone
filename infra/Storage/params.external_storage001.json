@@ -6,16 +6,16 @@
             "value": "northeurope"
         },
         "storageAccountName": {
-            "value": "dn001enrichedcuratedsa"
+            "value": "dn001externalsa001"
         },
         "storageAccountType": {
-            "value": "Standard_ZRS"
+            "value": "Standard_LRS"
         },
         "enableHns": {
-            "value": true
+            "value": false
         },
         "keyVaultId": {
-            "value": ""
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
         },
         "subnetId": {
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"

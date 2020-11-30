@@ -15,7 +15,7 @@
                 "description": "Specifies the name of the storage account."
             }
         },
-        "storageIsHnsEnabled": {
+        "enableHns": {
             "type": "bool",
             "defaultValue": true,
             "metadata": {
@@ -51,10 +51,16 @@
                 "description": "Specifies the id of the subnet which the private endpoint uses."
             }
         },
-        "privateDnsZoneResourceGroupId": {
+        "privateDnsZoneIdBlob": {
             "type": "string",
             "metadata": {
-                "description": "Specifies the ID of the resource group of the private dns zones."
+                "description": "Specifies the ID of the private dns zone for Blob."
+            }
+        },
+        "privateDnsZoneIdDfs": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the private dns zone for DFS."
             }
         }
     },
@@ -63,13 +69,14 @@
         "location": "[parameters('location')]",
         "storageAccountName": "[parameters('storageAccountName')]",
         "storageAccountType": "[parameters('storageAccountType')]",
-        "storageIsHnsEnabled": "[parameters('storageIsHnsEnabled')]",
+        "enableHns": "[parameters('enableHns')]",
         "keyVaultId": "[parameters('keyVaultId')]",
         "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]",
         "subnetId": "[parameters('subnetId')]",
-        "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
-        "privateDnsZoneResourceGroupName": "[last(split(variables('privateDnsZoneResourceGroupId'), '/'))]",
-        "templateUri": "https://raw.githubusercontent.com/Azure/data-node/main/infra/PrivateEndpoint/deploy.privateEndpoint.json?token=AIHRGTUPBHOMXOH6QQG6E7C7UF6KO"
+        "privateDnsZoneIdBlob": "[parameters('privateDnsZoneIdBlob')]",
+        "privateDnsZoneIdDfs": "[parameters('privateDnsZoneIdDfs')]",
+        "privateEndpointNameBlob": "[concat(variables('storageAccountName'), '-blob-private-endpoint')]",
+        "privateEndpointNameDfs": "[concat(variables('storageAccountName'), '-dfs-private-endpoint')]"
     },
     "resources": [
         {
@@ -118,7 +125,7 @@
                 },
                 "accessTier": "Hot",
                 "supportsHttpsTrafficOnly": true,
-                "isHnsEnabled": "[variables('storageIsHnsEnabled')]",
+                "isHnsEnabled": "[variables('enableHns')]",
                 "largeFileSharesState": "Disabled",
                 "minimumTlsVersion": "TLS1_2",
                 "allowBlobPublicAccess": false
@@ -194,18 +201,7 @@
                 {
                     "type": "blobServices/containers",
                     "apiVersion": "2020-08-01-preview",
-                    "name": "[concat('default/', 'nonsecure')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-                    ],
-                    "properties": {
-                        "publicAccess": "None"
-                    }
-                },
-                {
-                    "type": "blobServices/containers",
-                    "apiVersion": "2020-08-01-preview",
-                    "name": "[concat('default/', 'secure')]",
+                    "name": "[concat('default/', 'data')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
                     ],
@@ -216,76 +212,101 @@
             ]
         },
         {
-            "name": "PrivateEndpointDeployment",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
+            "condition": "[variables('enableHns')]",
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('privateEndpointNameDfs')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ],
+            "location": "[variables('location')]",
             "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('templateUri')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "privateEndpointName": {
-                        "value": "[concat(variables('storageAccountName'), '-private-endpoint-dfs')]"
-                    },
-                    "privateEndpointLocation": {
-                        "value": "[variables('location')]"
-                    },
-                    "privateLinkServiceResourceId": {
-                        "value": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-                    },
-                    "privateLinkServiceGroupId": {
-                        "value": "dfs"
-                    },
-                    "subnetResourceId": {
-                        "value": "[variables('subnetId')]"
-                    },
-                    "privateDnsZoneId": {
-                        "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.dfs.core.windows.net')]"
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('privateEndpointNameDfs')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                            "groupIds": [
+                                "dfs"
+                            ]
+                        }
                     }
+                ],
+                "manualPrivateLinkServiceConnections": [
+                ],
+                "subnet": {
+                    "id": "[variables('subnetId')]"
                 }
             }
         },
         {
-            "name": "PrivateEndpointDeployment",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
+            "condition": "[variables('enableHns')]",
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('privateEndpointNameDfs'), '/aRecord')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameDfs'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "[concat(variables('privateEndpointNameDfs'), '-aRecord')]",
+                        "properties": {
+                            "privateDnsZoneId": "[variables('privateDnsZoneIdDfs')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('privateEndpointNameBlob')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ],
+            "location": "[variables('location')]",
             "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('templateUri')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "privateEndpointName": {
-                        "value": "[concat(variables('storageAccountName'), '-private-endpoint')]"
-                    },
-                    "privateEndpointLocation": {
-                        "value": "[variables('location')]"
-                    },
-                    "privateLinkServiceResourceId": {
-                        "value": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-                    },
-                    "privateLinkServiceGroupId": {
-                        "value": "blob"
-                    },
-                    "subnetResourceId": {
-                        "value": "[variables('subnetId')]"
-                    },
-                    "privateDnsZoneId": {
-                        "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.blob.core.windows.net')]"
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('privateEndpointNameBlob')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                            "groupIds": [
+                                "blob"
+                            ]
+                        }
                     }
+                ],
+                "manualPrivateLinkServiceConnections": [
+                ],
+                "subnet": {
+                    "id": "[variables('subnetId')]"
                 }
             }
         },
         {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('privateEndpointNameBlob'), '/aRecord')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameBlob'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "[concat(variables('privateEndpointNameBlob'), '-aRecord')]",
+                        "properties": {
+                            "privateDnsZoneId": "[variables('privateDnsZoneIdBlob')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "condition": "[not(empty(variables('keyVaultId')))]",
             "name": "SecretDeployment",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",

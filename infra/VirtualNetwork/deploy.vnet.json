@@ -74,7 +74,7 @@
                     ]
                 },
                 "dhcpOptions": {
-                    "dnsServers": "[variables('dnsServerAdresses')]"
+                    "dnsServers": "[if(empty(variables('dnsServerAdresses')), '[]', variables('dnsServerAdresses'))]"
                 },
                 "subnets": [
                     {
