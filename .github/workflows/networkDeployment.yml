@@ -9,6 +9,7 @@ on:
       - '.github/workflows/networkDeployment.yml'
 
 env:
+  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'
   AZURE_RESOURCE_GROUP: dn001-network
   AZURE_LOCATION: northeurope
 
@@ -16,7 +17,6 @@ jobs:
   create-resource-group:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Login to Azure
     - name: Azure Login
@@ -32,7 +32,7 @@ jobs:
       with:
         azcliversion: latest
         inlineScript: |
-          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP }}"
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP }}\""
           az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP }}
     
     # Log out from Azure
@@ -45,10 +45,9 @@ jobs:
           az logout
 
   validation:
-    needs: [create-resource-group ]
+    needs: [ create-resource-group ]
     runs-on: ubuntu-latest
     
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Check Out Repository
@@ -62,44 +61,44 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploys vnet - validation
-    - name: Deploy vnet - validation
+    # Deploy Vnet - validation
+    - name: Deploy Vnet - validation
       id: vnet_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetwork/deploy.vnet.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet.json
+        deploymentMode: Validate
     
-    # Deploy vnet peering 001 - validation
-    - name: Deploy vnet peering 001 - validation
+    # Deploy Vnet Peering 001 - validation
+    - name: Deploy Vnet Peering 001 - validation
       id: vnet_peering_001_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
+        deploymentMode: Validate
     
-    # Deploy vnet peering 002 - validation
-    - name: Deploy vnet peering 002 - validation
+    # Deploy Vnet Peering 002 - validation
+    - name: Deploy Vnet Peering 002 - validation
       id: vnet_peering_002_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering002.json
+        deploymentMode: Validate
     
     # Log out from Azure
     - name: Log out from Azure
@@ -129,44 +128,44 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploys vnet
-    - name: Deploy vnet
+    # Deploy Vnet
+    - name: Deploy Vnet
       id: vnet_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetwork/deploy.vnet.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet.json
+        deploymentMode: Incremental
     
-    # Deploy vnet peering 001
-    - name: Deploy vnet peering 001
+    # Deploy Vnet Peering 001
+    - name: Deploy Vnet Peering 001
       id: vnet_peering_001_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
+        deploymentMode: Incremental
     
-    # Deploy vnet peering 002
-    - name: Deploy vnet peering 002
+    # Deploy Vnet Peering 002
+    - name: Deploy Vnet Peering 002
       id: vnet_peering_002_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering002.json
+        deploymentMode: Incremental
     
     # Log out from Azure
     - name: Log out from Azure
