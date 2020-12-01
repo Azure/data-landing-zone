@@ -246,6 +246,10 @@
         }
     ],
     "outputs": {
+        "sqlDatabaseId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServerName'), variables('sqlDatabaseName'))]"
+        },
         "connectionStringSecretName": {
             "type": "string",
             "value": "[variables('connectionStringSecretName')]"

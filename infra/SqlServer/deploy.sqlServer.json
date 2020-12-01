@@ -146,5 +146,10 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "sqlServerId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
+        }
+    }
 }
