@@ -32,7 +32,7 @@
             }
         },
         "dnsServerAdresses": {
-            "type": "string",
+            "type": "array",
             "metadata": {
                 "description": "List of internal IP adresses of your DNS forwarders."
             }
@@ -62,13 +62,13 @@
         "sqlServerAdministratorLoginPassword": "[parameters('sqlServerAdministratorLoginPassword')]",
         "storageAccountNames": [
             "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'rawsa')]",
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'enrichedcuratedsa')]",
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'workspacesa')]"
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'enrcursa')]",
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa')]"
         ],
         "secretStorageAccountNames": [
             "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretrawsa')]",
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretenrichedcuratedsa')]",
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretworkspacesa')]"
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretenrcursa')]",
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretworksa')]"
         ],
         "databricksNames": [
             "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-databricks001-ingest')]",
@@ -82,13 +82,14 @@
         "metadataResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-metadata')]",
         "processingDomainResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-processing-domain')]",
         "processingProductResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-processing-product')]",
-        "vnetTemplateLink": "url",
-        "keyVaultTemplateLink": "url",
-        "storageTemplateLink": "url",
-        "sqlServerTemplateLink": "url",
-        "sqlDatabaseTemplateLink": "url",
-        "databricksTemplateLink": "url",
-        "eventHubTemplateLink": "url"
+        "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/VirtualNetwork/deploy.vnet.json?token=AIHRGTXECUOLYNPUBAZTVNK7Z64GE",
+        "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/KeyVault/deploy.keyVault.json?token=AIHRGTQJGE5VKSNJLW3KHQC7Z6KOM",
+        "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Storage/deploy.storage.json?token=AIHRGTWAODHLC5RESPJTZPK7Z6WEM",
+        "sqlServerTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlServer/deploy.sqlServer.json?token=AIHRGTX7J72IAOMHATHPO4S7Z6WFS",
+        "sqlDatabaseTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlDatabase/deploy.sqlDatabase.json?token=AIHRGTU5TLDZY6FCOCCNE6S7Z6YZQ",
+        "databricksTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Databricks/deploy.databricks.json?token=AIHRGTUCILPWOMJQZP7I7KC7Z6Y34",
+        "eventHubTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/EventHub/deploy.eventHub.json?token=AIHRGTV7RWCREINFMPVHJSC7Z6Y4U",
+        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/DataFactory/deploy.dataFactory.json?token=AIHRGTWKEIPC6YCAQLZCCQ27Z652Y"
     },
     "resources": [
         {
@@ -168,7 +169,7 @@
                         "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-vnet')]"
                     },
                     "deployDatabricksNsg": {
-                        "value": true
+                        "value": false
                     },
                     "dnsServerAdresses": {
                         "value": "[variables('dnsServerAdresses')]"
@@ -182,7 +183,8 @@
             "apiVersion": "2020-06-01",
             "name": "keyVault001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
+                "vnetDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -212,7 +214,8 @@
             "apiVersion": "2020-06-01",
             "name": "keyVault002Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
+                "vnetDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -242,7 +245,8 @@
             "apiVersion": "2020-06-01",
             "name": "[take(concat('storageDeployment-', copyIndex(), '-', variables('storageAccountNames')[copyIndex()]), 64)]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('storageResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('storageResourceGroupName'))]",
+                "vnetDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -263,9 +267,6 @@
                     "enableHns": {
                         "value": true
                     },
-                    "keyVaultId": {
-                        "value": ""
-                    },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
                     },
@@ -279,7 +280,7 @@
             },
             "resourceGroup": "[variables('storageResourceGroupName')]",
             "copy": {
-                "name": "storageAccountNamesCopy",
+                "name": "storageAccountCopy",
                 "count": "[length(variables('storageAccountNames'))]",
                 "mode": "Parallel"
             }
@@ -289,7 +290,8 @@
             "apiVersion": "2020-06-01",
             "name": "[take(concat('secretStorageDeployment-', copyIndex(), '-', variables('secretStorageAccountNames')[copyIndex()]), 64)]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('secretStorageResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('secretStorageResourceGroupName'))]",
+                "vnetDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -310,9 +312,6 @@
                     "enableHns": {
                         "value": true
                     },
-                    "keyVaultId": {
-                        "value": ""
-                    },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
                     },
@@ -326,7 +325,7 @@
             },
             "resourceGroup": "[variables('secretStorageResourceGroupName')]",
             "copy": {
-                "name": "storageAccountNamesCopy",
+                "name": "secretStorageAccountCopy",
                 "count": "[length(variables('secretStorageAccountNames'))]",
                 "mode": "Parallel"
             }
@@ -336,7 +335,9 @@
             "apiVersion": "2020-06-01",
             "name": "externalStorageDeployment001",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('externalStorageResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('externalStorageResourceGroupName'))]",
+                "vnetDeployment",
+                "keyVault001Deployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -357,9 +358,6 @@
                     "enableHns": {
                         "value": false
                     },
-                    "keyVaultId": {
-                        "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
-                    },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
                     },
@@ -378,7 +376,8 @@
             "apiVersion": "2020-06-01",
             "name": "sqlserver001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
+                "vnetDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -420,7 +419,9 @@
             "apiVersion": "2020-06-01",
             "name": "sqlserver002Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
+                "vnetDeployment",
+                "sqlserver001Deployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -462,7 +463,9 @@
             "apiVersion": "2020-06-01",
             "name": "sqlDatabase001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
+                "keyVault001Deployment",
+                "sqlserver001Deployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -514,18 +517,20 @@
                         "value": -1
                     },
                     "keyVaultId": {
-                        "value": "[reference('keyVault002Deployment').outputs.keyVaultId.value]"
+                        "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
                     }
                 }
             },
-            "resourceGroup": "[variables('externalStorageResourceGroupName')]"
+            "resourceGroup": "[variables('metadataResourceGroupName')]"
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
             "name": "sqlDatabase002Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
+                "keyVault002Deployment",
+                "sqlserver002Deployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -577,18 +582,19 @@
                         "value": -1
                     },
                     "keyVaultId": {
-                        "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
+                        "value": "[reference('keyVault002Deployment').outputs.keyVaultId.value]"
                     }
                 }
             },
-            "resourceGroup": "[variables('externalStorageResourceGroupName')]"
+            "resourceGroup": "[variables('metadataResourceGroupName')]"
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
             "name": "databricks001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('processingDomainResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('processingDomainResourceGroupName'))]",
+                "vnetDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -607,7 +613,7 @@
                         "value": "[reference('vnetDeployment').outputs.vnetId.value]"
                     },
                     "databricksManagedResourceGroupId": {
-                        "value": "[concat('subscriptions/', variables('dataNodeSubscriptionId'), '/resourceGroups/', variables('databricksNames')[0])]"
+                        "value": "[concat('/subscriptions/', variables('dataNodeSubscriptionId'), '/resourceGroups/', variables('databricksNames')[0])]"
                     },
                     "databricksPrivateSubnetName": {
                         "value": "[reference('vnetDeployment').outputs.databricksPrivateSubnetName001.value]"
@@ -622,9 +628,48 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
+            "name": "databricks002Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('processingProductResourceGroupName'))]",
+                "vnetDeployment"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('databricksTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "databricksName": {
+                        "value": "[variables('databricksNames')[1]]"
+                    },
+                    "databricksVnetId": {
+                        "value": "[reference('vnetDeployment').outputs.vnetId.value]"
+                    },
+                    "databricksManagedResourceGroupId": {
+                        "value": "[concat('/subscriptions/', variables('dataNodeSubscriptionId'), '/resourceGroups/', variables('databricksNames')[1])]"
+                    },
+                    "databricksPrivateSubnetName": {
+                        "value": "[reference('vnetDeployment').outputs.databricksPrivateSubnetName002.value]"
+                    },
+                    "databricksPublicSubnetName": {
+                        "value": "[reference('vnetDeployment').outputs.databricksPublicSubnetName002.value]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('processingProductResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
             "name": "eventHub001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('processingDomainResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('processingDomainResourceGroupName'))]",
+                "vnetDeployment",
+                "keyVault001Deployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -666,12 +711,16 @@
             "apiVersion": "2020-06-01",
             "name": "dataFactory001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('processingDomainResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('processingDomainResourceGroupName'))]",
+                "vnetDeployment",
+                "keyVault001Deployment",
+                "sqlserver001Deployment",
+                "sqlDatabase001Deployment"
             ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('eventHubTemplateLink')]",
+                    "uri": "[variables('dataFactoryTemplateLink')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
