@@ -84,12 +84,12 @@
         "processingProductResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-processing-product')]",
         "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/VirtualNetwork/deploy.vnet.json?token=AIHRGTXECUOLYNPUBAZTVNK7Z64GE",
         "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/KeyVault/deploy.keyVault.json?token=AIHRGTQJGE5VKSNJLW3KHQC7Z6KOM",
-        "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Storage/deploy.storage.json?token=AIHRGTWAODHLC5RESPJTZPK7Z6WEM",
+        "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Storage/deploy.storage.json?token=AIHRGTVQWU2NQLQDZB3MDOK7Z7Q3U",
         "sqlServerTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlServer/deploy.sqlServer.json?token=AIHRGTX7J72IAOMHATHPO4S7Z6WFS",
         "sqlDatabaseTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlDatabase/deploy.sqlDatabase.json?token=AIHRGTU5TLDZY6FCOCCNE6S7Z6YZQ",
         "databricksTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Databricks/deploy.databricks.json?token=AIHRGTUCILPWOMJQZP7I7KC7Z6Y34",
         "eventHubTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/EventHub/deploy.eventHub.json?token=AIHRGTV7RWCREINFMPVHJSC7Z6Y4U",
-        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/DataFactory/deploy.dataFactory.json?token=AIHRGTWKEIPC6YCAQLZCCQ27Z652Y"
+        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/DataFactory/deploy.dataFactory.json?token=AIHRGTWJYQH24OVZEKPIP227Z7QZO"
     },
     "resources": [
         {
