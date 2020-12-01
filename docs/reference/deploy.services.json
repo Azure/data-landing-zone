@@ -36,6 +36,18 @@
             "metadata": {
                 "description": "List of internal IP adresses of your DNS forwarders."
             }
+        },
+        "privateDnsZoneResourceGroupId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the resource group of the private dns zones."
+            }
+        },
+        "sqlServerAdministratorLoginPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Specifies the admin password of the sql servers."
+            }
         }
     },
     "functions": [],
@@ -45,16 +57,51 @@
         "dataNodeName": "[parameters('dataNodeName')]",
         "location": "[parameters('location')]",
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
-        "vnetResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), 'network')]",
-        "storageResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), 'storage')]",
-        "secretStorageResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), 'secretstorage')]",
-        "vnetTemplateLink": "url"
+        "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
+        "privateDnsZoneResourceGroupName": "[last(split(variables('privateDnsZoneResourceGroupId'), '/'))]",
+        "sqlServerAdministratorLoginPassword": "[parameters('sqlServerAdministratorLoginPassword')]",
+        "storageAccountNames": [
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'rawsa')]",
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'enrichedcuratedsa')]",
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'workspacesa')]"
+        ],
+        "secretStorageAccountNames": [
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretrawsa')]",
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretenrichedcuratedsa')]",
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretworkspacesa')]"
+        ],
+        "databricksNames": [
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-databricks001-ingest')]",
+            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-databricks002-processing')]"
+        ],
+        "vnetResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-network')]",
+        "managementResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-mgmt')]",
+        "storageResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-storage')]",
+        "secretStorageResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-secretstorage')]",
+        "externalStorageResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-externalstorage')]",
+        "metadataResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-metadata')]",
+        "processingDomainResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-processing-domain')]",
+        "processingProductResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-processing-product')]",
+        "vnetTemplateLink": "url",
+        "keyVaultTemplateLink": "url",
+        "storageTemplateLink": "url",
+        "sqlServerTemplateLink": "url",
+        "sqlDatabaseTemplateLink": "url",
+        "databricksTemplateLink": "url",
+        "eventHubTemplateLink": "url"
     },
     "resources": [
         {
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2020-06-01",
             "name": "[variables('vnetResourceGroupName')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('managementResourceGroupName')]",
             "location": "[variables('location')]",
             "properties": {}
         },
@@ -69,6 +116,34 @@
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2020-06-01",
             "name": "[variables('secretStorageResourceGroupName')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('externalStorageResourceGroupName')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('metadataResourceGroupName')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('processingDomainResourceGroupName')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('processingProductResourceGroupName')]",
             "location": "[variables('location')]",
             "properties": {}
         },
@@ -101,6 +176,544 @@
                 }
             },
             "resourceGroup": "[variables('vnetResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "keyVault001Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('keyVaultTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-keyvault001')]"
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneId": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('metadataResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "keyVault002Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('keyVaultTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-keyvault002')]"
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneId": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('metadataResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "[take(concat('storageDeployment-', copyIndex(), '-', variables('storageAccountNames')[copyIndex()]), 64)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('storageResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('storageTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountNames')[copyIndex()]]"
+                    },
+                    "storageAccountType": {
+                        "value": "Standard_ZRS"
+                    },
+                    "enableHns": {
+                        "value": true
+                    },
+                    "keyVaultId": {
+                        "value": ""
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneIdBlob": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net')]"
+                    },
+                    "privateDnsZoneIdDfs": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('storageResourceGroupName')]",
+            "copy": {
+                "name": "storageAccountNamesCopy",
+                "count": "[length(variables('storageAccountNames'))]",
+                "mode": "Parallel"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "[take(concat('secretStorageDeployment-', copyIndex(), '-', variables('secretStorageAccountNames')[copyIndex()]), 64)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('secretStorageResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('storageTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('secretStorageAccountNames')[copyIndex()]]"
+                    },
+                    "storageAccountType": {
+                        "value": "Standard_ZRS"
+                    },
+                    "enableHns": {
+                        "value": true
+                    },
+                    "keyVaultId": {
+                        "value": ""
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneIdBlob": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net')]"
+                    },
+                    "privateDnsZoneIdDfs": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('secretStorageResourceGroupName')]",
+            "copy": {
+                "name": "storageAccountNamesCopy",
+                "count": "[length(variables('secretStorageAccountNames'))]",
+                "mode": "Parallel"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "externalStorageDeployment001",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('externalStorageResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('storageTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'externalsa001')]"
+                    },
+                    "storageAccountType": {
+                        "value": "Standard_LRS"
+                    },
+                    "enableHns": {
+                        "value": false
+                    },
+                    "keyVaultId": {
+                        "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneIdBlob": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net')]"
+                    },
+                    "privateDnsZoneIdDfs": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('externalStorageResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "sqlserver001Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('sqlServerTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "sqlServerName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver001')]"
+                    },
+                    "administratorLogin": {
+                        "value": "SqlServerMainUser"
+                    },
+                    "administratorLoginPassword": {
+                        "value": "[variables('sqlServerAdministratorLoginPassword')]"
+                    },
+                    "sqlAdminGroupName": {
+                        "value": ""
+                    },
+                    "sqlAdminGroupObjectID": {
+                        "value": ""
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneId": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('metadataResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "sqlserver002Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('sqlServerTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "sqlServerName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver001')]"
+                    },
+                    "administratorLogin": {
+                        "value": "SqlServerMainUser"
+                    },
+                    "administratorLoginPassword": {
+                        "value": "[variables('sqlServerAdministratorLoginPassword')]"
+                    },
+                    "sqlAdminGroupName": {
+                        "value": ""
+                    },
+                    "sqlAdminGroupObjectID": {
+                        "value": ""
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneId": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('metadataResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "sqlDatabase001Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('sqlDatabaseTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "sqlServerId": {
+                        "value": "[reference('sqlserver001Deployment').outputs.sqlServerId.value]"
+                    },
+                    "sqlServerAdministratorLoginPassword": {
+                        "value": "[variables('sqlServerAdministratorLoginPassword')]"
+                    },
+                    "sqlDatabaseName": {
+                        "value": "AdfMetastoreDB"
+                    },
+                    "sqlDatabaseSku": {
+                        "value": "GP_Gen5"
+                    },
+                    "sqlDatabaseTier": {
+                        "value": "GeneralPurpose"
+                    },
+                    "sqlDatabaseCapacity": {
+                        "value": 2
+                    },
+                    "sqlDatabaseMaxSizeInBytes": {
+                        "value": 34359738368
+                    },
+                    "sqlDatabaseZoneRedundant": {
+                        "value": false
+                    },
+                    "sqlDatabaseLicenseType": {
+                        "value": "LicenseIncluded"
+                    },
+                    "sqlDatabaseReadReplicaCount": {
+                        "value": 0
+                    },
+                    "sqlDatabaseMinCapacity": {
+                        "value": "0.5"
+                    },
+                    "sqlDatabaseStorageAccountType": {
+                        "value": "GRS"
+                    },
+                    "sqlDatabaseAutoPauseDelay": {
+                        "value": -1
+                    },
+                    "keyVaultId": {
+                        "value": "[reference('keyVault002Deployment').outputs.keyVaultId.value]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('externalStorageResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "sqlDatabase002Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('sqlDatabaseTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "sqlServerId": {
+                        "value": "[reference('sqlserver002Deployment').outputs.sqlServerId.value]"
+                    },
+                    "sqlServerAdministratorLoginPassword": {
+                        "value": "[variables('sqlServerAdministratorLoginPassword')]"
+                    },
+                    "sqlDatabaseName": {
+                        "value": "HiveMetastoreDB"
+                    },
+                    "sqlDatabaseSku": {
+                        "value": "GP_Gen5"
+                    },
+                    "sqlDatabaseTier": {
+                        "value": "GeneralPurpose"
+                    },
+                    "sqlDatabaseCapacity": {
+                        "value": 2
+                    },
+                    "sqlDatabaseMaxSizeInBytes": {
+                        "value": 34359738368
+                    },
+                    "sqlDatabaseZoneRedundant": {
+                        "value": false
+                    },
+                    "sqlDatabaseLicenseType": {
+                        "value": "LicenseIncluded"
+                    },
+                    "sqlDatabaseReadReplicaCount": {
+                        "value": 0
+                    },
+                    "sqlDatabaseMinCapacity": {
+                        "value": "0.5"
+                    },
+                    "sqlDatabaseStorageAccountType": {
+                        "value": "GRS"
+                    },
+                    "sqlDatabaseAutoPauseDelay": {
+                        "value": -1
+                    },
+                    "keyVaultId": {
+                        "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('externalStorageResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "databricks001Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('processingDomainResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('databricksTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "databricksName": {
+                        "value": "[variables('databricksNames')[0]]"
+                    },
+                    "databricksVnetId": {
+                        "value": "[reference('vnetDeployment').outputs.vnetId.value]"
+                    },
+                    "databricksManagedResourceGroupId": {
+                        "value": "[concat('subscriptions/', variables('dataNodeSubscriptionId'), '/resourceGroups/', variables('databricksNames')[0])]"
+                    },
+                    "databricksPrivateSubnetName": {
+                        "value": "[reference('vnetDeployment').outputs.databricksPrivateSubnetName001.value]"
+                    },
+                    "databricksPublicSubnetName": {
+                        "value": "[reference('vnetDeployment').outputs.databricksPublicSubnetName001.value]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('processingDomainResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "eventHub001Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('processingDomainResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('eventHubTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "eventHubName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-eventhub001')]"
+                    },
+                    "eventHubSku": {
+                        "value": "Standard"
+                    },
+                    "eventHubMinThroughputUnits": {
+                        "value": 1
+                    },
+                    "eventHubMaxThroughputUnits": {
+                        "value": 2
+                    },
+                    "keyVaultId": {
+                        "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneId": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('processingDomainResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "dataFactory001Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('processingDomainResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('eventHubTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "dataFactoryName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-datafactory001')]"
+                    },
+                    "dataFactoryGitAccount": {
+                        "value": ""
+                    },
+                    "dataFactoryGitRepo": {
+                        "value": ""
+                    },
+                    "dataFactoryGitCollaborationBranch": {
+                        "value": ""
+                    },
+                    "dataFactoryGitRootFolder": {
+                        "value": ""
+                    },
+                    "dataFactoryGitType": {
+                        "value": "FactoryGitHubConfiguration"
+                    },
+                    "keyVaultId": {
+                        "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
+                    },
+                    "sqlServerId": {
+                        "value": "[reference('sqlserver001Deployment').outputs.sqlServerId.value]"
+                    },
+                    "sqlDatabaseId": {
+                        "value": "[reference('sqlDatabase001Deployment').outputs.sqlDatabaseId.value]"
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneId": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('processingDomainResourceGroupName')]"
         }
     ],
     "outputs": {}
