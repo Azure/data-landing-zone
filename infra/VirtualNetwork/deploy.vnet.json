@@ -210,11 +210,11 @@
         },
         "subnetId": {
             "type": "string",
-            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'dn001-subnet')]"
+            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), concat(variables('dataNodeName'), '-subnet'))]"
         },
         "privateLinkSubnetId": {
             "type": "string",
-            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'dh-privatelink-subnet')]"
+            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), concat(variables('dataNodeName'), '-privatelink-subnet'))]"
         },
         "databricksPublicSubnetName001": {
             "type": "string",
