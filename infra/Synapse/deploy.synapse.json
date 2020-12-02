@@ -1,0 +1,337 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "synapseWorkspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the synapse workspace."
+            }
+        },
+        "synapseDefaultStorageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the default storage account of the synapse workspace."
+            }
+        },
+        "synapseDefaultStorageAccountFileSystem": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the synapse workspace."
+            }
+        },
+        "synapseSqlAdministratorLogin": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the login account name for the SQL DW of the synapse workspace."
+            }
+        },
+        "synapseSqlAdministratorPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Specifies the password for the SQL DW of the synapse workspace."
+            }
+        },
+        "synapseDatalakeAnalyticsResourceId": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies the resource ID of data lake analytics for the synapse workspace."
+            }
+        },
+        "synapseComputeSubnetResourceId": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies the resource ID of data lake analytics for the synapse workspace."
+            }
+        },
+        "synapseSqlAdminGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the Azure Active Directory group of the SQL admin group."
+            }
+        },
+        "synapseSqlAdminGroupObjectID": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the Azure Active Directory objectID of the SQL admin group."
+            }
+        },
+        "subnetId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the id of the subnet which the private endpoint uses."
+            }
+        },
+        "privateDnsZoneIdSql": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the private dns zone for sql pools."
+            }
+        },
+        "privateDnsZoneIdDev": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the private dns zone for dev."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[parameters('location')]",
+        "synapseWorkspaceName": "[parameters('synapseWorkspaceName')]",
+        "synapseDefaultStorageAccountUrl": "[concat('https://', parameters('synapseDefaultStorageAccountName'), '.dfs.core.windows.net')]",
+        "synapseDefaultStorageAccountFileSystem": "[parameters('synapseDefaultStorageAccountFileSystem')]",
+        "synapseSqlAdministratorLogin": "[parameters('synapseSqlAdministratorLogin')]",
+        "synapseSqlAdministratorPassword": "[parameters('synapseSqlAdministratorPassword')]",
+        "synapseDatalakeAnalyticsResourceId": "[parameters('synapseDatalakeAnalyticsResourceId')]",
+        "synapseComputeSubnetResourceId": "[parameters('synapseComputeSubnetResourceId')]",
+        "synapseSqlAdminGroupName": "[parameters('synapseSqlAdminGroupName')]",
+        "synapseSqlAdminGroupObjectID": "[parameters('synapseSqlAdminGroupObjectID')]",
+        "subnetId": "[parameters('subnetId')]",
+        "privateDnsZoneIdSql": "[parameters('privateDnsZoneIdSql')]",
+        "privateDnsZoneIdDev": "[parameters('privateDnsZoneIdDev')]",
+        "privateEndpointNameSql": "[concat(variables('synapseWorkspaceName'), '-sql-private-endpoint')]",
+        "privateEndpointNameSqlOnDemand": "[concat(variables('synapseWorkspaceName'), '-sqlondemand-private-endpoint')]",
+        "privateEndpointNameDev": "[concat(variables('synapseWorkspaceName'), '-dev-private-endpoint')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Synapse/workspaces",
+            "apiVersion": "2019-06-01-preview",
+            "name": "[variables('synapseWorkspaceName')]",
+            "location": "[variables('location')]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "defaultDataLakeStorage": {
+                    "accountUrl": "[variables('synapseDefaultStorageAccountUrl')]",
+                    "filesystem": "[variables('synapseDefaultStorageAccountFileSystem')]"
+                },
+                "sqlAdministratorLogin": "[variables('synapseSqlAdministratorLogin')]",
+                "sqlAdministratorLoginPassword": "[variables('synapseSqlAdministratorPassword')]",
+                "adlaResourceId": "[variables('synapseDatalakeAnalyticsResourceId')]",
+                "managedVirtualNetwork": "default",
+                "virtualNetworkProfile": {
+                    "computeSubnetId": "[variables('synapseComputeSubnetResourceId')]"
+                },
+                "managedResourceGroupName": "[variables('synapseWorkspaceName')]",
+                "managedVirtualNetworkSettings": {
+                    "allowedAadTenantIdsForLinking": [
+                        "[subscription().tenantId]"
+                    ],
+                    "linkedAccessCheckOnTargetResource": true,
+                    "preventDataExfiltration": true
+                },
+                // "babylonConfiguration": {    // Take care of this as part of the Policies
+                //     "babylonResourceId": ""
+                // },
+                "connectivityEndpoints": {}
+                // "encryption": {
+                //     "cmk": {
+                //         "key": {
+                //             "name": "",
+                //             "keyVaultUrl": ""
+                //         }
+                //     }
+                // },
+                // "privateEndpointConnections": [
+                //     {
+                //         "properties": {
+                //             "privateEndpoint": {},
+                //             "privateLinkServiceConnectionState": {}
+                //         }
+                //     }
+                // ]
+            },
+            "resources": [
+                {
+                    "type": "managedIdentitySqlControlSettings",
+                    "apiVersion": "2019-06-01-preview",
+                    "name": "default",
+                    "dependsOn": [
+                        "[concat('Microsoft.Synapse/workspaces/', variables('synapseWorkspaceName'))]"
+                    ],
+                    "properties": {
+                        "grantSqlControlToManagedIdentity": {
+                            "desiredState": "Enabled"
+                        }
+                    }
+                },
+                {
+                    "condition": "[and(not(empty(variables('synapseSqlAdminGroupName'))), not(empty(variables('synapseSqlAdminGroupObjectID'))))]",
+                    "type": "administrators",
+                    "apiVersion": "2019-06-01-preview",
+                    "name": "default",
+                    "dependsOn": [
+                        "[concat('Microsoft.Synapse/workspaces/', variables('synapseWorkspaceName'))]"
+                    ],
+                    "properties": {
+                        "administratorType": "ActiveDirectory",
+                        "login": "[variables('synapseSqlAdminGroupName')]",
+                        "sid": "[variables('synapseSqlAdminGroupObjectID')]",
+                        "tenantId": "[subscription().tenantId]"
+                    }
+                }
+                // {
+                //     "type": "firewallRules",
+                //     "apiVersion": "2019-06-01-preview",
+                //     "name": "default",
+                //     "dependsOn": [
+                //         "[concat('Microsoft.Synapse/workspaces/', variables('synapseWorkspaceName'))]"
+                //     ],
+                //     "properties": {
+                //     }
+                // }
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('privateEndpointNameSql')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('privateEndpointNameSql')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName'))]",
+                            "groupIds": [
+                                "Sql"
+                            ]
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [
+                ],
+                "subnet": {
+                    "id": "[variables('subnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('privateEndpointNameSql'), '/aRecord')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameSql'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "[concat(variables('privateEndpointNameSql'), '-aRecord')]",
+                        "properties": {
+                            "privateDnsZoneId": "[variables('privateDnsZoneIdSql')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('privateEndpointNameSqlOnDemand')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('privateEndpointNameSqlOnDemand')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName'))]",
+                            "groupIds": [
+                                "SqlOnDemand"
+                            ]
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [
+                ],
+                "subnet": {
+                    "id": "[variables('subnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('privateEndpointNameSqlOnDemand'), '/aRecord')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameSqlOnDemand'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "[concat(variables('privateEndpointNameSqlOnDemand'), '-aRecord')]",
+                        "properties": {
+                            "privateDnsZoneId": "[variables('privateDnsZoneIdSql')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('privateEndpointNameDev')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('privateEndpointNameDev')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName'))]",
+                            "groupIds": [
+                                "Dev"
+                            ]
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [
+                ],
+                "subnet": {
+                    "id": "[variables('subnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('privateEndpointNameDev'), '/aRecord')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameDev'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "[concat(variables('privateEndpointNameDev'), '-aRecord')]",
+                        "properties": {
+                            "privateDnsZoneId": "[variables('privateDnsZoneIdDev')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}
