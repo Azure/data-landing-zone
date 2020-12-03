@@ -1,0 +1,162 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "databricksSetupScriptLink": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the link to the databricks setup powershell script."
+            }
+        },
+        "databricksWorkspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the databricks workspace."
+            }
+        },
+        "databricksWorkspaceId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of the databricks workspace."
+            }
+        },
+        "databricksApiUrl": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the api url of the databricks workspace."
+            }
+        },
+        "databricksSubscriptionId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the subscription of the databricks workspace."
+            }
+        },
+        "databricksResourceGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource group of the databricks workspace."
+            }
+        },
+        "hiveKeyVaultId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the hive key vault id for the databricks workspace."
+            }
+        },
+        "hiveConnectionStringSecretName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the connection string secret name in the hive key vault id."
+            }
+        },
+        "hiveUsernameSecretName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the user name secret name in the hive key vault id."
+            }
+        },
+        "hivePasswordSecretName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the password secret name in the hive key vault id."
+            }
+        },
+        "logAnalyticsKeyVaultId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the log analytics key vault id for the databricks workspace."
+            }
+        },
+        "logAnalyticsWorkspaceIdSecretName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the workspace id secret name in the log analytics key vault id."
+            }
+        },
+        "logAnalyticsWorkspaceKeySecretName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the workspace key secret name in the log analytics key vault id."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[parameters('location')]",
+        "databricksSetupScriptLink": "[parameters('databricksSetupScriptLink')]",
+        "databricksWorkspaceName": "[parameters('databricksWorkspaceName')]",
+        "databricksWorkspaceId": "[parameters('databricksWorkspaceId')]",
+        "databricksApiUrl": "[parameters('databricksApiUrl')]",
+        "databricksSubscriptionId": "[parameters('databricksSubscriptionId')]",
+        "databricksResourceGroupName": "[parameters('databricksResourceGroupName')]",
+        "hiveKeyVaultId": "[parameters('hiveKeyVaultId')]",
+        "hiveConnectionStringSecretName": "[parameters('hiveConnectionStringSecretName')]",
+        "hiveUsernameSecretName": "[parameters('hiveUsernameSecretName')]",
+        "hivePasswordSecretName": "[parameters('hivePasswordSecretName')]",
+        "logAnalyticsKeyVaultId": "[parameters('logAnalyticsKeyVaultId')]",
+        "logAnalyticsWorkspaceIdSecretName": "[parameters('logAnalyticsWorkspaceIdSecretName')]",
+        "logAnalyticsWorkspaceKeySecretName": "[parameters('logAnalyticsWorkspaceKeySecretName')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "name": "databricksManagedIdentity",
+            "location": "[variables('location')]"
+        },
+        {
+            "type": "Microsoft.Resources/deploymentScripts",
+            "apiVersion": "2020-10-01",
+            "name": "databricksSetup",
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', 'databricksManagedIdentity')]"
+            ],
+            "location": "[variables('location')]",
+            "kind": "AzurePowerShell",
+            "identity": {
+                "type": "UserAssigned",
+                "userAssignedIdentities": {
+                    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', 'databricksManagedIdentity')]": {}
+                }
+            },
+            "properties": {
+                "azPowerShellVersion": "5.1",
+                "primaryScriptUri": "[variables('databricksSetupScriptLink')]",
+                "supportingScriptUris": [],
+                "containerSettings": {
+                    "containerGroupName": "[concat('databricksSetup', variables('databricksWorkspaceName'))]"
+                },
+                "storageAccountSettings": {
+                    "storageAccountName": "",
+                    "storageAccountKey": ""
+                },
+                "environmentVariables": [],
+                "arguments": "[replace(concat('-DatabricksWorkspaceName \"', variables('databricksWorkspaceName'), '\"',
+                                              ' -DatabricksWorkspaceId \"', variables('databricksWorkspaceId'), '\"',
+                                              ' -DatabricksApiUrl \"', variables('databricksApiUrl'), '\"',
+                                              ' -DatabricksSubscriptionId \"', variables('databricksSubscriptionId'), '\"',
+                                              ' -DatabricksResourceGroupName \"', variables('databricksResourceGroupName'), '\"',
+                                              ' -HiveKeyVaultId \"', variables('hiveKeyVaultId'), '\"',
+                                              ' -HiveConnectionStringSecretName \"', variables('hiveConnectionStringSecretName'), '\"',
+                                              ' -HiveUsernameSecretName \"', variables('hiveUsernameSecretName'), '\"',
+                                              ' -HivePasswordSecretName \"', variables('hivePasswordSecretName'), '\"',
+                                              ' -LogAnalyticsKeyVaultId \"', variables('logAnalyticsKeyVaultId'), '\"',
+                                              ' -LogAnalyticsWorkspaceIdSecretName \"', variables('logAnalyticsWorkspaceIdSecretName'), '\"',
+                                              ' -LogAnalyticsWorkspaceKeySecretName \"', variables('logAnalyticsWorkspaceKeySecretName'), '\"'), '\"', '\\\"')]",
+                "cleanupPreference": "OnSuccess",
+                "forceUpdateTag": "1",
+                "retentionInterval": "P1D",
+                "timeout": "PT40M"
+            }
+        }
+    ],
+    "outputs": {}
+}
