@@ -427,8 +427,7 @@
             "name": "sqlserver002Deployment",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
-                "vnetDeployment",
-                "sqlserver001Deployment"
+                "vnetDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -441,7 +440,7 @@
                         "value": "[variables('location')]"
                     },
                     "sqlServerName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver001')]"
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver002')]"
                     },
                     "administratorLogin": {
                         "value": "SqlServerMainUser"
