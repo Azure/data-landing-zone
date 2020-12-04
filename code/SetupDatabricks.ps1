@@ -1,50 +1,63 @@
 # Define script arguments
+[CmdletBinding()]
 param (
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $DatabricksWorkspaceName,
 
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $DatabricksWorkspaceId,
 
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $DatabricksApiUrl,
 
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $DatabricksSubscriptionId,
 
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $DatabricksResourceGroupName,
 
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $HiveKeyVaultId,
 
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $HiveConnectionStringSecretName,
 
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $HiveUsernameSecretName,
 
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $HivePasswordSecretName,
 
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $LogAnalyticsKeyVaultId,
 
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $LogAnalyticsWorkspaceIdSecretName,
 
     [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
     [String]
     $LogAnalyticsWorkspaceKeySecretName
 )
