@@ -770,8 +770,11 @@
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
                     },
-                    "privateDnsZoneId": {
+                    "privateDnsZoneIdDataFactory": {
                         "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net')]"
+                    },
+                    "privateDnsZoneIdPortal": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azure.com')]"
                     }
                 }
             },
