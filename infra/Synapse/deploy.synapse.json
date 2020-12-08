@@ -171,7 +171,7 @@
                     "condition": "[and(not(empty(variables('synapseSqlAdminGroupName'))), not(empty(variables('synapseSqlAdminGroupObjectID'))))]",
                     "type": "administrators",
                     "apiVersion": "2019-06-01-preview",
-                    "name": "default",
+                    "name": "activeDirectory",
                     "dependsOn": [
                         "[concat('Microsoft.Synapse/workspaces/', variables('synapseWorkspaceName'))]"
                     ],
