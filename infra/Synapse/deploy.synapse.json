@@ -181,18 +181,6 @@
                         "sid": "[variables('synapseSqlAdminGroupObjectID')]",
                         "tenantId": "[subscription().tenantId]"
                     }
-                },
-                {
-                    "type": "firewallRules",
-                    "apiVersion": "2019-06-01-preview",
-                    "name": "default",
-                    "dependsOn": [
-                        "[concat('Microsoft.Synapse/workspaces/', variables('synapseWorkspaceName'))]"
-                    ],
-                    "properties": {
-                        "startIpAddress": "0.0.0.0",
-                        "endIpAddress": "0.0.0.0"
-                    }
                 }
             ]
         },

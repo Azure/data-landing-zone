@@ -253,7 +253,7 @@ jobs:
     
     # Generate Password
     - name: Generate Password
-      id: generate_password
+      id: generate_password_001
       run: |
         echo "Generating Password"
         pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
@@ -268,12 +268,12 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SqlServer/deploy.sqlServer.json
-        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer001.json administratorLoginPassword="${{ steps.generate_password.outputs.password }}"
+        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer001.json administratorLoginPassword="${{ steps.generate_password_001.outputs.password }}"
         deploymentMode: Validate
     
     # Generate Password
     - name: Generate Password
-      id: generate_password
+      id: generate_password_002
       run: |
         echo "Generating Password"
         pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
@@ -288,7 +288,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SqlServer/deploy.sqlServer.json
-        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer002.json administratorLoginPassword="${{ steps.generate_password.outputs.password }}"
+        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer002.json administratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
         deploymentMode: Validate
     
     # Deploy SQL Database 001 - validation
@@ -515,7 +515,7 @@ jobs:
     
     # Generate Password
     - name: Generate Password
-      id: generate_password
+      id: generate_password_001
       run: |
         echo "Generating Password"
         pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
@@ -530,12 +530,12 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SqlServer/deploy.sqlServer.json
-        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer001.json administratorLoginPassword="${{ steps.generate_password.outputs.password }}"
+        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer001.json administratorLoginPassword="${{ steps.generate_password_001.outputs.password }}"
         deploymentMode: Incremental
     
     # Generate Password
     - name: Generate Password
-      id: generate_password
+      id: generate_password_002
       run: |
         echo "Generating Password"
         pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
@@ -550,7 +550,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SqlServer/deploy.sqlServer.json
-        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer002.json administratorLoginPassword="${{ steps.generate_password.outputs.password }}"
+        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer002.json administratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
         deploymentMode: Incremental
     
     # Deploy SQL Database 001
