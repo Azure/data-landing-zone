@@ -58,20 +58,6 @@ stages:
           continueOnError: false
           enabled: true
         
-        # Generate Password
-        - task: PowerShell@2
-          name: generate_password
-          displayName: Generate Password
-          enabled: true
-          continueOnError: false
-          inputs:
-            targetType: 'filePath'
-            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
-            errorActionPreference: 'stop'
-            failOnStderr: false
-            ignoreLASTEXITCODE: false
-            pwsh: true
-        
         # Deploy key vault 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: key_vault_001_validation
@@ -90,6 +76,20 @@ stages:
             csmParametersFile: 'infra/KeyVault/params.keyVault001.json'
             deploymentMode: 'Validation'
         
+        # Generate Password
+        - task: PowerShell@2
+          name: generate_password_001
+          displayName: Generate Password
+          enabled: true
+          continueOnError: false
+          inputs:
+            targetType: 'filePath'
+            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
+            errorActionPreference: 'stop'
+            failOnStderr: false
+            ignoreLASTEXITCODE: false
+            pwsh: true
+        
         # Deploy sql server 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: sql_server_001_validation
@@ -106,26 +106,6 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/SqlServer/deploy.sqlServer.json'
             csmParametersFile: 'infra/SqlServer/params.sqlServer001.json'
-            deploymentMode: 'Validation'
-            overrideParameters: >
-              -administratorLoginPassword "$(password)"
-        
-        # Deploy sql server 002 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: sql_server_002_validation
-          displayName: Deploy sql server 002 - validation
-          enabled: true
-          continueOnError: true
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-            csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
             deploymentMode: 'Validation'
             overrideParameters: >
               -administratorLoginPassword "$(password)"
@@ -149,6 +129,40 @@ stages:
             deploymentMode: 'Validation'
             overrideParameters: >
               -sqlServerAdministratorLoginPassword "$(password)"
+        
+        # Generate Password
+        - task: PowerShell@2
+          name: generate_password_002
+          displayName: Generate Password
+          enabled: true
+          continueOnError: false
+          inputs:
+            targetType: 'filePath'
+            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
+            errorActionPreference: 'stop'
+            failOnStderr: false
+            ignoreLASTEXITCODE: false
+            pwsh: true
+        
+        # Deploy sql server 002 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: sql_server_002_validation
+          displayName: Deploy sql server 002 - validation
+          enabled: true
+          continueOnError: true
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/SqlServer/deploy.sqlServer.json'
+            csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
+            deploymentMode: 'Validation'
+            overrideParameters: >
+              -administratorLoginPassword "$(password)"
         
         # Deploy sql database 002 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -318,20 +332,6 @@ stages:
           continueOnError: false
           enabled: true
         
-        # Generate Password
-        - task: PowerShell@2
-          name: generate_password
-          displayName: Generate Password
-          enabled: true
-          continueOnError: false
-          inputs:
-            targetType: 'filePath'
-            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
-            errorActionPreference: 'stop'
-            failOnStderr: false
-            ignoreLASTEXITCODE: false
-            pwsh: true
-        
         # Deploy key vault 001
         - task: AzureResourceManagerTemplateDeployment@3
           name: key_vault_001_deployment
@@ -351,6 +351,20 @@ stages:
             deploymentMode: 'Incremental'
             deploymentOutputs: 'keyVaultDetails'
         
+        # Generate Password
+        - task: PowerShell@2
+          name: generate_password_001
+          displayName: Generate Password
+          enabled: true
+          continueOnError: false
+          inputs:
+            targetType: 'filePath'
+            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
+            errorActionPreference: 'stop'
+            failOnStderr: false
+            ignoreLASTEXITCODE: false
+            pwsh: true
+        
         # Deploy sql server 001
         - task: AzureResourceManagerTemplateDeployment@3
           name: sql_server_001_deployment
@@ -367,26 +381,6 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/SqlServer/deploy.sqlServer.json'
             csmParametersFile: 'infra/SqlServer/params.sqlServer001.json'
-            deploymentMode: 'Incremental'
-            overrideParameters: >
-              -administratorLoginPassword "$(password)"
-        
-        # Deploy sql server 002
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: sql_server_002_deployment
-          displayName: Deploy sql server 002
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-            csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
             deploymentMode: 'Incremental'
             overrideParameters: >
               -administratorLoginPassword "$(password)"
@@ -411,6 +405,40 @@ stages:
             deploymentOutputs: 'hivemetastoreDetails'
             overrideParameters: >
               -sqlServerAdministratorLoginPassword "$(password)"
+        
+        # Generate Password
+        - task: PowerShell@2
+          name: generate_password_002
+          displayName: Generate Password
+          enabled: true
+          continueOnError: false
+          inputs:
+            targetType: 'filePath'
+            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
+            errorActionPreference: 'stop'
+            failOnStderr: false
+            ignoreLASTEXITCODE: false
+            pwsh: true
+        
+        # Deploy sql server 002
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: sql_server_002_deployment
+          displayName: Deploy sql server 002
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/SqlServer/deploy.sqlServer.json'
+            csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
+            deploymentMode: 'Incremental'
+            overrideParameters: >
+              -administratorLoginPassword "$(password)"
         
         # Deploy sql database 002
         - task: AzureResourceManagerTemplateDeployment@3

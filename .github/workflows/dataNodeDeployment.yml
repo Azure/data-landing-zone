@@ -271,6 +271,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer001.json administratorLoginPassword="${{ steps.generate_password_001.outputs.password }}"
         deploymentMode: Validate
     
+    # Deploy SQL Database 001 - validation
+    - name: Deploy SQL Database 001 - validation
+      id: sql_database_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
+        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase001.json sqlServerAdministratorLoginPassword="${{ steps.generate_password_001.outputs.password }}"
+        deploymentMode: Validate
+    
     # Generate Password
     - name: Generate Password
       id: generate_password_002
@@ -291,19 +304,6 @@ jobs:
         parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer002.json administratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
         deploymentMode: Validate
     
-    # Deploy SQL Database 001 - validation
-    - name: Deploy SQL Database 001 - validation
-      id: sql_database_001_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
-        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase001.json
-        deploymentMode: Validate
-    
     # Deploy SQL Database 002 - validation
     - name: Deploy SQL Database 002 - validation
       id: sql_database_002_validation
@@ -314,7 +314,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
-        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase002.json
+        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase002.json sqlServerAdministratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
         deploymentMode: Validate
     
     # Deploy Databricks 001 - validation
@@ -533,6 +533,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer001.json administratorLoginPassword="${{ steps.generate_password_001.outputs.password }}"
         deploymentMode: Incremental
     
+    # Deploy SQL Database 001
+    - name: Deploy SQL Database 001
+      id: sql_database_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
+        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase001.json sqlServerAdministratorLoginPassword="${{ steps.generate_password_001.outputs.password }}"
+        deploymentMode: Incremental
+    
     # Generate Password
     - name: Generate Password
       id: generate_password_002
@@ -553,19 +566,6 @@ jobs:
         parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer002.json administratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
         deploymentMode: Incremental
     
-    # Deploy SQL Database 001
-    - name: Deploy SQL Database 001
-      id: sql_database_001_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
-        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase001.json
-        deploymentMode: Incremental
-    
     # Deploy SQL Database 002
     - name: Deploy SQL Database 002
       id: sql_database_002_deployment
@@ -576,7 +576,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
-        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase002.json
+        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase002.json sqlServerAdministratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
         deploymentMode: Incremental
     
     # Deploy Databricks 001
