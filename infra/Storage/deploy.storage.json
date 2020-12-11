@@ -147,10 +147,10 @@
                                             "baseBlob": {
                                                 "tierToCool": {
                                                     "daysAfterModificationGreaterThan": 90
-                                                },
-                                                "tierToArchive": {
-                                                    "daysAfterModificationGreaterThan": 365
                                                 }
+                                                // "tierToArchive": {
+                                                //     "daysAfterModificationGreaterThan": 365
+                                                // }
                                             }
                                             // "snapshot": {
                                             //     "delete": {
