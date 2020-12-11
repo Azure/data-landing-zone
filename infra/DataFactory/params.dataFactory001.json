@@ -24,13 +24,13 @@
             "value": "FactoryGitHubConfiguration"
         },
         "keyVaultId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
         },
         "sqlServerId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.Sql/servers/dn001-sqlserver002"
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.Sql/servers/dn001-sqlserver002"
         },
         "sqlDatabaseId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-mgmt/providers/Microsoft.Sql/servers/dn001-sqlserver002/databases/AdfMetastoreDB"
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.Sql/servers/dn001-sqlserver002/databases/AdfMetastoreDB"
         },
         "subnetId": {
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
