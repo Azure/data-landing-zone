@@ -15,7 +15,7 @@ variables:
     value: 'datanode001'
   - name: AZURE_SUBSCRIPTION_ID
     value: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'
-  - name: AZURE_RESOURCE_GROUP_NAME
+  - name: AZURE_RESOURCE_GROUP_NAME_NETWORK
     value: 'dn001-network'
   - name: AZURE_LOCATION
     value: 'North Europe'
@@ -52,7 +52,7 @@ stages:
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
             subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
             action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
@@ -70,7 +70,7 @@ stages:
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
             subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
             action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: 'infra/VirtualNetworkPeering/deploy.vnetPeering.json'
@@ -110,7 +110,7 @@ stages:
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
             subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
             action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
@@ -128,7 +128,7 @@ stages:
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
             subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
             action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: 'infra/VirtualNetworkPeering/deploy.vnetPeering.json'
