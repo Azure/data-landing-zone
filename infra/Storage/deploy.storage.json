@@ -163,8 +163,7 @@
                                             ],
                                             "blobTypes": [
                                                 "blockBlob"
-                                            ],
-                                            "blobIndexMatch": []
+                                            ]
                                         }
                                     }
                                 }
