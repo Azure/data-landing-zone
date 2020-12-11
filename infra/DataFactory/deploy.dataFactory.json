@@ -229,7 +229,8 @@
                         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
                         "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('azureManagedVnetIntegrationRuntimeName'))]",
-                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('sqlDatabaseName'), '-', ''))]"
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('sqlDatabaseName'), '-', ''))]",
+                        "[resourceId('Microsoft.DataFactory/factories/linkedservices', variables('dataFactoryName'), replace(variables('keyVaultName'), '-', ''))]"
                     ],
                     "properties": {
                         "type": "AzureSqlDatabase",
