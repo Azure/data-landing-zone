@@ -120,12 +120,12 @@
                 "isHnsEnabled": "[variables('enableHns')]",
                 "largeFileSharesState": "Disabled",
                 "minimumTlsVersion": "TLS1_2",
-                "allowBlobPublicAccess": false
-                // "routingPreference": {
-                //     "routingChoice": "MicrosoftRouting",
-                //     "publishMicrosoftEndpoints": false,
-                //     "publishInternetEndpoints": false
-                // }
+                "allowBlobPublicAccess": false,
+                "routingPreference": {
+                    "routingChoice": "MicrosoftRouting",
+                    "publishMicrosoftEndpoints": false,
+                    "publishInternetEndpoints": false
+                }
             },
             "resources": [
                 {
@@ -147,10 +147,10 @@
                                             "baseBlob": {
                                                 "tierToCool": {
                                                     "daysAfterModificationGreaterThan": 90
+                                                },
+                                                "tierToArchive": {
+                                                    "daysAfterModificationGreaterThan": 365
                                                 }
-                                                // "tierToArchive": {
-                                                //     "daysAfterModificationGreaterThan": 365
-                                                // }
                                             }
                                             // "snapshot": {
                                             //     "delete": {
@@ -163,7 +163,8 @@
                                             ],
                                             "blobTypes": [
                                                 "blockBlob"
-                                            ]
+                                            ],
+                                            "blobIndexMatch": []
                                         }
                                     }
                                 }
@@ -187,7 +188,19 @@
                         // "automaticSnapshotPolicyEnabled": true,
                         // "changeFeed": {
                         //     "enabled": true
-                        // }
+                        // },
+                        // "defaultServiceVersion": "",
+                        // "restorePolicy": {
+                        //     "enabled": true,
+                        //     "days": 7
+                        // },
+                        "containerDeleteRetentionPolicy": {
+                            "enabled": true,
+                            "days": 7
+                        },
+                        "cors": {
+                            "corsRules": []
+                        }
                     }
                 },
                 {
@@ -198,7 +211,8 @@
                         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
                     ],
                     "properties": {
-                        "publicAccess": "None"
+                        "publicAccess": "None",
+                        "metadata": {}
                     }
                 }
             ]
