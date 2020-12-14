@@ -9,10 +9,10 @@
             "value": "dn001-synapse001"
         },
         "synapseDefaultStorageAccountName": {
-            "value": ""
+            "value": "dn001workspacesa"
         },
         "synapseDefaultStorageAccountFileSystem": {
-            "value": ""
+            "value": "data"
         },
         "synapseSqlAdministratorLogin": {
             "value": "SqlServerMainUser"
