@@ -132,10 +132,10 @@
                     "linkedAccessCheckOnTargetResource": true,
                     "preventDataExfiltration": true
                 },
+                "connectivityEndpoints": {}
                 // "babylonConfiguration": {    // Take care of this as part of the Policies
                 //     "babylonResourceId": ""
                 // },
-                "connectivityEndpoints": {}
                 // "encryption": {
                 //     "cmk": {
                 //         "key": {
