@@ -11,6 +11,7 @@ on:
       - 'infra/EventHub/**'
       - 'infra/SqlDatabase/**'
       - 'infra/SqlServer/**'
+      - 'infra/Synapse/**'
       - 'infra/PrivateEndpoint/**'
       - '.github/workflows/dataNodeDeployment.yml'
       - 'code/**'

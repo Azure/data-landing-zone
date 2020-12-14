@@ -13,6 +13,7 @@ trigger:
       - infra/EventHub/*
       - infra/SqlDatabase/*
       - infra/SqlServer/*
+      - infra/Synapse/*
       - infra/PrivateEndpoint/*
       - .ado/workflows/dataNodeDeployment.yml
       - code/*
