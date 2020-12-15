@@ -1,4 +1,5 @@
 # Define script arguments
+[CmdletBinding()]
 param (
     [Parameter(Mandatory = $true)]
     [String]

@@ -500,6 +500,26 @@ stages:
             csmFile: 'infra/KeyVault/deploy.keyVault.json'
             csmParametersFile: 'infra/KeyVault/params.keyVault002.json'
             deploymentMode: 'Incremental'
+            deploymentOutputs: 'keyVault002Details'
+        
+        # Generate Pipeline Variables 001
+        - task: AzureCLI@2
+          name: generate_pipeline_variables_001
+          displayName: Generate Pipeline Variables 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            scriptType: pscore
+            scriptLocation: 'scriptPath'
+            scriptPath: '$(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1'
+            powerShellErrorActionPreference: 'stop'
+            addSpnToEnvironment: false
+            failOnStandardError: false
+            powerShellIgnoreLASTEXITCODE: false
+            arguments: >
+              -ArmOutputString '$(keyVault002Details)'
+              -MakeOutput
         
         # Deploy storage account 001 - raw
         - task: AzureResourceManagerTemplateDeployment@3
@@ -732,8 +752,28 @@ stages:
             csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
             csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase002.json'
             deploymentMode: 'Incremental'
+            deploymentOutputs: 'hivemetastoreDetails'
             overrideParameters: >
               -sqlServerAdministratorLoginPassword "$(password)"
+        
+        # Generate Pipeline Variables 002
+        - task: AzureCLI@2
+          name: generate_pipeline_variables_002
+          displayName: Generate Pipeline Variables 002
+          enabled: true
+          continueOnError: false
+          inputs:
+            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            scriptType: pscore
+            scriptLocation: 'scriptPath'
+            scriptPath: '$(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1'
+            powerShellErrorActionPreference: 'stop'
+            addSpnToEnvironment: false
+            failOnStandardError: false
+            powerShellIgnoreLASTEXITCODE: false
+            arguments: >
+              -ArmOutputString '$(hivemetastoreDetails)'
+              -MakeOutput
         
         # Deploy databricks 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -752,6 +792,26 @@ stages:
             csmFile: 'infra/Databricks/deploy.databricks.json'
             csmParametersFile: 'infra/Databricks/params.databricks001.json'
             deploymentMode: 'Incremental'
+            deploymentOutputs: 'databricksDetails001'
+        
+        # Generate Pipeline Variables 003
+        - task: AzureCLI@2
+          name: generate_pipeline_variables_003
+          displayName: Generate Pipeline Variables 003
+          enabled: true
+          continueOnError: false
+          inputs:
+            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            scriptType: pscore
+            scriptLocation: 'scriptPath'
+            scriptPath: '$(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1'
+            powerShellErrorActionPreference: 'stop'
+            addSpnToEnvironment: false
+            failOnStandardError: false
+            powerShellIgnoreLASTEXITCODE: false
+            arguments: >
+              -ArmOutputString '$(databricksDetails001)'
+              -MakeOutput
         
         # Setup databricks 001
         - task: AzureCLI@2
@@ -769,9 +829,15 @@ stages:
             failOnStandardError: false
             powerShellIgnoreLASTEXITCODE: false
             arguments: >
-              -databricksDetails '$(databricksDetails001)'
-              -hivemetastoreDetails '$(hivemetastoreDetails)'
-              -HiveKeyVaultDetails '$(keyVaultDetails)'
+              -DatabricksWorkspaceName '$(databricksWorkspaceName)'
+              -DatabricksWorkspaceId '$(databricksWorkspaceId)'
+              -DatabricksApiUrl '$(databricksApiUrl)'
+              -DatabricksSubscriptionId '$(databricksSubscriptionId)'
+              -DatabricksResourceGroupName '$(databricksResourceGroupName)'
+              -HiveKeyVaultId '$(keyVaultId)'
+              -HiveConnectionStringSecretName '$(connectionStringSecretName)'
+              -HiveUsernameSecretName '$(usernameSecretName)'
+              -HivePasswordSecretName '$(passwordSecretName)'
               -LogAnalyticsKeyVaultId '$(LOG_ANALYTICS_KEY_VAULT_ID)'
               -LogAnalyticsWorkspaceIdSecretName '$(LOG_ANALYTICS_WORKSPACE_ID_SECRET_NAME)'
               -LogAnalyticsWorkspaceKeySecretName '$(LOG_ANALYTICS_WORKSPACE_KEY_SECRET_NAME)'
@@ -793,6 +859,26 @@ stages:
             csmFile: 'infra/Databricks/deploy.databricks.json'
             csmParametersFile: 'infra/Databricks/params.databricks002.json'
             deploymentMode: 'Incremental'
+            deploymentOutputs: 'databricksDetails002'
+        
+        # Generate Pipeline Variables 004
+        - task: AzureCLI@2
+          name: generate_pipeline_variables_004
+          displayName: Generate Pipeline Variables 004
+          enabled: true
+          continueOnError: false
+          inputs:
+            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            scriptType: pscore
+            scriptLocation: 'scriptPath'
+            scriptPath: '$(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1'
+            powerShellErrorActionPreference: 'stop'
+            addSpnToEnvironment: false
+            failOnStandardError: false
+            powerShellIgnoreLASTEXITCODE: false
+            arguments: >
+              -ArmOutputString '$(databricksDetails002)'
+              -MakeOutput
         
         # Setup databricks 002
         - task: AzureCLI@2
@@ -810,9 +896,15 @@ stages:
             failOnStandardError: false
             powerShellIgnoreLASTEXITCODE: false
             arguments: >
-              -databricksDetails '$(databricksDetails002)'
-              -hivemetastoreDetails '$(hivemetastoreDetails)'
-              -HiveKeyVaultDetails '$(keyVaultDetails)'
+              -DatabricksWorkspaceName '$(databricksWorkspaceName)'
+              -DatabricksWorkspaceId '$(databricksWorkspaceId)'
+              -DatabricksApiUrl '$(databricksApiUrl)'
+              -DatabricksSubscriptionId '$(databricksSubscriptionId)'
+              -DatabricksResourceGroupName '$(databricksResourceGroupName)'
+              -HiveKeyVaultId '$(keyVaultId)'
+              -HiveConnectionStringSecretName '$(connectionStringSecretName)'
+              -HiveUsernameSecretName '$(usernameSecretName)'
+              -HivePasswordSecretName '$(passwordSecretName)'
               -LogAnalyticsKeyVaultId '$(LOG_ANALYTICS_KEY_VAULT_ID)'
               -LogAnalyticsWorkspaceIdSecretName '$(LOG_ANALYTICS_WORKSPACE_ID_SECRET_NAME)'
               -LogAnalyticsWorkspaceKeySecretName '$(LOG_ANALYTICS_WORKSPACE_KEY_SECRET_NAME)'

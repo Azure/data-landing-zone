@@ -21,7 +21,7 @@
         "hidden": false
     },
     "node_type_id": {
-        "type": "whitelist",
+        "type": "allowlist",
         "values": [
             "Standard_DS3_v2",
             "Standard_DS4_v2",
@@ -31,7 +31,7 @@
         "hidden": false
     },
     "driver_node_type_id": {
-        "type": "whitelist",
+        "type": "allowlist",
         "values": [
             "Standard_DS3_v2",
             "Standard_DS4_v2",
@@ -52,8 +52,8 @@
         "hidden": false
     },
     "custom_tags.costCenter": {
-        "type": "fixed",
-        "value": "sampleCostCenter",
+        "type": "unlimited",
+        "isOptional": false,
         "hidden": false
     },
     "ssh_public_keys.*": {
@@ -83,22 +83,6 @@
         "type": "fixed",
         "value": "dbfs://cluster-logs",
         "hidden": false
-    },
-    "spark_conf.spark.hadoop.javax.jdo.option.ConnectionDriverName": {
-        "type": "fixed",
-        "value": "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-    },
-    "spark_conf.spark.sql.hive.metastore.version": {
-        "type": "fixed",
-        "value": "1.2.1"
-    },
-    "spark_conf.datanucleus.autoCreateSchema": {
-        "type": "fixed",
-        "value": "true"
-    },
-    "spark_conf.datanucleus.fixedDatastore": {
-        "type": "fixed",
-        "value": "false"
     },
     "spark_env_vars.LOG_ANALYTICS_WORKSPACE_ID": {
         "type": "fixed",

@@ -89,7 +89,8 @@
         "sqlDatabaseTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlDatabase/deploy.sqlDatabase.json?token=AIHRGTUM5HU47LKVWHCS33S72D662",
         "databricksTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Databricks/deploy.databricks.json?token=AIHRGTSTBKWIHGRI32WYFG272D7AE",
         "eventHubTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/EventHub/deploy.eventHub.json?token=AIHRGTQTGLGE56OFJPLOSWS72D7BU",
-        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/DataFactory/deploy.dataFactory.json?token=AIHRGTSKQLJSYTSG2XFZLSS72D7CW"
+        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/DataFactory/deploy.dataFactory.json?token=AIHRGTSKQLJSYTSG2XFZLSS72D7CW",
+        "synapseTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Synapse/deploy.synapse.json?token=AIHRGTTPUFTB3G6Z5R73RLS74EC7I"
     },
     "resources": [
         {
@@ -427,8 +428,7 @@
             "name": "sqlserver002Deployment",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
-                "vnetDeployment",
-                "sqlserver001Deployment"
+                "vnetDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -441,7 +441,7 @@
                         "value": "[variables('location')]"
                     },
                     "sqlServerName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver001')]"
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver002')]"
                     },
                     "administratorLogin": {
                         "value": "SqlServerMainUser"
@@ -780,6 +780,65 @@
             },
             "subscriptionId": "[variables('dataNodeSubscriptionId')]",
             "resourceGroup": "[variables('processingDomainResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "synapse001Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('processingProductResourceGroupName'))]",
+                "vnetDeployment"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('synapseTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "synapseWorkspaceName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-synapse001')]"
+                    },
+                    "synapseDefaultStorageAccountName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa')]"
+                    },
+                    "synapseDefaultStorageAccountFileSystem": {
+                        "value": "data"
+                    },
+                    "synapseSqlAdministratorLogin": {
+                        "value": "SqlServerMainUser"
+                    },
+                    "synapseSqlAdministratorPassword": {
+                        "value": "[variables('sqlServerAdministratorLoginPassword')]"
+                    },
+                    "synapseDatalakeAnalyticsResourceId": {
+                        "value": ""
+                    },
+                    "synapseComputeSubnetResourceId": {
+                        "value": ""
+                    },
+                    "synapseSqlAdminGroupName": {
+                        "value": ""
+                    },
+                    "synapseSqlAdminGroupObjectID": {
+                        "value": ""
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneIdSql": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net')]"
+                    },
+                    "privateDnsZoneIdDev": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net')]"
+                    }
+                }
+            },
+            "subscriptionId": "[variables('dataNodeSubscriptionId')]",
+            "resourceGroup": "[variables('processingProductResourceGroupName')]"
         }
     ],
     "outputs": {}

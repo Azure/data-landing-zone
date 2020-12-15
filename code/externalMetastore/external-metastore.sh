@@ -35,6 +35,9 @@ cat << 'EOF' > /databricks/driver/conf/00-custom-spark.conf
     "spark.sql.hive.metastore.version" = "<hive-version>"
     # Skip this one if <hive-version> is 0.13.x.
     "spark.sql.hive.metastore.jars" = "/databricks/hive_metastore_jars/*"
+    # Datanucleus parameters
+    datanucleus.autoCreateSchema = "true"
+    datanucleus.fixedDatastore = "false"
 }
 EOF
 
