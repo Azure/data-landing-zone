@@ -12,7 +12,7 @@
             "value": "<your-secure-password>"
         },
         "sqlDatabaseName": {
-            "value": "HiveMetastoreDB"
+            "value": "AdfMetastoreDB"
         },
         "sqlDatabaseSku": {
             "value": "GP_Gen5"

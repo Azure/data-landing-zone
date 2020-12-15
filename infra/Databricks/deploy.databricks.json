@@ -102,11 +102,11 @@
             "type": "string",
             "value": "[concat('https://', variables('location'), '.azuredatabricks.net')]"
         },
-        "subscriptionId": {
+        "databricksSubscriptionId": {
             "type": "string",
             "value": "[subscription().subscriptionId]"
         },
-        "resourceGroupName": {
+        "databricksResourceGroupName": {
             "type": "string",
             "value": "[resourceGroup().name]"
         }
