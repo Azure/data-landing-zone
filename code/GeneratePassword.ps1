@@ -141,9 +141,9 @@ function New-Password {
             [char]'C' = [char[]]"BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz"
             [char]'z' = [char[]]"BCDFGHJKLMNPQRSTVWXYZ"
             [char]'p' = [char[]]",.;:"
-            [char]'b' = [char[]]"()[]{}<>"
-            [char]'s' = [char[]]"!`"#$%&'()*+,-./:;<=>?@[\]^_``{|}~"
-            [char]'S' = [char[]]"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!`"#$%&'()*+,-./:;<=>?@[\]^_``{|}~"
+            [char]'b' = [char[]]"()[]<>"
+            [char]'s' = [char[]]"!`#$%&'()*+,-./:;<=>?@[\]^_``|~"
+            [char]'S' = [char[]]"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!`#$%&'()*+,-./:;<=>?@[\]^_``|~"
         }.GetEnumerator().ForEach{ $CharacterSets.Add($_.Key, $_.Value) }
     
         $CustomCharacterSet.GetEnumerator().ForEach{ $CharacterSets.Add($_.Key, $_.Value) }
