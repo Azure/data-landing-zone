@@ -102,6 +102,10 @@
             "type": "string",
             "value": "[concat('https://', variables('location'), '.azuredatabricks.net')]"
         },
+        "databricksWorkspaceUrl": {
+            "type": "string",
+            "value": "[concat('https://', reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').workspaceUrl)]"
+        },
         "databricksSubscriptionId": {
             "type": "string",
             "value": "[subscription().subscriptionId]"
