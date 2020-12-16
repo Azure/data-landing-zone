@@ -679,7 +679,7 @@ stages:
             csmParametersFile: 'infra/SqlServer/params.sqlServer001.json'
             deploymentMode: 'Incremental'
             overrideParameters: >
-              -administratorLoginPassword "$(password)"
+              -administratorLoginPassword '$(password)'
         
         # Deploy sql database 001
         - task: AzureResourceManagerTemplateDeployment@3
