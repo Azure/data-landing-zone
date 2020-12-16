@@ -519,7 +519,6 @@ stages:
             powerShellIgnoreLASTEXITCODE: false
             arguments: >
               -ArmOutputString '$(keyVault002Details)'
-              -MakeOutput
         
         # Deploy storage account 001 - raw
         - task: AzureResourceManagerTemplateDeployment@3
@@ -679,7 +678,7 @@ stages:
             csmParametersFile: 'infra/SqlServer/params.sqlServer001.json'
             deploymentMode: 'Incremental'
             overrideParameters: >
-              -administratorLoginPassword $(password)
+              -administratorLoginPassword "$(password)"
         
         # Deploy sql database 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -773,7 +772,6 @@ stages:
             powerShellIgnoreLASTEXITCODE: false
             arguments: >
               -ArmOutputString '$(hivemetastoreDetails)'
-              -MakeOutput
         
         # Deploy databricks 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -811,7 +809,6 @@ stages:
             powerShellIgnoreLASTEXITCODE: false
             arguments: >
               -ArmOutputString '$(databricksDetails001)'
-              -MakeOutput
         
         # Setup databricks 001
         - task: AzureCLI@2
@@ -878,7 +875,6 @@ stages:
             powerShellIgnoreLASTEXITCODE: false
             arguments: >
               -ArmOutputString '$(databricksDetails002)'
-              -MakeOutput
         
         # Setup databricks 002
         - task: AzureCLI@2
