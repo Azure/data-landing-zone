@@ -40,7 +40,7 @@ variables:
   - name: AZURE_LOCATION
     value: 'North Europe'
   - name: LOG_ANALYTICS_KEY_VAULT_ID
-    value: ''
+    value: '/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-logging/providers/Microsoft.KeyVault/vaults/dh-keyvault002'
   - name: LOG_ANALYTICS_WORKSPACE_ID_SECRET_NAME
     value: 'logAnalyticsWorkspaceId'
   - name: LOG_ANALYTICS_WORKSPACE_KEY_SECRET_NAME
