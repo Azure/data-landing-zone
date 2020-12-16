@@ -38,7 +38,7 @@ $armOutputObj.PSObject.Properties | ForEach-Object {
 
     $attribString = $vsoAttribs -join ';'
     $var = "##vso[$attribString]$value"
-    
-    Write-Output "Setting output ${keyname}"
+
+    Write-Output "Setting output '${keyname}'"
     Write-Output -InputObject $var
 }
