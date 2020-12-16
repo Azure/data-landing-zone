@@ -20,7 +20,7 @@ trigger:
 
 variables:
   - name: AZURE_RESOURCE_MANAGER_CONNECTION_NAME
-    value: 'datanode001'
+    value: 'datanode001-service-connection'
   - name: AZURE_SUBSCRIPTION_ID
     value: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'
   - name: AZURE_RESOURCE_GROUP_NAME_MANAGEMENT
