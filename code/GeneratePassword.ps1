@@ -142,8 +142,8 @@ function New-Password {
             [char]'z' = [char[]]"BCDFGHJKLMNPQRSTVWXYZ"
             [char]'p' = [char[]]",.;:"
             [char]'b' = [char[]]"()[]<>"
-            [char]'s' = [char[]]"!`#$%&'()*+,-./:;<=>?@[\]^_``|~"
-            [char]'S' = [char[]]"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!`#$%&'()*+,-./:;<=>?@[\]^_``|~"
+            [char]'s' = [char[]]"!`#$%&()*+,-./:;<=>?@[\]^_``|~"
+            [char]'S' = [char[]]"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!`#$%&()*+,-./:;<=>?@[\]^_``|~"
         }.GetEnumerator().ForEach{ $CharacterSets.Add($_.Key, $_.Value) }
     
         $CustomCharacterSet.GetEnumerator().ForEach{ $CharacterSets.Add($_.Key, $_.Value) }
@@ -201,5 +201,5 @@ if ($GitHub) {
 else {
     # Set output
     Write-Output "Setting output"
-    Write-Output "##vso[task.setvariable variable=password;issecret=true;isoutput=true;]$Password"
+    Write-Output "##vso[task.setvariable variable=password;issecret=true]$Password"
 }
