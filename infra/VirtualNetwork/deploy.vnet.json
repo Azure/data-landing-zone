@@ -72,6 +72,151 @@
             }
         },
         {
+            "type": "Microsoft.Network/routeTables",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('dataNodeName'), '-databricks-routetable')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "routes": [
+                    {
+                        "name": "to-firewall-default",
+                        "properties": {
+                            "addressPrefix": "0.0.0.0/0",
+                            "nextHopType": "VirtualAppliance",
+                            "nextHopIpAddress": "[variables('firewallPrivateIp')]"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-sccrelay-weu",
+                        "properties": {
+                            "addressPrefix": "23.97.201.41/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-sccrelay-neu",
+                        "properties": {
+                            "addressPrefix": "40.127.147.196/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-webapp-weu",
+                        "properties": {
+                            "addressPrefix": "52.232.19.246/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-webapp-neu",
+                        "properties": {
+                            "addressPrefix": "20.38.84.81/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-metastore",
+                        "properties": {
+                            "addressPrefix": "40.113.93.91/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-artifactblobstorageprimary001",
+                        "properties": {
+                            "addressPrefix": "52.239.137.36/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-artifactblobstorageprimary002",
+                        "properties": {
+                            "addressPrefix": "52.245.40.100/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-artifactblobstorageprimary003",
+                        "properties": {
+                            "addressPrefix": "52.239.137.164/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-artifactblobstorageprimary004",
+                        "properties": {
+                            "addressPrefix": "52.239.138.164/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-artifactblobstorageprimary005",
+                        "properties": {
+                            "addressPrefix": "20.150.104.4/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-artifactblobstorageprimary006",
+                        "properties": {
+                            "addressPrefix": "52.239.205.196/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-artifactblobstorageprimary007",
+                        "properties": {
+                            "addressPrefix": "52.239.138.100/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-artifactblobstorageprimary008",
+                        "properties": {
+                            "addressPrefix": "52.239.248.228/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-artifactblobstorageprimary009",
+                        "properties": {
+                            "addressPrefix": "20.150.47.132/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-artifactblobstoragesecondary",
+                        "properties": {
+                            "addressPrefix": "20.150.37.228/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-logblobstorage",
+                        "properties": {
+                            "addressPrefix": "52.239.141.36/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-eventhub-weu",
+                        "properties": {
+                            "addressPrefix": "13.69.64.0/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-eventhub-neu",
+                        "properties": {
+                            "addressPrefix": "52.169.18.8/32",
+                            "nextHopType": "Internet"
+                        }
+                    }
+                ],
+                "disableBgpRoutePropagation": false
+            }
+        },
+        {
             "name": "[concat(variables('dataNodeName'), '-nsg')]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-05-01",
@@ -143,7 +288,9 @@
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]",
+                "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]",
+                "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-databricks-routetable'))]"
             ],
             "properties": {
                 "addressSpace": {
@@ -162,10 +309,10 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dn001-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
                             },
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
                             }
                         }
                     },
@@ -176,7 +323,7 @@
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
                             }
                         }
                     },
@@ -187,7 +334,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dn001-databricks-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
                             },
                             "delegations": [
                                 {
@@ -198,7 +345,7 @@
                                 }
                             ],
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-databricks-routetable'))]"
                             }
                         }
                     },
@@ -209,7 +356,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dn001-databricks-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
                             },
                             "delegations": [
                                 {
@@ -220,7 +367,7 @@
                                 }
                             ],
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
                             }
                         }
                     },
@@ -231,7 +378,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dn001-databricks-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
                             },
                             "delegations": [
                                 {
@@ -242,7 +389,7 @@
                                 }
                             ],
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-databricks-routetable'))]"
                             }
                         }
                     },
@@ -253,7 +400,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dn001-databricks-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
                             },
                             "delegations": [
                                 {
@@ -264,7 +411,7 @@
                                 }
                             ],
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
                             }
                         }
                     },
@@ -275,10 +422,10 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dn001-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
                             },
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
                             }
                         }
                     },
@@ -289,7 +436,7 @@
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
                             }
                         }
                     }
