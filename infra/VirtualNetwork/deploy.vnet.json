@@ -34,6 +34,12 @@
             "metadata": {
                 "description": "Specifies the addresses of DNS forwarders in the hub."
             }
+        },
+        "firewallPrivateIp": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the private IP of the Firewall."
+            }
         }
     },
     "functions": [],
@@ -42,9 +48,29 @@
         "vnetName": "[parameters('vnetName')]",
         "dataNodeName": "[parameters('dataNodeName')]",
         "deployDatabricksNsg": "[parameters('deployDatabricksNsg')]",
-        "dnsServerAdresses": "[parameters('dnsServerAdresses')]"
+        "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
+        "firewallPrivateIp": "[parameters('firewallPrivateIp')]"
     },
     "resources": [
+        {
+            "type": "Microsoft.Network/routeTables",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('dataNodeName'), '-routetable')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "routes": [
+                    {
+                        "name": "to-firewall-default",
+                        "properties": {
+                            "addressPrefix": "0.0.0.0/0",
+                            "nextHopType": "VirtualAppliance",
+                            "nextHopIpAddress": "[variables('firewallPrivateIp')]"
+                        }
+                    }
+                ],
+                "disableBgpRoutePropagation": false
+            }
+        },
         {
             "name": "[concat(variables('dataNodeName'), '-nsg')]",
             "type": "Microsoft.Network/networkSecurityGroups",
@@ -52,6 +78,50 @@
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
+                    {
+                        "name": "AllowRDP",
+                        "properties": {
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "priority": 1000,
+                            "protocol": "Tcp",
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "3389"
+                        }
+                    },
+                    {
+                        "name": "AllowSSH",
+                        "properties": {
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "priority": 1010,
+                            "protocol": "Tcp",
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "22"                            
+                        }
+                    }
+                    // {
+                    //     "name": "DenyInternetInbound",
+                    //     "properties": {
+                    //         "description": "Deny Internet Inbound",
+                    //         "protocol": "*",
+                    //         "sourcePortRange": "*",
+                    //         "destinationPortRange": "*",
+                    //         "sourceAddressPrefix": "Internet",
+                    //         "destinationAddressPrefix": "*",
+                    //         "access": "Deny",
+                    //         "priority": 4000,
+                    //         "direction": "Inbound",
+                    //         "sourcePortRanges": [],
+                    //         "destinationPortRanges": [],
+                    //         "sourceAddressPrefixes": [],
+                    //         "destinationAddressPrefixes": []
+                    //     }
+                    // }
                 ]
             }
         },
