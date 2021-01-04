@@ -163,6 +163,9 @@
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dn001-nsg')]"
+                            },
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
                             }
                         }
                     },
@@ -171,7 +174,10 @@
                         "properties": {
                             "addressPrefix": "10.1.1.0/24",
                             "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Disabled"
+                            "privateLinkServiceNetworkPolicies": "Disabled",
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                            }
                         }
                     },
                     {
@@ -190,7 +196,10 @@
                                         "serviceName": "Microsoft.Databricks/workspaces"
                                     }
                                 }
-                            ]
+                            ],
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                            }
                         }
                     },
                     {
@@ -209,7 +218,10 @@
                                         "serviceName": "Microsoft.Databricks/workspaces"
                                     }
                                 }
-                            ]
+                            ],
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                            }
                         }
                     },
                     {
@@ -228,7 +240,10 @@
                                         "serviceName": "Microsoft.Databricks/workspaces"
                                     }
                                 }
-                            ]
+                            ],
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                            }
                         }
                     },
                     {
@@ -247,7 +262,10 @@
                                         "serviceName": "Microsoft.Databricks/workspaces"
                                     }
                                 }
-                            ]
+                            ],
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                            }
                         }
                     },
                     {
@@ -258,6 +276,9 @@
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dn001-nsg')]"
+                            },
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
                             }
                         }
                     },
@@ -266,7 +287,10 @@
                         "properties": {
                             "addressPrefix": "10.1.7.0/24",
                             "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Disabled"
+                            "privateLinkServiceNetworkPolicies": "Disabled",
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                            }
                         }
                     }
                 ]
