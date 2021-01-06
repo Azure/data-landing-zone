@@ -115,9 +115,30 @@
                         }
                     },
                     {
-                        "name": "to-databricks-metastore",
+                        "name": "to-databricks-metastore001",
                         "properties": {
                             "addressPrefix": "40.113.93.91/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-metastore002",
+                        "properties": {
+                            "addressPrefix": "191.235.193.75/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-metastore003",
+                        "properties": {
+                            "addressPrefix": "52.138.224.6/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "to-databricks-metastore004",
+                        "properties": {
+                            "addressPrefix": "52.138.224.7/32",
                             "nextHopType": "Internet"
                         }
                     },
