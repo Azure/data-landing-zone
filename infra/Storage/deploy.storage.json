@@ -116,6 +116,7 @@
                     "defaultAction": "Deny"
                 },
                 "accessTier": "Hot",
+                "allowSharedKeyAccess": false,
                 "supportsHttpsTrafficOnly": true,
                 "isHnsEnabled": "[variables('enableHns')]",
                 "largeFileSharesState": "Disabled",
