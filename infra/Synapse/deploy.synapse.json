@@ -143,15 +143,7 @@
                 //             "keyVaultUrl": ""
                 //         }
                 //     }
-                // },
-                // "privateEndpointConnections": [
-                //     {
-                //         "properties": {
-                //             "privateEndpoint": {},
-                //             "privateLinkServiceConnectionState": {}
-                //         }
-                //     }
-                // ]
+                // }
             },
             "resources": [
                 {
