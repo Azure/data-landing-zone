@@ -141,6 +141,26 @@
                 {
                     "type": "integrationRuntimes",
                     "apiVersion": "2018-06-01",
+                    "name": "AutoResolveIntegrationRuntime",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]"
+                    ],
+                    "properties": {
+                        "type": "Managed",
+                        "managedVirtualNetwork": {
+                            "type": "ManagedVirtualNetworkReference",
+                            "referenceName": "default"
+                        },
+                        "typeProperties": {
+                            "computeProperties": {
+                                "location": "AutoResolve"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type": "integrationRuntimes",
+                    "apiVersion": "2018-06-01",
                     "name": "[variables('azureManagedVnetIntegrationRuntimeName')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
