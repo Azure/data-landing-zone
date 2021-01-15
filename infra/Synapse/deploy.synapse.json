@@ -133,17 +133,6 @@
                     "preventDataExfiltration": true
                 },
                 "connectivityEndpoints": {}
-                // "babylonConfiguration": {    // Take care of this as part of the Policies
-                //     "babylonResourceId": ""
-                // },
-                // "encryption": {
-                //     "cmk": {
-                //         "key": {
-                //             "name": "",
-                //             "keyVaultUrl": ""
-                //         }
-                //     }
-                // }
             },
             "resources": [
                 {
