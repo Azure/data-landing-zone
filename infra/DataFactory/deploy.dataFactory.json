@@ -143,6 +143,7 @@
                     "apiVersion": "2018-06-01",
                     "name": "AutoResolveIntegrationRuntime",
                     "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]"
                     ],
                     "properties": {
