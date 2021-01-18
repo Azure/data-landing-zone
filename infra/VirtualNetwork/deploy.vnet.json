@@ -470,7 +470,7 @@
                     {
                         "name": "[concat(variables('dataNodeName'), '-dd002-subnet')]",
                         "properties": {
-                            "addressPrefix": "10.1.6.0/24",
+                            "addressPrefix": "10.1.8.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
@@ -484,7 +484,7 @@
                     {
                         "name": "[concat(variables('dataNodeName'), '-dd002-privatelink-subnet')]",
                         "properties": {
-                            "addressPrefix": "10.1.7.0/24",
+                            "addressPrefix": "10.1.9.0/24",
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
                             "networkSecurityGroup": {
