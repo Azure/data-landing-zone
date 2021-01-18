@@ -14,14 +14,14 @@
         "sqlDatabaseName": {
             "value": "AdfMetastoreDB"
         },
-        "sqlDatabaseSku": {
-            "value": "GP_Gen5"
+        "sqlDatabaseSkuName": {
+            "value": "Basic"
         },
         "sqlDatabaseTier": {
-            "value": "GeneralPurpose"
+            "value": "Basic"
         },
         "sqlDatabaseCapacity": {
-            "value": 2
+            "value": 5
         },
         "sqlDatabaseMaxSizeInBytes": {
             "value": 34359738368
