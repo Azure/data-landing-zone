@@ -343,6 +343,9 @@
                             "addressPrefix": "10.1.1.0/24",
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
+                            },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
                             }
@@ -456,6 +459,37 @@
                             "addressPrefix": "10.1.7.0/24",
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
+                            },
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "[concat(variables('dataNodeName'), '-dd002-subnet')]",
+                        "properties": {
+                            "addressPrefix": "10.1.6.0/24",
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
+                            },
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "[concat(variables('dataNodeName'), '-dd002-privatelink-subnet')]",
+                        "properties": {
+                            "addressPrefix": "10.1.7.0/24",
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Disabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
+                            },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
                             }
