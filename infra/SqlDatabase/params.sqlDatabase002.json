@@ -24,7 +24,7 @@
             "value": 5
         },
         "sqlDatabaseMaxSizeInBytes": {
-            "value": 34359738368
+            "value": 524288000
         },
         "sqlDatabaseZoneRedundant": {
             "value": false
