@@ -26,6 +26,9 @@
         "mySqlSkuFamily": {
             "value": "Gen5"
         },
+        "geoRedundantBackup": {
+            "value": "Enabled"
+        },
         "mySqlServerAdministratorLogin": {
             "value": "MySqlServerMainUser"
         },

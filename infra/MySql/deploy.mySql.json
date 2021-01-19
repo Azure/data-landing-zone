@@ -51,6 +51,13 @@
                 "description": "Specifies the name of the sku of the MySQL server."
             }
         },
+        "geoRedundantBackup": {
+            "type": "string",
+            "defaultValue": "Enabled",
+            "metadata": {
+              "description": "Specifies whether geo-redundant backup storage should be enabled or disabled"
+            }
+          },
         "mySqlServerAdministratorLogin": {
             "type": "string",
             "defaultValue": "sqladminuser",
@@ -93,6 +100,7 @@
         "mySqlSkuCapacity": "[parameters('mySqlSkuCapacity')]",
         "mySqlSkuSize": "[parameters('mySqlSkuSize')]",
         "mySqlSkuFamily": "[parameters('mySqlSkuFamily')]",
+        "geoRedundantBackup": "[parameters('geoRedundantBackup')]",
         "mySqlServerAdministratorLogin": "[parameters('mySqlServerAdministratorLogin')]",
         "mySqlServerAdministratorLoginPassword": "[parameters('mySqlServerAdministratorLoginPassword')]",
         "keyVaultId": "[parameters('keyVaultId')]",
@@ -127,7 +135,7 @@
                 "sslEnforcement": "Enabled",
                 "storageProfile": {
                     "backupRetentionDays": 7,
-                    "geoRedundantBackup": "Enabled",
+                    "geoRedundantBackup": "[variables('geoRedundantBackup')]",
                     "storageAutogrow": "Enabled",
                     "storageMB": "[variables('mySqlSkuSize')]"
                 },
