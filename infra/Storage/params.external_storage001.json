@@ -9,7 +9,7 @@
             "value": "dn001externalsa001"
         },
         "storageAccountType": {
-            "value": "Standard_LRS"
+            "value": "Standard_ZRS"
         },
         "enableHns": {
             "value": false
