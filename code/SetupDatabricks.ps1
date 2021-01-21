@@ -59,7 +59,17 @@ param (
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $LogAnalyticsWorkspaceKeySecretName
+    $LogAnalyticsWorkspaceKeySecretName,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $HiveVersion = "2.3.7",
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $HadoopVersion = "2.7.4"
 )
 
 # Install Databricks PS Module
@@ -74,6 +84,7 @@ $credSp = New-Object System.Management.Automation.PSCredential ($env:servicePrin
 # Login to Databricks Workspace using Service Principal
 Write-Host "Logging in to Databricks using Service Principal"
 Set-DatabricksEnvironment -TenantID $env:tenantId -ClientID $env:servicePrincipalId -Credential $credSp -AzureResourceID $DatabricksWorkspaceId -ApiRootUrl $DatabricksApiUrl -ServicePrincipal
+
 
 # Create Databricks Hive Secret Scope
 Write-Host "Creating Databricks Hive Secret Scope"
@@ -98,6 +109,27 @@ catch {
     Write-Host "Secret Scope already exists"
 }
 Add-DatabricksSecretScopeACL -ScopeName $logAnalyticsSecretScopeName -Principal "users" -Permission Read
+
+
+# Upload Workspace Configuration Notebook
+Write-Host "Uploading Workspace Configuration Notebook"
+$notebookPath = "/Configure Databricks Workspace"
+Import-DatabricksWorkspaceItem -Path $notebookPath -Format SOURCE -Language SCALA -LocalPath "code/Configure Databricks Workspace.scala" -Overwrite $true
+
+# Execute Workspace Configuration Notebook as a Job
+Write-Host "Executing Workspace Configuration Notebook"
+$runName = "WorkspaceConfigurationExecution"
+$jobClusterDefinition = @{
+     "spark_version" = "7.5.x-scala2.12"
+     "node_type_id" = "Standard_D3_v2"
+     "num_workers" = 1
+}
+$notebookParams = @{
+    "hive-version" = $HiveVersion
+    "hadoop-version" = $HadoopVersion
+}
+$jobInfo = New-DatabricksJobRun -RunName $runName -NewClusterDefinition $jobClusterDefinition -NotebookPath $notebookPath -NotebookParameters $notebookParams
+
 
 # Update Spark Monitoring Shell Script
 Write-Host "Updating Spark Monitoring Shell Script"
