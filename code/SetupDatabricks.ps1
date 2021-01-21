@@ -130,6 +130,16 @@ $notebookParams = @{
 }
 $jobInfo = New-DatabricksJobRun -RunName $runName -NewClusterDefinition $jobClusterDefinition -NotebookPath $notebookPath -NotebookParameters $notebookParams
 
+# Monitor the job status and wait for completion
+while ($(Get-DatabricksJobRun -JobRunID $($jobInfo.run_id)).end_time -eq 0) {
+    Write-Host "  - Running..."
+    Start-Sleep -Seconds 5
+}
+
+# Clean up notebook
+Write-Host "Removing Workspace Configuration Notebook"
+Remove-DatabricksWorkspaceItem $notebookPath
+
 
 # Update Spark Monitoring Shell Script
 Write-Host "Updating Spark Monitoring Shell Script"
