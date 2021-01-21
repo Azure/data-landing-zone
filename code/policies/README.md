@@ -28,5 +28,5 @@ By setting the value of **"isOptional"** to *false*, it prevents the creation of
 As a result, when the cluster is created, the VMs provisioned in the Managed Resource Group will have assigned the defined cost tag. 
 
 <p align="left">
-  <img width="700" height="500" src="https://github.com/Azure/data-node/blob/adb-regex/code/policies/CostCenterDefined-Portal.png">
+  <img width="800" height="500" src="https://github.com/Azure/data-node/blob/adb-regex/code/policies/CostCenterDefined-Portal.png">
 </p>
