@@ -2,6 +2,37 @@ $Global:accessToken = $null
 $Global:accessTokenExpiry = $null
 
 function Get-AadToken {
+    <#
+    .SYNOPSIS
+        Gets an AAD token for a registered AAD application. The application requires the following API permissions:
+            * Application.ReadWrite.All
+            * AppRoleAssignment.ReadWrite.All
+            * Directory.ReadWrite.All
+        Returns a list of services that are set to start automatically, are not
+        currently running, excluding the services that are set to delayed start.
+
+    .DESCRIPTION
+        Get-MrAutoStoppedService is a function that returns a list of services from
+        the specified remote computer(s) that are set to start automatically, are not
+        currently running, and it excludes the services that are set to start automatically
+        with a delayed startup.
+
+    .PARAMETER TenantId
+        Specifies the AAD tenant ID of the application.
+
+    .PARAMETER ClientId
+        Specifies the client ID of the application.
+
+    .PARAMETER ClientSecret
+        Specifies client secret of the application.
+
+    .EXAMPLE
+        Get-AadToken -TenantId '<your-tenant-id>' -ClientId '<your-client-id>' -ClientId '<your-client-secret>'
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -70,6 +101,21 @@ function Get-AadToken {
 
 
 function Assert-Authentication {
+    <#
+    .SYNOPSIS
+        Checks whether authentication was executed successfully.
+
+    .DESCRIPTION
+        The function checks whether authentication was successfully executed.
+        The AAD token must exist and must be valid and not expired.
+
+    .EXAMPLE
+        Assert-Authentication
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param ()
     # Get Unix time
@@ -93,6 +139,25 @@ function Assert-Authentication {
 
 
 function New-DatabricksEnterpriseApplication {
+    <#
+    .SYNOPSIS
+        Created a new Databricks Enterprise Application in AAD.
+
+    .DESCRIPTION
+        New-DatabricksEnterpriseApplication creates a new Databricks Enterprise Application based on the
+        provided parameters.
+
+    .PARAMETER DatabricksWorkspaceName
+        Function expects the Databricks workspace name which is ussed for the name of the enterprise
+        application taht gets created. Final name will be specified as '<your-workspace-name>-scim'.
+
+    .EXAMPLE
+        New-DatabricksEnterpriseApplication -DatabricksWorkspaceName '<your-databricks-workspace-name>'
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -164,6 +229,25 @@ function New-DatabricksEnterpriseApplication {
 
 
 function Get-SynchronisationTemplate {
+    <#
+    .SYNOPSIS
+        Retrieves the template for the provisioning connector.
+
+    .DESCRIPTION
+        Applications in the gallery that are enabled for provisioning have templates to streamline configuration.
+        This function retrieves the template for the provisioning configuration.
+
+    .PARAMETER ObjectId
+        Function expects the Databricks enterprise application service principal object id which is
+        returned by New-DatabricksEnterpriseApplication.
+
+    .EXAMPLE
+        Get-SynchronisationTemplate -ObjectId '<your-service-principal-object-id>'
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -213,6 +297,25 @@ function Get-SynchronisationTemplate {
 
 
 function New-SynchronisationJob {
+    <#
+    .SYNOPSIS
+        Creates a new synchronisation job for the Databricks enterprise application in AADs.
+
+    .DESCRIPTION
+        New-SynchronisationJob creates a new synchronisation job for the Databricks enterprise application.
+        This job is required for all subsequent steps.
+
+    .PARAMETER ObjectId
+        Function expects the Databricks enterprise application service principal object id which is
+        returned by New-DatabricksEnterpriseApplication.
+
+    .EXAMPLE
+        New-SynchronisationJob -ObjectId '<your-service-principal-object-id>'
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -277,6 +380,36 @@ function New-SynchronisationJob {
 
 
 function Test-Connection {
+    <#
+    .SYNOPSIS
+        Test the connection between the Databricks workspace and the application.
+
+    .DESCRIPTION
+        Test-Connection tests whether the connection between Databricks and the enterprise application can
+        be successfully established with the provided parameters.
+
+    .PARAMETER ObjectId
+        Function expects the Databricks enterprise application service principal object id which is
+        returned by New-DatabricksEnterpriseApplication.
+
+    .PARAMETER JobId
+        Function expects a Databricks enterprise application service principal synchronisation job id
+        which is returned by New-SynchronisationJob.
+
+    .PARAMETER DatabricksInstanceName
+        Function expects the Databricks instance name. More details on this can be found here:
+        https://docs.microsoft.com/en-us/azure/databricks/workspace/workspace-details#per-workspace-url
+
+    .PARAMETER DatabricksPatToken
+        Function expects a Databricks PAT token from the workspace.
+
+    .EXAMPLE
+        Test-Connection -ObjectId '<your-service-principal-object-id>' -JobId '<your-synchronisation-job-id>' -DatabricksInstanceName '<your-databricks-instance-name>' -DatabricksPatToken '<your-databricks-pat-token>'
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -292,7 +425,12 @@ function Test-Connection {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [String]
-        $DatabricksInstanceName
+        $DatabricksInstanceName,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $DatabricksPatToken
     )
     # Validate authentication
     Write-Verbose "Validating authentication"
@@ -321,7 +459,7 @@ function Test-Connection {
             },
             @{
                 'key'   = 'SecretToken'
-                'value' = "${Global:accessToken}"
+                'value' = "${DatabricksPatToken}"
             }
         )
     } | ConvertTo-Json
@@ -354,6 +492,38 @@ function Test-Connection {
 
 
 function Save-ProvisioningCredentials {
+    <#
+    .SYNOPSIS
+        Saves the credentials for the Databricks enterprise application.
+
+    .DESCRIPTION
+        Saves the credentials for the Databricks enterprise application in order to allow authorization access.
+
+    .PARAMETER ObjectId
+        Function expects the Databricks enterprise application service principal object id which is
+        returned by New-DatabricksEnterpriseApplication.
+
+    .PARAMETER JobId
+        Function expects a Databricks enterprise application service principal synchronisation job id
+        which is returned by New-SynchronisationJob.
+
+    .PARAMETER DatabricksInstanceName
+        Function expects the Databricks instance name. More details on this can be found here:
+        https://docs.microsoft.com/en-us/azure/databricks/workspace/workspace-details#per-workspace-url
+
+    .PARAMETER DatabricksPatToken
+        Function expects a Databricks PAT token from the workspace.
+
+    .PARAMETER NotificationEmail
+        Function expects a notification email address to which messages are sent, if there are synchronization issues.
+
+    .EXAMPLE
+        Test-Connection -ObjectId '<your-service-principal-object-id>' -JobId '<your-synchronisation-job-id>' -DatabricksInstanceName '<your-databricks-instance-name>' -DatabricksPatToken '<your-databricks-pat-token>' -NotificationEmail '<your-notification-email>'
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -445,6 +615,28 @@ function Save-ProvisioningCredentials {
 
 
 function New-GroupAssignment {
+    <#
+    .SYNOPSIS
+        Assigns an AAD group to the Databricks enterprise application.
+
+    .DESCRIPTION
+        Assigns an AAD group to the Databricks enterprise application which gets then synched to the
+        Databricks workspace.
+
+    .PARAMETER ObjectId
+        Function expects the Databricks enterprise application service principal object id which is
+        returned by New-DatabricksEnterpriseApplication.
+
+    .PARAMETER GroupId
+        Function expects a group object id which is granted access to the Databricks workspace via SCIM.
+
+    .EXAMPLE
+        Test-Connection -ObjectId '<your-service-principal-object-id>' -GroupId '<your-group-id>'
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -508,6 +700,28 @@ function New-GroupAssignment {
 
 
 function Start-SynchronisationJob {
+    <#
+    .SYNOPSIS
+        Starts the synchronisation between the enterprise application and the Databricks workspace.
+
+    .DESCRIPTION
+        Synchronizes the users between the Databricks workspace and the enterprise application.
+
+    .PARAMETER ObjectId
+        Function expects the Databricks enterprise application service principal object id which is
+        returned by New-DatabricksEnterpriseApplication.
+
+    .PARAMETER JobId
+        Function expects a Databricks enterprise application service principal synchronisation job id
+        which is returned by New-SynchronisationJob.
+
+    .EXAMPLE
+        Start-SynchronisationJob -ObjectId '<your-service-principal-object-id>' -GroupId '<your-group-id>'
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -562,6 +776,30 @@ function Start-SynchronisationJob {
 
 
 function Get-ProvisioningAuditLogs {
+    <#
+    .SYNOPSIS
+        Monitors the provisioning job status.
+
+    .DESCRIPTION
+        Get-ProvisioningAuditLogs can be used to track the progress of the current provisioning job 
+        cycle as well as statistics to date such as the number of users and groups that have been
+        created in the Databricks workspace.
+
+    .PARAMETER ObjectId
+        Function expects the Databricks enterprise application service principal object id which is
+        returned by New-DatabricksEnterpriseApplication.
+
+    .PARAMETER JobId
+        Function expects a Databricks enterprise application service principal synchronisation job id
+        which is returned by New-SynchronisationJob.
+
+    .EXAMPLE
+        Get-ProvisioningAuditLogs -ObjectId '<your-service-principal-object-id>' -JobId '<your-job-id>'
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -616,6 +854,37 @@ function Get-ProvisioningAuditLogs {
 
 
 function New-ScimSetup {
+    <#
+    .SYNOPSIS
+        Creates the end-to-end SCIM synch setup for a Databricks workspace.
+
+    .DESCRIPTION
+        This function executes all required steps end-to-end to create a Databricks SCIM enterprise application.
+
+    .PARAMETER DatabricksWorkspaceName
+        Function expects the Databricks workspace name which is ussed for the name of the enterprise
+        application taht gets created. Final name will be specified as '<your-workspace-name>-scim'.
+
+    .PARAMETER DatabricksInstanceName
+        Function expects the Databricks instance name. More details on this can be found here:
+        https://docs.microsoft.com/en-us/azure/databricks/workspace/workspace-details#per-workspace-url
+
+    .PARAMETER DatabricksPatToken
+        Function expects a Databricks PAT token from the workspace.
+
+    .PARAMETER NotificationEmail
+        Function expects a notification email address to which messages are sent, if there are synchronization issues.
+
+    .PARAMETER GroupIdList
+        Function expects a list of group object ids which is granted access to the Databricks workspace via SCIM.
+
+    .EXAMPLE
+        New-ScimSetup -DatabricksWorkspaceName '<your-databricks-workspace-name>' -DatabricksInstanceName '<your-databricks-instance-name>' -DatabricksPatToken '<your-databricks-pat-token>' -NotificationEmail '<your-notification-email>' -GroupIdList @('<your-group-id-1>', '<your-group-id-2>')
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -667,7 +936,8 @@ function New-ScimSetup {
     Test-Connection `
         -ObjectId $objectId `
         -JobId $jobId `
-        -DatabricksInstanceName $DatabricksInstanceName
+        -DatabricksInstanceName $DatabricksInstanceName `
+        -DatabricksPatToken $DatabricksPatToken
     
     # Save Provisioning Credentials for Enterprise Application
     Write-Verbose "Saving Provisioning Credentials for Enterprise Application"
@@ -695,6 +965,32 @@ function New-ScimSetup {
 }
 
 function New-GroupAssignment {
+    <#
+    .SYNOPSIS
+        Assigns AAD groups to the enterprise application to give them access to the Databricks workspace.
+
+    .DESCRIPTION
+        This function executes all required steps end-to-end to assign AAD groups to the enterprise
+        application and starts a synch job with the Databricks workspace.
+
+    .PARAMETER ObjectId
+        Function expects the Databricks enterprise application service principal object id which is
+        returned by New-DatabricksEnterpriseApplication.
+
+    .PARAMETER JobId
+        Function expects a Databricks enterprise application service principal synchronisation job id
+        which is returned by New-SynchronisationJob.
+
+    .PARAMETER GroupIdList
+        Function expects a list of group object ids which is granted access to the Databricks workspace via SCIM.
+
+    .EXAMPLE
+        New-GroupAssignment -ObjectId '<your-service-principal-object-id>' -JobId '<your-job-id>' -GroupIdList @('<your-group-id-1>', '<your-group-id-2>')
+
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
