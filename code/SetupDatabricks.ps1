@@ -72,6 +72,11 @@ param (
     $HadoopVersion = "2.7.4"
 )
 
+
+# *****************************************************************************
+#    SETUP AND LOGIN
+# *****************************************************************************
+
 # Install Databricks PS Module
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 Install-Module -Name DatabricksPS
@@ -85,6 +90,10 @@ $credSp = New-Object System.Management.Automation.PSCredential ($env:servicePrin
 Write-Host "Logging in to Databricks using Service Principal"
 Set-DatabricksEnvironment -TenantID $env:tenantId -ClientID $env:servicePrincipalId -Credential $credSp -AzureResourceID $DatabricksWorkspaceId -ApiRootUrl $DatabricksApiUrl -ServicePrincipal
 
+
+# *****************************************************************************
+#    CREATE SECRET SCOPES
+# *****************************************************************************
 
 # Create Databricks Hive Secret Scope
 Write-Host "Creating Databricks Hive Secret Scope"
@@ -110,6 +119,10 @@ catch {
 }
 Add-DatabricksSecretScopeACL -ScopeName $logAnalyticsSecretScopeName -Principal "users" -Permission Read
 
+
+# *****************************************************************************
+#    EXECUTE WORKSPACE CONFIGURATION NOTEBOOK
+# *****************************************************************************
 
 # Upload Workspace Configuration Notebook
 Write-Host "Uploading Workspace Configuration Notebook"
@@ -141,6 +154,10 @@ Write-Host "Removing Workspace Configuration Notebook"
 Remove-DatabricksWorkspaceItem $notebookPath
 
 
+# *****************************************************************************
+#    UPLOAD GLOBAL INIT SCRIPTS
+# *****************************************************************************
+
 # Update Spark Monitoring Shell Script
 Write-Host "Updating Spark Monitoring Shell Script"
 $SparkMonitoringFileContent = Get-Content -Path "code/applicationLogging/spark-monitoring.sh"
@@ -165,6 +182,11 @@ foreach ($relativeFilePath in $relativeFilePaths) {
     Write-Host "Uploading File: $file"
     Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark_2.4.3/${relativeFilePath}" -LocalPath "${basePath}${relativeFilePath}" -Overwrite $true
 }
+
+
+# *****************************************************************************
+#    UPLOAD SPARK MONITORING JARS
+# *****************************************************************************
 
 # Upload Jars for Spark 2.4.5
 Write-Host "Uploading Spark Monitoring Jars for Spark 2.4.5"
@@ -218,6 +240,11 @@ foreach ($relativeFilePath in $relativeFilePaths) {
 # $jobJarUri = "spark-monitoring-sample-1.0.0.jar"
 # $jobJarMainClassName = "com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob"
 # Add-DatabricksJob -Name $jobName -NewClusterDefinition $jobClusterDefinition -Libraries $jobLibraries -JarMainClassName $jobJarMainClassName -JarURI $jobJarUri
+
+
+# *****************************************************************************
+#    UPLOAD CLUSTER POLICIES
+# *****************************************************************************
 
 # Update Cluster Policy
 Write-Host "Updating Cluster Policies"
