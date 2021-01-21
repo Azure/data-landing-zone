@@ -81,20 +81,6 @@
         "type": "forbidden",
         "hidden": true
     },
-    "init_scripts.0.dbfs.destination": {
-        "type": "fixed",
-        "value": "dbfs:/databricks/spark-monitoring/spark-monitoring.sh"
-    },
-    "init_scripts.1.dbfs.destination": {
-        "type": "fixed",
-        "value": "dbfs:/databricks/externalMetastore/external-metastore.sh"
-    },
-    "init_scripts.*.dbfs.destination": {
-        "type": "forbidden"
-    },
-    "init_scripts.*.file.destination": {
-        "type": "forbidden"
-    },
     "cluster_log_conf.type": {
         "type": "fixed",
         "value": "DBFS",
@@ -115,19 +101,44 @@
         "value": "{{secrets/adminSecretScopeNew/logAnalyticsWorkspaceKey}}",
         "hidden": false
     },
-    "spark_env_vars.SQL_USERNAME": {
+    "spark_conf.spark.hadoop.javax.jdo.option.ConnectionUserName": {
         "type": "fixed",
         "value": "{{secrets/adminSecretScopeNew/hiveMetastoreConnectionUserName}}",
         "hidden": false
     },
-    "spark_env_vars.SQL_PASSWORD": {
+    "spark_conf.spark.hadoop.javax.jdo.option.ConnectionPassword": {
         "type": "fixed",
         "value": "{{secrets/adminSecretScopeNew/hiveMetastoreConnectionPassword}}",
         "hidden": false
     },
-    "spark_env_vars.SQL_CONNECTION_STRING": {
+    "spark_conf.spark.hadoop.javax.jdo.option.ConnectionURL": {
         "type": "fixed",
         "value": "{{secrets/adminSecretScopeNew/hiveMetastoreConnectionURL}}",
+        "hidden": false
+    },
+    "spark_conf.spark.hadoop.javax.jdo.option.ConnectionDriverName": {
+        "type": "fixed",
+        "value": "org.mariadb.jdbc.Driver",
+        "hidden": false
+    },
+    "spark_conf.spark.sql.hive.metastore.version": {
+        "type": "fixed",
+        "value": "0.0.0",
+        "hidden": false
+    },
+    "spark_conf.spark.sql.hive.metastore.jars": {
+        "type": "fixed",
+        "value": "/databricks/hive_metastore_jars/*",
+        "hidden": false
+    },
+    "spark_conf.spark.hadoop.hive.metastore.schema.verification": {
+        "type": "fixed",
+        "value": "false",
+        "hidden": false
+    },
+    "spark_conf.spark.hadoop.datanucleus.schema.autoCreateAll": {
+        "type": "fixed",
+        "value": "true",
         "hidden": false
     }
 }

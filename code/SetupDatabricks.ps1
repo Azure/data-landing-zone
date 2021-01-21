@@ -144,9 +144,14 @@ $notebookParams = @{
 $jobInfo = New-DatabricksJobRun -RunName $runName -NewClusterDefinition $jobClusterDefinition -NotebookPath $notebookPath -NotebookParameters $notebookParams
 
 # Monitor the job status and wait for completion
-while ($(Get-DatabricksJobRun -JobRunID $($jobInfo.run_id)).end_time -eq 0) {
+do {
     Write-Host "  - Running..."
-    Start-Sleep -Seconds 5
+    Start-Sleep -Seconds 10
+    $jobRunStatus = Get-DatabricksJobRun -JobRunID $jobInfo.run_id
+} while ($jobRunStatus.end_time -eq 0)
+Write-Host "  - Notebook execution complete!  Status: $($jobRunStatus.state.result_state)"
+if ($jobRunStatus.state.result_state -eq "FAILED") {
+    Write-Host "       $($jobRunStatus.state.state_message)`n"
 }
 
 # Clean up notebook
@@ -239,68 +244,64 @@ foreach ($relativeFilePath in $relativeFilePaths) {
 #    UPLOAD CLUSTER POLICIES
 # *****************************************************************************
 
-# Update Cluster Policy
-Write-Host "Updating Cluster Policies"
-$connectionUrlParameter = "spark_env_vars.SQL_CONNECTION_STRING"
-$userNameParameter = "spark_env_vars.SQL_USERNAME"
-$passwordParameter = "spark_env_vars.SQL_PASSWORD"
-$logAnalyticsWorkspaceIdParameter = "spark_env_vars.LOG_ANALYTICS_WORKSPACE_ID"
-$logAnalyticsWorkspaceKeyParameter = "spark_env_vars.LOG_ANALYTICS_WORKSPACE_KEY"
+# Declare a function that will update values in a policy object
+function Update-PolicyValues {
+    param (
+        [Parameter(Mandatory)][string]$ContentPath,
+        [Parameter(Mandatory)][Hashtable]$ReplacementValues
+    )
 
-# Load All Purpose Policy
-Write-Host "Loading All Purpose Policy"
-$allPurposePolicy = Get-Content -Path "code/policies/allPurposePolicy.json" -Raw | Out-String | ConvertFrom-Json
-$allPurposePolicy.$connectionUrlParameter.value = "{{secrets/${hiveSecretScopeName}/${HiveConnectionStringSecretName}}}"
-$allPurposePolicy.$userNameParameter.value = "{{secrets/${hiveSecretScopeName}/${HiveUsernameSecretName}}}"
-$allPurposePolicy.$passwordParameter.value = "{{secrets/${hiveSecretScopeName}/${HivePasswordSecretName}}}"
-$allPurposePolicy.$logAnalyticsWorkspaceIdParameter.value = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceIdSecretName}}}"
-$allPurposePolicy.$logAnalyticsWorkspaceKeyParameter.value = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceKeySecretName}}}"
-$allPurposePolicy = ConvertTo-Json $allPurposePolicy
-
-# Define All Purpose Policy
-Write-Host "Defining All Purpose Cluster Policy"
-$allPurposePolicyName = "AllPurposeClusterPolicy"
-try {
-    Add-DatabricksClusterPolicy -PolicyName $allPurposePolicyName -Definition $allPurposePolicy
-}
-catch {
-    $clusterPolicies = Get-DatabricksClusterPolicy
-    $clusterId = ""
-    foreach ($clusterPolicy in $clusterPolicies) {
-        if ($clusterPolicy.name -eq $allPurposePolicyName) {
-            $clusterId = $clusterPolicy.policy_id
-            Break;
+    $policy = Get-Content -Path $ContentPath -Raw | Out-String | ConvertFrom-Json
+    
+    foreach ($rv in $ReplacementValues.GetEnumerator()) {
+        if ([bool]($policy.PSobject.Properties.name -match $rv.Name)) {
+            $policy.$($rv.Name).value = $rv.Value
         }
     }
-    Update-DatabricksClusterPolicy -PolicyID $clusterId -PolicyName $allPurposePolicyName -Definition $allPurposePolicy
+
+    ConvertTo-Json $policy
 }
+
+# Declare a wrapper function for uploading a new policy or updating an existing policy
+function Upload-Policy {
+    param (
+        [Parameter(Mandatory)][string]$PolicyName,
+        [Parameter(Mandatory)][string]$PolicyJson
+    )
+
+    try {
+        Add-DatabricksClusterPolicy -PolicyName $PolicyName -Definition $PolicyJson
+        Write-Host "  - Create new policy `"$PolicyName`""
+    }
+    catch {
+        $clusterPolicies = Get-DatabricksClusterPolicy
+        $policyId = ""
+        foreach ($clusterPolicy in $clusterPolicies) {
+            if ($clusterPolicy.name -eq $PolicyName) {
+                $policyId = $clusterPolicy.policy_id
+                Break;
+            }
+        }
+        Update-DatabricksClusterPolicy -PolicyID $policyId -PolicyName $PolicyName -Definition $PolicyJson
+        Write-Host "  - Updated policy `"$PolicyName`""
+    }
+}
+
+$policyValues = @{
+    "spark_env_vars.LOG_ANALYTICS_WORKSPACE_ID" = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceIdSecretName}}}"
+    "spark_env_vars.LOG_ANALYTICS_WORKSPACE_KEY" = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceKeySecretName}}}"
+    "spark_conf.spark.hadoop.javax.jdo.option.ConnectionUserName" = "{{secrets/${hiveSecretScopeName}/${HiveUsernameSecretName}}}"
+    "spark_conf.spark.hadoop.javax.jdo.option.ConnectionPassword" = "{{secrets/${hiveSecretScopeName}/${HivePasswordSecretName}}}"
+    "spark_conf.spark.hadoop.javax.jdo.option.ConnectionURL" = "{{secrets/${hiveSecretScopeName}/${HiveConnectionStringSecretName}}}"
+    "spark_conf.spark.sql.hive.metastore.version" = "$HiveVersion"
+}
+
+# Load All-Purpose Policy
+Write-Host "Loading All-Purpose Policy"
+$allPurposePolicy = Update-PolicyValues -ContentPath "code/policies/allPurposePolicy.json" -ReplacementValues $policyValues
+Upload-Policy -PolicyName "AllPurposeClusterPolicy" -PolicyJson $allPurposePolicy
 
 # Load Job Policy
 Write-Host "Loading Job Policy"
-$jobPolicy = Get-Content -Path "code/policies/jobPolicy.json" -Raw | Out-String | ConvertFrom-Json
-$jobPolicy.$connectionUrlParameter.value = "{{secrets/${hiveSecretScopeName}/${HiveConnectionStringSecretName}}}"
-$jobPolicy.$userNameParameter.value = "{{secrets/${hiveSecretScopeName}/${HiveUsernameSecretName}}}"
-$jobPolicy.$passwordParameter.value = "{{secrets/${hiveSecretScopeName}/${HivePasswordSecretName}}}"
-$jobPolicy.$logAnalyticsWorkspaceIdParameter.value = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceIdSecretName}}}"
-$jobPolicy.$logAnalyticsWorkspaceKeyParameter.value = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceKeySecretName}}}"
-$jobPolicy = ConvertTo-Json $jobPolicy
-
-# Define Job Policy
-Write-Host "Defining Job Cluster Policy"
-$jobPolicyName = "JobClusterPolicy"
-try {
-    Add-DatabricksClusterPolicy -PolicyName $jobPolicyName -Definition $jobPolicy
-}
-catch {
-    $clusterPolicies = Get-DatabricksClusterPolicy
-    $clusterId = ""
-    foreach ($clusterPolicy in $clusterPolicies) {
-        if ($clusterPolicy.name -eq $jobPolicyName) {
-            $clusterId = $clusterPolicy.policy_id
-            Break;
-        }
-    }
-    Update-DatabricksClusterPolicy -PolicyID $clusterId -PolicyName $jobPolicyName -Definition $jobPolicy
-}
-
-Write-Host "Successfully finished Databricks setup"
+$jobPolicy = Update-PolicyValues -ContentPath "code/policies/jobPolicy.json" -ReplacementValues $policyValues
+Upload-Policy -PolicyName "JobClusterPolicy" -PolicyJson $jobPolicy
