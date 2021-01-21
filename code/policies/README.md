@@ -22,11 +22,11 @@ In this implementation, **Regex policy** is used in order to enforce cost center
 By setting the value of **"isOptional"** to *false*, it prevents the creation of a cluster without specifying a costCenter with a value which needs to follow the defined pattern ( length of 11 chars, with 5 uppercase chars followed by "-", followed by 5 numbers). 
 
 <p align="center">
-  <img width="460" height="300" src="https://github.com/Azure/data-node/blob/adb-regex/code/policies/DefiningCostCenter-DatabricksUX.png">
+  <img width="400" height="400" src="https://github.com/Azure/data-node/blob/adb-regex/code/policies/DefiningCostCenter-DatabricksUX.png">
 </p>
 
 As a result, when the cluster is created, the VMs provisioned in the Managed Resource Group will have assigned the defined cost tag. 
 
 <p align="center">
-  <img width="460" height="300" src="https://github.com/Azure/data-node/blob/adb-regex/code/policies/CostCenterDefined-Portal.png ">
+  <img width="500" height="500" src="https://github.com/Azure/data-node/blob/adb-regex/code/policies/CostCenterDefined-Portal.png ">
 </p>
