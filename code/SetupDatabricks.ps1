@@ -159,20 +159,27 @@ Remove-DatabricksWorkspaceItem $notebookPath
 # *****************************************************************************
 
 # Update Spark Monitoring Shell Script
-Write-Host "Updating Spark Monitoring Shell Script"
-$SparkMonitoringFileContent = Get-Content -Path "code/applicationLogging/spark-monitoring.sh"
-$SparkMonitoringFileContent = $SparkMonitoringFileContent -Replace "AZ_SUBSCRIPTION_ID=", "AZ_SUBSCRIPTION_ID=${DatabricksSubscriptionId}"
-$SparkMonitoringFileContent = $SparkMonitoringFileContent -Replace "AZ_RSRC_GRP_NAME=", "AZ_RSRC_GRP_NAME=${DatabricksResourceGroupName}"
-$SparkMonitoringFileContent = $SparkMonitoringFileContent -Replace "AZ_RSRC_NAME=", "AZ_RSRC_NAME=${DatabricksWorkspaceName}"
-$SparkMonitoringFileContent | Set-Content -Path "code/applicationLogging/spark-monitoring.sh"
-
-# Upload Hive Metastore Connection Shell Script
-Write-Host "Uploading Hive Metastore Connection Shell Script"
-Upload-DatabricksFSFile -Path "/databricks/externalMetastore/external-metastore.sh" -LocalPath "code/externalMetastore/external-metastore.sh" -Overwrite $true
+Write-Host "Updating Spark Monitoring Init Script"
+$SparkMonitoringInitScriptContent = Get-Content -Path "code/applicationLogging/spark-monitoring.sh"
+$SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_SUBSCRIPTION_ID=", "AZ_SUBSCRIPTION_ID=${DatabricksSubscriptionId}"
+$SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_RSRC_GRP_NAME=", "AZ_RSRC_GRP_NAME=${DatabricksResourceGroupName}"
+$SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_RSRC_NAME=", "AZ_RSRC_NAME=${DatabricksWorkspaceName}"
+$SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -join "`r`n" | Out-String
 
 # Upload Spark Monitoring Shell Script
 Write-Host "Uploading Spark Monitoring Shell Script"
-Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark-monitoring.sh" -LocalPath "code/applicationLogging/spark-monitoring.sh" -Overwrite $true
+$scriptInfo = Add-DatabricksGlobalInitScript -Name "spark-monitoring" -Script $SparkMonitoringInitScriptContent -AsPlainText -Position 0 -Enabled $true
+
+# Upload Hive Metastore Connection Shell Script
+Write-Host "Uploading Hive Metastore Connection Init Script"
+$ExternalMetastoreInitScriptContent = Get-Content -Path "code/externalMetastore/external-metastore.sh"
+$ExternalMetastoreInitScriptContent = $ExternalMetastoreInitScriptContent -join "`r`n" | Out-String
+$scriptInfo = Add-DatabricksGlobalInitScript -Name "external-metastore" -Script $ExternalMetastoreInitScriptContent -AsPlainText -Position 1 -Enabled $true
+
+
+# *****************************************************************************
+#    UPLOAD SPARK MONITORING JARS
+# *****************************************************************************
 
 # Upload Jars for Spark 2.4.3
 Write-Host "Uploading Spark Monitoring Jars for Spark 2.4.3"
@@ -182,11 +189,6 @@ foreach ($relativeFilePath in $relativeFilePaths) {
     Write-Host "Uploading File: $file"
     Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark_2.4.3/${relativeFilePath}" -LocalPath "${basePath}${relativeFilePath}" -Overwrite $true
 }
-
-
-# *****************************************************************************
-#    UPLOAD SPARK MONITORING JARS
-# *****************************************************************************
 
 # Upload Jars for Spark 2.4.5
 Write-Host "Uploading Spark Monitoring Jars for Spark 2.4.5"
@@ -213,15 +215,6 @@ $relativeFilePaths = Get-ChildItem -Path $basePath -Recurse -File -Name
 foreach ($relativeFilePath in $relativeFilePaths) {
     Write-Host "Uploading File: $file"
     Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark_3.0.1/${relativeFilePath}" -LocalPath "${basePath}${relativeFilePath}" -Overwrite $true
-}
-
-# Upload Jars for Hive Metastore 1.2.1
-Write-Host "Uploading Jars for Hive Metastore 1.2.1"
-$basePath = "code/externalMetastore/hiveMetastoreJars_1.2.1/"
-$relativeFilePaths = Get-ChildItem -Path $basePath -Recurse -File -Name
-foreach ($relativeFilePath in $relativeFilePaths) {
-    Write-Host "Uploading File: $file"
-    Upload-DatabricksFSFile -Path "/hiveMetastoreJars_1.2.1/${relativeFilePath}" -LocalPath "${basePath}${relativeFilePath}" -Overwrite $true
 }
 
 # # Upload Spark Monitoring Jar for testing
