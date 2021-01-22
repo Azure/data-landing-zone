@@ -145,11 +145,11 @@ $jobInfo = New-DatabricksJobRun -RunName $runName -NewClusterDefinition $jobClus
 
 # Monitor the job status and wait for completion
 do {
-    Write-Host "  - Running..."
-    Start-Sleep -Seconds 10
+    Write-Host -NoNewline "`r - Running .."
+    Start-Sleep -Seconds 5
     $jobRunStatus = Get-DatabricksJobRun -JobRunID $jobInfo.run_id
 } while ($jobRunStatus.end_time -eq 0)
-Write-Host "  - Notebook execution complete!  Status: $($jobRunStatus.state.result_state)"
+Write-Host "`r - Notebook execution complete!  Status: $($jobRunStatus.state.result_state)"
 if ($jobRunStatus.state.result_state -eq "FAILED") {
     Write-Host "       $($jobRunStatus.state.state_message)`n"
 }
