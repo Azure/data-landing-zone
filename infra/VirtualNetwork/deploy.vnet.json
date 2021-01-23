@@ -143,8 +143,8 @@
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]",
-                "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]",
-                "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-databricks-routetable'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]",
+                "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
             ],
             "properties": {
                 "addressSpace": {
