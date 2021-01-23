@@ -64,6 +64,18 @@
                 "description": "Specifies the password for the MySQL server."
             }
         },
+        "mySqlAdminGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the Azure Active Directory group of the MySQL admin group."
+            }
+        },
+        "mySqlAdminGroupObjectID": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the Azure Active Directory objectID of the MySQL admin group."
+            }
+        },
         "keyVaultId": {
             "type": "string",
             "metadata": {
@@ -95,6 +107,8 @@
         "mySqlSkuFamily": "[parameters('mySqlSkuFamily')]",
         "mySqlServerAdministratorLogin": "[parameters('mySqlServerAdministratorLogin')]",
         "mySqlServerAdministratorLoginPassword": "[parameters('mySqlServerAdministratorLoginPassword')]",
+        "mySqlAdminGroupName": "[parameters('mySqlAdminGroupName')]",
+        "mySqlAdminGroupObjectID": "[parameters('mySqlAdminGroupObjectID')]",
         "keyVaultId": "[parameters('keyVaultId')]",
         "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]",
         "connectionStringSecretName": "[concat(variables('mySqlServerName'), 'ConnectionString')]",
@@ -159,6 +173,21 @@
             "properties": {
                 "charset": "utf8",
                 "collation": "utf8_general_ci"
+            }
+        },
+        {
+            "condition": "[and(not(empty(variables('mySqlAdminGroupName'))), not(empty(variables('mySqlAdminGroupObjectID'))))]",
+            "type": "Microsoft.DBForMySQL/servers/Administrators",
+            "apiVersion": "2017-12-01",
+            "name": "[concat(variables('mySqlServerName'), '/', variables('mySqlDatabaseName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforMySQL/servers', variables('mySqlServerName'))]"
+            ],
+            "properties": {
+                "administratorType": "ActiveDirectory",
+                "login": "[variables('mySqlAdminGroupName')]",
+                "sid": "[variables('mySqlAdminGroupObjectID')]",
+                "tenantId": "[subscription().tenantId]"
             }
         },
         {
