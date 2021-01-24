@@ -20,8 +20,9 @@
         "dataNodeName": {
             "type": "string",
             "defaultValue": "dn001",
+            "maxLength": 5,
             "metadata": {
-                "description": "Name of the data node."
+                "description": "Name of the data node (max 5 characters)."
             }
         },
         "location": {
@@ -61,18 +62,18 @@
         "privateDnsZoneResourceGroupName": "[last(split(variables('privateDnsZoneResourceGroupId'), '/'))]",
         "sqlServerAdministratorLoginPassword": "[parameters('sqlServerAdministratorLoginPassword')]",
         "storageAccountNames": [
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'rawsa')]",
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'enrcursa')]",
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa')]"
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'rawsa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'enrcursa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
         ],
         "secretStorageAccountNames": [
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretrawsa')]",
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretenrcursa')]",
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretworksa')]"
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretrawsa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretenrcursa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretworksa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
         ],
         "databricksNames": [
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-databricks001-ingest')]",
-            "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-databricks002-processing')]"
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-databricks001-ingest'), 30)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-databricks002-processing'), 30)]"
         ],
         "vnetResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-network')]",
         "managementResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-mgmt')]",
@@ -85,6 +86,7 @@
         "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/VirtualNetwork/deploy.vnet.json?token=AIHRGTQ34ZHG2TOM5LFTXR272D6V4",
         "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/KeyVault/deploy.keyVault.json?token=AIHRGTXC2ZVYPPLOBHNLQDK72D6XA",
         "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Storage/deploy.storage.json?token=AIHRGTW5VG55KEUPYBWJO6S72D6YI",
+        "mySqlTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/MySql/deploy.mySql.json?token=AIHRGTXVADDL6LKWNEUJDOC72D65W",
         "sqlServerTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlServer/deploy.sqlServer.json?token=AIHRGTXVADDL6LKWNEUJDOC72D65W",
         "sqlDatabaseTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlDatabase/deploy.sqlDatabase.json?token=AIHRGTUM5HU47LKVWHCS33S72D662",
         "databricksTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Databricks/deploy.databricks.json?token=AIHRGTSTBKWIHGRI32WYFG272D7AE",
@@ -167,7 +169,7 @@
                         "value": "[variables('location')]"
                     },
                     "vnetName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-vnet')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-vnet'), 64)]"
                     },
                     "deployDatabricksNsg": {
                         "value": false
@@ -199,7 +201,7 @@
                         "value": "[variables('location')]"
                     },
                     "keyVaultName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-keyvault001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-keyvault001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
                     },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
@@ -231,7 +233,7 @@
                         "value": "[variables('location')]"
                     },
                     "keyVaultName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-keyvault002')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-keyvault002', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
                     },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
@@ -356,7 +358,7 @@
                         "value": "[variables('location')]"
                     },
                     "storageAccountName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'externalsa001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'externalsa001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
                     },
                     "storageAccountType": {
                         "value": "Standard_LRS"
@@ -397,7 +399,7 @@
                         "value": "[variables('location')]"
                     },
                     "sqlServerName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
                     },
                     "administratorLogin": {
                         "value": "SqlServerMainUser"
@@ -441,7 +443,7 @@
                         "value": "[variables('location')]"
                     },
                     "sqlServerName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver002')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver002', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
                     },
                     "administratorLogin": {
                         "value": "SqlServerMainUser"
@@ -495,16 +497,16 @@
                         "value": "AdfMetastoreDB"
                     },
                     "sqlDatabaseSku": {
-                        "value": "GP_Gen5"
+                        "value": "Basic"
                     },
                     "sqlDatabaseTier": {
-                        "value": "GeneralPurpose"
+                        "value": "Basic"
                     },
                     "sqlDatabaseCapacity": {
-                        "value": 2
+                        "value": 5
                     },
                     "sqlDatabaseMaxSizeInBytes": {
-                        "value": 34359738368
+                        "value": 524288000
                     },
                     "sqlDatabaseZoneRedundant": {
                         "value": false
@@ -561,16 +563,16 @@
                         "value": "HiveMetastoreDB"
                     },
                     "sqlDatabaseSku": {
-                        "value": "GP_Gen5"
+                        "value": "Basic"
                     },
                     "sqlDatabaseTier": {
-                        "value": "GeneralPurpose"
+                        "value": "Basic"
                     },
                     "sqlDatabaseCapacity": {
-                        "value": 2
+                        "value": 5
                     },
                     "sqlDatabaseMaxSizeInBytes": {
-                        "value": 34359738368
+                        "value": 524288000
                     },
                     "sqlDatabaseZoneRedundant": {
                         "value": false
@@ -598,6 +600,65 @@
             "subscriptionId": "[variables('dataNodeSubscriptionId')]",
             "resourceGroup": "[variables('metadataResourceGroupName')]"
         },
+        // {
+        //     "type": "Microsoft.Resources/deployments",
+        //     "apiVersion": "2020-06-01",
+        //     "name": "mySql001Deployment",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
+        //         "keyVault002Deployment"
+        //     ],
+        //     "properties": {
+        //         "mode": "Incremental",
+        //         "templateLink": {
+        //             "uri": "[variables('mySqlTemplateLink')]",
+        //             "contentVersion": "1.0.0.0"
+        //         },
+        //         "parameters": {
+        //             "location": {
+        //                 "value": "[variables('location')]"
+        //             },
+        //             "mySqlServerName": {
+        //                 "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-mysqlserver001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
+        //             },
+        //             "mySqlDatabaseName": {
+        //                 "value": "HiveMetastoreDB"
+        //             },
+        //             "mySqlSkuName": {
+        //                 "value": "B_Gen5_1"
+        //             },
+        //             "mySqlSkuTier": {
+        //                 "value": "Basic"
+        //             },
+        //             "mySqlSkuCapacity": {
+        //                 "value": 1
+        //             },
+        //             "mySqlSkuSize": {
+        //                 "value": 5120
+        //             },
+        //             "mySqlSkuFamily": {
+        //                 "value": "Gen5"
+        //             },
+        //             "administratorLogin": {
+        //                 "value": "MySqlServerMainUser"
+        //             },
+        //             "administratorLoginPassword": {
+        //                 "value": "[variables('sqlServerAdministratorLoginPassword')]"
+        //             },
+        //             "keyVaultId": {
+        //                 "value": "[reference('keyVault002Deployment').outputs.keyVaultId.value]"
+        //             },
+        //             "subnetId": {
+        //                 "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+        //             },
+        //             "privateDnsZoneId": {
+        //                 "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com')]"
+        //             }
+        //         }
+        //     },
+        //     "subscriptionId": "[variables('dataNodeSubscriptionId')]",
+        //     "resourceGroup": "[variables('metadataResourceGroupName')]"
+        // },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
@@ -694,7 +755,7 @@
                         "value": "[variables('location')]"
                     },
                     "eventHubName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-eventhub001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-eventhub001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 50)]"
                     },
                     "eventHubSku": {
                         "value": "Standard"
@@ -741,7 +802,7 @@
                         "value": "[variables('location')]"
                     },
                     "dataFactoryName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-datafactory001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-datafactory001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
                     },
                     "dataFactoryGitAccount": {
                         "value": ""
@@ -800,7 +861,7 @@
                         "value": "[variables('location')]"
                     },
                     "synapseWorkspaceName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-synapse001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-synapse001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 50)]"
                     },
                     "synapseDefaultStorageAccountName": {
                         "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa')]"
