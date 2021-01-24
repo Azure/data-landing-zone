@@ -27,7 +27,7 @@
         },
         "location": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "northeurope",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -40,6 +40,7 @@
         },
         "privateDnsZoneResourceGroupId": {
             "type": "string",
+            "defaultValue": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/<your-rg-name>",
             "metadata": {
                 "description": "Specifies the ID of the resource group of the private dns zones."
             }
