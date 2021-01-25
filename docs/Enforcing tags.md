@@ -23,7 +23,7 @@ By setting the value of **"isOptional"** to *false*, it prevents the creation of
 
 
 <p align="center">
-  <img width="500" height="400" src="https://github.com/Azure/data-node/tree/adb-regex/docs/images/DefiningCostCenter-DatabricksUX.png">
+  <img width="500" height="400" src="https://github.com/Azure/data-node/blob/adb-regex/docs/images/DefiningCostCenter-DatabricksUX.png">
 </p>
     
     
@@ -31,5 +31,5 @@ As a result, when the cluster is created, the VMs provisioned in the Managed Res
 
 
 <p align="center">
-  <img width="800" height="500" src="https://github.com/Azure/data-node/tree/adb-regex/docs/images/CostCenterDefined-Portal.png">
+  <img width="800" height="500" src="https://github.com/Azure/data-node/blob/adb-regex/docs/images/CostCenterDefined-Portal.png">
 </p>
