@@ -169,20 +169,11 @@ $SparkMonitoringInitScriptContent = Get-Content -Path "code/databricks/applicati
 $SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_SUBSCRIPTION_ID=", "AZ_SUBSCRIPTION_ID=${DatabricksSubscriptionId}"
 $SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_RSRC_GRP_NAME=", "AZ_RSRC_GRP_NAME=${DatabricksResourceGroupName}"
 $SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_RSRC_NAME=", "AZ_RSRC_NAME=${DatabricksWorkspaceName}"
-$SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -join "`r`n" | Out-String
-# $SparkMonitoringInitScriptContent | Set-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh"
-
-# # Upload Spark Monitoring Shell Script
-# Write-Host "Uploading Spark Monitoring Shell Script"
-# Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark-monitoring.sh" -LocalPath "code/databricks/applicationLogging/spark-monitoring.sh" -Overwrite $true
-
-# # Upload Hive Metastore Connection Shell Script
-# Write-Host "Uploading Hive Metastore Connection Shell Script"
-# Upload-DatabricksFSFile -Path "/databricks/externalMetastore/external-metastore.sh" -LocalPath "code/databricks/externalMetastore/external-metastore.sh" -Overwrite $true
+$SparkMonitoringInitScriptContent | Set-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh"
 
 # Upload Spark Monitoring Shell Script
 Write-Host "Uploading Spark Monitoring Shell Script"
-$scriptInfo = Add-DatabricksGlobalInitScript -Name "spark-monitoring" -Script $SparkMonitoringInitScriptContent -AsPlainText -Position 0 -Enabled $true
+Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark-monitoring.sh" -LocalPath "code/databricks/applicationLogging/spark-monitoring.sh" -Overwrite $true
 
 # Upload Hive Metastore Connection Shell Script
 Write-Host "Uploading Hive Metastore Connection Init Script"
