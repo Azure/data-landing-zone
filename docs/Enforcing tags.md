@@ -1,8 +1,8 @@
 # Policies
 ## Azure Databricks Policies
-* **Enforcing Tags**
+**Enforcing Tags**
     
-Cluster tags allow to easily monitor the cost of cloud resources used by various groups in an organization. 
+Cluster tags allow to easily monitor the cost of cloud resources used by various groups in an organization. More information regarding tags can be found [here](https://docs.microsoft.com/en-us/azure/databricks/administration-guide/account-settings/usage-detail-tags-azure#tag-propagation)
 
 >**Note:** By default, Azure Databricks applies the following tags to each cluster: **Vendor**, **Creator**, **ClusterName** and **ClusterId**
 
@@ -23,7 +23,7 @@ By setting the value of **"isOptional"** to *false*, it prevents the creation of
 
 
 <p align="center">
-  <img width="500" height="400" src="https://github.com/Azure/data-node/blob/adb-regex/code/policies/DefiningCostCenter-DatabricksUX.png">
+  <img width="500" height="400" src="https://github.com/Azure/data-node/tree/adb-regex/docs/images/DefiningCostCenter-DatabricksUX.png">
 </p>
     
     
@@ -31,5 +31,5 @@ As a result, when the cluster is created, the VMs provisioned in the Managed Res
 
 
 <p align="center">
-  <img width="800" height="500" src="https://github.com/Azure/data-node/blob/adb-regex/code/policies/CostCenterDefined-Portal.png">
+  <img width="800" height="500" src="https://github.com/Azure/data-node/tree/adb-regex/docs/images/CostCenterDefined-Portal.png">
 </p>
