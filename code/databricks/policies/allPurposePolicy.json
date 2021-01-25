@@ -83,10 +83,6 @@
     },
     "init_scripts.0.dbfs.destination": {
         "type": "fixed",
-        "value": "dbfs:/databricks/externalMetastore/external-metastore.sh"
-    },
-    "init_scripts.1.dbfs.destination": {
-        "type": "fixed",
         "value": "dbfs:/databricks/spark-monitoring/spark-monitoring.sh"
     },
     "init_scripts.*.dbfs.destination": {
