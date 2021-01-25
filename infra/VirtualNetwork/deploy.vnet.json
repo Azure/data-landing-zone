@@ -333,7 +333,7 @@
                         "properties": {
                             "addressPrefix": "10.1.10.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Disabled",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
                             },
