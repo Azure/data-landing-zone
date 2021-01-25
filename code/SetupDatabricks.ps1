@@ -69,8 +69,19 @@ param (
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $HadoopVersion = "2.7.4"
+    $HadoopVersion = "2.7.4",
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $MySqlId
 )
+
+# *****************************************************************************
+#    RESTART MYSQL SERVER
+# *****************************************************************************
+
+az mysql server restart --ids "${MySqlId}"
 
 
 # *****************************************************************************
