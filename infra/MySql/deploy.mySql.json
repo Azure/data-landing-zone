@@ -123,7 +123,7 @@
             "properties": {
                 "version": "5.7",
                 "createMode": "Default",
-                "minimalTlsVersion": "TLS1_1",  // Databricks does not support TLS 1.2 for Azure MySql external metastores
+                "minimalTlsVersion": "TLS1_2",
                 "sslEnforcement": "Enabled",
                 "storageProfile": {
                     "backupRetentionDays": 7,
@@ -231,7 +231,7 @@
                             "apiVersion": "2019-09-01",
                             "properties": {
                                 "contentType": "text/plain",
-                                "value": "[concat('jdbc:mysql://', variables('mySqlServerName'), '.mysql.database.azure.com:3306/', variables('mySqlDatabaseName'), '?useSSL=true&requireSSL=false')]",
+                                "value": "[concat('jdbc:mysql://', variables('mySqlServerName'), '.mysql.database.azure.com:3306/', variables('mySqlDatabaseName'), '?useSSL=true&requireSSL=false&enabledSslProtocolSuites=TLSv1.2')]",
                                 "attributes": {
                                     "enabled": true
                                 }
