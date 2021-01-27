@@ -31,7 +31,7 @@ cat << 'EOF' > /databricks/driver/conf/00-custom-spark.conf
     "spark.hadoop.javax.jdo.option.ConnectionPassword" = "<sql-password>"
     
     # Driver class name for a JDBC metastore
-    "spark.hadoop.javax.jdo.option.ConnectionDriverName" = "com.mysql.jdbc.Driver"
+    "spark.hadoop.javax.jdo.option.ConnectionDriverName" = "org.mariadb.jdbc.Driver"
     
     # Spark specific configuration options
     "spark.sql.hive.metastore.version" = "<hive-version>"
