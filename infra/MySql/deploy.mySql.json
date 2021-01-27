@@ -51,13 +51,6 @@
                 "description": "Specifies the name of the sku of the MySQL server."
             }
         },
-        "geoRedundantBackup": {
-            "type": "string",
-            "defaultValue": "Enabled",
-            "metadata": {
-              "description": "Specifies whether geo-redundant backup storage should be enabled or disabled"
-            }
-          },
         "mySqlServerAdministratorLogin": {
             "type": "string",
             "defaultValue": "sqladminuser",
@@ -100,7 +93,6 @@
         "mySqlSkuCapacity": "[parameters('mySqlSkuCapacity')]",
         "mySqlSkuSize": "[parameters('mySqlSkuSize')]",
         "mySqlSkuFamily": "[parameters('mySqlSkuFamily')]",
-        "geoRedundantBackup": "[parameters('geoRedundantBackup')]",
         "mySqlServerAdministratorLogin": "[parameters('mySqlServerAdministratorLogin')]",
         "mySqlServerAdministratorLoginPassword": "[parameters('mySqlServerAdministratorLoginPassword')]",
         "keyVaultId": "[parameters('keyVaultId')]",
@@ -131,11 +123,11 @@
             "properties": {
                 "version": "5.7",
                 "createMode": "Default",
-                "minimalTlsVersion": "TLS1_1",
+                "minimalTlsVersion": "TLS1_2",
                 "sslEnforcement": "Enabled",
                 "storageProfile": {
                     "backupRetentionDays": 7,
-                    "geoRedundantBackup": "[variables('geoRedundantBackup')]",
+                    "geoRedundantBackup": "Enabled",
                     "storageAutogrow": "Enabled",
                     "storageMB": "[variables('mySqlSkuSize')]"
                 },
@@ -239,7 +231,7 @@
                             "apiVersion": "2019-09-01",
                             "properties": {
                                 "contentType": "text/plain",
-                                "value": "[concat('jdbc:mysql://', variables('mySqlServerName'), '.mysql.database.azure.com:3306/', variables('mySqlDatabaseName'), '?useSSL=true&requireSSL=false')]",
+                                "value": "[concat('jdbc:mysql://', variables('mySqlServerName'), '.mysql.database.azure.com:3306/', variables('mySqlDatabaseName'), '?useSSL=true&requireSSL=false&enabledSslProtocolSuites=TLSv1.2')]",
                                 "attributes": {
                                     "enabled": true
                                 }

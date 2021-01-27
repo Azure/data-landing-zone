@@ -69,12 +69,23 @@ param (
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $HadoopVersion = "2.7.4"
+    $HadoopVersion = "2.7.4",
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $MySqlId
 )
+
+# *****************************************************************************
+#    RESTART MYSQL SERVER
+# *****************************************************************************
+
+az mysql server restart --ids "${MySqlId}"
 
 
 # *****************************************************************************
-#    SETUP AND LOGIN
+#    SETUP ENVIRONMENT AND LOGIN TO DATABRICKS
 # *****************************************************************************
 
 # Install Databricks PS Module
@@ -126,19 +137,19 @@ Add-DatabricksSecretScopeACL -ScopeName $logAnalyticsSecretScopeName -Principal 
 
 # Upload Workspace Configuration Notebook
 Write-Host "Uploading Workspace Configuration Notebook"
-$notebookPath = "/Configure Databricks Workspace"
-Import-DatabricksWorkspaceItem -Path $notebookPath -Format SOURCE -Language SCALA -LocalPath "code/Configure Databricks Workspace.scala" -Overwrite $true
+$notebookPath = "/ConfigureDatabricksWorkspace"
+Import-DatabricksWorkspaceItem -Path $notebookPath -Format SOURCE -Language SCALA -LocalPath "code/databricks/ConfigureDatabricksWorkspace.scala" -Overwrite $true
 
 # Execute Workspace Configuration Notebook as a Job
 Write-Host "Executing Workspace Configuration Notebook"
 $runName = "WorkspaceConfigurationExecution"
 $jobClusterDefinition = @{
-     "spark_version" = "7.5.x-scala2.12"
-     "node_type_id" = "Standard_D3_v2"
-     "num_workers" = 1
+    "spark_version" = "7.5.x-scala2.12"
+    "node_type_id"  = "Standard_D3_v2"
+    "num_workers"   = 1
 }
 $notebookParams = @{
-    "hive-version" = $HiveVersion
+    "hive-version"   = $HiveVersion
     "hadoop-version" = $HadoopVersion
 }
 $jobInfo = New-DatabricksJobRun -RunName $runName -NewClusterDefinition $jobClusterDefinition -NotebookPath $notebookPath -NotebookParameters $notebookParams
@@ -165,19 +176,19 @@ Remove-DatabricksWorkspaceItem $notebookPath
 
 # Update Spark Monitoring Shell Script
 Write-Host "Updating Spark Monitoring Init Script"
-$SparkMonitoringInitScriptContent = Get-Content -Path "code/applicationLogging/spark-monitoring.sh"
+$SparkMonitoringInitScriptContent = Get-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh"
 $SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_SUBSCRIPTION_ID=", "AZ_SUBSCRIPTION_ID=${DatabricksSubscriptionId}"
 $SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_RSRC_GRP_NAME=", "AZ_RSRC_GRP_NAME=${DatabricksResourceGroupName}"
 $SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_RSRC_NAME=", "AZ_RSRC_NAME=${DatabricksWorkspaceName}"
-$SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -join "`r`n" | Out-String
+$SparkMonitoringInitScriptContent | Set-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh"
 
 # Upload Spark Monitoring Shell Script
 Write-Host "Uploading Spark Monitoring Shell Script"
-$scriptInfo = Add-DatabricksGlobalInitScript -Name "spark-monitoring" -Script $SparkMonitoringInitScriptContent -AsPlainText -Position 0 -Enabled $true
+Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark-monitoring.sh" -LocalPath "code/databricks/applicationLogging/spark-monitoring.sh" -Overwrite $true
 
 # Upload Hive Metastore Connection Shell Script
 Write-Host "Uploading Hive Metastore Connection Init Script"
-$ExternalMetastoreInitScriptContent = Get-Content -Path "code/externalMetastore/external-metastore.sh"
+$ExternalMetastoreInitScriptContent = Get-Content -Path "code/databricks/externalMetastore/external-metastore.sh"
 $ExternalMetastoreInitScriptContent = $ExternalMetastoreInitScriptContent -join "`r`n" | Out-String
 $scriptInfo = Add-DatabricksGlobalInitScript -Name "external-metastore" -Script $ExternalMetastoreInitScriptContent -AsPlainText -Position 1 -Enabled $true
 
@@ -188,7 +199,7 @@ $scriptInfo = Add-DatabricksGlobalInitScript -Name "external-metastore" -Script 
 
 # Upload Jars for Spark 2.4.3
 Write-Host "Uploading Spark Monitoring Jars for Spark 2.4.3"
-$basePath = "code/applicationLogging/spark_2.4.3/"
+$basePath = "code/databricks/applicationLogging/spark_2.4.3/"
 $relativeFilePaths = Get-ChildItem -Path $basePath -Recurse -File -Name
 foreach ($relativeFilePath in $relativeFilePaths) {
     Write-Host "Uploading File: $file"
@@ -197,7 +208,7 @@ foreach ($relativeFilePath in $relativeFilePaths) {
 
 # Upload Jars for Spark 2.4.5
 Write-Host "Uploading Spark Monitoring Jars for Spark 2.4.5"
-$basePath = "code/applicationLogging/spark_2.4.5/"
+$basePath = "code/databricks/applicationLogging/spark_2.4.5/"
 $relativeFilePaths = Get-ChildItem -Path $basePath -Recurse -File -Name
 foreach ($relativeFilePath in $relativeFilePaths) {
     Write-Host "Uploading File: $file"
@@ -206,7 +217,7 @@ foreach ($relativeFilePath in $relativeFilePaths) {
 
 # Upload Jars for Spark 3.0.0
 Write-Host "Uploading Spark Monitoring Jars for Spark 3.0.0"
-$basePath = "code/applicationLogging/spark_3.0.0/"
+$basePath = "code/databricks/applicationLogging/spark_3.0.0/"
 $relativeFilePaths = Get-ChildItem -Path $basePath -Recurse -File -Name
 foreach ($relativeFilePath in $relativeFilePaths) {
     Write-Host "Uploading File: $file"
@@ -215,7 +226,7 @@ foreach ($relativeFilePath in $relativeFilePaths) {
 
 # Upload Jars for Spark 3.0.1
 Write-Host "Uploading Spark Monitoring Jars for Spark 3.0.1"
-$basePath = "code/applicationLogging/spark_3.0.1/"
+$basePath = "code/databricks/applicationLogging/spark_3.0.1/"
 $relativeFilePaths = Get-ChildItem -Path $basePath -Recurse -File -Name
 foreach ($relativeFilePath in $relativeFilePaths) {
     Write-Host "Uploading File: $file"
@@ -224,7 +235,7 @@ foreach ($relativeFilePath in $relativeFilePaths) {
 
 # # Upload Spark Monitoring Jar for testing
 # Write-Host "Uploading Spark Monitoring Jar for testing"
-# Upload-DatabricksFSFile -Path "/FileStore/job-jars/spark-monitoring-sample-1.0.0.jar" -LocalPath "code/applicationLogging/tests/spark-monitoring-sample-1.0.0.jar" -Overwrite $true
+# Upload-DatabricksFSFile -Path "/FileStore/job-jars/spark-monitoring-sample-1.0.0.jar" -LocalPath "code/databricks/applicationLogging/tests/spark-monitoring-sample-1.0.0.jar" -Overwrite $true
 
 # # Add Databricks Job for testing logging
 # Write-Host "Add Databricks Job for testing logging"
@@ -241,14 +252,19 @@ foreach ($relativeFilePath in $relativeFilePaths) {
 
 
 # *****************************************************************************
-#    UPLOAD CLUSTER POLICIES
+#    UPDATE AND UPLOAD CLUSTER POLICIES
 # *****************************************************************************
 
 # Declare a function that will update values in a policy object
-function Update-PolicyValues {
+function Update-DatabricksClusterPolicyValues {
     param (
-        [Parameter(Mandatory)][string]$ContentPath,
-        [Parameter(Mandatory)][Hashtable]$ReplacementValues
+        [Parameter(Mandatory)]
+        [String]
+        $ContentPath,
+
+        [Parameter(Mandatory)]
+        [Hashtable]
+        $ReplacementValues
     )
 
     $policy = Get-Content -Path $ContentPath -Raw | Out-String | ConvertFrom-Json
@@ -263,7 +279,7 @@ function Update-PolicyValues {
 }
 
 # Declare a wrapper function for uploading a new policy or updating an existing policy
-function Upload-Policy {
+function Set-DatabricksClusterPolicy {
     param (
         [Parameter(Mandatory)][string]$PolicyName,
         [Parameter(Mandatory)][string]$PolicyJson
@@ -271,7 +287,7 @@ function Upload-Policy {
 
     try {
         Add-DatabricksClusterPolicy -PolicyName $PolicyName -Definition $PolicyJson
-        Write-Host "  - Create new policy `"$PolicyName`""
+        Write-Host "  - Create new policy `"${PolicyName}`""
     }
     catch {
         $clusterPolicies = Get-DatabricksClusterPolicy
@@ -283,25 +299,25 @@ function Upload-Policy {
             }
         }
         Update-DatabricksClusterPolicy -PolicyID $policyId -PolicyName $PolicyName -Definition $PolicyJson
-        Write-Host "  - Updated policy `"$PolicyName`""
+        Write-Host "  - Updated policy `"${PolicyName}`""
     }
 }
 
 $policyValues = @{
-    "spark_env_vars.LOG_ANALYTICS_WORKSPACE_ID" = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceIdSecretName}}}"
+    "spark_env_vars.LOG_ANALYTICS_WORKSPACE_ID"  = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceIdSecretName}}}"
     "spark_env_vars.LOG_ANALYTICS_WORKSPACE_KEY" = "{{secrets/${logAnalyticsSecretScopeName}/${LogAnalyticsWorkspaceKeySecretName}}}"
-    "spark_conf.spark.hadoop.javax.jdo.option.ConnectionUserName" = "{{secrets/${hiveSecretScopeName}/${HiveUsernameSecretName}}}"
-    "spark_conf.spark.hadoop.javax.jdo.option.ConnectionPassword" = "{{secrets/${hiveSecretScopeName}/${HivePasswordSecretName}}}"
-    "spark_conf.spark.hadoop.javax.jdo.option.ConnectionURL" = "{{secrets/${hiveSecretScopeName}/${HiveConnectionStringSecretName}}}"
-    "spark_conf.spark.sql.hive.metastore.version" = "$HiveVersion"
+    "spark_env_vars.SQL_USERNAME"                = "{{secrets/${hiveSecretScopeName}/${HiveUsernameSecretName}}}"
+    "spark_env_vars.SQL_PASSWORD"                = "{{secrets/${hiveSecretScopeName}/${HivePasswordSecretName}}}"
+    "spark_env_vars.SQL_CONNECTION_STRING"       = "{{secrets/${hiveSecretScopeName}/${HiveConnectionStringSecretName}}}"
+    "spark_env_vars.HIVE_VERSION"                = "${HiveVersion}"
 }
 
 # Load All-Purpose Policy
 Write-Host "Loading All-Purpose Policy"
-$allPurposePolicy = Update-PolicyValues -ContentPath "code/policies/allPurposePolicy.json" -ReplacementValues $policyValues
-Upload-Policy -PolicyName "AllPurposeClusterPolicy" -PolicyJson $allPurposePolicy
+$allPurposePolicy = Update-DatabricksClusterPolicyValues -ContentPath "code/databricks/policies/allPurposePolicy.json" -ReplacementValues $policyValues
+Set-DatabricksClusterPolicy -PolicyName "AllPurposeClusterPolicy" -PolicyJson $allPurposePolicy
 
 # Load Job Policy
 Write-Host "Loading Job Policy"
-$jobPolicy = Update-PolicyValues -ContentPath "code/policies/jobPolicy.json" -ReplacementValues $policyValues
-Upload-Policy -PolicyName "JobClusterPolicy" -PolicyJson $jobPolicy
+$jobPolicy = Update-DatabricksClusterPolicyValues -ContentPath "code/databricks/policies/jobPolicy.json" -ReplacementValues $policyValues
+Set-DatabricksClusterPolicy -PolicyName "JobClusterPolicy" -PolicyJson $jobPolicy
