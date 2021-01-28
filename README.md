@@ -2,7 +2,7 @@
 
 A Data Node has several layers to enable agility to service the Data Domains under the node. A new node is always deployed with a standard set of services to enable the entity to start ingesting and analysing data.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-node%2Fmain%2Fdocs%2Freference%2Fdeploy.dataNode.json%3Ftoken%3DAIHRGTXKCLWICTJF4YSDAL272D7SM)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-node%2Fmain%2Fdocs%2Freference%2Fdeploy.dataNode.json%3Ftoken%3DAIO3X7PEWTDGTMDAGKUSZCLADOW32)
 
 # Contributing
 
