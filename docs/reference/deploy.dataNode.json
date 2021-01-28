@@ -84,16 +84,16 @@
         "metadataResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-metadata')]",
         "processingDomainResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-processing-domain')]",
         "processingProductResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-processing-product')]",
-        "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/VirtualNetwork/deploy.vnet.json?token=AIHRGTQ34ZHG2TOM5LFTXR272D6V4",
-        "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/KeyVault/deploy.keyVault.json?token=AIHRGTXC2ZVYPPLOBHNLQDK72D6XA",
-        "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Storage/deploy.storage.json?token=AIHRGTW5VG55KEUPYBWJO6S72D6YI",
-        "mySqlTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/MySql/deploy.mySql.json?token=AIHRGTXVADDL6LKWNEUJDOC72D65W",
-        "sqlServerTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlServer/deploy.sqlServer.json?token=AIHRGTXVADDL6LKWNEUJDOC72D65W",
-        "sqlDatabaseTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlDatabase/deploy.sqlDatabase.json?token=AIHRGTUM5HU47LKVWHCS33S72D662",
-        "databricksTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Databricks/deploy.databricks.json?token=AIHRGTSTBKWIHGRI32WYFG272D7AE",
-        "eventHubTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/EventHub/deploy.eventHub.json?token=AIHRGTQTGLGE56OFJPLOSWS72D7BU",
-        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/DataFactory/deploy.dataFactory.json?token=AIHRGTSKQLJSYTSG2XFZLSS72D7CW",
-        "synapseTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Synapse/deploy.synapse.json?token=AIHRGTTPUFTB3G6Z5R73RLS74EC7I"
+        "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/VirtualNetwork/deploy.vnet.json?token=AIO3X7LI7W6DM24XUBMUOVLADOYX2",
+        "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/KeyVault/deploy.keyVault.json?token=AIO3X7KQ46SJCJ4KKCTYATLADOYPY",
+        "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Storage/deploy.storage.json?token=AIO3X7MSFQTA3YE6LOS5SZ3ADOYU2",
+        "mySqlTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/MySql/deploy.mySql.json?token=AIO3X7LDZP6B3ZY5J35JUWTADOYRE",
+        "sqlServerTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlServer/deploy.sqlServer.json?token=AIO3X7LTLZA37I4RFECP5SLADOYTU",
+        "sqlDatabaseTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlDatabase/deploy.sqlDatabase.json?token=AIO3X7JKK257XBGOQORSKWTADOYSE",
+        "databricksTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Databricks/deploy.databricks.json?token=AIO3X7M63K4VGZKF7URRFC3ADOYNG",
+        "eventHubTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/EventHub/deploy.eventHub.json?token=AIO3X7OT45LALHQULHGHMRLADOYOI",
+        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/DataFactory/deploy.dataFactory.json?token=AIO3X7JBY43CCO73L7RZ2GDADOYLU",
+        "synapseTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Synapse/deploy.synapse.json?token=AIO3X7PEU2VMNA4J7HU3PMLADOYWC"
     },
     "resources": [
         {
