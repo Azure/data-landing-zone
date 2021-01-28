@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "originVnetId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet"
+            "value": "/subscriptions/2150d511-458f-43b9-8691-6819ba2e6c7b/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet"
         },
         "destinationVnetId": {
             "value": "/subscriptions/558bf93d-0c7b-4436-82ab-a7ed6fda34aa/resourceGroups/dn002-network/providers/Microsoft.Network/virtualNetworks/dn002-vnet"

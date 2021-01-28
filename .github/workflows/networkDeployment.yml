@@ -9,7 +9,7 @@ on:
       - '.github/workflows/networkDeployment.yml'
 
 env:
-  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'
+  AZURE_SUBSCRIPTION_ID: '2150d511-458f-43b9-8691-6819ba2e6c7b'
   AZURE_RESOURCE_GROUP_NAME_NETWORK: dn001-network
   AZURE_LOCATION: northeurope
 

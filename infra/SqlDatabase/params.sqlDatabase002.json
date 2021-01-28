@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "sqlServerId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.Sql/servers/dn001-sqlserver002"
+            "value": "/subscriptions/2150d511-458f-43b9-8691-6819ba2e6c7b/resourceGroups/dn001-metadata/providers/Microsoft.Sql/servers/dn001-sqlserver002"
         },
         "sqlServerAdministratorLoginPassword": {
             "value": "<your-secure-password>"
@@ -45,7 +45,7 @@
             "value": -1
         },
         "keyVaultId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.KeyVault/vaults/dn001-keyvault002"
+            "value": "/subscriptions/2150d511-458f-43b9-8691-6819ba2e6c7b/resourceGroups/dn001-metadata/providers/Microsoft.KeyVault/vaults/dn001-keyvault002"
         }
     }
 }
