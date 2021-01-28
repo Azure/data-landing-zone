@@ -52,7 +52,8 @@
         "hidden": false
     },
     "custom_tags.costCenter": {
-        "type": "unlimited",
+        "type": "regex",
+        "pattern": "[A-Z]{5}-[0-9]{5}",
         "isOptional": false,
         "hidden": false
     },

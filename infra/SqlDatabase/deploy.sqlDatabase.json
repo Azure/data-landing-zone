@@ -27,7 +27,7 @@
                 "description": "Specifies the name of the SQL database."
             }
         },
-        "sqlDatabaseSku": {
+        "sqlDatabaseSkuName": {
             "type": "string",
             "defaultValue": "GP_Gen5",
             "metadata": {
@@ -120,7 +120,7 @@
         "sqlServerId": "[parameters('sqlServerId')]",
         "sqlServerName": "[last(split(variables('sqlServerId'), '/'))]",
         "sqlServerAdministratorLoginPassword": "[parameters('sqlServerAdministratorLoginPassword')]",
-        "sqlDatabaseSku": "[parameters('sqlDatabaseSku')]",
+        "sqlDatabaseSkuName": "[parameters('sqlDatabaseSkuName')]",
         "sqlDatabaseTier": "[parameters('sqlDatabaseTier')]",
         "sqlDatabaseName": "[parameters('sqlDatabaseName')]",
         "sqlDatabaseMaxSizeInBytes": "[parameters('sqlDatabaseMaxSizeInBytes')]",
@@ -148,7 +148,7 @@
             "name": "[concat(variables('sqlServerName'), '/', variables('sqlDatabaseName'))]",
             "location": "[variables('location')]",
             "sku": {
-                "name": "[variables('sqlDatabaseSku')]",
+                "name": "[variables('sqlDatabaseSkuName')]",
                 "tier": "[variables('sqlDatabaseTier')]",
                 "capacity": "[variables('sqlDatabaseCapacity')]"
             },
