@@ -171,8 +171,8 @@
                 "[resourceId('Microsoft.DBforMySQL/servers', variables('mySqlServerName'))]"
             ],
             "properties": {
-                "charset": "utf8",
-                "collation": "utf8_general_ci"
+                "charset": "latin1",
+                "collation": "latin1_swedish_ci"
             }
         },
         {
@@ -260,7 +260,7 @@
                             "apiVersion": "2019-09-01",
                             "properties": {
                                 "contentType": "text/plain",
-                                "value": "[concat('String url =\"jdbc:mysql://', variables('mySqlServerName'), '.mysql.database.azure.com:3306/', variables('mySqlDatabaseName'), '?useSSL=true&requireSSL=false\"; myDbConn = DriverManager.getConnection(url, \"', reference(resourceId('Microsoft.DBForMySQL/servers', variables('mySqlServerName')), '2017-12-01-preview').administratorLogin, '@', variables('mySqlServerName'), '\", ', variables('mySqlServerAdministratorLoginPassword'), ');')]",
+                                "value": "[concat('jdbc:mysql://', variables('mySqlServerName'), '.mysql.database.azure.com:3306/', variables('mySqlDatabaseName'), '?useSSL=true&requireSSL=false&enabledSslProtocolSuites=TLSv1.2')]",
                                 "attributes": {
                                     "enabled": true
                                 }
@@ -272,7 +272,7 @@
                             "apiVersion": "2019-09-01",
                             "properties": {
                                 "contentType": "text/plain",
-                                "value": "[reference(resourceId('Microsoft.DBForMySQL/servers', variables('mySqlServerName')), '2017-12-01-preview').administratorLogin]",
+                                "value": "[concat(reference(resourceId('Microsoft.DBForMySQL/servers', variables('mySqlServerName')), '2017-12-01-preview').administratorLogin, '@', variables('mySqlServerName'))]",
                                 "attributes": {
                                     "enabled": true
                                 }

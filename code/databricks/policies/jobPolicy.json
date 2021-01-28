@@ -1,0 +1,114 @@
+{
+    "dbus_per_hour": {
+        "type": "range",
+        "maxValue": 100
+    },
+    "cluster_type": {
+        "type": "fixed",
+        "value": "job"
+    },
+    "spark_conf.spark.databricks.delta.preview.enabled": {
+        "type": "fixed",
+        "value": "true"
+    },
+    "instance_pool_id": {
+        "type": "forbidden",
+        "hidden": true
+    },
+    "spark_version": {
+        "type": "regex",
+        "pattern": "[7].[0-9].*",
+        "hidden": false
+    },
+    "node_type_id": {
+        "type": "allowlist",
+        "values": [
+            "Standard_DS3_v2",
+            "Standard_DS4_v2",
+            "Standard_DS5_v2"
+        ],
+        "defaultValue": "Standard_DS3_v2",
+        "hidden": false
+    },
+    "driver_node_type_id": {
+        "type": "allowlist",
+        "values": [
+            "Standard_DS3_v2",
+            "Standard_DS4_v2",
+            "Standard_DS5_v2"
+        ],
+        "defaultValue": "Standard_DS3_v2",
+        "hidden": false
+    },
+    "autoscale.min_workers": {
+        "type": "fixed",
+        "value": 1,
+        "hidden": true
+    },
+    "autoscale.max_workers": {
+        "type": "range",
+        "maxValue": 10,
+        "defaultValue": 5,
+        "hidden": false
+    },
+    "custom_tags.costCenter": {
+        "type": "regex",
+        "pattern": "[A-Z]{5}-[0-9]{5}",
+        "isOptional": false,
+        "hidden": false
+    },
+    "ssh_public_keys.*": {
+        "type": "forbidden",
+        "hidden": true
+    },
+    "init_scripts.0.dbfs.destination": {
+        "type": "fixed",
+        "value": "dbfs:/databricks/spark-monitoring/spark-monitoring.sh"
+    },
+    "init_scripts.*.dbfs.destination": {
+        "type": "forbidden"
+    },
+    "init_scripts.*.file.destination": {
+        "type": "forbidden"
+    },
+    "cluster_log_conf.type": {
+        "type": "fixed",
+        "value": "DBFS",
+        "hidden": false
+    },
+    "cluster_log_conf.path": {
+        "type": "fixed",
+        "value": "dbfs://cluster-logs",
+        "hidden": false
+    },
+    "spark_env_vars.LOG_ANALYTICS_WORKSPACE_ID": {
+        "type": "fixed",
+        "value": "{{secrets/adminSecretScopeNew/logAnalyticsWorkspaceId}}",
+        "hidden": false
+    },
+    "spark_env_vars.LOG_ANALYTICS_WORKSPACE_KEY": {
+        "type": "fixed",
+        "value": "{{secrets/adminSecretScopeNew/logAnalyticsWorkspaceKey}}",
+        "hidden": false
+    },
+    "spark_env_vars.SQL_USERNAME": {
+        "type": "fixed",
+        "value": "{{secrets/adminSecretScopeNew/hiveMetastoreConnectionUserName}}",
+        "hidden": false
+    },
+    "spark_env_vars.SQL_PASSWORD": {
+        "type": "fixed",
+        "value": "{{secrets/adminSecretScopeNew/hiveMetastoreConnectionPassword}}",
+        "hidden": false
+    },
+    "spark_env_vars.SQL_CONNECTION_STRING": {
+        "type": "fixed",
+        "value": "{{secrets/adminSecretScopeNew/hiveMetastoreConnectionURL}}",
+        "hidden": false
+    },
+    "spark_env_vars.HIVE_VERSION": {
+        "type": "fixed",
+        "value": "2.3.7",
+        "hidden": false
+    }
+}
