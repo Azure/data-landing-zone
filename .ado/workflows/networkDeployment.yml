@@ -9,6 +9,7 @@ trigger:
       - infra/VirtualNetwork/*
       - infra/VirtualNetworkPeering/*
       - .ado/workflows/networkDeployment.yml
+      
 
 variables:
   - name: AZURE_RESOURCE_MANAGER_CONNECTION_NAME
