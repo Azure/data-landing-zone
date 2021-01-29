@@ -6,15 +6,15 @@ trigger:
       - main
   paths:
     include:
-      - infra/Storage/*
-      - infra/KeyVault/*
       - infra/Databricks/*
       - infra/DataFactory/*
       - infra/EventHub/*
+      - infra/KeyVault/*
+      - infra/MySql/*
       - infra/SqlDatabase/*
       - infra/SqlServer/*
+      - infra/Storage/*
       - infra/Synapse/*
-      - infra/PrivateEndpoint/*
       - .ado/workflows/dataNodeDeployment.yml
       - code/*
 
