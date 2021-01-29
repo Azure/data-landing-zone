@@ -27,7 +27,7 @@
             "value": "Gen5"
         },
         "mySqlServerAdministratorLogin": {
-            "value": "MySqlServerMainUser"
+            "value": "ServerMainUser"
         },
         "mySqlServerAdministratorLoginPassword": {
             "value": "<your-secure-password>"

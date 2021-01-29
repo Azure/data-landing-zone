@@ -641,7 +641,7 @@
                         "value": "Gen5"
                     },
                     "administratorLogin": {
-                        "value": "MySqlServerMainUser"
+                        "value": "ServerMainUser"
                     },
                     "administratorLoginPassword": {
                         "value": "[variables('sqlServerAdministratorLoginPassword')]"
