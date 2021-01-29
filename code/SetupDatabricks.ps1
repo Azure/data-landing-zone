@@ -194,64 +194,6 @@ $scriptInfo = Add-DatabricksGlobalInitScript -Name "external-metastore" -Script 
 
 
 # *****************************************************************************
-#    UPLOAD SPARK MONITORING JARS
-# *****************************************************************************
-
-# Upload Jars for Spark 2.4.3
-Write-Host "Uploading Spark Monitoring Jars for Spark 2.4.3"
-$basePath = "code/databricks/applicationLogging/spark_2.4.3/"
-$relativeFilePaths = Get-ChildItem -Path $basePath -Recurse -File -Name
-foreach ($relativeFilePath in $relativeFilePaths) {
-    Write-Host "Uploading File: $file"
-    Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark_2.4.3/${relativeFilePath}" -LocalPath "${basePath}${relativeFilePath}" -Overwrite $true
-}
-
-# Upload Jars for Spark 2.4.5
-Write-Host "Uploading Spark Monitoring Jars for Spark 2.4.5"
-$basePath = "code/databricks/applicationLogging/spark_2.4.5/"
-$relativeFilePaths = Get-ChildItem -Path $basePath -Recurse -File -Name
-foreach ($relativeFilePath in $relativeFilePaths) {
-    Write-Host "Uploading File: $file"
-    Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark_2.4.5/${relativeFilePath}" -LocalPath "${basePath}${relativeFilePath}" -Overwrite $true
-}
-
-# Upload Jars for Spark 3.0.0
-Write-Host "Uploading Spark Monitoring Jars for Spark 3.0.0"
-$basePath = "code/databricks/applicationLogging/spark_3.0.0/"
-$relativeFilePaths = Get-ChildItem -Path $basePath -Recurse -File -Name
-foreach ($relativeFilePath in $relativeFilePaths) {
-    Write-Host "Uploading File: $file"
-    Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark_3.0.0/${relativeFilePath}" -LocalPath "${basePath}${relativeFilePath}" -Overwrite $true
-}
-
-# Upload Jars for Spark 3.0.1
-Write-Host "Uploading Spark Monitoring Jars for Spark 3.0.1"
-$basePath = "code/databricks/applicationLogging/spark_3.0.1/"
-$relativeFilePaths = Get-ChildItem -Path $basePath -Recurse -File -Name
-foreach ($relativeFilePath in $relativeFilePaths) {
-    Write-Host "Uploading File: $file"
-    Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark_3.0.1/${relativeFilePath}" -LocalPath "${basePath}${relativeFilePath}" -Overwrite $true
-}
-
-# # Upload Spark Monitoring Jar for testing
-# Write-Host "Uploading Spark Monitoring Jar for testing"
-# Upload-DatabricksFSFile -Path "/FileStore/job-jars/spark-monitoring-sample-1.0.0.jar" -LocalPath "code/databricks/applicationLogging/tests/spark-monitoring-sample-1.0.0.jar" -Overwrite $true
-
-# # Add Databricks Job for testing logging
-# Write-Host "Add Databricks Job for testing logging"
-# $jobName = "LogAnalyticsLoggingTest"
-# $jobClusterDefinition = @{
-#     "spark_version" = "6.6.x-scala2.11"
-#     "node_type_id" = "Standard_D3_v2"
-#     "num_workers" = 1
-# }
-# $jobLibraries = @( @{"jar" = "dbfs:/databricks/spark-monitoring/tests/spark-monitoring-sample-1.0.0.jar"} )
-# $jobJarUri = "spark-monitoring-sample-1.0.0.jar"
-# $jobJarMainClassName = "com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob"
-# Add-DatabricksJob -Name $jobName -NewClusterDefinition $jobClusterDefinition -Libraries $jobLibraries -JarMainClassName $jobJarMainClassName -JarURI $jobJarUri
-
-
-# *****************************************************************************
 #    UPDATE AND UPLOAD CLUSTER POLICIES
 # *****************************************************************************
 

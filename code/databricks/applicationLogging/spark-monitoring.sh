@@ -35,10 +35,12 @@ SPARK_VERSION=${SPARK_VERSION:-2.4.5}
 SPARK_SCALA_VERSION=$(ls /databricks/spark/assembly/target | cut -d '-' -f2 2> /dev/null || echo "")
 SPARK_SCALA_VERSION=${SPARK_SCALA_VERSION:-2.11}
 
-# Exit for unsupported Spark versions
-if [ $SPARK_VERSION != "2.4.5" ] && [ $SPARK_VERSION != "2.4.3" ] && [ $SPARK_VERSION != "3.0.0" ] && [ $SPARK_VERSION != "3.0.1" ];
+JAR_FILES=(${STAGE_DIR}/spark-listeners*${SPARK_VERSION}_${SPARK_SCALA_VERSION}*.jar)
+
+# Make sure we have exactly 2 jar files that match the version of Spark and Scala that we are running
+if [ ${#JAR_FILES[@]} != 2 ]
 then
-    echo "Exit because of Spark version: ${SPARK_VERSION}"
+    echo "spark-monitoring init script aborted because of unsupported Spark version ${SPARK_VERSION}"
     exit 0
 fi
 
@@ -59,12 +61,10 @@ EOF
 )
 
 echo "Copying Spark Monitoring jars"
-JAR_FILENAME="spark-listeners_${SPARK_VERSION}_${SPARK_SCALA_VERSION}-${SPARK_LISTENERS_VERSION}.jar"
-echo "Copying $JAR_FILENAME"
-cp -f "$STAGE_DIR/spark_$SPARK_VERSION/$JAR_FILENAME" /mnt/driver-daemon/jars
-JAR_FILENAME="spark-listeners-loganalytics_${SPARK_VERSION}_${SPARK_SCALA_VERSION}-${SPARK_LISTENERS_LOG_ANALYTICS_VERSION}.jar"
-echo "Copying $JAR_FILENAME"
-cp -f "$STAGE_DIR/spark_$SPARK_VERSION/$JAR_FILENAME" /mnt/driver-daemon/jars
+for i in "${JAR_FILES[@]}"; do
+    cp -f $i /mnt/driver-daemon/jars
+    echo "   Copying $i"
+done
 echo "Copied Spark Monitoring jars successfully"
 
 echo "Merging metrics.properties"
