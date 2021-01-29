@@ -425,50 +425,50 @@
             "subscriptionId": "[variables('dataNodeSubscriptionId')]",
             "resourceGroup": "[variables('metadataResourceGroupName')]"
         },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "name": "sqlserver002Deployment",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
-                "vnetDeployment"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('sqlServerTemplateLink')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[variables('location')]"
-                    },
-                    "sqlServerName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver002', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
-                    },
-                    "administratorLogin": {
-                        "value": "SqlServerMainUser"
-                    },
-                    "administratorLoginPassword": {
-                        "value": "[variables('sqlServerAdministratorLoginPassword')]"
-                    },
-                    "sqlAdminGroupName": {
-                        "value": ""
-                    },
-                    "sqlAdminGroupObjectID": {
-                        "value": ""
-                    },
-                    "subnetId": {
-                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
-                    },
-                    "privateDnsZoneId": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net')]"
-                    }
-                }
-            },
-            "subscriptionId": "[variables('dataNodeSubscriptionId')]",
-            "resourceGroup": "[variables('metadataResourceGroupName')]"
-        },
+        // {
+        //     "type": "Microsoft.Resources/deployments",
+        //     "apiVersion": "2020-06-01",
+        //     "name": "sqlserver002Deployment",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
+        //         "vnetDeployment"
+        //     ],
+        //     "properties": {
+        //         "mode": "Incremental",
+        //         "templateLink": {
+        //             "uri": "[variables('sqlServerTemplateLink')]",
+        //             "contentVersion": "1.0.0.0"
+        //         },
+        //         "parameters": {
+        //             "location": {
+        //                 "value": "[variables('location')]"
+        //             },
+        //             "sqlServerName": {
+        //                 "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver002', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
+        //             },
+        //             "administratorLogin": {
+        //                 "value": "SqlServerMainUser"
+        //             },
+        //             "administratorLoginPassword": {
+        //                 "value": "[variables('sqlServerAdministratorLoginPassword')]"
+        //             },
+        //             "sqlAdminGroupName": {
+        //                 "value": ""
+        //             },
+        //             "sqlAdminGroupObjectID": {
+        //                 "value": ""
+        //             },
+        //             "subnetId": {
+        //                 "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+        //             },
+        //             "privateDnsZoneId": {
+        //                 "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net')]"
+        //             }
+        //         }
+        //     },
+        //     "subscriptionId": "[variables('dataNodeSubscriptionId')]",
+        //     "resourceGroup": "[variables('metadataResourceGroupName')]"
+        // },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
@@ -535,131 +535,131 @@
             "subscriptionId": "[variables('dataNodeSubscriptionId')]",
             "resourceGroup": "[variables('metadataResourceGroupName')]"
         },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "name": "sqlDatabase002Deployment",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
-                "keyVault002Deployment",
-                "sqlserver002Deployment"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('sqlDatabaseTemplateLink')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[variables('location')]"
-                    },
-                    "sqlServerId": {
-                        "value": "[reference('sqlserver002Deployment').outputs.sqlServerId.value]"
-                    },
-                    "sqlServerAdministratorLoginPassword": {
-                        "value": "[variables('sqlServerAdministratorLoginPassword')]"
-                    },
-                    "sqlDatabaseName": {
-                        "value": "HiveMetastoreDB"
-                    },
-                    "sqlDatabaseSku": {
-                        "value": "Basic"
-                    },
-                    "sqlDatabaseTier": {
-                        "value": "Basic"
-                    },
-                    "sqlDatabaseCapacity": {
-                        "value": 5
-                    },
-                    "sqlDatabaseMaxSizeInBytes": {
-                        "value": 524288000
-                    },
-                    "sqlDatabaseZoneRedundant": {
-                        "value": false
-                    },
-                    "sqlDatabaseLicenseType": {
-                        "value": "LicenseIncluded"
-                    },
-                    "sqlDatabaseReadReplicaCount": {
-                        "value": 0
-                    },
-                    "sqlDatabaseMinCapacity": {
-                        "value": "0.5"
-                    },
-                    "sqlDatabaseStorageAccountType": {
-                        "value": "GRS"
-                    },
-                    "sqlDatabaseAutoPauseDelay": {
-                        "value": -1
-                    },
-                    "keyVaultId": {
-                        "value": "[reference('keyVault002Deployment').outputs.keyVaultId.value]"
-                    }
-                }
-            },
-            "subscriptionId": "[variables('dataNodeSubscriptionId')]",
-            "resourceGroup": "[variables('metadataResourceGroupName')]"
-        },
         // {
         //     "type": "Microsoft.Resources/deployments",
         //     "apiVersion": "2020-06-01",
-        //     "name": "mySql001Deployment",
+        //     "name": "sqlDatabase002Deployment",
         //     "dependsOn": [
         //         "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
-        //         "keyVault002Deployment"
+        //         "keyVault002Deployment",
+        //         "sqlserver002Deployment"
         //     ],
         //     "properties": {
         //         "mode": "Incremental",
         //         "templateLink": {
-        //             "uri": "[variables('mySqlTemplateLink')]",
+        //             "uri": "[variables('sqlDatabaseTemplateLink')]",
         //             "contentVersion": "1.0.0.0"
         //         },
         //         "parameters": {
         //             "location": {
         //                 "value": "[variables('location')]"
         //             },
-        //             "mySqlServerName": {
-        //                 "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-mysqlserver001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
+        //             "sqlServerId": {
+        //                 "value": "[reference('sqlserver002Deployment').outputs.sqlServerId.value]"
         //             },
-        //             "mySqlDatabaseName": {
+        //             "sqlServerAdministratorLoginPassword": {
+        //                 "value": "[variables('sqlServerAdministratorLoginPassword')]"
+        //             },
+        //             "sqlDatabaseName": {
         //                 "value": "HiveMetastoreDB"
         //             },
-        //             "mySqlSkuName": {
-        //                 "value": "B_Gen5_1"
-        //             },
-        //             "mySqlSkuTier": {
+        //             "sqlDatabaseSku": {
         //                 "value": "Basic"
         //             },
-        //             "mySqlSkuCapacity": {
-        //                 "value": 1
+        //             "sqlDatabaseTier": {
+        //                 "value": "Basic"
         //             },
-        //             "mySqlSkuSize": {
-        //                 "value": 5120
+        //             "sqlDatabaseCapacity": {
+        //                 "value": 5
         //             },
-        //             "mySqlSkuFamily": {
-        //                 "value": "Gen5"
+        //             "sqlDatabaseMaxSizeInBytes": {
+        //                 "value": 524288000
         //             },
-        //             "administratorLogin": {
-        //                 "value": "MySqlServerMainUser"
+        //             "sqlDatabaseZoneRedundant": {
+        //                 "value": false
         //             },
-        //             "administratorLoginPassword": {
-        //                 "value": "[variables('sqlServerAdministratorLoginPassword')]"
+        //             "sqlDatabaseLicenseType": {
+        //                 "value": "LicenseIncluded"
+        //             },
+        //             "sqlDatabaseReadReplicaCount": {
+        //                 "value": 0
+        //             },
+        //             "sqlDatabaseMinCapacity": {
+        //                 "value": "0.5"
+        //             },
+        //             "sqlDatabaseStorageAccountType": {
+        //                 "value": "GRS"
+        //             },
+        //             "sqlDatabaseAutoPauseDelay": {
+        //                 "value": -1
         //             },
         //             "keyVaultId": {
         //                 "value": "[reference('keyVault002Deployment').outputs.keyVaultId.value]"
-        //             },
-        //             "subnetId": {
-        //                 "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
-        //             },
-        //             "privateDnsZoneId": {
-        //                 "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com')]"
         //             }
         //         }
         //     },
         //     "subscriptionId": "[variables('dataNodeSubscriptionId')]",
         //     "resourceGroup": "[variables('metadataResourceGroupName')]"
         // },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "mySql001Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('metadataResourceGroupName'))]",
+                "keyVault002Deployment"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('mySqlTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "mySqlServerName": {
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-mysqlserver001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
+                    },
+                    "mySqlDatabaseName": {
+                        "value": "HiveMetastoreDB"
+                    },
+                    "mySqlSkuName": {
+                        "value": "B_Gen5_1"
+                    },
+                    "mySqlSkuTier": {
+                        "value": "Basic"
+                    },
+                    "mySqlSkuCapacity": {
+                        "value": 1
+                    },
+                    "mySqlSkuSize": {
+                        "value": 5120
+                    },
+                    "mySqlSkuFamily": {
+                        "value": "Gen5"
+                    },
+                    "administratorLogin": {
+                        "value": "MySqlServerMainUser"
+                    },
+                    "administratorLoginPassword": {
+                        "value": "[variables('sqlServerAdministratorLoginPassword')]"
+                    },
+                    "keyVaultId": {
+                        "value": "[reference('keyVault002Deployment').outputs.keyVaultId.value]"
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneId": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com')]"
+                    }
+                }
+            },
+            "subscriptionId": "[variables('dataNodeSubscriptionId')]",
+            "resourceGroup": "[variables('metadataResourceGroupName')]"
+        },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",

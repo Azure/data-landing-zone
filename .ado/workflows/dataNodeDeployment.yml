@@ -297,31 +297,51 @@ stages:
             ignoreLASTEXITCODE: false
             pwsh: true
         
-        # Deploy sql server 002 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: sql_server_002_validation
-          displayName: Deploy sql server 002 - validation
-          enabled: true
-          continueOnError: true
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-            csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
-            deploymentMode: 'Validation'
-            overrideParameters: >
-              -administratorLoginPassword "$(password)"
+        # # Deploy sql server 002 - validation
+        # - task: AzureResourceManagerTemplateDeployment@3
+        #   name: sql_server_002_validation
+        #   displayName: Deploy sql server 002 - validation
+        #   enabled: true
+        #   continueOnError: true
+        #   inputs:
+        #     deploymentScope: 'Resource Group'
+        #     azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+        #     subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+        #     action: 'Create Or Update Resource Group'
+        #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
+        #     location: '$(AZURE_LOCATION)'
+        #     templateLocation: 'Linked artifact'
+        #     csmFile: 'infra/SqlServer/deploy.sqlServer.json'
+        #     csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
+        #     deploymentMode: 'Validation'
+        #     overrideParameters: >
+        #       -administratorLoginPassword "$(password)"
         
-        # Deploy sql database 002 - validation
+        # # Deploy sql database 002 - validation
+        # - task: AzureResourceManagerTemplateDeployment@3
+        #   name: sql_database_002_validation
+        #   displayName: Deploy sql database 002 - validation
+        #   enabled: true
+        #   continueOnError: true
+        #   inputs:
+        #     deploymentScope: 'Resource Group'
+        #     azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+        #     subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+        #     action: 'Create Or Update Resource Group'
+        #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
+        #     location: '$(AZURE_LOCATION)'
+        #     templateLocation: 'Linked artifact'
+        #     csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
+        #     csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase002.json'
+        #     deploymentMode: 'Validation'
+        #     overrideParameters: >
+        #       -sqlServerAdministratorLoginPassword "$(password)"
+        
+        # Deploy My SQL 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
-          name: sql_database_002_validation
-          displayName: Deploy sql database 002 - validation
-          enabled: true
+          name: mysql_001_validation
+          displayName: Deploy My SQL 001 - validation
+          enabled: false
           continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
@@ -331,11 +351,11 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
-            csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase002.json'
+            csmFile: 'infra/MySql/deploy.mySql.json'
+            csmParametersFile: 'infra/MySql/params.mySql001.json'
             deploymentMode: 'Validation'
             overrideParameters: >
-              -sqlServerAdministratorLoginPassword "$(password)"
+              -mySqlServerAdministratorLoginPassword "$(password)"
         
         # Deploy databricks 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -714,31 +734,52 @@ stages:
             ignoreLASTEXITCODE: false
             pwsh: true
         
-        # Deploy sql server 002
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: sql_server_002_deployment
-          displayName: Deploy sql server 002
-          enabled: true
-          continueOnError: true
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-            csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
-            deploymentMode: 'Incremental'
-            overrideParameters: >
-              -administratorLoginPassword "$(password)"
+        # # Deploy sql server 002
+        # - task: AzureResourceManagerTemplateDeployment@3
+        #   name: sql_server_002_deployment
+        #   displayName: Deploy sql server 002
+        #   enabled: true
+        #   continueOnError: true
+        #   inputs:
+        #     deploymentScope: 'Resource Group'
+        #     azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+        #     subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+        #     action: 'Create Or Update Resource Group'
+        #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
+        #     location: '$(AZURE_LOCATION)'
+        #     templateLocation: 'Linked artifact'
+        #     csmFile: 'infra/SqlServer/deploy.sqlServer.json'
+        #     csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
+        #     deploymentMode: 'Incremental'
+        #     overrideParameters: >
+        #       -administratorLoginPassword "$(password)"
         
-        # Deploy sql database 002
+        # # Deploy sql database 002
+        # - task: AzureResourceManagerTemplateDeployment@3
+        #   name: sql_database_002_deployment
+        #   displayName: Deploy sql database 002
+        #   enabled: true
+        #   continueOnError: true
+        #   inputs:
+        #     deploymentScope: 'Resource Group'
+        #     azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+        #     subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+        #     action: 'Create Or Update Resource Group'
+        #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
+        #     location: '$(AZURE_LOCATION)'
+        #     templateLocation: 'Linked artifact'
+        #     csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
+        #     csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase002.json'
+        #     deploymentMode: 'Incremental'
+        #     deploymentOutputs: 'hivemetastoreDetails'
+        #     overrideParameters: >
+        #       -sqlServerAdministratorLoginPassword "$(password)"
+        
+        # Deploy My SQL 001
         - task: AzureResourceManagerTemplateDeployment@3
-          name: sql_database_002_deployment
-          displayName: Deploy sql database 002
-          enabled: true
+          name: mysql_001_deployment
+          displayName: Deploy My SQL 001
+          enabled: false
           continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
@@ -748,12 +789,12 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
-            csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase002.json'
+            csmFile: 'infra/MySql/deploy.mySql.json'
+            csmParametersFile: 'infra/MySql/params.mySql001.json'
             deploymentMode: 'Incremental'
             deploymentOutputs: 'hivemetastoreDetails'
             overrideParameters: >
-              -sqlServerAdministratorLoginPassword "$(password)"
+              -mySqlServerAdministratorLoginPassword "$(password)"
         
         # Generate Pipeline Variables 002
         - task: AzureCLI@2
@@ -838,6 +879,9 @@ stages:
               -LogAnalyticsKeyVaultId '$(LOG_ANALYTICS_KEY_VAULT_ID)'
               -LogAnalyticsWorkspaceIdSecretName '$(LOG_ANALYTICS_WORKSPACE_ID_SECRET_NAME)'
               -LogAnalyticsWorkspaceKeySecretName '$(LOG_ANALYTICS_WORKSPACE_KEY_SECRET_NAME)'
+              -HiveVersion '2.3.7'
+              -HadoopVersion '2.7.4'
+              -MySqlId '$(mySqlDatabaseId)'
         
         # Deploy databricks 002
         - task: AzureResourceManagerTemplateDeployment@3
@@ -904,6 +948,9 @@ stages:
               -LogAnalyticsKeyVaultId '$(LOG_ANALYTICS_KEY_VAULT_ID)'
               -LogAnalyticsWorkspaceIdSecretName '$(LOG_ANALYTICS_WORKSPACE_ID_SECRET_NAME)'
               -LogAnalyticsWorkspaceKeySecretName '$(LOG_ANALYTICS_WORKSPACE_KEY_SECRET_NAME)'
+              -HiveVersion '2.3.7'
+              -HadoopVersion '2.7.4'
+              -MySqlId '$(mySqlDatabaseId)'
         
         # Deploy event hub 001
         - task: AzureResourceManagerTemplateDeployment@3

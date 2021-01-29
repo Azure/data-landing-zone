@@ -292,32 +292,45 @@ jobs:
         echo "Generating Password"
         pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
     
-    # Deploy SQL Server 002 - validation
-    - name: Deploy SQL Server 002 - validation
-      id: sql_server_002_validation
+    # # Deploy SQL Server 002 - validation
+    # - name: Deploy SQL Server 002 - validation
+    #   id: sql_server_002_validation
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     scope: resourcegroup
+    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+    #     region: ${{ env.AZURE_LOCATION }}
+    #     template: ${{ github.workspace }}/infra/SqlServer/deploy.sqlServer.json
+    #     parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer002.json administratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
+    #     deploymentMode: Validate
+    
+    # # Deploy SQL Database 002 - validation
+    # - name: Deploy SQL Database 002 - validation
+    #   id: sql_database_002_validation
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     scope: resourcegroup
+    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+    #     region: ${{ env.AZURE_LOCATION }}
+    #     template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
+    #     parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase002.json sqlServerAdministratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
+    #     deploymentMode: Validate
+    
+    # Deploy MySQL 001 - validation
+    - name: Deploy MySQL 001 - validation
+      id: mysql_001_validation
       uses: azure/arm-deploy@v1
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
         region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/SqlServer/deploy.sqlServer.json
-        parameters: ${{ github.workspace }}/infra/SqlServer/params.sqlServer002.json administratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
+        template: ${{ github.workspace }}/infra/MySql/deploy.mySql.json
+        parameters: ${{ github.workspace }}/infra/MySql/params.mySql001.json mySqlServerAdministratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
         deploymentMode: Validate
-    
-    # Deploy SQL Database 002 - validation
-    - name: Deploy SQL Database 002 - validation
-      id: sql_database_002_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
-        parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase002.json sqlServerAdministratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
-        deploymentMode: Validate
-    
+
     # Deploy Databricks 001 - validation
     - name: Deploy Databricks 001 - validation
       id: databricks_001_validation
@@ -598,6 +611,19 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SqlDatabase/deploy.sqlDatabase.json
         parameters: ${{ github.workspace }}/infra/SqlDatabase/params.sqlDatabase002.json sqlServerAdministratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
+        deploymentMode: Incremental
+    
+    # Deploy MySQL 001
+    - name: Deploy MySQL 001
+      id: mysql_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/MySql/deploy.mySql.json
+        parameters: ${{ github.workspace }}/infra/MySql/params.mySql001.json mySqlServerAdministratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
         deploymentMode: Incremental
     
     # Deploy Databricks 001
