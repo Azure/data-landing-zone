@@ -819,7 +819,7 @@ stages:
           name: databricks_001_deployment
           displayName: Deploy databricks 001
           enabled: true
-          continueOnError: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
@@ -888,7 +888,7 @@ stages:
           name: databricks_002_deployment
           displayName: Deploy databricks 002
           enabled: true
-          continueOnError: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
