@@ -45,10 +45,16 @@
                 "description": "Specifies the id of the subnet which the private endpoint uses."
             }
         },
-        "privateDnsZoneId": {
+        "privateDnsZoneIdDatabricks": {
             "type": "string",
             "metadata": {
-                "description": "Specifies the ID of the private dns zone."
+                "description": "Specifies the resource ID of the private dns zone that is used for Databricks."
+            }
+        },
+        "privateDnsZoneIdBlob": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource ID of the private dns zone that is used for DBFS."
             }
         }
     },
@@ -56,14 +62,17 @@
         "location": "[parameters('location')]",
         "databricksName": "[parameters('databricksName')]",
         "databricksManagedResourceGroupId": "[parameters('databricksManagedResourceGroupId')]",
+        "databricksManagedResourceGroupName": "[last(split(variables('databricksManagedResourceGroupId'), '/'))]",
         "databricksVnetId": "[parameters('databricksVnetId')]",
         "databricksPrivateSubnetName": "[parameters('databricksPrivateSubnetName')]",
         "databricksPublicSubnetName": "[parameters('databricksPublicSubnetName')]",
         "subnetId": "[parameters('subnetId')]",
-        "privateDnsZoneId": "[parameters('privateDnsZoneId')]",
-        "privateDnsZoneName": "[last(split(variables('privateDnsZoneId'), '/'))]",
+        "privateDnsZoneIdBlob": "[parameters('privateDnsZoneIdBlob')]",
+        "privateDnsZoneIdDatabricks": "[parameters('privateDnsZoneIdDatabricks')]",
+        "privateDnsZoneNameDatabricks": "[last(split(variables('privateDnsZoneIdDatabricks'), '/'))]",
         "privateEndpointNameUser": "[concat(variables('databricksName'), '-user-private-endpoint')]",
-        "privateEndpointNameData": "[concat(variables('databricksName'), '-data-private-endpoint')]"
+        "privateEndpointNameData": "[concat(variables('databricksName'), '-data-private-endpoint')]",
+        "privateEndpointNameDbfs": "[concat(variables('databricksName'), '-dbfs-private-endpoint')]"
     },
     "resources": [
         {
@@ -149,7 +158,7 @@
                     {
                         "name": "[concat(variables('privateEndpointNameUser'), '-aRecord')]",
                         "properties": {
-                            "privateDnsZoneId": "[variables('privateDnsZoneId')]"
+                            "privateDnsZoneId": "[variables('privateDnsZoneIdDatabricks')]"
                         }
                     }
                 ]
@@ -194,7 +203,53 @@
                     {
                         "name": "[concat(variables('privateEndpointNameData'), '-aRecord')]",
                         "properties": {
-                            "privateDnsZoneId": "[variables('privateDnsZoneId')]"
+                            "privateDnsZoneId": "[variables('privateDnsZoneIdDatabricks')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('privateEndpointNameDbfs')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('privateEndpointNameDbfs')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId(variables('databricksManagedResourceGroupName'), 'Microsoft.Storage/storageAccounts', reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').storageAccountName.value)]",
+                            "groupIds": [
+                                "blob"
+                            ]
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [
+                ],
+                "subnet": {
+                    "id": "[variables('subnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('privateEndpointNameDbfs'), '/aRecord')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameDbfs'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "[concat(variables('privateEndpointNameDbfs'), '-aRecord')]",
+                        "properties": {
+                            "privateDnsZoneId": "[variables('privateDnsZoneIdBlob')]"
                         }
                     }
                 ]
@@ -221,7 +276,7 @@
                         {
                             "type": "Microsoft.Network/dnszones/CNAME",
                             "apiVersion": "2018-05-01",
-                            "name": "[concat(variables('privateDnsZoneName'), '/', variables('location'), '-c2.azuredatabricks.net')]",
+                            "name": "[concat(variables('privateDnsZoneNameDatabricks'), '/', variables('location'), '-c2.azuredatabricks.net')]",
                             "properties": {
                                 "metadata": {},
                                 "TTL": 60,
@@ -234,8 +289,8 @@
                     "outputs": {}
                 }
             },
-            "subscriptionId": "[split(variables('privateDnsZoneId'), '/')[2]]",
-            "resourceGroup": "[split(variables('privateDnsZoneId'), '/')[4]]"
+            "subscriptionId": "[split(variables('privateDnsZoneIdDatabricks'), '/')[2]]",
+            "resourceGroup": "[split(variables('privateDnsZoneIdDatabricks'), '/')[4]]"
         }
     ],
     "outputs": {
