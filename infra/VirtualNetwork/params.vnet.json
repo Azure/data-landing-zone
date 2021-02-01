@@ -8,9 +8,6 @@
         "vnetName": {
             "value": "dn001-vnet"
         },
-        "deployDatabricksNsg": {
-            "value": false
-        },
         "dnsServerAdresses": {
             "value": [
                 "10.0.0.4"

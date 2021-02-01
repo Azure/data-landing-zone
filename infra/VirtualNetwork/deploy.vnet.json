@@ -22,13 +22,6 @@
                 "description": "Name of the data node."
             }
         },
-        "deployDatabricksNsg": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "Specifies whether the databricks NSG should be deployed."
-            }
-        },
         "dnsServerAdresses": {
             "type": "array",
             "metadata": {
@@ -47,7 +40,6 @@
         "location": "[parameters('location')]",
         "vnetName": "[parameters('vnetName')]",
         "dataNodeName": "[parameters('dataNodeName')]",
-        "deployDatabricksNsg": "[parameters('deployDatabricksNsg')]",
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
         "firewallPrivateIp": "[parameters('firewallPrivateIp')]"
     },
@@ -126,24 +118,12 @@
             }
         },
         {
-            "condition": "[variables('deployDatabricksNsg')]",
-            "name": "[concat(variables('dataNodeName'), '-databricks-nsg')]",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "apiVersion": "2020-05-01",
-            "location": "[variables('location')]",
-            "properties": {
-                "securityRules": [
-                ]
-            }
-        },
-        {
             "name": "[variables('vnetName')]",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-05-01",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]",
                 "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
             ],
             "properties": {
@@ -191,7 +171,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
                             },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
@@ -213,7 +193,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
                             },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
@@ -235,7 +215,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
                             },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
@@ -257,7 +237,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
                             },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
