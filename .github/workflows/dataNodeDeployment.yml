@@ -638,6 +638,7 @@ jobs:
         template: ${{ github.workspace }}/infra/Databricks/deploy.databricks.json
         parameters: ${{ github.workspace }}/infra/Databricks/params.databricks001.json
         deploymentMode: Incremental
+      continue-on-error: true
     
     # Deploy Databricks 002
     - name: Deploy Databricks 002
@@ -651,6 +652,7 @@ jobs:
         template: ${{ github.workspace }}/infra/Databricks/deploy.databricks.json
         parameters: ${{ github.workspace }}/infra/Databricks/params.databricks002.json
         deploymentMode: Incremental
+      continue-on-error: true
     
     # Deploy Event Hub 001
     - name: Deploy Event Hub 001

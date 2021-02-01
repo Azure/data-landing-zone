@@ -19,6 +19,15 @@
         },
         "databricksPublicSubnetName": {
             "value": "dn001-databricks001-public-subnet"
+        },
+        "subnetId": {
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
+        },
+        "privateDnsZoneIdDatabricks": {
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.azuredatabricks.net"
+        },
+        "privateDnsZoneIdBlob": {
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
         }
     }
 }
