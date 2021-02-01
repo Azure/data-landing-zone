@@ -22,6 +22,13 @@
                 "description": "Name of the data node."
             }
         },
+        "deployDatabricksNsg": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies whether the databricks NSG should be deployed."
+            }
+        },
         "dnsServerAdresses": {
             "type": "array",
             "metadata": {
@@ -40,6 +47,7 @@
         "location": "[parameters('location')]",
         "vnetName": "[parameters('vnetName')]",
         "dataNodeName": "[parameters('dataNodeName')]",
+        "deployDatabricksNsg": "[parameters('deployDatabricksNsg')]",
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
         "firewallPrivateIp": "[parameters('firewallPrivateIp')]"
     },
@@ -118,12 +126,114 @@
             }
         },
         {
+            "condition": "[variables('deployDatabricksNsg')]",
+            "name": "[concat(variables('dataNodeName'), '-databricks-nsg')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "location": "[variables('location')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "Microsoft.Databricks-workspaces_UseOnly_databricks-worker-to-worker-inbound",
+                        "properties": {
+                            "description": "Required for worker nodes communication within a cluster.",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Microsoft.Databricks-workspaces_UseOnly_databricks-worker-to-worker-outbound",
+                        "properties": {
+                            "description": "Required for worker nodes communication within a cluster.",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Microsoft.Databricks-workspaces_UseOnly_databricks-worker-to-sql",
+                        "properties": {
+                            "description": "Required for workers communication with Azure SQL services.",
+                            "protocol": "tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3306",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "Sql",
+                            "access": "Allow",
+                            "priority": 101,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Microsoft.Databricks-workspaces_UseOnly_databricks-worker-to-storage",
+                        "properties": {
+                            "description": "Required for workers communication with Azure Storage services.",
+                            "protocol": "tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "Storage",
+                            "access": "Allow",
+                            "priority": 102,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Microsoft.Databricks-workspaces_UseOnly_databricks-worker-to-eventhub",
+                        "properties": {
+                            "description": "Required for worker communication with Azure Eventhub services.",
+                            "protocol": "tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "9093",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "EventHub",
+                            "access": "Allow",
+                            "priority": 103,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
             "name": "[variables('vnetName')]",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-05-01",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]",
                 "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
             ],
             "properties": {
@@ -171,7 +281,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
                             },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
@@ -193,7 +303,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
                             },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
@@ -215,7 +325,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
                             },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
@@ -237,7 +347,7 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-databricks-nsg'))]"
                             },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
