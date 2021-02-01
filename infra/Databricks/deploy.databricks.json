@@ -85,6 +85,8 @@
             },
             "properties": {
                 "managedResourceGroupId": "[variables('databricksManagedResourceGroupId')]",
+                "publicNetworkAccess": "Disabled",
+                "requiredNsgRules": "NoAzureDatabricksRules",
                 "parameters": {
                     "storageAccountSkuName": {
                         "value": "Standard_GRS"
@@ -100,9 +102,7 @@
                     },
                     "enableNoPublicIp": {
                         "value": true
-                    },
-                    "publicNetworkAccess": "Disabled",
-                    "requiredNsgRules": "NoAzureDatabricksRules"
+                    }
                     // "encryption": {
                     //     "value": {
                     //         "keySource": "Default"
@@ -222,7 +222,7 @@
                     {
                         "name": "[variables('privateEndpointNameDbfs')]",
                         "properties": {
-                            "privateLinkServiceId": "[resourceId(variables('databricksManagedResourceGroupName'), 'Microsoft.Storage/storageAccounts', reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').storageAccountName.value)]",
+                            "privateLinkServiceId": "[resourceId(variables('databricksManagedResourceGroupName'), 'Microsoft.Storage/storageAccounts', reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').parameters.storageAccountName.value)]",
                             "groupIds": [
                                 "blob"
                             ]
@@ -274,14 +274,14 @@
                     "variables": {},
                     "resources": [
                         {
-                            "type": "Microsoft.Network/dnszones/CNAME",
-                            "apiVersion": "2018-05-01",
+                            "type": "Microsoft.Network/privateDnsZones/CNAME",
+                            "apiVersion": "2020-06-01",
                             "name": "[concat(variables('privateDnsZoneNameDatabricks'), '/', variables('location'), '-c2.azuredatabricks.net')]",
                             "properties": {
                                 "metadata": {},
                                 "TTL": 60,
                                 "CNAMERecord": {
-                                    "cname": "[reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').workspaceUrl]"
+                                    "cname": "testadb" //"[reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').workspaceUrl]"
                                 }
                             }
                         }
