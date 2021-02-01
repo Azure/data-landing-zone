@@ -78,7 +78,7 @@
                 "managedResourceGroupId": "[variables('databricksManagedResourceGroupId')]",
                 "parameters": {
                     "storageAccountSkuName": {
-                        "value": "Standard_ZRS"
+                        "value": "Standard_GRS"
                     },
                     "customVirtualNetworkId": {
                         "value": "[variables('databricksVnetId')]"
