@@ -8,6 +8,9 @@
         "vnetName": {
             "value": "dn001-vnet"
         },
+        "dataNodeName": {
+            "value": "dn001"
+        },
         "deployDatabricksNsg": {
             "value": true
         },

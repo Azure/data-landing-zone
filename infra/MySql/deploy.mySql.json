@@ -303,15 +303,19 @@
             "type": "string",
             "value": "[resourceId('Microsoft.DBforMySQL/servers/databases', variables('mySqlServerName'), variables('mySqlDatabaseName'))]"
         },
-        "connectionStringSecretName": {
+        "mySqlDatabaseKeyVaultId": {
+            "type": "string",
+            "value": "[variables('keyVaultId')]"
+        },
+        "mySqlConnectionStringSecretName": {
             "type": "string",
             "value": "[variables('connectionStringSecretName')]"
         },
-        "usernameSecretName": {
+        "mySqlUsernameSecretName": {
             "type": "string",
             "value": "[variables('usernameSecretName')]"
         },
-        "passwordSecretName": {
+        "mySqlPasswordSecretName": {
             "type": "string",
             "value": "[variables('passwordSecretName')]"
         }
