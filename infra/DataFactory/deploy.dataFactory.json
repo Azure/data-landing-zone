@@ -97,10 +97,12 @@
         "dataFactoryGitRootFolder": "[parameters('dataFactoryGitRootFolder')]",
         "dataFactoryGitType": "[parameters('dataFactoryGitType')]",
         "keyVaultId": "[parameters('keyVaultId')]",
-        "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]",
+        "keyVaultName": "[if(empty(variables('keyVaultId')), 'keyVaultNotSet', last(split(variables('keyVaultId'), '/')))]",
+        "keyVaultSubscriptionId": "[if(empty(variables('keyVaultId')), subscription().subscriptionId, split(variables('keyVaultId'), '/')[2])]",
+        "keyVaultResourceGroupName": "[if(empty(variables('keyVaultId')), resourceGroup().name, split(variables('keyVaultId'), '/')[4])]",
         "sqlServerId": "[parameters('sqlServerId')]",
         "sqlDatabaseId": "[parameters('sqlDatabaseId')]",
-        "sqlDatabaseName": "[last(split(variables('sqlDatabaseId'), '/'))]",
+        "sqlDatabaseName": "[if(empty(variables('sqlDatabaseId')), 'sqlDatabaseNotSet', last(split(variables('sqlDatabaseId'), '/')))]",
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneIdDataFactory": "[parameters('privateDnsZoneIdDataFactory')]",
         "privateDnsZoneIdPortal": "[parameters('privateDnsZoneIdPortal')]",
@@ -370,6 +372,7 @@
             }
         },
         {
+            "condition": "[not(empty(variables('keyVaultId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "AccessPolicyDeployment",
@@ -388,9 +391,9 @@
                     "variables": {},
                     "resources": [
                         {
-                            "name": "[concat(variables('keyVaultName'), '/add')]",
                             "type": "Microsoft.KeyVault/vaults/accessPolicies",
                             "apiVersion": "2019-09-01",
+                            "name": "[concat(variables('keyVaultName'), '/add')]",
                             "properties": {
                                 "accessPolicies": [
                                     {
@@ -410,8 +413,8 @@
                     "outputs": {}
                 }
             },
-            "subscriptionId": "[split(variables('keyVaultId'), '/')[2]]",
-            "resourceGroup": "[split(variables('keyVaultId'), '/')[4]]"
+            "subscriptionId": "[variables('keyVaultSubscriptionId')]",
+            "resourceGroup": "[variables('keyVaultResourceGroupName')]"
         }
     ],
     "outputs": {}
