@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "logAnalyticsWorkspaceName": {
+            "value": "dn001-la001"
+        },
+        "keyVaultId": {
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-logging/providers/Microsoft.KeyVault/vaults/dn001-keyvault003"
+        }
+    }
+}
