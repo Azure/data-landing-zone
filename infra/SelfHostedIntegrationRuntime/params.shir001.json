@@ -1,39 +1,39 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "vmssName": {
-            "value": "dn001Shir001"
-        },
-        "vmssSkuTier": {
-            "value": "Standard"
-        },
-        "vmssSkuName": {
-            "value": "Standard_DS2_v2"
-        },
-        "vmssSkuCapacity": {
-            "value": 1
-        },
-        "vmssAdminUsername": {
-            "value": "VmssMainUser"
-        },
-        "vmssAdminPassword": {
-            "value": "<your-secure-password>"
-        },
-        "dataFactoryId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-integration/providers/Microsoft.DataFactory/factories/dn001-datafactory002"
-        },
-        "storageAccountId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-integration/providers/Microsoft.Storage/storageAccounts/dn001artifactstorage001"
-        },
-        "storageAccountContainerName": {
-            "value": "scripts"
-        },
-        "subnetId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-subnet"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "<my-region>"
+    },
+    "vmssName": {
+      "value": "<my-data-landing-zone-name>Shir001"
+    },
+    "vmssSkuTier": {
+      "value": "Standard"
+    },
+    "vmssSkuName": {
+      "value": "Standard_DS2_v2"
+    },
+    "vmssSkuCapacity": {
+      "value": 1
+    },
+    "vmssAdminUsername": {
+      "value": "VmssMainUser"
+    },
+    "vmssAdminPassword": {
+      "value": "<your-secure-password>"
+    },
+    "dataFactoryId": {
+      "value": "/subscriptions/<my-data-landing-zone-subscription-id>/resourceGroups/<my-data-landing-zone-name>-integration/providers/Microsoft.DataFactory/factories/<my-data-landing-zone-name>-datafactory002"
+    },
+    "storageAccountId": {
+      "value": "/subscriptions/<my-data-landing-zone-subscription-id>/resourceGroups/<my-data-landing-zone-name>-integration/providers/Microsoft.Storage/storageAccounts/<my-data-landing-zone-name>artifactstorage001"
+    },
+    "storageAccountContainerName": {
+      "value": "scripts"
+    },
+    "subnetId": {
+      "value": "/subscriptions/<my-data-landing-zone-subscription-id>/resourceGroups/<my-data-landing-zone-name>-network/providers/Microsoft.Network/virtualNetworks/<my-data-landing-zone-name>-vnet/subnets/<my-data-landing-zone-name>-subnet"
     }
+  }
 }
