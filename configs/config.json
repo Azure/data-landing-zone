@@ -277,7 +277,7 @@
         "parameters": {
             "parameters.location.value": "${Location}",
             "parameters.sourceVnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet",
-            "parameters.dataNodeName.value": "${HubVnetId}"
+            "parameters.destinationVnetId.value": "${HubVnetId}"
         }
     },
     {
