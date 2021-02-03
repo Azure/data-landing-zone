@@ -33,11 +33,6 @@ Param(
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $SubnetId,
-
-    [Parameter(Mandatory)]
-    [ValidateNotNullOrEmpty()]
-    [string]
     $SynapseStorageAccountName,
 
     [Parameter(Mandatory)]
