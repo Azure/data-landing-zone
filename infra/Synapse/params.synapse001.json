@@ -1,45 +1,45 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "synapseWorkspaceName": {
-            "value": "dn001-synapse001"
-        },
-        "synapseDefaultStorageAccountName": {
-            "value": "dn001workspacesa"
-        },
-        "synapseDefaultStorageAccountFileSystem": {
-            "value": "data"
-        },
-        "synapseSqlAdministratorLogin": {
-            "value": "SqlServerMainUser"
-        },
-        "synapseSqlAdministratorPassword": {
-            "value": "<your-secure-password>"
-        },
-        "synapseDatalakeAnalyticsResourceId": {
-            "value": ""
-        },
-        "synapseComputeSubnetResourceId": {
-            "value": ""
-        },
-        "synapseSqlAdminGroupName": {
-            "value": ""
-        },
-        "synapseSqlAdminGroupObjectID": {
-            "value": ""
-        },
-        "subnetId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
-        },
-        "privateDnsZoneIdSql": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net"
-        },
-        "privateDnsZoneIdDev": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "<my-region>"
+    },
+    "synapseWorkspaceName": {
+      "value": "<my-data-landing-zone-name>-synapse001"
+    },
+    "synapseDefaultStorageAccountName": {
+      "value": "<my-synapse-storage-account-name>"
+    },
+    "synapseDefaultStorageAccountFileSystem": {
+      "value": "<my-synapse-storage-account-file-system-name>"
+    },
+    "synapseSqlAdministratorLogin": {
+      "value": "SqlServerMainUser"
+    },
+    "synapseSqlAdministratorPassword": {
+      "value": "<your-secure-password>"
+    },
+    "synapseDatalakeAnalyticsResourceId": {
+      "value": ""
+    },
+    "synapseComputeSubnetResourceId": {
+      "value": ""
+    },
+    "synapseSqlAdminGroupName": {
+      "value": ""
+    },
+    "synapseSqlAdminGroupObjectID": {
+      "value": ""
+    },
+    "subnetId": {
+      "value": "/subscriptions/<my-data-landing-zone-subscription-id>/resourceGroups/<my-data-landing-zone-name>-network/providers/Microsoft.Network/virtualNetworks/<my-data-landing-zone-name>-vnet/subnets/<my-data-landing-zone-name>-privatelink-subnet"
+    },
+    "privateDnsZoneIdSql": {
+      "value": "/subscriptions/<my-management-subscription-id>/resourceGroups/<my-global-dns-resource-group-name>/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net"
+    },
+    "privateDnsZoneIdDev": {
+      "value": "/subscriptions/<my-management-subscription-id>/resourceGroups/<my-global-dns-resource-group-name>/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net"
     }
+  }
 }
