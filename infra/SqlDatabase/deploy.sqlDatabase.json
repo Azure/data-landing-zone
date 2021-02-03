@@ -250,15 +250,19 @@
             "type": "string",
             "value": "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServerName'), variables('sqlDatabaseName'))]"
         },
-        "connectionStringSecretName": {
+        "sqlDatabaseKeyVaultId": {
+            "type": "string",
+            "value": "[variables('keyVaultId')]"
+        },
+        "sqlDatabaseConnectionStringSecretName": {
             "type": "string",
             "value": "[variables('connectionStringSecretName')]"
         },
-        "usernameSecretName": {
+        "sqlDatabaseUsernameSecretName": {
             "type": "string",
             "value": "[variables('usernameSecretName')]"
         },
-        "passwordSecretName": {
+        "sqlDatabasePasswordSecretName": {
             "type": "string",
             "value": "[variables('passwordSecretName')]"
         }
