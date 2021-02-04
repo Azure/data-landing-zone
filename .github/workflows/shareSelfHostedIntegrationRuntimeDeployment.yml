@@ -1,0 +1,96 @@
+name: Share Self Hosted Integration Runtime
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'infra/ShareSelfHostedIntegrationRuntime/**'
+      - '.github/workflows/shareSelfHostedIntegrationRuntimeDeployment.yml'
+
+env:
+  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'
+  AZURE_LOCATION: 'northeurope'
+
+jobs:
+
+  validation:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+    
+    # Login to Azure
+    - name: Azure Login
+      id: azure_login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Share Self Hosted Integration Runtime 001 - validation
+    - name: Share Self Hosted Integration Runtime 001 - validation
+      id: share_self_hosted_integration_runtime_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json
+        parameters: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+        deploymentMode: Validate
+      env:
+        AZURE_RESOURCE_GROUP: 'dn001-processing-domain'
+    
+    # Log out from Azure
+    - name: Log out from Azure
+      id: azure_logout
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
+
+  deployment:
+    needs: [ validation ]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+    
+    # Login to Azure
+    - name: Azure Login
+      id: azure_login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Share Self Hosted Integration Runtime 001
+    - name: Share Self Hosted Integration Runtime 001
+      id: share_self_hosted_integration_runtime_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json
+        parameters: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+        deploymentMode: Incremental
+      env:
+        AZURE_RESOURCE_GROUP: dn001-processing-domain
+    
+    # Log out from Azure
+    - name: Log out from Azure
+      id: azure_logout
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
