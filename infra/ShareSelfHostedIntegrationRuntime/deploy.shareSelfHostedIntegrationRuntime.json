@@ -46,9 +46,9 @@
                     "variables": {},
                     "resources": [
                         {
-                            "name": "[concat(variables('sourceDataFactoryName'), '/Microsoft.Authorization/', guid(uniqueString(variables('destinationDataFactoryName'))))]",
                             "type": "Microsoft.DataFactory/factories/providers/roleAssignments",
                             "apiVersion": "2018-09-01-preview",
+                            "name": "[concat(variables('sourceDataFactoryName'), '/Microsoft.Authorization/', guid(uniqueString(variables('destinationDataFactoryName'))))]",
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                                 "principalId": "[reference(variables('destinationDataFactoryId'), '2018-06-01', 'Full').identity.principalId]"
@@ -70,7 +70,7 @@
             ],
             "properties": {
                 "type": "SelfHosted",
-                "description": "Data Hub - Self Hosted Integration Runtime",
+                "description": "Data Node - Self Hosted Integration Runtime",
                 "typeProperties": {
                     "linkedInfo": {
                         "resourceId": "[variables('sourceDataFactoryShirId')]",
