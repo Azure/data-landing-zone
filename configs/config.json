@@ -18,8 +18,8 @@
             "parameters.databricksPrivateSubnetName.value": "${DataLandingZoneName}-databricks001-private-subnet",
             "parameters.databricksPublicSubnetName.value": "${DataLandingZoneName}-databricks001-public-subnet",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdDatabricks.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.azuredatabricks.net",
-            "parameters.privateDnsZoneIdBlob.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
+            "parameters.privateDnsZoneIdDatabricks.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.azuredatabricks.net",
+            "parameters.privateDnsZoneIdBlob.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
         }
     },
     {
@@ -33,8 +33,8 @@
             "parameters.databricksPrivateSubnetName.value": "${DataLandingZoneName}-databricks002-private-subnet",
             "parameters.databricksPublicSubnetName.value": "${DataLandingZoneName}-databricks002-public-subnet",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdDatabricks.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.azuredatabricks.net",
-            "parameters.privateDnsZoneIdBlob.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
+            "parameters.privateDnsZoneIdDatabricks.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.azuredatabricks.net",
+            "parameters.privateDnsZoneIdBlob.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
         }
     },
     {
@@ -47,8 +47,8 @@
             "parameters.sqlServerId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-metadata/providers/Microsoft.Sql/servers/${DataLandingZoneName}-sqlserver001",
             "parameters.sqlDatabaseId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-metadata/providers/Microsoft.Sql/servers/${DataLandingZoneName}-sqlserver001/databases/AdfMetastoreDB",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdDataFactory.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net",
-            "parameters.privateDnsZoneIdPortal.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.azure.com"
+            "parameters.privateDnsZoneIdDataFactory.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net",
+            "parameters.privateDnsZoneIdPortal.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.azure.com"
         }
     },
     {
@@ -58,8 +58,8 @@
             "parameters.location.value": "${Location}",
             "parameters.dataFactoryName.value": "${DataLandingZoneName}-datafactory002",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdDataFactory.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net",
-            "parameters.privateDnsZoneIdPortal.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.azure.com"
+            "parameters.privateDnsZoneIdDataFactory.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net",
+            "parameters.privateDnsZoneIdPortal.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.azure.com"
         }
     },
     {
@@ -70,7 +70,7 @@
             "parameters.eventHubName.value": "${DataLandingZoneName}-eventhub001",
             "parameters.keyVaultId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-metadata/providers/Microsoft.KeyVault/vaults/${DataLandingZoneName}-keyvault001",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneId.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net"
+            "parameters.privateDnsZoneId.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net"
         }
     },
     {
@@ -80,7 +80,7 @@
             "parameters.location.value": "${Location}",
             "parameters.keyVaultName.value": "${DataLandingZoneName}-keyvault001",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneId.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
+            "parameters.privateDnsZoneId.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
         }
     },
     {
@@ -90,7 +90,7 @@
             "parameters.location.value": "${Location}",
             "parameters.keyVaultName.value": "${DataLandingZoneName}-keyvault002",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneId.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
+            "parameters.privateDnsZoneId.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
         }
     },
     {
@@ -100,7 +100,7 @@
             "parameters.location.value": "${Location}",
             "parameters.keyVaultName.value": "${DataLandingZoneName}-keyvault003",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneId.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
+            "parameters.privateDnsZoneId.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
         }
     },
     {
@@ -120,7 +120,7 @@
             "parameters.mySqlServerName.value": "${DataLandingZoneName}-mysqlserver001",
             "parameters.keyVaultId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-metadata/providers/Microsoft.KeyVault/vaults/${DataLandingZoneName}-keyvault002",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneId.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com"
+            "parameters.privateDnsZoneId.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com"
         }
     },
     {
@@ -168,7 +168,7 @@
             "parameters.location.value": "${Location}",
             "parameters.sqlServerName.value": "${DataLandingZoneName}-sqlserver001",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneId.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net"
+            "parameters.privateDnsZoneId.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net"
         }
     },
     {
@@ -178,7 +178,7 @@
             "parameters.location.value": "${Location}",
             "parameters.sqlServerName.value": "${DataLandingZoneName}-sqlserver002",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneId.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net"
+            "parameters.privateDnsZoneId.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net"
         }
     },
     {
@@ -188,8 +188,8 @@
             "parameters.location.value": "${Location}",
             "parameters.storageAccountName.value": "${DataLandingZoneName}externalsa001",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdBlob.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
-            "parameters.privateDnsZoneIdDfs.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
+            "parameters.privateDnsZoneIdBlob.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
+            "parameters.privateDnsZoneIdDfs.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
         }
     },
     {
@@ -199,8 +199,8 @@
             "parameters.location.value": "${Location}",
             "parameters.storageAccountName.value": "${DataLandingZoneName}secretrawsa",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdBlob.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
-            "parameters.privateDnsZoneIdDfs.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
+            "parameters.privateDnsZoneIdBlob.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
+            "parameters.privateDnsZoneIdDfs.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
         }
     },
     {
@@ -210,8 +210,8 @@
             "parameters.location.value": "${Location}",
             "parameters.storageAccountName.value": "${DataLandingZoneName}secretenrcursa",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdBlob.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
-            "parameters.privateDnsZoneIdDfs.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
+            "parameters.privateDnsZoneIdBlob.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
+            "parameters.privateDnsZoneIdDfs.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
         }
     },
     {
@@ -221,8 +221,8 @@
             "parameters.location.value": "${Location}",
             "parameters.storageAccountName.value": "${DataLandingZoneName}secretworkspacesa",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdBlob.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
-            "parameters.privateDnsZoneIdDfs.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
+            "parameters.privateDnsZoneIdBlob.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
+            "parameters.privateDnsZoneIdDfs.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
         }
     },
     {
@@ -232,8 +232,8 @@
             "parameters.location.value": "${Location}",
             "parameters.storageAccountName.value": "${DataLandingZoneName}rawsa",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdBlob.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
-            "parameters.privateDnsZoneIdDfs.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
+            "parameters.privateDnsZoneIdBlob.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
+            "parameters.privateDnsZoneIdDfs.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
         }
     },
     {
@@ -243,8 +243,8 @@
             "parameters.location.value": "${Location}",
             "parameters.storageAccountName.value": "${DataLandingZoneName}enrcursa",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdBlob.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
-            "parameters.privateDnsZoneIdDfs.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
+            "parameters.privateDnsZoneIdBlob.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
+            "parameters.privateDnsZoneIdDfs.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
         }
     },
     {
@@ -254,8 +254,8 @@
             "parameters.location.value": "${Location}",
             "parameters.storageAccountName.value": "${DataLandingZoneName}workspacesa",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdBlob.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
-            "parameters.privateDnsZoneIdDfs.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
+            "parameters.privateDnsZoneIdBlob.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
+            "parameters.privateDnsZoneIdDfs.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
         }
     },
     {
@@ -267,8 +267,8 @@
             "parameters.synapseDefaultStorageAccountName.value": "${SynapseStorageAccountName}",
             "parameters.synapseDefaultStorageAccountFileSystem.value": "${SynapseStorageAccountFileSystemName}",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
-            "parameters.privateDnsZoneIdSql.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net",
-            "parameters.privateDnsZoneIdDev.value": "/subscriptions/${ManagementSubscriptionId}/resourceGroups/${GlobalDnsRgName}/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net"
+            "parameters.privateDnsZoneIdSql.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net",
+            "parameters.privateDnsZoneIdDev.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net"
         }
     },
     {

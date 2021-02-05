@@ -8,9 +8,8 @@ on:
       - '.github/workflows/updateParameters.yml'
 
 env:
-  MANAGEMENT_SUBSCRIPTION_ID: '<my-management-subscription-id>'
-  GLOBAL_DNS_RG_NAME: '<my-global-dns-resource-group-name>'
-  DATA_LANDING_ZONE_SUBSCRIPTION_ID: '<my-data-landing-zone-subscription-id>'
+  GLOBAL_DNS_RESOURCE_GROUP_ID: '<my-global-dns-resource-group-resource-id>'
+  DATA_LANDING_ZONE_SUBSCRIPTION_ID: '<my-data-landing-zone-subscription-id>' # Choose ~5 characters. Will be used as a prefix for services. If not unique enough, deployment can fail
   DATA_LANDING_ZONE_NAME: '<my-data-landing-zone-name>'
   LOCATION: '<my-region>'
   SYNAPSE_STORAGE_ACCOUNT_NAME: '<my-synapse-storage-account-name>'
@@ -43,8 +42,7 @@ jobs:
           echo "Updating Parameters"
           pwsh $GITHUB_WORKSPACE/configs/UpdateParameters.ps1 \
             -ConfigurationFilePath 'configs/config.json' \
-            -ManagementSubscriptionId '${{ env.MANAGEMENT_SUBSCRIPTION_ID }}' \
-            -GlobalDnsRgName '${{ env.GLOBAL_DNS_RG_NAME }}' \
+            -GlobalDnsResourceGroupId '${{ env.GLOBAL_DNS_RESOURCE_GROUP_ID }}' \
             -DataLandingZoneSubscriptionId '${{ env.DATA_LANDING_ZONE_SUBSCRIPTION_ID }}' \
             -DataLandingZoneName '${{ env.DATA_LANDING_ZONE_NAME }}' \
             -Location '${{ env.LOCATION }}' \

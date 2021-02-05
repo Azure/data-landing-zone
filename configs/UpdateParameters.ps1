@@ -8,12 +8,7 @@ Param(
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $ManagementSubscriptionId,
-
-    [Parameter(Mandatory)]
-    [ValidateNotNullOrEmpty()]
-    [string]
-    $GlobalDnsRgName,
+    $GlobalDnsResourceGroupId,
 
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
