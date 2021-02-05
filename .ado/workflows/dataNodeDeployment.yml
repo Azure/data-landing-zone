@@ -1,1337 +1,1087 @@
 name: Data Node Deployment
-
 trigger:
   branches:
     include:
-      - main
+    - main
   paths:
     include:
-      - infra/ArtifactStorage/*
-      - infra/Databricks/*
-      - infra/DataFactory/*
-      - infra/EventHub/*
-      - infra/KeyVault/*
-      - infra/MySql/*
-      - infra/SelfHostedIntegrationRuntime/*
-      - infra/SqlDatabase/*
-      - infra/SqlServer/*
-      - infra/Storage/*
-      - infra/Synapse/*
-      - infra/VirtualNetwork/*
-      - infra/VirtualNetworkPeering/*
-      - .ado/workflows/dataNodeDeployment.yml
-      - code/*
-
+    - infra/ArtifactStorage/*
+    - infra/Databricks/*
+    - infra/DataFactory/*
+    - infra/EventHub/*
+    - infra/KeyVault/*
+    - infra/MySql/*
+    - infra/SelfHostedIntegrationRuntime/*
+    - infra/SqlDatabase/*
+    - infra/SqlServer/*
+    - infra/Storage/*
+    - infra/Synapse/*
+    - infra/VirtualNetwork/*
+    - infra/VirtualNetworkPeering/*
+    - .ado/workflows/dataNodeDeployment.yml
+    - code/*
 variables:
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'datanode001-service-connection'
-  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'
-  AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dn001-network'
-  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dn001-mgmt'
-  AZURE_RESOURCE_GROUP_NAME_INTEGRATION: 'dn001-integration'
-  AZURE_RESOURCE_GROUP_NAME_LOGGING: 'dn001-logging'
-  AZURE_RESOURCE_GROUP_NAME_STORAGE: 'dn001-storage'
-  AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE: 'dn001-secretstorage'
-  AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE: 'dn001-externalstorage'
-  AZURE_RESOURCE_GROUP_NAME_METADATA: 'dn001-metadata'
-  AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: 'dn001-processing-domain'
-  AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: 'dn001-processing-product'
-  AZURE_LOCATION: 'North Europe'
-
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: <my-resource-manager-connection-name>
+  AZURE_SUBSCRIPTION_ID: <my-data-landing-zone-subscription-id>
+  AZURE_RESOURCE_GROUP_NAME_NETWORK: <my-data-landing-zone-name>-network
+  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: <my-data-landing-zone-name>-mgmt
+  AZURE_RESOURCE_GROUP_NAME_INTEGRATION: <my-data-landing-zone-name>-integration
+  AZURE_RESOURCE_GROUP_NAME_LOGGING: <my-data-landing-zone-name>-logging
+  AZURE_RESOURCE_GROUP_NAME_STORAGE: <my-data-landing-zone-name>-storage
+  AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE: <my-data-landing-zone-name>-secretstorage
+  AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE: <my-data-landing-zone-name>-externalstorage
+  AZURE_RESOURCE_GROUP_NAME_METADATA: <my-data-landing-zone-name>-metadata
+  AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: <my-data-landing-zone-name>-processing-domain
+  AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: <my-data-landing-zone-name>-processing-product
+  AZURE_LOCATION: <my-region>
 stages:
-  - stage: Validation
-    displayName: 'Validation of ARM templates'
-    jobs:
-      - job: Validation
-        displayName: 'Validation of ARM templates'
-        continueOnError: false
-        pool:
-          vmImage: 'ubuntu-latest'
-        
-        steps:
-        # Checkout code
-        - checkout: self
-          name: checkout_repository
-          displayName: 'Checkout repository'
-          submodules: true
-          lfs: false
-          clean: true
-          continueOnError: false
-          enabled: true
-        
-        # Deploy vnet - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: vnet_validation
-          displayName: Deploy vnet - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy key vault 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: key_vault_001_validation
-          displayName: Deploy key vault 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault001.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy key vault 002 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: key_vault_002_validation
-          displayName: Deploy key vault 002 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault002.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy key vault 003 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: key_vault_003_validation
-          displayName: Deploy key vault 003 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_LOGGING)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault003.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy Log Analytics Workspace 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: log_analytics_001_validation
-          displayName: Deploy Log Analytics Workspace 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_LOGGING)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/LogAnalytics/deploy.logAnalytics.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/LogAnalytics/params.logAnalytics001.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy storage account 001 - raw - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: storage_account_001_validation
-          displayName: Deploy storage account 001 - raw - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage001.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy storage account 002 - enriched & curated - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: storage_account_002_validation
-          displayName: Deploy storage account 002 - enriched & curated - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage002.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy storage account 003 - workspace - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: storage_account_003_validation
-          displayName: Deploy storage account 003 - workspace - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage003.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy secret storage account 001 - raw - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: secret_storage_001_validation
-          displayName: Deploy secret storage account 001 - raw - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage001.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy secret storage account 002 - enriched & curated - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: secret_storage_002_validation
-          displayName: Deploy secret storage account 002 - enriched & curated - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage002.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy secret storage account 003 - workspace - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: secret_storage_003_validation
-          displayName: Deploy secret storage account 003 - workspace - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage003.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy external storage account 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: external_storage_001_validation
-          displayName: Deploy external storage account 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.external_storage001.json'
-            deploymentMode: 'Validation'
-        
-        # Generate Password
-        - task: PowerShell@2
-          name: generate_password_001
-          displayName: Generate Password
-          enabled: true
-          continueOnError: false
-          inputs:
-            targetType: 'filePath'
-            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
-            errorActionPreference: 'stop'
-            failOnStderr: false
-            ignoreLASTEXITCODE: false
-            pwsh: true
-        
-        # Deploy sql server 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: sql_server_001_validation
-          displayName: Deploy sql server 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-            csmParametersFile: 'infra/SqlServer/params.sqlServer001.json'
-            deploymentMode: 'Validation'
-            overrideParameters: >
-              -administratorLoginPassword "$(password)"
-        
-        # Deploy sql database 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: sql_database_001_validation
-          displayName: Deploy sql database 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
-            csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase001.json'
-            deploymentMode: 'Validation'
-            overrideParameters: >
-              -sqlServerAdministratorLoginPassword "$(password)"
-        
-        # Generate Password
-        - task: PowerShell@2
-          name: generate_password_002
-          displayName: Generate Password
-          enabled: true
-          continueOnError: false
-          inputs:
-            targetType: 'filePath'
-            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
-            errorActionPreference: 'stop'
-            failOnStderr: false
-            ignoreLASTEXITCODE: false
-            pwsh: true
-        
-        # # Deploy sql server 002 - validation
-        # - task: AzureResourceManagerTemplateDeployment@3
-        #   name: sql_server_002_validation
-        #   displayName: Deploy sql server 002 - validation
-        #   enabled: true
-        #   continueOnError: false
-        #   inputs:
-        #     deploymentScope: 'Resource Group'
-        #     azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-        #     subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-        #     action: 'Create Or Update Resource Group'
-        #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-        #     location: '$(AZURE_LOCATION)'
-        #     templateLocation: 'Linked artifact'
-        #     csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-        #     csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
-        #     deploymentMode: 'Validation'
-        #     overrideParameters: >
-        #       -administratorLoginPassword "$(password)"
-        
-        # # Deploy sql database 002 - validation
-        # - task: AzureResourceManagerTemplateDeployment@3
-        #   name: sql_database_002_validation
-        #   displayName: Deploy sql database 002 - validation
-        #   enabled: true
-        #   continueOnError: false
-        #   inputs:
-        #     deploymentScope: 'Resource Group'
-        #     azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-        #     subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-        #     action: 'Create Or Update Resource Group'
-        #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-        #     location: '$(AZURE_LOCATION)'
-        #     templateLocation: 'Linked artifact'
-        #     csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
-        #     csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase002.json'
-        #     deploymentMode: 'Validation'
-        #     overrideParameters: >
-        #       -sqlServerAdministratorLoginPassword "$(password)"
-        
-        # Deploy My SQL 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: mysql_001_validation
-          displayName: Deploy My SQL 001 - validation
-          enabled: false
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/MySql/deploy.mySql.json'
-            csmParametersFile: 'infra/MySql/params.mySql001.json'
-            deploymentMode: 'Validation'
-            overrideParameters: >
-              -mySqlServerAdministratorLoginPassword "$(password)"
-        
-        # Deploy databricks 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: databricks_001_validation
-          displayName: Deploy databricks 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Databricks/deploy.databricks.json'
-            csmParametersFile: 'infra/Databricks/params.databricks001.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy databricks 002 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: databricks_002_validation
-          displayName: Deploy databricks 002 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Databricks/deploy.databricks.json'
-            csmParametersFile: 'infra/Databricks/params.databricks002.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy event hub 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: event_hub_001_validation
-          displayName: Deploy event hub 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/EventHub/deploy.eventHub.json'
-            csmParametersFile: 'infra/EventHub/params.eventHub001.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy Data Factory 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: data_factory_001_validation
-          displayName: Deploy Data Factory 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy Data Factory 002 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: data_factory_002_validation
-          displayName: Deploy Data Factory 002 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/params.dataFactory002.json'
-            deploymentMode: 'Validation'
-        
-        # Deploy Artifact Storage Account 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: artifact_storage_001_validation
-          displayName: Deploy Artifact Storage Account 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/deploy.storage.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/params.storage001.json'
-            deploymentMode: 'Validation'
-        
-        # Generate Password
-        - task: PowerShell@2
-          name: generate_password_003
-          displayName: Generate Password
-          enabled: true
-          continueOnError: false
-          inputs:
-            targetType: 'filePath'
-            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
-            errorActionPreference: 'stop'
-            failOnStderr: false
-            ignoreLASTEXITCODE: false
-            pwsh: true
-        
-        # Deploy SHIR 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: shir_001_validation
-          displayName: Deploy SHIR 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/deploy.shir.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/params.shir001.json'
-            deploymentMode: 'Validation'
-            overrideParameters: >
-              -vmssAdminPassword "$(password)"
-        
-        # Generate Password
-        - task: PowerShell@2
-          name: generate_password_004
-          displayName: Generate Password
-          enabled: true
-          continueOnError: false
-          inputs:
-            targetType: 'filePath'
-            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
-            errorActionPreference: 'stop'
-            failOnStderr: false
-            ignoreLASTEXITCODE: false
-            pwsh: true
-        
-        # Deploy synapse 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: synapse_001_validation
-          displayName: Deploy synapse 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Synapse/deploy.synapse.json'
-            csmParametersFile: 'infra/Synapse/params.synapse001.json'
-            deploymentMode: 'Validation'
-            overrideParameters: >
-              -synapseSqlAdministratorPassword "$(password)"
+- stage: Validation
+  displayName: Validation of ARM templates
+  jobs:
+  - job: Validation
+    displayName: Validation of ARM templates
+    continueOnError: false
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+      name: checkout_repository
+      displayName: Checkout repository
+      submodules: true
+      lfs: false
+      clean: true
+      continueOnError: false
+      enabled: true
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: vnet_validation
+      displayName: Deploy vnet - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_NETWORK)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/VirtualNetwork/deploy.vnet.json
+        csmParametersFile: infra/VirtualNetwork/params.vnet.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: key_vault_001_validation
+      displayName: Deploy key vault 001 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_METADATA)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/KeyVault/deploy.keyVault.json
+        csmParametersFile: infra/KeyVault/params.keyVault001.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: key_vault_002_validation
+      displayName: Deploy key vault 002 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_METADATA)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/KeyVault/deploy.keyVault.json
+        csmParametersFile: infra/KeyVault/params.keyVault002.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: key_vault_003_validation
+      displayName: Deploy key vault 003 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_LOGGING)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/KeyVault/deploy.keyVault.json
+        csmParametersFile: infra/KeyVault/params.keyVault003.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: log_analytics_001_validation
+      displayName: Deploy Log Analytics Workspace 001 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_LOGGING)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: $(System.DefaultWorkingDirectory)/infra/LogAnalytics/deploy.logAnalytics.json
+        csmParametersFile: $(System.DefaultWorkingDirectory)/infra/LogAnalytics/params.logAnalytics001.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: storage_account_001_validation
+      displayName: Deploy storage account 001 - raw - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_STORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.storage001.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: storage_account_002_validation
+      displayName: Deploy storage account 002 - enriched & curated - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_STORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.storage002.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: storage_account_003_validation
+      displayName: Deploy storage account 003 - workspace - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_STORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.storage003.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: secret_storage_001_validation
+      displayName: Deploy secret storage account 001 - raw - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.secret_storage001.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: secret_storage_002_validation
+      displayName: Deploy secret storage account 002 - enriched & curated - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.secret_storage002.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: secret_storage_003_validation
+      displayName: Deploy secret storage account 003 - workspace - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.secret_storage003.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: external_storage_001_validation
+      displayName: Deploy external storage account 001 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.external_storage001.json
+        deploymentMode: Validation
+    - task: PowerShell@2
+      name: generate_password_001
+      displayName: Generate Password
+      enabled: true
+      continueOnError: false
+      inputs:
+        targetType: filePath
+        filePath: $(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1
+        errorActionPreference: stop
+        failOnStderr: false
+        ignoreLASTEXITCODE: false
+        pwsh: true
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: sql_server_001_validation
+      displayName: Deploy sql server 001 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_METADATA)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/SqlServer/deploy.sqlServer.json
+        csmParametersFile: infra/SqlServer/params.sqlServer001.json
+        deploymentMode: Validation
+        overrideParameters: |
+          -administratorLoginPassword "$(password)"
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: sql_database_001_validation
+      displayName: Deploy sql database 001 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_METADATA)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/SqlDatabase/deploy.sqlDatabase.json
+        csmParametersFile: infra/SqlDatabase/params.sqlDatabase001.json
+        deploymentMode: Validation
+        overrideParameters: |
+          -sqlServerAdministratorLoginPassword "$(password)"
+    - task: PowerShell@2
+      name: generate_password_002
+      displayName: Generate Password
+      enabled: true
+      continueOnError: false
+      inputs:
+        targetType: filePath
+        filePath: $(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1
+        errorActionPreference: stop
+        failOnStderr: false
+        ignoreLASTEXITCODE: false
+        pwsh: true
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: mysql_001_validation
+      displayName: Deploy My SQL 001 - validation
+      enabled: false
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_METADATA)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/MySql/deploy.mySql.json
+        csmParametersFile: infra/MySql/params.mySql001.json
+        deploymentMode: Validation
+        overrideParameters: |
+          -mySqlServerAdministratorLoginPassword "$(password)"
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: databricks_001_validation
+      displayName: Deploy databricks 001 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Databricks/deploy.databricks.json
+        csmParametersFile: infra/Databricks/params.databricks001.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: databricks_002_validation
+      displayName: Deploy databricks 002 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Databricks/deploy.databricks.json
+        csmParametersFile: infra/Databricks/params.databricks002.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: event_hub_001_validation
+      displayName: Deploy event hub 001 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/EventHub/deploy.eventHub.json
+        csmParametersFile: infra/EventHub/params.eventHub001.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: data_factory_001_validation
+      displayName: Deploy Data Factory 001 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/DataFactory/deploy.dataFactory.json
+        csmParametersFile: infra/DataFactory/params.dataFactory001.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: data_factory_002_validation
+      displayName: Deploy Data Factory 002 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/DataFactory/deploy.dataFactory.json
+        csmParametersFile: infra/DataFactory/params.dataFactory002.json
+        deploymentMode: Validation
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: artifact_storage_001_validation
+      displayName: Deploy Artifact Storage Account 001 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: $(System.DefaultWorkingDirectory)/infra/ArtifactStorage/deploy.storage.json
+        csmParametersFile: $(System.DefaultWorkingDirectory)/infra/ArtifactStorage/params.storage001.json
+        deploymentMode: Validation
+    - task: PowerShell@2
+      name: generate_password_003
+      displayName: Generate Password
+      enabled: true
+      continueOnError: false
+      inputs:
+        targetType: filePath
+        filePath: $(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1
+        errorActionPreference: stop
+        failOnStderr: false
+        ignoreLASTEXITCODE: false
+        pwsh: true
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: shir_001_validation
+      displayName: Deploy SHIR 001 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: $(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/deploy.shir.json
+        csmParametersFile: $(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/params.shir001.json
+        deploymentMode: Validation
+        overrideParameters: |
+          -vmssAdminPassword "$(password)"
+    - task: PowerShell@2
+      name: generate_password_004
+      displayName: Generate Password
+      enabled: true
+      continueOnError: false
+      inputs:
+        targetType: filePath
+        filePath: $(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1
+        errorActionPreference: stop
+        failOnStderr: false
+        ignoreLASTEXITCODE: false
+        pwsh: true
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: synapse_001_validation
+      displayName: Deploy synapse 001 - validation
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Synapse/deploy.synapse.json
+        csmParametersFile: infra/Synapse/params.synapse001.json
+        deploymentMode: Validation
+        overrideParameters: |
+          -synapseSqlAdministratorPassword "$(password)"
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: vnet_peering_001_validation
+      displayName: Deploy vnet peering 001 - validation
+      enabled: true
+      continueOnError: true
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_NETWORK)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        csmParametersFile: infra/VirtualNetworkPeering/params.vnetPeering001.json
+        deploymentMode: Validation
+- stage: Deployment
+  displayName: Deployment of ARM templates
+  dependsOn: Validation
+  jobs:
+  - job: Deployment
+    displayName: Deployment of ARM templates
+    continueOnError: false
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+      name: checkout_repository
+      displayName: Checkout repository
+      submodules: true
+      lfs: false
+      clean: true
+      continueOnError: false
+      enabled: true
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: vnet_deployment
+      displayName: Deploy vnet
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_NETWORK)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/VirtualNetwork/deploy.vnet.json
+        csmParametersFile: infra/VirtualNetwork/params.vnet.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: key_vault_001_deployment
+      displayName: Deploy key vault 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_METADATA)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/KeyVault/deploy.keyVault.json
+        csmParametersFile: infra/KeyVault/params.keyVault001.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: key_vault_002_deployment
+      displayName: Deploy Key Vault 002
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_METADATA)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/KeyVault/deploy.keyVault.json
+        csmParametersFile: infra/KeyVault/params.keyVault002.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: key_vault_003_deployment
+      displayName: Deploy Key Vault 003
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_LOGGING)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/KeyVault/deploy.keyVault.json
+        csmParametersFile: infra/KeyVault/params.keyVault003.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: log_analytics_001_deployment
+      displayName: Deploy Log Analytics Workspace 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_LOGGING)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: $(System.DefaultWorkingDirectory)/infra/LogAnalytics/deploy.logAnalytics.json
+        csmParametersFile: $(System.DefaultWorkingDirectory)/infra/LogAnalytics/params.logAnalytics001.json
+        deploymentMode: Incremental
+        deploymentOutputs: logAnalytics001Details
+    - task: AzureCLI@2
+      name: generate_pipeline_variables_001
+      displayName: Generate Pipeline Variables 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        azureSubscription: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        scriptType: pscore
+        scriptLocation: scriptPath
+        scriptPath: $(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1
+        powerShellErrorActionPreference: stop
+        addSpnToEnvironment: false
+        failOnStandardError: false
+        powerShellIgnoreLASTEXITCODE: false
+        arguments: |
+          -ArmOutputString '$(logAnalytics001Details)' -MakeOutput
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: storage_account_001_deployment
+      displayName: Deploy storage account 001 - raw
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_STORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.storage001.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: storage_account_002_deployment
+      displayName: Deploy storage account 002 - enriched & curated
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_STORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.storage002.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: storage_account_003_deployment
+      displayName: Deploy storage account 003 - workspace
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_STORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.storage003.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: secret_storage_001_deployment
+      displayName: Deploy secret storage account 001 - raw
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.secret_storage001.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: secret_storage_002_deployment
+      displayName: Deploy secret storage account 002 - enriched & curated
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.secret_storage002.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: secret_storage_003_deployment
+      displayName: Deploy secret storage account 003 - workspace
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.secret_storage003.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: external_storage_001_deployment
+      displayName: Deploy external storage account 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Storage/deploy.storage.json
+        csmParametersFile: infra/Storage/params.external_storage001.json
+        deploymentMode: Incremental
+    - task: PowerShell@2
+      name: generate_password_001
+      displayName: Generate Password
+      enabled: true
+      continueOnError: false
+      inputs:
+        targetType: filePath
+        filePath: $(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1
+        errorActionPreference: stop
+        failOnStderr: false
+        ignoreLASTEXITCODE: false
+        pwsh: true
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: sql_server_001_deployment
+      displayName: Deploy sql server 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_METADATA)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/SqlServer/deploy.sqlServer.json
+        csmParametersFile: infra/SqlServer/params.sqlServer001.json
+        deploymentMode: Incremental
+        overrideParameters: |
+          -administratorLoginPassword "$(password)"
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: sql_database_001_deployment
+      displayName: Deploy sql database 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_METADATA)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/SqlDatabase/deploy.sqlDatabase.json
+        csmParametersFile: infra/SqlDatabase/params.sqlDatabase001.json
+        deploymentMode: Incremental
+        overrideParameters: |
+          -sqlServerAdministratorLoginPassword "$(password)"
+    - task: PowerShell@2
+      name: generate_password_002
+      displayName: Generate Password
+      enabled: true
+      continueOnError: false
+      inputs:
+        targetType: filePath
+        filePath: $(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1
+        errorActionPreference: stop
+        failOnStderr: false
+        ignoreLASTEXITCODE: false
+        pwsh: true
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: mysql_001_deployment
+      displayName: Deploy My SQL 001
+      enabled: false
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_METADATA)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/MySql/deploy.mySql.json
+        csmParametersFile: infra/MySql/params.mySql001.json
+        deploymentMode: Incremental
+        deploymentOutputs: hivemetastoreDetails001
+        overrideParameters: |
+          -mySqlServerAdministratorLoginPassword "$(password)"
+    - task: AzureCLI@2
+      name: generate_pipeline_variables_002
+      displayName: Generate Pipeline Variables 002
+      enabled: true
+      continueOnError: false
+      inputs:
+        azureSubscription: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        scriptType: pscore
+        scriptLocation: scriptPath
+        scriptPath: $(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1
+        powerShellErrorActionPreference: stop
+        addSpnToEnvironment: false
+        failOnStandardError: false
+        powerShellIgnoreLASTEXITCODE: false
+        arguments: |
+          -ArmOutputString '$(hivemetastoreDetails001)' -MakeOutput
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: databricks_001_deployment
+      displayName: Deploy databricks 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Databricks/deploy.databricks.json
+        csmParametersFile: infra/Databricks/params.databricks001.json
+        deploymentMode: Incremental
+        deploymentOutputs: databricksDetails001
+    - task: AzureCLI@2
+      name: generate_pipeline_variables_003
+      displayName: Generate Pipeline Variables 003
+      enabled: true
+      continueOnError: false
+      inputs:
+        azureSubscription: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        scriptType: pscore
+        scriptLocation: scriptPath
+        scriptPath: $(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1
+        powerShellErrorActionPreference: stop
+        addSpnToEnvironment: false
+        failOnStandardError: false
+        powerShellIgnoreLASTEXITCODE: false
+        arguments: |
+          -ArmOutputString '$(databricksDetails001)' -MakeOutput
+    - task: AzureCLI@2
+      name: setup_databricks_001
+      displayName: Setup databricks 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        azureSubscription: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        scriptType: pscore
+        scriptLocation: scriptPath
+        scriptPath: $(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1
+        powerShellErrorActionPreference: stop
+        addSpnToEnvironment: true
+        failOnStandardError: false
+        powerShellIgnoreLASTEXITCODE: false
+        arguments: |
+          -DatabricksWorkspaceName '$(databricksWorkspaceName)' -DatabricksWorkspaceId '$(databricksWorkspaceId)' -DatabricksApiUrl '$(databricksApiUrl)' -DatabricksSubscriptionId '$(databricksSubscriptionId)' -DatabricksResourceGroupName '$(databricksResourceGroupName)' -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)' -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)' -HiveUsernameSecretName '$(mySqlUsernameSecretName)' -HivePasswordSecretName '$(mySqlPasswordSecretName)' -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)' -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)' -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)' -HiveVersion '2.3.7' -HadoopVersion '2.7.4' -MySqlId '$(mySqlDatabaseId)'
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: databricks_002_deployment
+      displayName: Deploy databricks 002
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Databricks/deploy.databricks.json
+        csmParametersFile: infra/Databricks/params.databricks002.json
+        deploymentMode: Incremental
+        deploymentOutputs: databricksDetails002
+    - task: AzureCLI@2
+      name: generate_pipeline_variables_004
+      displayName: Generate Pipeline Variables 004
+      enabled: true
+      continueOnError: false
+      inputs:
+        azureSubscription: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        scriptType: pscore
+        scriptLocation: scriptPath
+        scriptPath: $(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1
+        powerShellErrorActionPreference: stop
+        addSpnToEnvironment: false
+        failOnStandardError: false
+        powerShellIgnoreLASTEXITCODE: false
+        arguments: |
+          -ArmOutputString '$(databricksDetails002)' -MakeOutput
+    - task: AzureCLI@2
+      name: setup_databricks_002
+      displayName: Setup databricks 002
+      enabled: true
+      continueOnError: false
+      inputs:
+        azureSubscription: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        scriptType: pscore
+        scriptLocation: scriptPath
+        scriptPath: $(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1
+        powerShellErrorActionPreference: stop
+        addSpnToEnvironment: true
+        failOnStandardError: false
+        powerShellIgnoreLASTEXITCODE: false
+        arguments: |
+          -DatabricksWorkspaceName '$(databricksWorkspaceName)' -DatabricksWorkspaceId '$(databricksWorkspaceId)' -DatabricksApiUrl '$(databricksApiUrl)' -DatabricksSubscriptionId '$(databricksSubscriptionId)' -DatabricksResourceGroupName '$(databricksResourceGroupName)' -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)' -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)' -HiveUsernameSecretName '$(mySqlUsernameSecretName)' -HivePasswordSecretName '$(mySqlPasswordSecretName)' -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)' -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)' -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)' -HiveVersion '2.3.7' -HadoopVersion '2.7.4' -MySqlId '$(mySqlDatabaseId)'
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: event_hub_001_deployment
+      displayName: Deploy event hub 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/EventHub/deploy.eventHub.json
+        csmParametersFile: infra/EventHub/params.eventHub001.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: data_factory_001_deployment
+      displayName: Deploy data factory 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/DataFactory/deploy.dataFactory.json
+        csmParametersFile: infra/DataFactory/params.dataFactory001.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: data_factory_002_deployment
+      displayName: Deploy Data Factory 002
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/DataFactory/deploy.dataFactory.json
+        csmParametersFile: infra/DataFactory/params.dataFactory002.json
+        deploymentMode: Incremental
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: artifact_storage_001_deployment
+      displayName: Deploy Artifact Storage Account 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: $(System.DefaultWorkingDirectory)/infra/ArtifactStorage/deploy.storage.json
+        csmParametersFile: $(System.DefaultWorkingDirectory)/infra/ArtifactStorage/params.storage001.json
+        deploymentMode: Incremental
+        deploymentOutputs: storageDetails
+    - task: AzureCLI@2
+      name: generate_pipeline_variables_001
+      displayName: Generate Pipeline Variables 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        azureSubscription: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        scriptType: pscore
+        scriptLocation: scriptPath
+        scriptPath: $(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1
+        powerShellErrorActionPreference: stop
+        addSpnToEnvironment: false
+        failOnStandardError: false
+        powerShellIgnoreLASTEXITCODE: false
+        arguments: |
+          -ArmOutputString '$(storageDetails)' -MakeOutput
+    - task: AzureFileCopy@3
+      name: upload_file_001
+      displayName: Upload file to storage account 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        sourcePath: $(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1
+        additionalArgumentsForBlobCopy: |
+          '/Y'
+        azureSubscription: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        destination: AzureBlob
+        storage: $(storageAccountName)
+        containerName: $(storageAccountContainerName)
+    - task: PowerShell@2
+      name: generate_password_003
+      displayName: Generate Password
+      enabled: true
+      continueOnError: false
+      inputs:
+        targetType: filePath
+        filePath: $(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1
+        errorActionPreference: stop
+        failOnStderr: false
+        ignoreLASTEXITCODE: false
+        pwsh: true
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: shir_001_deployment
+      displayName: Deploy SHIR 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: $(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/deploy.shir.json
+        csmParametersFile: $(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/params.shir001.json
+        deploymentMode: Incremental
+        overrideParameters: |
+          -vmssAdminPassword "$(password)"
+    - task: PowerShell@2
+      name: generate_password_004
+      displayName: Generate Password
+      enabled: true
+      continueOnError: false
+      inputs:
+        targetType: filePath
+        filePath: $(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1
+        errorActionPreference: stop
+        failOnStderr: false
+        ignoreLASTEXITCODE: false
+        pwsh: true
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: synapse_001_deployment
+      displayName: Deploy synapse 001
+      enabled: true
+      continueOnError: false
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/Synapse/deploy.synapse.json
+        csmParametersFile: infra/Synapse/params.synapse001.json
+        deploymentMode: Incremental
+        overrideParameters: |
+          -synapseSqlAdministratorPassword "$(password)"
+    - task: AzureResourceManagerTemplateDeployment@3
+      name: vnet_peering_001_deployment
+      displayName: Deploy Vnet Peering 001
+      enabled: true
+      continueOnError: true
+      inputs:
+        deploymentScope: Resource Group
+        azureResourceManagerConnection: $(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)
+        subscriptionId: $(AZURE_SUBSCRIPTION_ID)
+        action: Create Or Update Resource Group
+        resourceGroupName: $(AZURE_RESOURCE_GROUP_NAME_NETWORK)
+        location: $(AZURE_LOCATION)
+        templateLocation: Linked artifact
+        csmFile: infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        csmParametersFile: infra/VirtualNetworkPeering/params.vnetPeering001.json
+        deploymentMode: Incremental
 
-        # Deploy vnet peering 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: vnet_peering_001_validation
-          displayName: Deploy vnet peering 001 - validation
-          enabled: true
-          continueOnError: true
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetworkPeering/deploy.vnetPeering.json'
-            csmParametersFile: 'infra/VirtualNetworkPeering/params.vnetPeering001.json'
-            deploymentMode: 'Validation'
-
-  - stage: Deployment
-    displayName: 'Deployment of ARM templates'
-    dependsOn: Validation
-    # condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
-    jobs:
-      - job: Deployment
-        displayName: 'Deployment of ARM templates'
-        continueOnError: false
-        pool:
-          vmImage: 'ubuntu-latest'
-        
-        steps:
-        # Checkout repository
-        - checkout: self
-          name: checkout_repository
-          displayName: 'Checkout repository'
-          submodules: true
-          lfs: false
-          clean: true
-          continueOnError: false
-          enabled: true
-
-        # Deploy vnet
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: vnet_deployment
-          displayName: Deploy vnet
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy key vault 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: key_vault_001_deployment
-          displayName: Deploy key vault 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault001.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy Key Vault 002
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: key_vault_002_deployment
-          displayName: Deploy Key Vault 002
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault002.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy Key Vault 003
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: key_vault_003_deployment
-          displayName: Deploy Key Vault 003
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_LOGGING)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault003.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy Log Analytics Workspace 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: log_analytics_001_deployment
-          displayName: Deploy Log Analytics Workspace 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_LOGGING)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/LogAnalytics/deploy.logAnalytics.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/LogAnalytics/params.logAnalytics001.json'
-            deploymentMode: 'Incremental'
-            deploymentOutputs: 'logAnalytics001Details'
-        
-        # Generate Pipeline Variables 001
-        - task: AzureCLI@2
-          name: generate_pipeline_variables_001
-          displayName: Generate Pipeline Variables 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            scriptType: pscore
-            scriptLocation: 'scriptPath'
-            scriptPath: '$(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1'
-            powerShellErrorActionPreference: 'stop'
-            addSpnToEnvironment: false
-            failOnStandardError: false
-            powerShellIgnoreLASTEXITCODE: false
-            arguments: >
-              -ArmOutputString '$(logAnalytics001Details)'
-              -MakeOutput
-        
-        # Deploy storage account 001 - raw
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: storage_account_001_deployment
-          displayName: Deploy storage account 001 - raw
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage001.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy storage account 002 - enriched & curated
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: storage_account_002_deployment
-          displayName: Deploy storage account 002 - enriched & curated
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage002.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy storage account 003 - workspace
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: storage_account_003_deployment
-          displayName: Deploy storage account 003 - workspace
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage003.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy secret storage account 001 - raw
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: secret_storage_001_deployment
-          displayName: Deploy secret storage account 001 - raw
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage001.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy secret storage account 002 - enriched & curated
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: secret_storage_002_deployment
-          displayName: Deploy secret storage account 002 - enriched & curated
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage002.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy secret storage account 003 - workspace
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: secret_storage_003_deployment
-          displayName: Deploy secret storage account 003 - workspace
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage003.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy external storage account 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: external_storage_001_deployment
-          displayName: Deploy external storage account 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.external_storage001.json'
-            deploymentMode: 'Incremental'
-        
-        # Generate Password
-        - task: PowerShell@2
-          name: generate_password_001
-          displayName: Generate Password
-          enabled: true
-          continueOnError: false
-          inputs:
-            targetType: 'filePath'
-            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
-            errorActionPreference: 'stop'
-            failOnStderr: false
-            ignoreLASTEXITCODE: false
-            pwsh: true
-        
-        # Deploy sql server 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: sql_server_001_deployment
-          displayName: Deploy sql server 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-            csmParametersFile: 'infra/SqlServer/params.sqlServer001.json'
-            deploymentMode: 'Incremental'
-            overrideParameters: >
-              -administratorLoginPassword "$(password)"
-        
-        # Deploy sql database 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: sql_database_001_deployment
-          displayName: Deploy sql database 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
-            csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase001.json'
-            deploymentMode: 'Incremental'
-            overrideParameters: >
-              -sqlServerAdministratorLoginPassword "$(password)"
-        
-        # Generate Password
-        - task: PowerShell@2
-          name: generate_password_002
-          displayName: Generate Password
-          enabled: true
-          continueOnError: false
-          inputs:
-            targetType: 'filePath'
-            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
-            errorActionPreference: 'stop'
-            failOnStderr: false
-            ignoreLASTEXITCODE: false
-            pwsh: true
-        
-        # # Deploy sql server 002
-        # - task: AzureResourceManagerTemplateDeployment@3
-        #   name: sql_server_002_deployment
-        #   displayName: Deploy sql server 002
-        #   enabled: true
-        #   continueOnError: false
-        #   inputs:
-        #     deploymentScope: 'Resource Group'
-        #     azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-        #     subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-        #     action: 'Create Or Update Resource Group'
-        #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-        #     location: '$(AZURE_LOCATION)'
-        #     templateLocation: 'Linked artifact'
-        #     csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-        #     csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
-        #     deploymentMode: 'Incremental'
-        #     overrideParameters: >
-        #       -administratorLoginPassword "$(password)"
-        
-        # # Deploy sql database 002
-        # - task: AzureResourceManagerTemplateDeployment@3
-        #   name: sql_database_002_deployment
-        #   displayName: Deploy sql database 002
-        #   enabled: true
-        #   continueOnError: false
-        #   inputs:
-        #     deploymentScope: 'Resource Group'
-        #     azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-        #     subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-        #     action: 'Create Or Update Resource Group'
-        #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-        #     location: '$(AZURE_LOCATION)'
-        #     templateLocation: 'Linked artifact'
-        #     csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
-        #     csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase002.json'
-        #     deploymentMode: 'Incremental'
-        #     deploymentOutputs: 'hivemetastoreDetails'
-        #     overrideParameters: >
-        #       -sqlServerAdministratorLoginPassword "$(password)"
-        
-        # Deploy My SQL 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: mysql_001_deployment
-          displayName: Deploy My SQL 001
-          enabled: false
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/MySql/deploy.mySql.json'
-            csmParametersFile: 'infra/MySql/params.mySql001.json'
-            deploymentMode: 'Incremental'
-            deploymentOutputs: 'hivemetastoreDetails001'
-            overrideParameters: >
-              -mySqlServerAdministratorLoginPassword "$(password)"
-        
-        # Generate Pipeline Variables 002
-        - task: AzureCLI@2
-          name: generate_pipeline_variables_002
-          displayName: Generate Pipeline Variables 002
-          enabled: true
-          continueOnError: false
-          inputs:
-            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            scriptType: pscore
-            scriptLocation: 'scriptPath'
-            scriptPath: '$(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1'
-            powerShellErrorActionPreference: 'stop'
-            addSpnToEnvironment: false
-            failOnStandardError: false
-            powerShellIgnoreLASTEXITCODE: false
-            arguments: >
-              -ArmOutputString '$(hivemetastoreDetails001)'
-              -MakeOutput
-        
-        # Deploy databricks 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: databricks_001_deployment
-          displayName: Deploy databricks 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Databricks/deploy.databricks.json'
-            csmParametersFile: 'infra/Databricks/params.databricks001.json'
-            deploymentMode: 'Incremental'
-            deploymentOutputs: 'databricksDetails001'
-        
-        # Generate Pipeline Variables 003
-        - task: AzureCLI@2
-          name: generate_pipeline_variables_003
-          displayName: Generate Pipeline Variables 003
-          enabled: true
-          continueOnError: false
-          inputs:
-            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            scriptType: pscore
-            scriptLocation: 'scriptPath'
-            scriptPath: '$(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1'
-            powerShellErrorActionPreference: 'stop'
-            addSpnToEnvironment: false
-            failOnStandardError: false
-            powerShellIgnoreLASTEXITCODE: false
-            arguments: >
-              -ArmOutputString '$(databricksDetails001)'
-              -MakeOutput
-        
-        # Setup databricks 001
-        - task: AzureCLI@2
-          name: setup_databricks_001
-          displayName: Setup databricks 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            scriptType: pscore
-            scriptLocation: 'scriptPath'
-            scriptPath: '$(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1'
-            powerShellErrorActionPreference: 'stop'
-            addSpnToEnvironment: true
-            failOnStandardError: false
-            powerShellIgnoreLASTEXITCODE: false
-            arguments: >
-              -DatabricksWorkspaceName '$(databricksWorkspaceName)'
-              -DatabricksWorkspaceId '$(databricksWorkspaceId)'
-              -DatabricksApiUrl '$(databricksApiUrl)'
-              -DatabricksSubscriptionId '$(databricksSubscriptionId)'
-              -DatabricksResourceGroupName '$(databricksResourceGroupName)'
-              -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)'
-              -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)'
-              -HiveUsernameSecretName '$(mySqlUsernameSecretName)'
-              -HivePasswordSecretName '$(mySqlPasswordSecretName)'
-              -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)'
-              -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)'
-              -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)'
-              -HiveVersion '2.3.7'
-              -HadoopVersion '2.7.4'
-              -MySqlId '$(mySqlDatabaseId)'
-        
-        # Deploy databricks 002
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: databricks_002_deployment
-          displayName: Deploy databricks 002
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Databricks/deploy.databricks.json'
-            csmParametersFile: 'infra/Databricks/params.databricks002.json'
-            deploymentMode: 'Incremental'
-            deploymentOutputs: 'databricksDetails002'
-        
-        # Generate Pipeline Variables 004
-        - task: AzureCLI@2
-          name: generate_pipeline_variables_004
-          displayName: Generate Pipeline Variables 004
-          enabled: true
-          continueOnError: false
-          inputs:
-            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            scriptType: pscore
-            scriptLocation: 'scriptPath'
-            scriptPath: '$(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1'
-            powerShellErrorActionPreference: 'stop'
-            addSpnToEnvironment: false
-            failOnStandardError: false
-            powerShellIgnoreLASTEXITCODE: false
-            arguments: >
-              -ArmOutputString '$(databricksDetails002)'
-              -MakeOutput
-        
-        # Setup databricks 002
-        - task: AzureCLI@2
-          name: setup_databricks_002
-          displayName: Setup databricks 002
-          enabled: true
-          continueOnError: false
-          inputs:
-            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            scriptType: pscore
-            scriptLocation: 'scriptPath'
-            scriptPath: '$(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1'
-            powerShellErrorActionPreference: 'stop'
-            addSpnToEnvironment: true
-            failOnStandardError: false
-            powerShellIgnoreLASTEXITCODE: false
-            arguments: >
-              -DatabricksWorkspaceName '$(databricksWorkspaceName)'
-              -DatabricksWorkspaceId '$(databricksWorkspaceId)'
-              -DatabricksApiUrl '$(databricksApiUrl)'
-              -DatabricksSubscriptionId '$(databricksSubscriptionId)'
-              -DatabricksResourceGroupName '$(databricksResourceGroupName)'
-              -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)'
-              -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)'
-              -HiveUsernameSecretName '$(mySqlUsernameSecretName)'
-              -HivePasswordSecretName '$(mySqlPasswordSecretName)'
-              -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)'
-              -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)'
-              -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)'
-              -HiveVersion '2.3.7'
-              -HadoopVersion '2.7.4'
-              -MySqlId '$(mySqlDatabaseId)'
-        
-        # Deploy event hub 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: event_hub_001_deployment
-          displayName: Deploy event hub 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/EventHub/deploy.eventHub.json'
-            csmParametersFile: 'infra/EventHub/params.eventHub001.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy data factory 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: data_factory_001_deployment
-          displayName: Deploy data factory 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy Data Factory 002
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: data_factory_002_deployment
-          displayName: Deploy Data Factory 002
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/params.dataFactory002.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy Artifact Storage Account 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: artifact_storage_001_deployment
-          displayName: Deploy Artifact Storage Account 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/deploy.storage.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/params.storage001.json'
-            deploymentMode: 'Incremental'
-            deploymentOutputs: 'storageDetails'
-        
-        # Generate Pipeline Variables 001
-        - task: AzureCLI@2
-          name: generate_pipeline_variables_001
-          displayName: Generate Pipeline Variables 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            scriptType: pscore
-            scriptLocation: 'scriptPath'
-            scriptPath: '$(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1'
-            powerShellErrorActionPreference: 'stop'
-            addSpnToEnvironment: false
-            failOnStandardError: false
-            powerShellIgnoreLASTEXITCODE: false
-            arguments: >
-              -ArmOutputString '$(storageDetails)'
-              -MakeOutput
-        
-        # Upload file to storage account 001
-        - task: AzureFileCopy@3
-          name: upload_file_001
-          displayName: Upload file to storage account 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            sourcePath: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1'
-            additionalArgumentsForBlobCopy: |
-              '/Y'
-            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            destination: AzureBlob
-            storage: $(storageAccountName)
-            containerName: $(storageAccountContainerName)
-        
-        # Generate Password
-        - task: PowerShell@2
-          name: generate_password_003
-          displayName: Generate Password
-          enabled: true
-          continueOnError: false
-          inputs:
-            targetType: 'filePath'
-            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
-            errorActionPreference: 'stop'
-            failOnStderr: false
-            ignoreLASTEXITCODE: false
-            pwsh: true
-        
-        # Deploy SHIR 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: shir_001_deployment
-          displayName: Deploy SHIR 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/deploy.shir.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/params.shir001.json'
-            deploymentMode: 'Incremental'
-            overrideParameters: >
-              -vmssAdminPassword "$(password)"
-        
-        # Generate Password
-        - task: PowerShell@2
-          name: generate_password_004
-          displayName: Generate Password
-          enabled: true
-          continueOnError: false
-          inputs:
-            targetType: 'filePath'
-            filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
-            errorActionPreference: 'stop'
-            failOnStderr: false
-            ignoreLASTEXITCODE: false
-            pwsh: true
-        
-        # Deploy synapse 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: synapse_001_deployment
-          displayName: Deploy synapse 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/Synapse/deploy.synapse.json'
-            csmParametersFile: 'infra/Synapse/params.synapse001.json'
-            deploymentMode: 'Incremental'
-            overrideParameters: >
-              -synapseSqlAdministratorPassword "$(password)"
-
-        # Deploy Vnet Peering 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: vnet_peering_001_deployment
-          displayName: Deploy Vnet Peering 001
-          enabled: true
-          continueOnError: true
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetworkPeering/deploy.vnetPeering.json'
-            csmParametersFile: 'infra/VirtualNetworkPeering/params.vnetPeering001.json'
-            deploymentMode: 'Incremental'
