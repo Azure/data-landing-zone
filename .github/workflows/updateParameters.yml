@@ -9,8 +9,8 @@ on:
 
 env:
   GLOBAL_DNS_RESOURCE_GROUP_ID: '<my-global-dns-resource-group-resource-id>'
-  DATA_LANDING_ZONE_SUBSCRIPTION_ID: '<my-data-landing-zone-subscription-id>' # Choose ~5 characters. Will be used as a prefix for services. If not unique enough, deployment can fail
-  DATA_LANDING_ZONE_NAME: '<my-data-landing-zone-name>'
+  DATA_LANDING_ZONE_SUBSCRIPTION_ID: '<my-data-landing-zone-subscription-id>'
+  DATA_LANDING_ZONE_NAME: '<my-data-landing-zone-name>'  # Choose ~5 characters. Will be used as a prefix for services. If not unique, deployment can fail for some services.
   LOCATION: '<my-region>'
   SYNAPSE_STORAGE_ACCOUNT_NAME: '<my-synapse-storage-account-name>'
   SYNAPSE_STORAGE_ACCOUNT_FILE_SYSTEM_NAME: '<my-synapse-storage-account-file-system-name>'
