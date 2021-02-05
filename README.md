@@ -25,7 +25,7 @@ By default, all the services which comes under Data Landing Zone are enabled and
     - **Network Watcher** - TBC
 - A **management resource group**, which should be used for hosting private agents for DevOps or GitHub in order to be able to deploy code on the privately hosted services. 
     - **CI/CD Agents** 
-    - **key Vault** for storing secrets
+    - 1 **key vault** for storing secrets
 - An **integration resource group**, containing: 
     - 1 **artifact storage account**, which will contain the script for creating and deploying SHIR
     - 1 **SHIR** 
@@ -53,12 +53,12 @@ By default, all the services which comes under Data Landing Zone are enabled and
         - 1 **SQL Database**
     - 2 **Key Vaults**, to store secrets required for Azure Data Factory and  Databricks
 - A **processing domain resource group**, for storing shared processing engines. Here we will deploy:
-    - 1 **Databricks workspace** - for ingestion purposes 
-    - 1 **Data Factory** - for ingestion purposes
-    - 1 **Event Hub** - optionally, used for streaming use cases and essentially requires support for data stream push scenarios
+    - 1 **Databricks workspace**, for ingestion purposes 
+    - 1 **Data Factory**, for ingestion purposes
+    - 1 aditional **Event Hub**, used for streaming use cases and essentially requires support for data stream push scenarios
 - A **processing product resource group**, which will contain:
     - 1 **Synapse instance**
-    - 1 **Databricks workspace** - to be shared across all data product teams and can be used for ad-hoc analysis 
+    - 1 **Databricks workspace**, to be shared across all data product teams and can be used for ad-hoc analysis 
 
 
     
