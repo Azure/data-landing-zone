@@ -64,16 +64,22 @@ By default, all the services which comes under Data Landing Zone are enabled and
     
 # Getting started
 
-### 1. Prerequisites
+## 1. Prerequisites
 
 The following prerequisites are required to make this repository work:
 - Azure subscription
 - Contributor access to the Azure subscription
-
 If you don’t have an Azure subscription, create a free account before you begin. Try the [free version of Azure](https://azure.microsoft.com/en-in/free/).
 
+## 2. Create repository from a template
 
-### 2. Create repository from a template
+1. On GitHub Enterprise Server, navigate to the main page of the repository.
+2. Above the file list, click **Use this template**
+3. Use the **Owner** drop-down menu, and select the account you want to own the repository.
+4. Type a name for your repository, and an optional description.
+5. Choose a repository visibility. 
+6. Optionally, to include the directory structure and files from all branches in the template, and not just the default branch, select **Include all branches**.
+7. Click **Create repository from template**.
 
 ### 3. Setting up the required secrets
 
