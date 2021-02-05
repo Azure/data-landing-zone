@@ -1,11 +1,11 @@
-# Enterprise Scale Analytics - Data Node
+# Enterprise Scale Analytics - Data Landing Zone
 
 **General disclaimer** Please be aware that this template is in public preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue, if you come across any issues that you would like us to fix.
 
 
 # Quickstart
 
-| Data-Node |
+| Data Landing Zone |
 |:--------------|
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-node%2Fmain%2Fdocs%2Freference%2Fdeploy.dataNode.json)
 
