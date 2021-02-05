@@ -47,7 +47,9 @@ jobs:
             -DataLandingZoneName '${{ env.DATA_LANDING_ZONE_NAME }}' \
             -Location '${{ env.LOCATION }}' \
             -SynapseStorageAccountName '${{ env.SYNAPSE_STORAGE_ACCOUNT_NAME }}' \
-            -SynapseStorageAccountFileSystemName '${{ env.SYNAPSE_STORAGE_ACCOUNT_FILE_SYSTEM_NAME }}'
+            -SynapseStorageAccountFileSystemName '${{ env.SYNAPSE_STORAGE_ACCOUNT_FILE_SYSTEM_NAME }}' \
+            -HubVnetId '${{ env.HUB_VNET_ID }}' \
+            -AzureResourceManagerConnectionName '${{ env.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}'
       
       # Create Pull Request
       - name: Create Pull Request

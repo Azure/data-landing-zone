@@ -35,8 +35,13 @@ Param(
     [string]
     $SynapseStorageAccountFileSystemName,
 
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $HubVnetId,
+
     [Parameter(Mandatory=$false)]
-    [Switch]
+    [string]
     $AzureResourceManagerConnectionName
 )
 
