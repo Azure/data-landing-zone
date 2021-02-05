@@ -1,27 +1,27 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "storageAccountName": {
-            "value": "dn001workspacesa"
-        },
-        "storageAccountType": {
-            "value": "Standard_ZRS"
-        },
-        "enableHns": {
-            "value": true
-        },
-        "subnetId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
-        },
-        "privateDnsZoneIdBlob": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
-        },
-        "privateDnsZoneIdDfs": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "<my-region>"
+    },
+    "storageAccountName": {
+      "value": "<my-data-landing-zone-name>workspacesa"
+    },
+    "storageAccountType": {
+      "value": "Standard_ZRS"
+    },
+    "enableHns": {
+      "value": true
+    },
+    "subnetId": {
+      "value": "/subscriptions/<my-data-landing-zone-subscription-id>/resourceGroups/<my-data-landing-zone-name>-network/providers/Microsoft.Network/virtualNetworks/<my-data-landing-zone-name>-vnet/subnets/<my-data-landing-zone-name>-privatelink-subnet"
+    },
+    "privateDnsZoneIdBlob": {
+      "value": "<my-global-dns-resource-group-resource-id>/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
+    },
+    "privateDnsZoneIdDfs": {
+      "value": "<my-global-dns-resource-group-resource-id>/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
     }
+  }
 }
