@@ -1,6 +1,6 @@
 # Enterprise Scale Analytics - Data Landing Zone
 
-**General disclaimer** Please be aware that this template is in public preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue, if you come across any issues that you would like us to fix.
+> **General disclaimer** Please be aware that this template is in public preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue, if you come across any issues that you would like us to fix.
 
 
 # Quickstart
@@ -22,7 +22,7 @@ By default, all the services which comes under Data Landing Zone are enabled and
     - **Vnet**, which is peered to the Vnet of the Data Management Subscription as well as to the Vnet of the Azure Platform Vnet
     - **NSGs** for traffic restriction purposes
     - **Route Tables** in order to defined next hopes within the network topology
-    - **Network Watcher** - TBC
+    - **Network Watcher** - TBC @marvinbuss - are we going to have this here or elsewhere?
 - A **management resource group**, which should be used for hosting private agents for DevOps or GitHub in order to be able to deploy code on the privately hosted services. 
     - **CI/CD Agents** 
     - 1 **key vault** for storing secrets
@@ -72,7 +72,7 @@ The following prerequisites are required to make this repository work:
 If you don’t have an Azure subscription, create a free account before you begin. Try the [free version of Azure](https://azure.microsoft.com/en-in/free/).
 
 ## 2. Create repository from a template
-
+TODO - add screenshots
 1. On GitHub Enterprise Server, navigate to the main page of the repository.
 2. Above the file list, click **Use this template**
 3. Use the **Owner** drop-down menu, and select the account you want to own the repository.
@@ -81,8 +81,40 @@ If you don’t have an Azure subscription, create a free account before you begi
 6. Optionally, to include the directory structure and files from all branches in the template, and not just the default branch, select **Include all branches**.
 7. Click **Create repository from template**.
 
-### 3. Setting up the required secrets
+## 3. Setting up the required secrets
 
+A service principal needs to be generated for authentication and getting access to your Azure subscription. We suggest adding a service principal with contributor rights to a new resource group or to the one where you have deployed your existing Azure Machine Learning workspace. Just go to the Azure Portal to find the details of your resource group or workspace. Then start the Cloud CLI or install the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) on your computer and execute the following command to generate the required credentials:
+
+```sh
+# Replace {service-principal-name}, {subscription-id} and {resource-group} with your 
+# Azure subscription id and resource group name and any name for your service principle
+az ad sp create-for-rbac --name {service-principal-name} \
+                         --role contributor \
+                         --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group} \
+                         --sdk-auth
+```
+
+This will generate the following JSON output:
+
+```sh
+{
+  "clientId": "<GUID>",
+  "clientSecret": "<GUID>",
+  "subscriptionId": "<GUID>",
+  "tenantId": "<GUID>",
+  (...)
+}
+```
+
+Add this JSON output as [a secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) with the name `AZURE_CREDENTIALS` in your GitHub repository:
+
+<p align="center">
+  <img src="docs/media/.png" alt="GitHub Template repository" width="700"/>
+</p>
+
+To do so, click on the Settings tab in your repository, then click on Secrets and finally add the new secret with the name `AZURE_CREDENTIALS` to your repository.
+
+Please follow [this link](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) for more details. 
 # Parameter Update Process
 
 ### Process
@@ -91,9 +123,9 @@ If you don’t have an Azure subscription, create a free account before you begi
 
 # Service Principals
 
-### Setup for GH Workflows
+## Setup for GH Workflows
 
-### Setup for ADO Workflow
+## Setup for ADO Workflow
 
 ### Access Requierements
 
