@@ -1,15 +1,15 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "destinationDataFactoryId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-processing-domain/providers/Microsoft.DataFactory/factories/dn001-datafactory001"
-        },
-        "sourceDataFactoryId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-integration/providers/Microsoft.DataFactory/factories/dn001-datafactory002"
-        },
-        "sourceDataFactoryShirId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-integration/providers/Microsoft.DataFactory/factories/dn001-datafactory002/integrationruntimes/dataNodeSelfHostedIntegrationRuntimedn001Shir001"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "destinationDataFactoryId": {
+      "value": "/subscriptions/<my-data-landing-zone-subscription-id>/resourceGroups/<my-data-landing-zone-name>-processing-domain/providers/Microsoft.DataFactory/factories/<my-data-landing-zone-name>-datafactory001"
+    },
+    "sourceDataFactoryId": {
+      "value": "/subscriptions/<my-data-landing-zone-subscription-id>/resourceGroups/<my-data-landing-zone-name>-integration/providers/Microsoft.DataFactory/factories/<my-data-landing-zone-name>-datafactory002"
+    },
+    "sourceDataFactoryShirId": {
+      "value": "/subscriptions/<my-data-landing-zone-subscription-id>/resourceGroups/<my-data-landing-zone-name>-integration/providers/Microsoft.DataFactory/factories/<my-data-landing-zone-name>-datafactory002/integrationruntimes/dataNodeSelfHostedIntegrationRuntime<my-data-landing-zone-name>Shir001"
     }
+  }
 }
