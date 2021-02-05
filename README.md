@@ -22,7 +22,7 @@ By default, all the services which comes under Data Landing Zone are enabled and
     - **Vnet**, which is peered to the Vnet of the Data Management Subscription as well as to the Vnet of the Azure Platform Vnet
     - **NSGs** for traffic restriction purposes
     - **Route Tables** in order to defined next hopes within the network topology
-    - **Network Watcher** - TBC @marvinbuss - are we going to have this here or elsewhere?
+    - **Network Watcher** 
 - A **management resource group**, which should be used for hosting private agents for DevOps or GitHub in order to be able to deploy code on the privately hosted services. 
     - **CI/CD Agents** 
     - 1 **key vault** for storing secrets
@@ -83,7 +83,7 @@ TODO - add screenshots
 
 ## 3. Setting up the required secrets
 
-A service principal needs to be generated for authentication and getting access to your Azure subscription. We suggest adding a service principal with contributor rights to a new resource group or to the one where you have deployed your existing Azure Machine Learning workspace. Just go to the Azure Portal to find the details of your resource group or workspace. Then start the Cloud CLI or install the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) on your computer and execute the following command to generate the required credentials:
+A service principal needs to be generated for authentication and getting access to your Azure subscription. Just go to the Azure Portal to find the details of your resource group or workspace. Then start the Cloud CLI or install the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) on your computer and execute the following command to generate the required credentials:
 
 ```sh
 # Replace {service-principal-name}, {subscription-id} and {resource-group} with your 
