@@ -17,8 +17,10 @@ A Data Landing Zone has several layers to enable agility to service the Data Dom
 By default, all the services which comes under Data Landing Zone are enabled and you must explicitly disable them if you don't want it to be deployed. 
 
 <p align="center">
-  <img src="./docs/media/DataNode.png" alt="Data Landing Zone" width="500"/>
+  <img src="./docs/media/DataNode.png" alt="Data Landing Zone" width="500"/> 
+  
 </p>
+
 
  - [Azure Virtual Network](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview)
  - [Network Security Groups](https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview)
@@ -120,19 +122,19 @@ env:
 ### Creating the Azure Resource Manager Connection
 In order to allow Azure DevOps Server to be integrated with Azure services, you will need to create an Azure Service Principal that will allow the deployments. The name of this connection will be parsed in the environment variables inside the workflow deployment. 
 
->  Note: Please make sure you have the right priviliges to create a SP inside your subscription.
+>  Note: Please make sure you have the right priviliges to create a Service Principle inside your subscription.
 
  1. On your Azure DevOps Project, navigate to **Project Settings** and Select **Service Connections**. 
  2. From the **New service connection** dropdown, select **Azure Resource Manager** (automatic or manual)
     <p align="center">
-    <img src="docs/media/ARMConnectionDevOps.png" alt="GitHub Template repository" width="500"/>
+    <img src="docs/media/ARMConnectionDevOps.png" alt="ARM Connection" width="600"/>
     </p>
 
 
  3. Set the **Connection name** to something descriptive. You will need to create a service principal in Azure in the next task to fill out the remaining fields. For this, please follow the instructions from *3. Setting up the required secrets*
  4. Now that you have completed the requried fields, click **Verify connection** to make sure the values work as expected. Click **OK** when verified. You will now be able to reference this connection from release pipeline tasks and parse the name in the env variable **AZURE_RESOURCE_MANAGER_CONNECTION_NAME**
     <p align="center">
-     <img src="docs/media/ConnectionDevOps.png" alt="GitHub Template repository" width="400"/>
+     <img src="docs/media/ConnectionDevOps.png" alt="Connection DevOps" width="400"/>
     </p>
 
 
@@ -169,28 +171,28 @@ In case you want to deploy the templates through ADO, please follow the below st
 2. Configuring Azure Pipelines project
     1. Now you will need to set up your Azure Pipelines project. Create (or select in case you have already created) the Azure DevOps **organization** you would like to perform these builds under, as well as the Azure DevOps **project** from that organization you would like to use.  Click **Continue**.
      <p align="center">
-    <img src="docs/media/CreateProjectDevOps.png" alt="GitHub Template repository" width="500"/>
+    <img src="docs/media/CreateProjectDevOps.png" alt="Create Project in DevOps" width="600"/>
     </p>
 
     2.  Select **Pipelines** and click on **Create** button in order to create a new pipeline.
     <p align="center">
-    <img src="docs/media/CreatePipelineDevOps.png" alt="GitHub Template repository" width="500"/>
+    <img src="docs/media/CreatePipelineDevOps.png" alt="Create Pipeline in DevOps" width="600"/>
     </p>
  
     3. Choose where your code is - in this scenario, you have your code in the forked GitHub Repo, therefor, you will choose GitHub using Yaml.
     <p align="center">
-    <img src="docs/media/CodeDevOps.png" alt="GitHub Template repository" width="500"/>
+    <img src="docs/media/CodeDevOps.png" alt="Choose code source in DevOps Pipeline" width="600"/>
     </p>
     
     4. Once you choose the source, search after your forked repository **data-node** inside **My Repositories** and select it. 
       <p align="center">
-    <img src="docs/media/SelectRepositoryDevOps.png" alt="GitHub Template repository" width="500"/>
+    <img src="docs/media/SelectRepositoryDevOps.png" alt="Select Repository" width="600"/>
     </p>
     
     5. In case you have not installed Azure Pipelines in the prior steps, you will be prompted a window for installing it now and allowing to access the app. 
     6. After connected to the forked repo, you will need to configure your pipeline. You can either start a new pipeline which you will work on or you can use an existing yaml file. For this project, you will use the existing yaml file which exists in your forked repo. Now, you just need to choose the **branch** on which you will work on and select the path to the ADO workflow file. 
     <p align="center">
-        <img src="docs/media/ConfigurePipelineDevOps.png" alt="GitHub Template repository" width="300"/>
+        <img src="docs/media/ConfigurePipelineDevOps.png" alt="Configure Pipeline in DevOps" width="600"/>
     </p>
     
     7. Click **run** to save the pipeline and queue a new build. It will take some minutes for the pipeline to complete. During this time it will configure the build agent, pull in the source from GitHub, and build it according to the pipeline definition.
