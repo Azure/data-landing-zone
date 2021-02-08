@@ -54,12 +54,12 @@ TODO - add screenshots
 2. Above the file list, click **Use this template**
 
 <p align="center">
-  <img src="docs/media/UseThisTemplateGH.png" alt="GitHub Template repository" width="600"/>
+  <img src="docs/media/UseThisTemplateGH.png" alt="GitHub Template repository" width="700"/>
 </p>
 
 3. Use the **Owner** drop-down menu, and select the account you want to own the repository.
 <p align="center">
-  <img src="docs/media/CreateRepoGH.png" alt="GitHub Template repository" width="700"/>
+  <img src="docs/media/CreateRepoGH.png" alt="Create Repository from Template" width="700"/>
 </p>
 
 4. Type a name for your repository, and an optional description.
@@ -100,7 +100,7 @@ This will generate the following JSON output:
 Add this JSON output as [a secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) with the name `AZURE_CREDENTIALS` in your GitHub repository:
 
 <p align="center">
-  <img src="docs/media/AzureCredentialsGH.png" alt="GitHub Template repository" width="600"/>
+  <img src="docs/media/AzureCredentialsGH.png" alt="GitHub Secrets" width="600"/>
 </p>
 
 To do so, click on the Settings tab in your repository, then click on Secrets and finally add the new secret with the name `AZURE_CREDENTIALS` to your repository.
@@ -108,7 +108,7 @@ To do so, click on the Settings tab in your repository, then click on Secrets an
 Please follow [this link](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) for more details. 
 # Parameter Update Process
 
-In order to connect GitHub actions to the desired Azure account and deploy the resources with your preffered inputs, you'll need to modify the parameters in the ARM parameter files. As updating each parameter file manually is a time consuming process, which could lead as well to undesired user errors, you can simplify the process by running the updateParameters.yml file. <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml"` file</a>. Just click on the link and edit the following environment variables: 
+In order to connect GitHub actions to the desired Azure account and deploy the resources with your preffered inputs, you'll need to modify the parameters in the ARM parameter files. As updating each parameter file manually is a time consuming process, which could lead as well to undesired user errors, you can simplify the process by running the <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml"` file</a>. Just click on the link and edit the following environment variables: 
 
 
 ```sh
@@ -142,7 +142,7 @@ To allow Azure DevOps Server to be integrated with Azure services, you will need
  1. On your Azure DevOps Project, navigate to **Project Settings** and Select **Service Connections**. 
  2. From the **New service connection** dropdown, select **Azure Resource Manager** (automatic or manual)
     <p align="center">
-    <img src="docs/media/ARMConnectionDevOps.png" alt="ARM Connection" width="600"/>
+    <img src="docs/media/ARMConnectionDevOps.png" alt="ARM Connection" width="700"/>
     </p>
 
 
@@ -172,51 +172,53 @@ In case you want to deploy the templates through ADO, please follow the below st
 * An Azure DevOps account from https://dev.azure.com.
 * A GitHub account from https://github.com.
 
-1. Forking the GitHub repo 
-    1. If you are not signed in to GitHub, sign in now.
-    2. Choose the repository that you wish to connect to Azure DevOps. In case you do not have any repositories forked, please follow the instructions from *2. Create repository from a template*
-    4. Click **Marketplace** from the top navigation to visit it and search for **Azure Pipelines**. The Azure Pipelines offering is free for anyone to use for public repositories, and free for a single build queue if you’re using a private repository. 
+**1. Forking the GitHub repo** 
+
+1. If you are not signed in to GitHub, sign in now.
+2. Choose the repository that you wish to connect to Azure DevOps. In case you do not have any repositories forked, please follow the instructions from *2. Create repository from a template*
+3. Click **Marketplace** from the top navigation to visit it and search for **Azure Pipelines**. The Azure Pipelines offering is free for anyone to use for public repositories, and free for a single build queue if you’re using a private repository. 
         <p align="center">
-         <img src="docs/media/AzurePipelinesGH.png" alt="Install Azure Pipelines on GitHub" width="600"/>
+         <img src="docs/media/AzurePipelinesGH.png" alt="Install Azure Pipelines on GitHub" width="700"/>
          </p>
 
-    5. Select it and click on **Install it for free**
+4. Select it and click on **Install it for free**
         <p align="center">
         <img src="docs/media/InstallButtonGH.png" alt="GitHub Template repository" width="500"/>
         </p>
-    6. If you have multiple **GitHub** accounts, select the one you forked this repository to from the **Switch billing account** dropdown. 
-    7. You may be prompted to confirm your GitHub password to continue. 
-    8. You may be prompted to log in to your Microsoft account. Make sure you are loged into the one associated with your Azure DevOps account.
+5. If you have multiple **GitHub** accounts, select the one you forked this repository to from the **Switch billing account** dropdown. 
+6. You may be prompted to confirm your GitHub password to continue. 
+7. You may be prompted to log in to your Microsoft account. Make sure you are loged into the one associated with your Azure DevOps account.
 
 
-2. Configuring Azure Pipelines project
-    1. Now you will need to set up your Azure Pipelines project. Create (or select in case you have already created) the Azure DevOps **organization** you would like to perform these builds under, as well as the Azure DevOps **project** from that organization you would like to use.  Click **Continue**.
+**2. Configuring Azure Pipelines project**
+
+1. Now you will need to set up your Azure Pipelines project. Create (or select in case you have already created) the Azure DevOps **organization** you would like to perform these builds under, as well as the Azure DevOps **project** from that organization you would like to use.  Click **Continue**.
      <p align="center">
     <img src="docs/media/CreateProjectDevOps.png" alt="Create Project in DevOps" width="500"/>
     </p>
 
-    2.  Select **Pipelines** and click on **Create** button in order to create a new pipeline.
+2.  Select **Pipelines** and click on **Create** button in order to create a new pipeline.
     <p align="center">
-    <img src="docs/media/CreatePipelineDevOps.png" alt="Create Pipeline in DevOps" width="600"/>
+    <img src="docs/media/CreatePipelineDevOps.png" alt="Create Pipeline in DevOps" width="700"/>
     </p>
  
-    3. Choose where your code is - in this scenario, you have your code in the forked GitHub Repo, therefor, you will choose GitHub using Yaml.
+3. Choose where your code is - in this scenario, you have your code in the forked GitHub Repo, therefor, you will choose GitHub using Yaml.
     <p align="center">
-    <img src="docs/media/CodeDevOps.png" alt="Choose code source in DevOps Pipeline" width="600"/>
+    <img src="docs/media/CodeDevOps.png" alt="Choose code source in DevOps Pipeline" width="700"/>
     </p>
     
-    4. Once you choose the source, search after your forked repository **data-node** inside **My Repositories** and select it. 
+4. Once you choose the source, search after your forked repository **data-node** inside **My Repositories** and select it. 
       <p align="center">
     <img src="docs/media/SelectRepositoryDevOps.png" alt="Select Repository" width="600"/>
     </p>
     
-    5. In case you have not installed Azure Pipelines in the prior steps, you will be prompted a window for installing it now and allowing to access the app. 
-    6. After connected to the forked repo, you will need to configure your pipeline. You can either start a new pipeline which you will work on or you can use an existing yaml file. For this project, you will use the existing yaml file which exists in your forked repo. Now, you just need to choose the **branch** on which you will work on and select the path to the ADO workflow file. 
+5. In case you have not installed Azure Pipelines in the prior steps, you will be prompted a window for installing it now and allowing to access the app. 
+6. After connected to the forked repo, you will need to configure your pipeline. You can either start a new pipeline which you will work on or you can use an existing yaml file. For this project, you will use the existing yaml file which exists in your forked repo. Now, you just need to choose the **branch** on which you will work on and select the path to the ADO workflow file. 
     <p align="center">
         <img src="docs/media/ConfigurePipelineDevOps.png" alt="Configure Pipeline in DevOps" width="600"/>
     </p>
     
-    7. Click **run** to save the pipeline and queue a new build. It will take some minutes for the pipeline to complete. During this time it will configure the build agent, pull in the source from GitHub, and build it according to the pipeline definition.
+7. Click **run** to save the pipeline and queue a new build. It will take some minutes for the pipeline to complete. During this time it will configure the build agent, pull in the source from GitHub, and build it according to the pipeline definition.
 
 
 # Contributing
