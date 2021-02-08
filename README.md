@@ -16,7 +16,9 @@ A Data Landing Zone has several layers to enable agility to service the Data Dom
 
 By default, all the services which comes under Data Landing Zone are enabled and you must explicitly disable them if you don't want it to be deployed. 
 
-![Data Landing Zone](./media/DataNode.png)
+<p align="center">
+  <img src="./docs/media/DataNode.png" alt="Data Landing Zone" width="600"/>
+</p>
 
  - A Data Landing Zone has a **network resource group**, which includes services to enable connectivity to on-prem, other clouds and other Azure services. These services include: 
     - **Vnet**, which is peered to the Vnet of the Data Management Subscription as well as to the Vnet of the Azure Platform Vnet
