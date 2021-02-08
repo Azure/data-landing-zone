@@ -42,8 +42,9 @@ By default, all the services which comes under Data Landing Zone are enabled and
 
 The following prerequisites are required to make this repository work:
 - At least 1 Azure subscription used as Data Landing Zone which is connected to the Data Management Subscription 
-- Contributor access to the Azure subscription
-If you don’t have an Azure subscription, create a free account before you begin. Try the [free version of Azure](https://azure.microsoft.com/en-in/free/).
+- Contributor access to the Azure subscription.
+
+!!If you don’t have an Azure subscription, create a free account before you begin. Try the [free version of Azure](https://azure.microsoft.com/en-in/free/).
 
 ## 2. Create repository from a template
 TODO - add screenshots
@@ -123,13 +124,16 @@ In order to allow Azure DevOps Server to be integrated with Azure services, you 
 
  1. On your Azure DevOps Project, navigate to **Project Settings** and Select **Service Connections**. 
  2. From the **New service connection** dropdown, select **Azure Resource Manager** (automatic or manual)
- ![alt](./docs/media/ARMConnectionDevOps.png)
+    <p align="center">
+    <img src="docs/media/ARMConnectionDevOps.png" alt="GitHub Template repository" width="500"/>
+    </p>
+
 
  3. Set the **Connection name** to something descriptive. You will need to create a service principal in Azure in the next task to fill out the remaining fields. For this, please follow the instructions from *3. Setting up the required secrets*
  4. Now that you have completed the requried fields, click **Verify connection** to make sure the values work as expected. Click **OK** when verified. You will now be able to reference this connection from release pipeline tasks and parse the name in the env variable **AZURE_RESOURCE_MANAGER_CONNECTION_NAME**
-<p align="center">
-  <img src="docs/media/ConnectionDevOps.png" alt="GitHub Template repository" width="300"/>
-</p>
+    <p align="center">
+     <img src="docs/media/ConnectionDevOps.png" alt="GitHub Template repository" width="400"/>
+    </p>
 
 
 
@@ -165,22 +169,22 @@ In case you want to deploy the templates through ADO, please follow the below st
 2. Configuring Azure Pipelines project
     1. Now you will need to set up your Azure Pipelines project. Create (or select in case you have already created) the Azure DevOps **organization** you would like to perform these builds under, as well as the Azure DevOps **project** from that organization you would like to use.  Click **Continue**.
      <p align="center">
-    <img src="docs/media/CreateProjectDevOps.png" alt="GitHub Template repository" width="300"/>
+    <img src="docs/media/CreateProjectDevOps.png" alt="GitHub Template repository" width="500"/>
     </p>
 
     2.  Select **Pipelines** and click on **Create** button in order to create a new pipeline.
     <p align="center">
-    <img src="docs/media/CreatePipelineDevOps.png" alt="GitHub Template repository" width="300"/>
+    <img src="docs/media/CreatePipelineDevOps.png" alt="GitHub Template repository" width="500"/>
     </p>
  
     3. Choose where your code is - in this scenario, you have your code in the forked GitHub Repo, therefor, you will choose GitHub using Yaml.
     <p align="center">
-    <img src="docs/media/CodeDevOps.png" alt="GitHub Template repository" width="300"/>
+    <img src="docs/media/CodeDevOps.png" alt="GitHub Template repository" width="500"/>
     </p>
     
     4. Once you choose the source, search after your forked repository **data-node** inside **My Repositories** and select it. 
       <p align="center">
-    <img src="docs/media/SelectRepositoryDevOps.png" alt="GitHub Template repository" width="300"/>
+    <img src="docs/media/SelectRepositoryDevOps.png" alt="GitHub Template repository" width="500"/>
     </p>
     
     5. In case you have not installed Azure Pipelines in the prior steps, you will be prompted a window for installing it now and allowing to access the app. 
