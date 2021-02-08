@@ -171,7 +171,7 @@ In case you want to deploy the templates through ADO, please follow the below st
 2. Configuring Azure Pipelines project
     1. Now you will need to set up your Azure Pipelines project. Create (or select in case you have already created) the Azure DevOps **organization** you would like to perform these builds under, as well as the Azure DevOps **project** from that organization you would like to use.  Click **Continue**.
      <p align="center">
-    <img src="docs/media/CreateProjectDevOps.png" alt="Create Project in DevOps" width="600"/>
+    <img src="docs/media/CreateProjectDevOps.png" alt="Create Project in DevOps" width="500"/>
     </p>
 
     2.  Select **Pipelines** and click on **Create** button in order to create a new pipeline.
