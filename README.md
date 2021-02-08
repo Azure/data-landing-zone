@@ -16,7 +16,7 @@ A Data Landing Zone has several layers to enable agility to service the Data Dom
 
 By default, all the services which comes under Data Landing Zone are enabled and you must explicitly disable them if you don't want it to be deployed. 
 
-![Data Landing Zone](./media/datalandingzone.png)
+![Data Landing Zone](./media/DataNode.png)
 
  - [Azure Virtual Network](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview)
  - [Network Security Groups](https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview)
