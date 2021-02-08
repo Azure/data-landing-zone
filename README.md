@@ -39,7 +39,7 @@ By default, all the services which comes under Data Landing Zone are enabled and
 ## 1. Prerequisites
 
 The following prerequisites are required to make this repository work:
-- At least 1 Azure subscription used as Data Landing Zone which is connected to the Data Management Subscription
+- At least 1 Azure subscription used as Data Landing Zone which is connected to the Data Management Subscription 
 - Contributor access to the Azure subscription
 If you don’t have an Azure subscription, create a free account before you begin. Try the [free version of Azure](https://azure.microsoft.com/en-in/free/).
 
@@ -89,11 +89,37 @@ To do so, click on the Settings tab in your repository, then click on Secrets an
 Please follow [this link](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) for more details. 
 # Parameter Update Process
 
-### Process
+In order to connect GitHub actions to the desired Azure account and deploy the resources with your preffered inputs, you'll need to modify the parameters in the ARM parameter files. As updating each parameter file manually is a time consuming process, which could lead as well to undesired user errors, you can simplify the process by running the updateParameters.yml file. <a href="/.github/.workflows/updateParameters.yml">`/.github/.workflows/updateParameters.yml"` file</a>. Just click on the link and edit the following environment variables: 
 
-### What do parameters mean
+```sh
+env:
+  GLOBAL_DNS_RESOURCE_GROUP_ID: '<my-global-dns-resource-group-resource-id>'
+  DATA_LANDING_ZONE_SUBSCRIPTION_ID: '<my-data-landing-zone-subscription-id>'
+  DATA_LANDING_ZONE_NAME: '<my-data-landing-zone-name>'  # Choose ~5 characters. Will be used as a prefix for services. If not unique, deployment can fail for some services.
+  LOCATION: '<my-region>'
+  SYNAPSE_STORAGE_ACCOUNT_NAME: '<my-synapse-storage-account-name>'
+  SYNAPSE_STORAGE_ACCOUNT_FILE_SYSTEM_NAME: '<my-synapse-storage-account-file-system-name>'
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '<my-resource-manager-connection-name>'
+  HUB_VNET_ID: '<my-hub-vnet-id>'
+```
 
-# Service Principals
+| Parameter | Description 
+|:-------------------------|:-------------|:-------------|------|
+| GLOBAL_DNS_RESOURCE_GROUP_ID | The global DNS Resource group resource ID which is inside the Data Management Subscription|
+| DATA_LANDING_ZONE_SUBSCRIPTION_ID | The subscription ID of the Data Landing Zone where all the resources will be deployed
+| DATA_LANDING_ZONE_NAME | The name of your Data Landing Zone 
+| LOCATION | The region where you want the resources to be deployed
+| SYNAPSE_STORAGE_ACCOUNT_NAME | The Synapse Storage Account name 
+| SYNAPSE_STORAGE_ACCOUNT_FILE_SYSTEM_NAME | The Synapse Storage Account File System name
+| AZURE_RESOURCE_MANAGER_CONNECTION_NAME | The Resource Manager Connection name. More details on how to create the connection name can be found [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) 
+| HUB_VNET_ID | The VNet ID from the Data Management Subscription that will be peered with the new VNet deployed inside the Data Landing Zone
+
+
+Once you save your changes to the file, one last step to complete. Please Update the GitHub Workflow environment variables in <a href="/.github/workflows/dataNodeDeployment.yml">`/.github/workflows/dataNodeDeployment.yml`</a>. 
+After completing, the workflow will trigger and run the <a href="/configs/UpdateParameters.ps1">`/configs/UpdateParameters.ps1"` file</a>, which is updating all the variables used in the ARM Templates and you will be ready to deploy the services. 
+
+
+
 
 ## Setup for GH Workflows
 
