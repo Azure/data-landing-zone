@@ -18,7 +18,6 @@ By default, all the services which comes under Data Landing Zone are enabled and
 
 <p align="center">
   <img src="./docs/media/DataNode.png" alt="Data Landing Zone" width="500"/> 
-  
 </p>
 
 
@@ -42,11 +41,13 @@ By default, all the services which comes under Data Landing Zone are enabled and
 
 ## 1. Prerequisites
 
+@marvinbuss @AnalyticJeremy will need to see how we formulate here. For testing purposes as discussed we can use 1 subscription for both Data management and landing zone deployment. How do you think we can phrase this in the prerquisites? 
+
 The following prerequisites are required to make this repository work:
 - At least 1 Azure subscription used as Data Landing Zone which is connected to the Data Management Subscription 
 - Contributor access to the Azure subscription.
 
-!!If you don’t have an Azure subscription, create a free account before you begin. Try the [free version of Azure](https://azure.microsoft.com/en-in/free/).
+If you don’t have an Azure subscription, create a free account before you begin. Try the [free version of Azure](https://azure.microsoft.com/en-in/free/).
 
 ## 2. Create repository from a template
 TODO - add screenshots
@@ -60,7 +61,7 @@ TODO - add screenshots
 
 ## 3. Setting up the required secrets
 
-A service principal needs to be generated for authentication and getting access to your Azure subscription. Just go to the Azure Portal to find the details of your resource group or workspace. Then start the Cloud CLI or install the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) on your computer and execute the following command to generate the required credentials:
+A service principal needs to be generated for authentication and getting access to your Azure subscription. Just go to the Azure Portal to find the details of your resource group or workspace. Then start your preffered CLI and execute the following commands to generate the required credentials:
 
 **Azure CLI**
 ```sh
