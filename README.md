@@ -116,6 +116,16 @@ env:
 | AZURE_RESOURCE_MANAGER_CONNECTION_NAME | The Resource Manager Connection name. More details on how to create the connection name can be found [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) 
 | HUB_VNET_ID | The VNet ID from the Data Management Subscription that will be peered with the new VNet deployed inside the Data Landing Zone
 
+### Creating the Azure Resource Manager Connection
+In order to allow Azure DevOps Server to be integrated with Azure services, you will need to create an Azure Service Principal that will allow the deployments. The name of this connection will be parsed in the environment variables inside the workflow deployment. 
+
+>  Note: Please make sure you have the right priviliges to create a SP inside your subscription.
+
+ 1. On your Azure DevOps Project, navigate to **Project Settings** and Select **Service Connections**. 
+ 2. From the **New service connection** dropdown, select **Azure Resource Manager** (automatic or manual)
+ 3. Set the **Connection name** to something descriptive. You will need to create a service principal in Azure in the next task to fill out the remaining fields. For this, please follow the instructions from *3. Setting up the required secrets*
+ 4. Now that you have completed the requried fields, click **Verify connection** to make sure the values work as expected. Click **OK** when verified. You will now be able to reference this connection from release pipeline tasks and parse the name in the env variable **AZURE_RESOURCE_MANAGER_CONNECTION_NAME**
+
 
 Once you save your changes to the file, one last step to complete. Please Update the GitHub Workflow environment variables in <a href="/.github/workflows/dataNodeDeployment.yml">`/.github/workflows/dataNodeDeployment.yml`</a>. 
 After completing, the workflow will trigger and run the <a href="/configs/UpdateParameters.ps1">`/configs/UpdateParameters.ps1"` file</a>, which is updating all the variables used in the ARM Templates and you will be ready to deploy the services. 
@@ -123,13 +133,38 @@ After completing, the workflow will trigger and run the <a href="/configs/Update
 
 
 
-## Setup for GH Workflows
+<!-- ## Setup for GH Workflows
 
 ## Setup for ADO Workflow
 
-### Access Requierements
+### Access Requierements -->
 
-# Connecting ADO to GitHub to deploy thorugh ADO
+# Connecting ADO to GitHub to deploy through ADO
+In case you want to deploy the templates through ADO, please follow the below steps on how to integrate ADO with GitHub using Azure DevOps pipeline. 
+### Prerequisites
+* An Azure DevOps account from https://dev.azure.com.
+* A GitHub account from https://github.com.
+
+1. Forking the GitHub repo 
+    1. If you are not signed in to GitHub, sign in now.
+    2. Click **Fork** to fork the repository to your own account.
+    3. If prompted, select the account to fork the repository into.
+    4. Click **Marketplace** from the top navigation to visit it and search for **Azure Pipelines**. The Azure Pipelines offering is free for anyone to use for public repositories, and free for a single build queue if you’re using a private repository. 
+    5. Select it and click on **Install it for free**
+    6. If you have multiple **GitHub** accounts, select the one you forked this repository to from the **Switch billing account** dropdown. 
+    7. You may be prompted to confirm your GitHub password to continue. 
+    8. You may be prompted to log in to your Microsoft account. Make sure you are looged into the one associated with your Azure DevOps account.
+
+
+2. Configuring Azure Pipelines project
+    1. Now you will need to set up your Azure Pipelines project. Create (or select in case you have already created) the Azure DevOps **organization** you would like to perform these builds under, as well as the Azure DevOps **project** from that organization you would like to use.  Click **Continue**.
+    2.  Select **Pipelines** and click on **Create** button in order to create a new pipeline.
+    3. Choose where your code is - in this scenario, you have your code in the forked GitHub Repo, therefor, you will choose GitHub using Yaml.
+    4. Once you choose the source, search after your forked repository **data-node** inside **My Repositories** and select it. 
+    5. In case you have not installed Azure Pipelines in the prior steps, you will be prompted a window for installing it now and allowing to access the app. 
+    6. After connected to the forked repo, you will need to configure your pipeline. You can either start a new pipeline which you will work on or you can use an existing yaml file. For this project, you will use the existing yaml file which exists in your forked repo. Now, you just need to choose the **branch** on which you will work on and select the path to the ADO workflow file. 
+    7. Click **run** to save the pipeline and queue a new build. It will take some minutes for the pipeline to complete. During this time it will configure the build agent, pull in the source from GitHub, and build it according to the pipeline definition.
+
 
 # Contributing
 
