@@ -106,7 +106,7 @@ env:
 ```
 
 | Parameter | Description 
-|:-------------------------|:-------------|:-------------|------|
+|:-------------------------|:-------------|
 | GLOBAL_DNS_RESOURCE_GROUP_ID | The global DNS Resource group resource ID which is inside the Data Management Subscription|
 | DATA_LANDING_ZONE_SUBSCRIPTION_ID | The subscription ID of the Data Landing Zone where all the resources will be deployed
 | DATA_LANDING_ZONE_NAME | The name of your Data Landing Zone 
