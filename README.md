@@ -49,7 +49,7 @@ The following prerequisites are required to make this repository work:
 If you don’t have an Azure subscription, create a free account before you begin. Try the [free version of Azure](https://azure.microsoft.com/en-in/free/).
 
 ## 2. Create repository from a template
-TODO - add screenshots
+
 1. On GitHub, navigate to the main page of the repository.
 2. Above the file list, click **Use this template**
 
