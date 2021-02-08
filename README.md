@@ -108,7 +108,8 @@ To do so, click on the Settings tab in your repository, then click on Secrets an
 Please follow [this link](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) for more details. 
 # Parameter Update Process
 
-In order to connect GitHub actions to the desired Azure account and deploy the resources with your preffered inputs, you'll need to modify the parameters in the ARM parameter files. As updating each parameter file manually is a time consuming process, which could lead as well to undesired user errors, you can simplify the process by running the updateParameters.yml file. <a href="/.github/.workflows/updateParameters.yml">`"/.github/.workflows/updateParameters.yml"` file</a>. Just click on the link and edit the following environment variables: 
+In order to connect GitHub actions to the desired Azure account and deploy the resources with your preffered inputs, you'll need to modify the parameters in the ARM parameter files. As updating each parameter file manually is a time consuming process, which could lead as well to undesired user errors, you can simplify the process by running the updateParameters.yml file. <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml"` file</a>. Just click on the link and edit the following environment variables: 
+
 
 ```sh
 env:
@@ -153,7 +154,7 @@ To allow Azure DevOps Server to be integrated with Azure services, you will need
 
 
 
-Once you save your changes to the file, one last step to complete. Please update the GitHub Workflow environment variables in <a href="/.github/workflows/dataNodeDeployment.yml">`/.github/workflows/dataNodeDeployment.yml`</a>. 
+Once you save your changes to the file, one last step to complete. Please update the GitHub Workflow environment variables in <a href="/.github/workflows/dataNodeDeployment.yml">`/.github/workflows/dataNodeDeployment.yml"` file</a>. 
 After completing, just commit and make a Pull Request so the workflow will trigger and run the <a href="/configs/UpdateParameters.ps1">`/configs/UpdateParameters.ps1"` file</a>, which is updating all the variables used in the ARM Templates and you will be ready to deploy the services. 
 
 
