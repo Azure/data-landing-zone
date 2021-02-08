@@ -45,15 +45,24 @@ By default, all the services which comes under Data Landing Zone are enabled and
 
 The following prerequisites are required to make this repository work:
 - At least 1 Azure subscription used as Data Landing Zone which is connected to the Data Management Subscription 
-- Contributor access to the Azure subscription.
+- Contributor access to the Azure subscription
 
 If you don’t have an Azure subscription, create a free account before you begin. Try the [free version of Azure](https://azure.microsoft.com/en-in/free/).
 
 ## 2. Create repository from a template
 TODO - add screenshots
-1. On GitHub Enterprise Server, navigate to the main page of the repository.
+1. On GitHub, navigate to the main page of the repository.
 2. Above the file list, click **Use this template**
+
+<p align="center">
+  <img src="docs/media/UseThisTemplateGH.png" alt="GitHub Template repository" width="600"/>
+</p>
+
 3. Use the **Owner** drop-down menu, and select the account you want to own the repository.
+<p align="center">
+  <img src="docs/media/CreateRepoGH.png" alt="GitHub Template repository" width="600"/>
+</p>
+
 4. Type a name for your repository, and an optional description.
 5. Choose a repository visibility. 
 6. Optionally, to include the directory structure and files from all branches in the template, and not just the default branch, select **Include all branches**.
@@ -61,7 +70,7 @@ TODO - add screenshots
 
 ## 3. Setting up the required secrets
 
-A service principal needs to be generated for authentication and getting access to your Azure subscription. Just go to the Azure Portal to find the details of your resource group or workspace. Then start your preffered CLI and execute the following commands to generate the required credentials:
+A service principal needs to be generated for authentication and getting access to your Azure subscription. Just go to the Azure Portal to find the details of your subscription. Then start your preffered CLI and execute the following commands to generate the required credentials:
 
 **Azure CLI**
 ```sh
@@ -92,7 +101,7 @@ This will generate the following JSON output:
 Add this JSON output as [a secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) with the name `AZURE_CREDENTIALS` in your GitHub repository:
 
 <p align="center">
-  <img src="docs/media/.png" alt="GitHub Template repository" width="700"/>
+  <img src="docs/media/AzureCredentialsGH.png" alt="GitHub Template repository" width="600"/>
 </p>
 
 To do so, click on the Settings tab in your repository, then click on Secrets and finally add the new secret with the name `AZURE_CREDENTIALS` to your repository.
@@ -126,9 +135,9 @@ env:
 | HUB_VNET_ID | The VNet ID from the Data Management Subscription that will be peered with the new VNet deployed inside the Data Landing Zone
 
 ### Creating the Azure Resource Manager Connection
-In order to allow Azure DevOps Server to be integrated with Azure services, you will need to create an Azure Service Principal that will allow the deployments. The name of this connection will be parsed in the environment variables inside the workflow deployment. 
+To allow Azure DevOps Server to be integrated with Azure services, you will need to create an Azure Service Principal that will allow the deployments. The name of this connection will be parsed in the environment variables inside the workflow deployment. 
 
->  Note: Please make sure you have the right priviliges to create a Service Principle inside your subscription.
+>  Note: Please make sure you have the right priviliges to create a Service Principal inside your subscription.
 
  1. On your Azure DevOps Project, navigate to **Project Settings** and Select **Service Connections**. 
  2. From the **New service connection** dropdown, select **Azure Resource Manager** (automatic or manual)
@@ -145,8 +154,8 @@ In order to allow Azure DevOps Server to be integrated with Azure services, you 
 
 
 
-Once you save your changes to the file, one last step to complete. Please Update the GitHub Workflow environment variables in <a href="/.github/workflows/dataNodeDeployment.yml">`/.github/workflows/dataNodeDeployment.yml`</a>. 
-After completing, the workflow will trigger and run the <a href="/configs/UpdateParameters.ps1">`/configs/UpdateParameters.ps1"` file</a>, which is updating all the variables used in the ARM Templates and you will be ready to deploy the services. 
+Once you save your changes to the file, one last step to complete. Please update the GitHub Workflow environment variables in <a href="/.github/workflows/dataNodeDeployment.yml">`/.github/workflows/dataNodeDeployment.yml`</a>. 
+After completing, just commit and make a Pull Request so the workflow will trigger and run the <a href="/configs/UpdateParameters.ps1">`/configs/UpdateParameters.ps1"` file</a>, which is updating all the variables used in the ARM Templates and you will be ready to deploy the services. 
 
 
 
@@ -165,13 +174,16 @@ In case you want to deploy the templates through ADO, please follow the below st
 
 1. Forking the GitHub repo 
     1. If you are not signed in to GitHub, sign in now.
-    2. Click **Fork** to fork the repository to your own account.
-    3. If prompted, select the account to fork the repository into.
+    2. Choose the repository that you wish to connect to Azure DevOps. In case you do not have any repositories forked, please follow the instructions from *2. Create repository from a template*
     4. Click **Marketplace** from the top navigation to visit it and search for **Azure Pipelines**. The Azure Pipelines offering is free for anyone to use for public repositories, and free for a single build queue if you’re using a private repository. 
+        <p align="center">
+         <img src="docs/media/AzurePipelinesGH.png" alt="Install Azure Pipelines on GitHub" width="600"/>
+         </p>
+
     5. Select it and click on **Install it for free**
     6. If you have multiple **GitHub** accounts, select the one you forked this repository to from the **Switch billing account** dropdown. 
     7. You may be prompted to confirm your GitHub password to continue. 
-    8. You may be prompted to log in to your Microsoft account. Make sure you are looged into the one associated with your Azure DevOps account.
+    8. You may be prompted to log in to your Microsoft account. Make sure you are loged into the one associated with your Azure DevOps account.
 
 
 2. Configuring Azure Pipelines project
