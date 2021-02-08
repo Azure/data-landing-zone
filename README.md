@@ -54,12 +54,12 @@ If you don’t have an Azure subscription, create a free account before you begi
 2. Above the file list, click **Use this template**
 
 <p align="center">
-  <img src="docs/media/UseThisTemplateGH.png" alt="GitHub Template repository" width="700"/>
+  <img src="docs/media/UseThisTemplateGH.png" alt="GitHub Template repository" width="800"/>
 </p>
 
 3. Use the **Owner** drop-down menu, and select the account you want to own the repository.
 <p align="center">
-  <img src="docs/media/CreateRepoGH.png" alt="Create Repository from Template" width="700"/>
+  <img src="docs/media/CreateRepoGH.png" alt="Create Repository from Template" width="800"/>
 </p>
 
 4. Type a name for your repository, and an optional description.
@@ -142,7 +142,7 @@ To allow Azure DevOps Server to be integrated with Azure services, you will need
  1. On your Azure DevOps Project, navigate to **Project Settings** and Select **Service Connections**. 
  2. From the **New service connection** dropdown, select **Azure Resource Manager** (automatic or manual)
     <p align="center">
-    <img src="docs/media/ARMConnectionDevOps.png" alt="ARM Connection" width="700"/>
+    <img src="docs/media/ARMConnectionDevOps.png" alt="ARM Connection" width="800"/>
     </p>
 
 
@@ -178,7 +178,7 @@ In case you want to deploy the templates through ADO, please follow the below st
 2. Choose the repository that you wish to connect to Azure DevOps. In case you do not have any repositories forked, please follow the instructions from *2. Create repository from a template*
 3. Click **Marketplace** from the top navigation to visit it and search for **Azure Pipelines**. The Azure Pipelines offering is free for anyone to use for public repositories, and free for a single build queue if you’re using a private repository. 
         <p align="center">
-         <img src="docs/media/AzurePipelinesGH.png" alt="Install Azure Pipelines on GitHub" width="700"/>
+         <img src="docs/media/AzurePipelinesGH.png" alt="Install Azure Pipelines on GitHub" width="800"/>
          </p>
 
 4. Select it and click on **Install it for free**
@@ -199,12 +199,12 @@ In case you want to deploy the templates through ADO, please follow the below st
 
 2.  Select **Pipelines** and click on **Create** button in order to create a new pipeline.
     <p align="center">
-    <img src="docs/media/CreatePipelineDevOps.png" alt="Create Pipeline in DevOps" width="700"/>
+    <img src="docs/media/CreatePipelineDevOps.png" alt="Create Pipeline in DevOps" width="800"/>
     </p>
  
 3. Choose where your code is - in this scenario, you have your code in the forked GitHub Repo, therefor, you will choose GitHub using Yaml.
     <p align="center">
-    <img src="docs/media/CodeDevOps.png" alt="Choose code source in DevOps Pipeline" width="700"/>
+    <img src="docs/media/CodeDevOps.png" alt="Choose code source in DevOps Pipeline" width="800"/>
     </p>
     
 4. Once you choose the source, search after your forked repository, in this example **data-node** inside **My Repositories** and select it. 
