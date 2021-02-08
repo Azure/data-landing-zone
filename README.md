@@ -20,48 +20,20 @@ By default, all the services which comes under Data Landing Zone are enabled and
   <img src="./docs/media/DataNode.png" alt="Data Landing Zone" width="600"/>
 </p>
 
- - A Data Landing Zone has a **network resource group**, which includes services to enable connectivity to on-prem, other clouds and other Azure services. These services include: 
-    - **Vnet**, which is peered to the Vnet of the Data Management Subscription as well as to the Vnet of the Azure Platform Vnet
-    - **NSGs** for traffic restriction purposes
-    - **Route Tables** in order to defined next hopes within the network topology
-    - **Network Watcher** 
-- A **management resource group**, which should be used for hosting private agents for DevOps or GitHub in order to be able to deploy code on the privately hosted services. 
-    - **CI/CD Agents** 
-    - 1 **key vault** for storing secrets
-- An **integration resource group**, containing: 
-    - 1 **artifact storage account**, which will contain the script for creating and deploying SHIR
-    - 1 **SHIR** 
-    - 1 **Data Factory**
-- A **logging resource group**, which will include
-    - 1 **log analytics workspace**
-    - 1 **key vault**
-- A **storage resource group**, for hosting the data lakes of the Data Landing Zone. Three data lakes are recommended to be used per each Data Landing Zone, therefor, we will deploy inside this resource group: 
-    - **Raw Data Data Lake**
-    - **Curated & Enriched Data Lake**
-    - **Workspace Data Lake**
-    More details can be found in [].
-- A **secure storage resource group**, which will contain separate data lakes for highly confidential data in order to put different isolation boundaries on the network, identity and data layer in place. The structure for this resource group will be the same to the above described **storage resource group**:
-    - **Raw Data Data Lake**
-    - **Curated & Enriched Data Lake**
-    - **Workspace Data Lake**
-- An **external resource group**, that will include dedicated storage account in order to be able to retrieve a storage account SAS token or access key in case we ingest data from external sources into the Azure platform: 
-    - **Blob Storage A**
-- A **metadata resource group**, which will include:
-    - 1 Hive Metastore data, for which it will be deployed: 
-        - 1 **sql server** 
-        - 1 **SQL Database**
-    - 1 Data Factory Metastore, for which it will be deployed:
-        - 1 **sql server** 
-        - 1 **SQL Database**
-    - 2 **Key Vaults**, to store secrets required for Azure Data Factory and  Databricks
-- A **processing domain resource group**, for storing shared processing engines. Here we will deploy:
-    - 1 **Databricks workspace**, for ingestion purposes 
-    - 1 **Data Factory**, for ingestion purposes
-    - 1 aditional **Event Hub**, used for streaming use cases and essentially requires support for data stream push scenarios
-- A **processing product resource group**, which will contain:
-    - 1 **Synapse instance**
-    - 1 **Databricks workspace**, to be shared across all data product teams and can be used for ad-hoc analysis 
-
+ - [Azure Virtual Network](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview)
+ - [Network Security Groups](https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview)
+ - [Route Tables](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-udr-overview)
+ - [Azure Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/general)
+ - [Storage Account](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview)
+ - [Data Lake Storage Gen2](https://docs.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-introduction)
+ - [Azure Data Factory](https://docs.microsoft.com/en-us/azure/data-factory/)
+ - [Self Hosted Integration Runtime](https://docs.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtime)
+ - [Log Analytics](https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-create-workspace)
+ - [SQL Server](https://docs.microsoft.com/en-us/sql/sql-server/?view=sql-server-ver15)
+ - [Azure SQL Database](https://docs.microsoft.com/en-us/azure/azure-sql/database/)
+ - [Synapse Workspace](https://docs.microsoft.com/en-us/azure/synapse-analytics/)
+ - [Azure Databricks](https://docs.microsoft.com/en-us/azure/databricks/)
+ - [Event Hub](https://docs.microsoft.com/en-us/azure/event-hubs/)
 
     
 # Getting started
@@ -69,7 +41,7 @@ By default, all the services which comes under Data Landing Zone are enabled and
 ## 1. Prerequisites
 
 The following prerequisites are required to make this repository work:
-- Azure subscription
+- At least 1 Azure subscription used as Data Landing Zone which is connected to the Data Management Subscription
 - Contributor access to the Azure subscription
 If you don’t have an Azure subscription, create a free account before you begin. Try the [free version of Azure](https://azure.microsoft.com/en-in/free/).
 
