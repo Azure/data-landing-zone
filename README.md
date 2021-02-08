@@ -181,6 +181,9 @@ In case you want to deploy the templates through ADO, please follow the below st
          </p>
 
     5. Select it and click on **Install it for free**
+        <p align="center">
+        <img src="docs/media/InstallButtonGH.png" alt="GitHub Template repository" width="500"/>
+        </p>
     6. If you have multiple **GitHub** accounts, select the one you forked this repository to from the **Switch billing account** dropdown. 
     7. You may be prompted to confirm your GitHub password to continue. 
     8. You may be prompted to log in to your Microsoft account. Make sure you are loged into the one associated with your Azure DevOps account.
