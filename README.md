@@ -62,15 +62,20 @@ TODO - add screenshots
 
 A service principal needs to be generated for authentication and getting access to your Azure subscription. Just go to the Azure Portal to find the details of your resource group or workspace. Then start the Cloud CLI or install the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) on your computer and execute the following command to generate the required credentials:
 
+**Azure CLI**
 ```sh
-# Replace {service-principal-name}, {subscription-id} and {resource-group} with your 
-# Azure subscription id and resource group name and any name for your service principle
+# Replace {service-principal-name} and {subscription-id}  with your 
+# Azure subscription id and any name for your service principle
 az ad sp create-for-rbac --name {service-principal-name} \
                          --role contributor \
-                         --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group} \
+                         --scopes /subscriptions/{subscription-id} \
                          --sdk-auth
 ```
 
+**Azure Powershell**
+```sh
+New-AzADServicePrincipal -DisplayName {service-principal-name} -Role contributor -Scope "/subscriptions/{subscription-id}"
+```
 This will generate the following JSON output:
 
 ```sh
@@ -116,7 +121,7 @@ env:
 | LOCATION | The region where you want the resources to be deployed
 | SYNAPSE_STORAGE_ACCOUNT_NAME | The Synapse Storage Account name 
 | SYNAPSE_STORAGE_ACCOUNT_FILE_SYSTEM_NAME | The Synapse Storage Account File System name
-| AZURE_RESOURCE_MANAGER_CONNECTION_NAME | The Resource Manager Connection name. More details on how to create the connection name can be found [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) 
+| AZURE_RESOURCE_MANAGER_CONNECTION_NAME | The Resource Manager Connection name. More details on how to create the connection name can be found [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) and in the following subsection
 | HUB_VNET_ID | The VNet ID from the Data Management Subscription that will be peered with the new VNet deployed inside the Data Landing Zone
 
 ### Creating the Azure Resource Manager Connection
