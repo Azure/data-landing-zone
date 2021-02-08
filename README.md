@@ -10,7 +10,7 @@
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-node%2Fmain%2Fdocs%2Freference%2Fdeploy.dataNode.json)
 
 # Description 
-A Data Landing Zone has several layers to enable agility to service the Data Domains under the node. A new Data Landing Zone is always deployed with a standard set of services to enable the entity to start ingesting and analysing data.
+A Data Landing Zone has several layers to enable agility to service the Data Domains and Data Products under the data landing zone. A new Data Landing Zone is always deployed with a standard set of services to enable the entity to start ingesting and analysing data.
 
 ## What will be deployed?
 
