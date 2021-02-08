@@ -207,7 +207,7 @@ In case you want to deploy the templates through ADO, please follow the below st
     <img src="docs/media/CodeDevOps.png" alt="Choose code source in DevOps Pipeline" width="700"/>
     </p>
     
-4. Once you choose the source, search after your forked repository **data-node** inside **My Repositories** and select it. 
+4. Once you choose the source, search after your forked repository, in this example **data-node** inside **My Repositories** and select it. 
       <p align="center">
     <img src="docs/media/SelectRepositoryDevOps.png" alt="Select Repository" width="600"/>
     </p>
