@@ -15,10 +15,9 @@ A Data Landing Zone has several layers to enable agility to service the Data Dom
 ## What will be deployed?
 
 By default, all the services which comes under Data Landing Zone are enabled and you must explicitly disable them if you don't want it to be deployed. 
-
-<p align="center">
-  <img src="./docs/media/DataNode.png" alt="Data Landing Zone" width="500"/> 
-</p>
+    <p align="center">
+        <img src="./docs/media/DataNode.png" alt="Data Landing Zone" width="500"/> 
+    </p>
 
 
  - [Azure Virtual Network](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview)
@@ -60,7 +59,7 @@ TODO - add screenshots
 
 3. Use the **Owner** drop-down menu, and select the account you want to own the repository.
 <p align="center">
-  <img src="docs/media/CreateRepoGH.png" alt="GitHub Template repository" width="600"/>
+  <img src="docs/media/CreateRepoGH.png" alt="GitHub Template repository" width="700"/>
 </p>
 
 4. Type a name for your repository, and an optional description.
