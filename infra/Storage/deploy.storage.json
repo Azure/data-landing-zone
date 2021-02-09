@@ -194,10 +194,10 @@
                         //     "enabled": true,
                         //     "days": 7
                         // },
-                        "containerDeleteRetentionPolicy": {
-                            "enabled": true,
-                            "days": 7
-                        },
+                        // "containerDeleteRetentionPolicy": { // Opt-in to preview if you want to use this feature: https://docs.microsoft.com/en-us/azure/storage/blobs/soft-delete-container-overview?tabs=powershell#register-for-the-preview
+                        //     "enabled": true,
+                        //     "days": 7
+                        // },
                         "cors": {
                             "corsRules": []
                         }
