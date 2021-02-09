@@ -277,16 +277,7 @@ As a last step, you need to reference the Azure DevOps Yaml pipeline, that is st
   <img src="docs/media/ConfigurePipelineDevOps.png" alt="Configure Pipeline in DevOps" width="600"/>
 </p>
 
-<<<<<<< HEAD
 7. Click on **Continue** and then on **Run**.
-=======
-1. If you are not signed in to GitHub, sign in now.
-2. Choose the repository that you wish to connect to Azure DevOps. In case you do not have any repositories forked, please follow the instructions from *2. Create repository from a template*
-3. Click **Marketplace** from the top navigation to visit it and search for **Azure Pipelines**. The Azure Pipelines offering is free for anyone to use for public repositories, and free for a single build queue if you’re using a private repository. 
-        <p align="center">
-         <img src="docs/media/AzurePipelinesGH.png" alt="Azure Pipelines on GitHub" width="800"/>                                                
-         </p>
->>>>>>> 2b2d061d8b344d4925123db9155d9d08c30e6e51
 
 ## 7. Follow the workflow deployment
 
