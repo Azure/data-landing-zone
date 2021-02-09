@@ -2,13 +2,6 @@
 
 > **General disclaimer** Please be aware that this template is in public preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue, if you come across any issues that you would like us to fix.
 
-
-# Quickstart
-
-| Data Landing Zone |
-|:--------------|
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-node%2Fmain%2Fdocs%2Freference%2Fdeploy.dataNode.json)
-
 # Description 
 A Data Landing Zone has several layers to enable agility to service the Data Domains and Data Products under the data landing zone. A new Data Landing Zone is always deployed with a standard set of services to enable the entity to start ingesting and analysing data.
 
@@ -35,22 +28,29 @@ By default, all the services which comes under Data Landing Zone are enabled and
  - [Azure Databricks](https://docs.microsoft.com/en-us/azure/databricks/)
  - [Event Hub](https://docs.microsoft.com/en-us/azure/event-hubs/)
 
+You have two options for deploying this reference architecture:
+1. Use the `Deploy to Azure` Button or
+2. Use GitHub Actions or Azure DevOps Pipelines.
+
+# Option 1: Deploy to Azure - Quickstart
+
+| Data Landing Zone |
+|:--------------|
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-node%2Fmain%2Fdocs%2Freference%2Fdeploy.dataNode.json)
     
-# Getting started
+# Option 2: GitHub Actions or Azure DevOps Pipelines
 
 ## 1. Prerequisites
 
-@marvinbuss @AnalyticJeremy will need to see how we formulate here. For testing purposes as discussed we can use 1 subscription for both Data management and landing zone deployment. How do you think we can phrase this in the prerquisites? 
-
 The following prerequisites are required to make this repository work:
-- At least 1 Azure subscription used as Data Landing Zone which is connected to the Data Management Subscription 
-- Contributor access to the Azure subscription
+* Azure subscription
+* [User Access Administrator](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#owner) access to the subscription to be able to create a service principal and add it to the subscription.
 
-If you don’t have an Azure subscription, create a free account before you begin. Try the [free version of Azure](https://azure.microsoft.com/en-in/free/).
+If you don’t have an Azure subscription, [create your Azure free account today](https://azure.microsoft.com/en-us/free/).
 
 ## 2. Create repository from a template
 
-1. On GitHub, navigate to the main page of the repository.
+1. On GitHub, navigate to the [main page of the repository](/).
 2. Above the file list, click **Use this template**
 
 <p align="center">
@@ -63,31 +63,37 @@ If you don’t have an Azure subscription, create a free account before you begi
 </p>
 
 4. Type a name for your repository, and an optional description.
-5. Choose a repository visibility. 
+5. Choose a repository visibility. For more information, see "[About repository visibility](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-repository-visibility)."
 6. Optionally, to include the directory structure and files from all branches in the template, and not just the default branch, select **Include all branches**.
 7. Click **Create repository from template**.
 
-## 3. Setting up the required secrets
+## 3. Setting up the required Service Principal and access
 
-A service principal needs to be generated for authentication and getting access to your Azure subscription. Just go to the Azure Portal to find the details of your subscription. Then start your preffered CLI and execute the following commands to generate the required credentials:
+A service principal needs to be generated for authentication and authorization from GitHub or Azure DevOps to your Azure subscription. This is required to deploy resources to your environment. Just go to the Azure Portal to find the id of your subscription. Then start CLI or PowerShell, login to Azure, set the Azure context and execute the following commands to generate the required credentials:
 
 **Azure CLI**
-```sh
+```Shell
 # Replace {service-principal-name} and {subscription-id}  with your 
-# Azure subscription id and any name for your service principle
-az ad sp create-for-rbac --name {service-principal-name} \
-                         --role contributor \
-                         --scopes /subscriptions/{subscription-id} \
-                         --sdk-auth
+# Azure subscription id and any name for your service principal.
+az ad sp create-for-rbac \
+  --name {service-principal-name} \
+  --role contributor \
+  --scopes /subscriptions/{subscription-id} \
+  --sdk-auth
 ```
 
 **Azure Powershell**
-```sh
-New-AzADServicePrincipal -DisplayName {service-principal-name} -Role contributor -Scope "/subscriptions/{subscription-id}"
+```PowerShell
+# Replace {service-principal-name} and {subscription-id}  with your 
+# Azure subscription id and any name for your service principal.
+New-AzADServicePrincipal `
+  -DisplayName "{service-principal-name}" `
+  -Role contributor `
+  -Scope "/subscriptions/{subscription-id}"
 ```
 This will generate the following JSON output:
 
-```sh
+```JSON
 {
   "clientId": "<GUID>",
   "clientSecret": "<GUID>",
@@ -97,42 +103,100 @@ This will generate the following JSON output:
 }
 ```
 
-Add this JSON output as [a secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) with the name `AZURE_CREDENTIALS` in your GitHub repository:
+Take note of the output. It will be required for the next steps.
+This service principal now also requires the following access rights:
+
+# TODO
+
+
+Now you can choose, whether you would like to use GitHub Actions or Azure DevOps for your deployment.
+
+## 4. a) GitHub Actions
+
+If you want to use GitHub Actions for deploying the resources, add the previous JSON output as a [repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) with the name `AZURE_CREDENTIALS` in your GitHub repository:
 
 <p align="center">
   <img src="docs/media/AzureCredentialsGH.png" alt="GitHub Secrets" width="600"/>
 </p>
 
-To do so, click on the Settings tab in your repository, then click on Secrets and finally add the new secret with the name `AZURE_CREDENTIALS` to your repository.
+To do so, execute the following steps:
 
-Please follow [this link](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) for more details. 
-# Parameter Update Process
+1. On GitHub, navigate to the [main page of the repository](/).
+2. Under your repository name, click on the **Settings** tab.
+3. In the left sidebar, click **Secrets**.
+4. Click **New repository secret**.
+5. Type the name `AZURE_CREDENTIALS` for your secret in the Name input box.
+6. Enter the JSON output from above as value for your secret.
+7. Click **Add secret**.
 
-In order to connect GitHub actions to the desired Azure account and deploy the resources with your preffered inputs, you'll need to modify the parameters in the ARM parameter files. As updating each parameter file manually is a time consuming process, which could lead as well to undesired user errors, you can simplify the process by running the <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml"` file</a>. Just click on the link and edit the following environment variables: 
+## 4. b) Azure DevOps
+
+If you want to use Azure DevOps Pipelines for deploying the resources, you need to create an Azure Resource Manager service connection. To do so, execute the following steps:
+
+1. In Azure DevOps, open the **Project settings**.
+2. Now, select the **Service connections** page from the project settings page.
+3. Choose **New service connection** and select **Azure Resource Manager**.
+4. On the next page select **Service principal (manual)**.
+5. Select the appropriate environment to which you would like to deploy the templates. Default and tested option is **Azure Cloud**.
+6. For the **Scope Level**, select **Subscription** and enter your subscription Id and name.
+7. Enter the details of the service principal that we have generated in step 3 (**Service Principal Id** = **clientId**, **Service Principal Key** = **clientSecret**, **Tenant ID** = **tenantId**) and click on **Verify** to make sure that the connection works.
+8. Enter a user-friendly **Connection name** to use when referring to this service connection. Take note of the name, because this will be required in the parameter update process. 
+9. Optionally, enter a **Description**.
+10. Click on **Verify and save**.
+
+More information can be found [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal).
+
+## 5. Parameter Update Process
+
+In order to deploy the ARM templates in this repository to the desired Azure subscription, you'll need to modify some parameters in the forked repository. As updating each parameter file manually is a time consuming process, which could lead as well to undesired user errors, we have simplified the process witha  GitHub Action workflow. After successfully executing the previous steps, please open the <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml"` YAML file</a>. In this file you need to update the environment variables. Once you commit the file with the updated values, a GitHub Action workflow will be triggered that replaces all parameters accordingly. Just click on <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml"`</a> and edit the following section: 
 
 
-```sh
+```YAML
 env:
   GLOBAL_DNS_RESOURCE_GROUP_ID: '<my-global-dns-resource-group-resource-id>'
   DATA_LANDING_ZONE_SUBSCRIPTION_ID: '<my-data-landing-zone-subscription-id>'
   DATA_LANDING_ZONE_NAME: '<my-data-landing-zone-name>'  # Choose ~5 characters. Will be used as a prefix for services. If not unique, deployment can fail for some services.
   LOCATION: '<my-region>'
-  SYNAPSE_STORAGE_ACCOUNT_NAME: '<my-synapse-storage-account-name>'
-  SYNAPSE_STORAGE_ACCOUNT_FILE_SYSTEM_NAME: '<my-synapse-storage-account-file-system-name>'
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '<my-resource-manager-connection-name>'
   HUB_VNET_ID: '<my-hub-vnet-id>'
 ```
 
-| Parameter | Description 
-|:-------------------------|:-------------|
-| GLOBAL_DNS_RESOURCE_GROUP_ID | The global DNS Resource group resource ID which is inside the Data Management Subscription|
-| DATA_LANDING_ZONE_SUBSCRIPTION_ID | The subscription ID of the Data Landing Zone where all the resources will be deployed
-| DATA_LANDING_ZONE_NAME | The name of your Data Landing Zone 
-| LOCATION | The region where you want the resources to be deployed
-| SYNAPSE_STORAGE_ACCOUNT_NAME | The Synapse Storage Account name 
-| SYNAPSE_STORAGE_ACCOUNT_FILE_SYSTEM_NAME | The Synapse Storage Account File System name
-| AZURE_RESOURCE_MANAGER_CONNECTION_NAME | The Resource Manager Connection name. More details on how to create the connection name can be found [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) and in the following subsection
-| HUB_VNET_ID | The VNet ID from the Data Management Subscription that will be peered with the new VNet deployed inside the Data Landing Zone
+The parameters have the following meaning:
+
+| Parameter                                | Description  | Sample value |
+|:-----------------------------------------|:-------------|:-------------|
+| GLOBAL_DNS_RESOURCE_GROUP_ID             | Specifies the global DNS resource group resource ID which gets deployed with the [Data Management Landing Zone](https://github.com/Azure/data-hub) | `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/my-subscription` |
+| DATA_LANDING_ZONE_SUBSCRIPTION_ID        | Specifies the subscription ID of the Data Landing Zone where all the resources will be deployed | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+| DATA_LANDING_ZONE_NAME                   | Specifies the name of your Data Landing Zone. The value should consist of alphanumeric characters (A-Z, a-z, 0-9) and should not contain any special characters like `-`, `_`, `.`, etc. Special characters will be removed in the renaming process. | `mynode01` |
+| LOCATION                                 | Specifies the region where you want the resources to be deployed. | `northeurope` |
+| AZURE_RESOURCE_MANAGER_CONNECTION_NAME   | Specifies the resource manager connection name in Azure DevOps. You can leave the default value, if you want to use GitHub Actions for your deployment. More details on how to create the resource manager connection in Azure DevOps can be found in step 4. b) or [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal). | `my-connection-name` |
+| HUB_VNET_ID                              | Specifies the resource ID of the vnet to which the landing zone vnet should be peered with. We are recommending a mesh network design for the overall data platform, which is why you might have to add additional peering deployments to your forked repository. | `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/my-network-rg/providers/Microsoft.Network/virtualNetworks/my-vnet` |
+
+After updating the values, please commit the updated version to the `main` branch. This will kick off a GitHub Action workflow, which will appear under the **Actions** tab of the [main page of the repository](/). The `Update Parameter Files` workflow will update all parameters in your repository according to a certain naming convention. Once the process has finished, it will open a Pull Request in your repository, where you can review the changes made by the workflow. Please follow the instructions in the Pull Request to complete the parameter update process. We are not renaming the environment variables in the workflow files, because this can have undesired outcomes of kicking of an infinite number of workflows. 
+
+After following the instructions in the Pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository.
+
+## 6. (not applicable for GH Actions) Reference pipeline from GitHub repository in Azure DevOps pipelines
+
+
+
+## 7. Follow the workflow deployment
+
+Congratulations! You have successfully executed all steps to deploy the template to your environment through GitHub Actions or Azure DevOps.
+
+If you are using GitHub Actions, you can navigate to the **Actions** tab of the [main page of the repository](/), where you will see a workflow with the name `Data Node Deployment` running. Click on it to see how it deploys one service after another. If you run into any issues, please open an issue [here](https://github.com/Azure/data-hub/issues).
+
+If you are using Azure DevOps Pipelines, you can navigate to the pipeline that you have created as part of step 6 and follow  how it deploys one service after another. If you run into any issues, please open an issue [here](https://github.com/Azure/data-hub/issues).
+
+# Enterprise Scale Analytics Documentation and Implementation
+
+* [Documentation](https://github.com/Azure/Enterprise-Scale-Analytics)
+- [Implementation - Data Management](https://github.com/Azure/data-hub)
+- [Implementation - Data Landing Zone](https://github.com/Azure/data-node)
+- [Implementation - Data Domain - Batch](https://github.com/Azure/data-domain)
+- [Implementation - Data Domain - Streaming](https://github.com/Azure/data-domain-streaming)
+- [Implementation - Data Product - Reporting](https://github.com/Azure/data-product)
+- [Implementation - Data Product - Data Science](https://github.com/Azure/data-product-analytics)
 
 ### Creating the Azure Resource Manager Connection
 To allow Azure DevOps Server to be integrated with Azure services, you will need to create an Azure Service Principal that will allow the deployments. The name of this connection will be parsed in the environment variables inside the workflow deployment. 
@@ -172,13 +236,13 @@ In case you want to deploy the templates through ADO, please follow the below st
 * An Azure DevOps account from https://dev.azure.com.
 * A GitHub account from https://github.com.
 
-**1. Forking the GitHub repo** 
+**1. Install Azure DevOps Pipelines** 
 
 1. If you are not signed in to GitHub, sign in now.
 2. Choose the repository that you wish to connect to Azure DevOps. In case you do not have any repositories forked, please follow the instructions from *2. Create repository from a template*
 3. Click **Marketplace** from the top navigation to visit it and search for **Azure Pipelines**. The Azure Pipelines offering is free for anyone to use for public repositories, and free for a single build queue if you’re using a private repository. 
         <p align="center">
-         <img src="docs/media/AzurePipelinesGH.png" alt="Install Azure Pipelines on GitHub" width="800"/>
+         <img src="docs/media/AzurePipelinesGH.png" alt="Azure Pipelines on GitHub" width="800"/>                                                
          </p>
 
 4. Select it and click on **Install it for free**
