@@ -43,7 +43,7 @@ You have two options for deploying this reference architecture:
 
 The following prerequisites are required to make this repository work:
 * Azure subscription
-* [User Access Administrator](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#owner) access to the subscription to be able to create a service principle and add it to the subscription.
+* [User Access Administrator](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#owner) access to the subscription to be able to create a service principal and add it to the subscription.
 
 If you don’t have an Azure subscription, [create your Azure free account today](https://azure.microsoft.com/en-us/free/).
 
@@ -73,7 +73,7 @@ A service principal needs to be generated for authentication and authorization f
 **Azure CLI**
 ```Shell
 # Replace {service-principal-name} and {subscription-id}  with your 
-# Azure subscription id and any name for your service principle.
+# Azure subscription id and any name for your service principal.
 az ad sp create-for-rbac \
   --name {service-principal-name} \
   --role contributor \
@@ -84,7 +84,7 @@ az ad sp create-for-rbac \
 **Azure Powershell**
 ```PowerShell
 # Replace {service-principal-name} and {subscription-id}  with your 
-# Azure subscription id and any name for your service principle.
+# Azure subscription id and any name for your service principal.
 New-AzADServicePrincipal `
   -DisplayName "{service-principal-name}" `
   -Role contributor `
@@ -156,7 +156,7 @@ Now you can choose, whether you would like to use GitHub Actions or Azure DevOps
 
 ## 4. a) GitHub Actions
 
-If you wnat to use GitHub Actions for deploying the resources, add the previous JSON output as a [repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) with the name `AZURE_CREDENTIALS` in your GitHub repository:
+If you want to use GitHub Actions for deploying the resources, add the previous JSON output as a [repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) with the name `AZURE_CREDENTIALS` in your GitHub repository:
 
 <p align="center">
   <img src="docs/media/AzureCredentialsGH.png" alt="GitHub Secrets" width="600"/>
@@ -277,7 +277,16 @@ As a last step, you need to reference the Azure DevOps Yaml pipeline, that is st
   <img src="docs/media/ConfigurePipelineDevOps.png" alt="Configure Pipeline in DevOps" width="600"/>
 </p>
 
+<<<<<<< HEAD
 7. Click on **Continue** and then on **Run**.
+=======
+1. If you are not signed in to GitHub, sign in now.
+2. Choose the repository that you wish to connect to Azure DevOps. In case you do not have any repositories forked, please follow the instructions from *2. Create repository from a template*
+3. Click **Marketplace** from the top navigation to visit it and search for **Azure Pipelines**. The Azure Pipelines offering is free for anyone to use for public repositories, and free for a single build queue if you’re using a private repository. 
+        <p align="center">
+         <img src="docs/media/AzurePipelinesGH.png" alt="Azure Pipelines on GitHub" width="800"/>                                                
+         </p>
+>>>>>>> 2b2d061d8b344d4925123db9155d9d08c30e6e51
 
 ## 7. Follow the workflow deployment
 
