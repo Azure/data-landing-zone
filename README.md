@@ -106,7 +106,7 @@ Take note of the output. It will be required for the next steps.
 
 For automation purposes of this repo, few more role assignments are required for this service principle. 
 
-> NOTE: The number of role assignments can be further reduced in a production scenario. The **Network Contributor** role assignment is just required in this repository to automatically setup the vnet peering between the data management environment and the data landing zone. Without this, DNS resolution will not work and in- and outbound traffic will be dropped, because there is no line of sight to the Azure Firewall. The **Private DNS Zone Contributor** is also not required, if the DNS A-records of the Private Endpoints are created through Azure Policy with `deployIfNotExists` effect.
+> NOTE: The number of role assignments can be further reduced in a production scenario. The **Network Contributor** role assignment is just required in this repository to automatically setup the vnet peering between the data management environment and the data landing zone. Without this, DNS resolution will not work and in- and outbound traffic will be dropped, because there is no line of sight to the Azure Firewall. The **Private DNS Zone Contributor** is also not required, if the deployment of DNS A-records of the Private Endpoints is automated through Azure Policies with `deployIfNotExists` effect.
 
 Required role assignments include:
 
