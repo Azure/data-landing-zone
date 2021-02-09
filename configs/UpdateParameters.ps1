@@ -28,16 +28,6 @@ Param(
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $SynapseStorageAccountName,
-
-    [Parameter(Mandatory)]
-    [ValidateNotNullOrEmpty()]
-    [string]
-    $SynapseStorageAccountFileSystemName,
-
-    [Parameter(Mandatory)]
-    [ValidateNotNullOrEmpty()]
-    [string]
     $HubVnetId,
 
     [Parameter(Mandatory=$false)]
