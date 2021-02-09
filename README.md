@@ -106,7 +106,6 @@ This will generate the following JSON output:
 Take note of the output. It will be required for the next steps.
 This service principal now also requires the following access rights:
 
-# TODO
 
 
 Now you can choose, whether you would like to use GitHub Actions or Azure DevOps for your deployment.
@@ -247,7 +246,7 @@ In case you want to deploy the templates through ADO, please follow the below st
 
 4. Select it and click on **Install it for free**
         <p align="center">
-        <img src="docs/media/InstallButtonGH.png" alt="GitHub Template repository" width="500"/>
+        <img src="docs/media/InstallButtonGH.png" alt="GitHub Template repository" width="700"/>
         </p>
 5. If you have multiple **GitHub** accounts, select the one you forked this repository to from the **Switch billing account** dropdown. 
 6. You may be prompted to confirm your GitHub password to continue. 
@@ -273,13 +272,13 @@ In case you want to deploy the templates through ADO, please follow the below st
     
 4. Once you choose the source, search after your forked repository, in this example **data-node** inside **My Repositories** and select it. 
       <p align="center">
-    <img src="docs/media/SelectRepositoryDevOps.png" alt="Select Repository" width="600"/>
+    <img src="docs/media/SelectRepositoryDevOps.png" alt="Select Repository" width="800"/>
     </p>
     
 5. In case you have not installed Azure Pipelines in the prior steps, you will be prompted a window for installing it now and allowing to access the app. 
 6. After connected to the forked repo, you will need to configure your pipeline. You can either start a new pipeline which you will work on or you can use an existing yaml file. For this project, you will use the existing yaml file which exists in your forked repo. Now, you just need to choose the **branch** on which you will work on and select the path to the ADO workflow file. 
     <p align="center">
-        <img src="docs/media/ConfigurePipelineDevOps.png" alt="Configure Pipeline in DevOps" width="600"/>
+        <img src="docs/media/ConfigurePipelineDevOps.png" alt="Configure Pipeline in DevOps" width="800"/>
     </p>
     
 7. Click **run** to save the pipeline and queue a new build. It will take some minutes for the pipeline to complete. During this time it will configure the build agent, pull in the source from GitHub, and build it according to the pipeline definition.
