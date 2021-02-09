@@ -121,12 +121,12 @@
                 "isHnsEnabled": "[variables('enableHns')]",
                 "largeFileSharesState": "Disabled",
                 "minimumTlsVersion": "TLS1_2",
-                "allowBlobPublicAccess": false,
-                "routingPreference": {
-                    "routingChoice": "MicrosoftRouting",
-                    "publishMicrosoftEndpoints": false,
-                    "publishInternetEndpoints": false
-                }
+                "allowBlobPublicAccess": false
+                // "routingPreference": {
+                //     "routingChoice": "MicrosoftRouting",
+                //     "publishMicrosoftEndpoints": false,
+                //     "publishInternetEndpoints": false
+                // }
             },
             "resources": [
                 {
