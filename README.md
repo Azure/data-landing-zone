@@ -103,13 +103,14 @@ This will generate the following JSON output:
 ```
 
 Take note of the output. It will be required for the next steps.
-This service principal now also requires the following access rights:
+
+For automation purposes of this repo, few more role assignments are required for this service principle. This can be further reduced in a production scenario. Required role assignments include:
 
 | Role Name | Description | Scope |
 |:----------|:------------|:------|
 | [Private DNS Zone Contributor](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#private-dns-zone-contributor) | We expect you to deploy all Private DNS zones for all data services into a single subscription and resource group. The service principal needs to be Private DNS Zone Contributor on that resource group. This is required to deploy A-records for teh respective private endpoints. | (Resource Group Scope) `/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}` |
 | [User Access Administrator](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#user-access-administrator) | In order to share the self-hosted integration runtime that gets deployed into the `integration-rg` resource group with other Data Factories, like the one in the `processing-domain-rg` resource group, the service principle needs User Access Administrator rights on the Data Factory that gets deployed into the `integration-rg` resource group. | (Resource Scope) `/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{dataFactoryName}` |
-| [Network Contributor](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#network-contributor) | In order to setup Vnet peering between the Data Landing Zone vnet and another Data Landing Zone vnet, the service principle needs Network Contributor access rights on the remote vnet. | (Resource Scope) `/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}` |
+| [Network Contributor](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#network-contributor) | In order to setup vnet peering between the Data Landing Zone vnet and the Data Management Landing Zone vnet, the service principal needs Network Contributor access rights on the resource group of the remote vnet. | (Resource Group Scope) `/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}` |
 
 To add these role assignments, you can use the [Azure Portal](https://portal.azure.com/) or run the following commands:
 
