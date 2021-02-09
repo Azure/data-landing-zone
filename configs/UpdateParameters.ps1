@@ -45,6 +45,7 @@ Param(
     $AzureResourceManagerConnectionName
 )
 
+
 function SetValue($Object, $Key, $Value) {
     $p1, $p2 = $Key.Split(".")
     if ($p2) { 
@@ -54,6 +55,18 @@ function SetValue($Object, $Key, $Value) {
         $Object.$p1 = $Value
     }
 }
+
+
+function Remove-SpecialCharsAndWhitespaces($InputString) {
+    $SpecialChars = '[#?!`"#$%&*+,-./:;<=>?@^_``|~\{\[\(\)\]\}]'
+    $Replacement  = ''
+    return ($InputString -replace $SpecialChars,$Replacement) -replace "\s", ""
+}
+
+
+# Replace Special Characters
+Write-Host "Replacing Special Characters"
+$DataLandingZoneName = Remove-SpecialCharsAndWhitespaces -InputString $DataLandingZoneName
 
 # Loading Configuration File for Parameter Updates
 Write-Host "Loading Configuration File for Parameter Updates"
@@ -111,6 +124,10 @@ foreach ($config in $configs) {
         Write-Error "File Type not Supported"
         throw "File Type not Supported"
     }
-
-    
 }
+
+
+# Set output
+Write-Output "Setting output"
+Write-Output "::set-output name=landingZoneName::${DataLandingZoneName}"
+Write-Output "::set-output name=landingZoneSubscriptionId::${DataLandingZoneSubscriptionId}"
