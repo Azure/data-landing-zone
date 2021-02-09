@@ -422,7 +422,7 @@ stages:
         - task: AzureResourceManagerTemplateDeployment@3
           name: mysql_001_validation
           displayName: Deploy My SQL 001 - validation
-          enabled: false
+          enabled: true
           continueOnError: false
           inputs:
             deploymentScope: 'Resource Group'
@@ -1021,7 +1021,7 @@ stages:
         - task: AzureResourceManagerTemplateDeployment@3
           name: mysql_001_deployment
           displayName: Deploy My SQL 001
-          enabled: false
+          enabled: true
           continueOnError: false
           inputs:
             deploymentScope: 'Resource Group'
