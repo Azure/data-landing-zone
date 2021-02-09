@@ -72,10 +72,46 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet.json'
             deploymentMode: 'Validation'
         
+        # Deploy Vnet Peering 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: vnet_peering_001_validation
+          displayName: Deploy Vnet Peering 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering001.json'
+            deploymentMode: 'Validation'
+
+        # Deploy Vnet Peering 002 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: vnet_peering_002_validation
+          displayName: Deploy Vnet Peering 002 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering002.json'
+            deploymentMode: 'Validation'
+
         # Deploy key vault 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: key_vault_001_validation
@@ -90,8 +126,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault001.json'
             deploymentMode: 'Validation'
         
         # Deploy key vault 002 - validation
@@ -108,8 +144,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault002.json'
             deploymentMode: 'Validation'
         
         # Deploy key vault 003 - validation
@@ -126,8 +162,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_LOGGING)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault003.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault003.json'
             deploymentMode: 'Validation'
         
         # Deploy Log Analytics Workspace 001 - validation
@@ -162,8 +198,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage001.json'
             deploymentMode: 'Validation'
         
         # Deploy storage account 002 - enriched & curated - validation
@@ -180,8 +216,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage002.json'
             deploymentMode: 'Validation'
         
         # Deploy storage account 003 - workspace - validation
@@ -198,8 +234,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage003.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage003.json'
             deploymentMode: 'Validation'
         
         # Deploy secret storage account 001 - raw - validation
@@ -216,8 +252,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage001.json'
             deploymentMode: 'Validation'
         
         # Deploy secret storage account 002 - enriched & curated - validation
@@ -234,8 +270,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage002.json'
             deploymentMode: 'Validation'
         
         # Deploy secret storage account 003 - workspace - validation
@@ -252,8 +288,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage003.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage003.json'
             deploymentMode: 'Validation'
         
         # Deploy external storage account 001 - validation
@@ -270,8 +306,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.external_storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.external_storage001.json'
             deploymentMode: 'Validation'
         
         # Generate Password
@@ -302,8 +338,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-            csmParametersFile: 'infra/SqlServer/params.sqlServer001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/SqlServer/deploy.sqlServer.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SqlServer/params.sqlServer001.json'
             deploymentMode: 'Validation'
             overrideParameters: >
               -administratorLoginPassword "$(password)"
@@ -322,8 +358,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
-            csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/SqlDatabase/deploy.sqlDatabase.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SqlDatabase/params.sqlDatabase001.json'
             deploymentMode: 'Validation'
             overrideParameters: >
               -sqlServerAdministratorLoginPassword "$(password)"
@@ -356,8 +392,8 @@ stages:
         #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
         #     location: '$(AZURE_LOCATION)'
         #     templateLocation: 'Linked artifact'
-        #     csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-        #     csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
+        #     csmFile: '$(System.DefaultWorkingDirectory)/infra/SqlServer/deploy.sqlServer.json'
+        #     csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SqlServer/params.sqlServer002.json'
         #     deploymentMode: 'Validation'
         #     overrideParameters: >
         #       -administratorLoginPassword "$(password)"
@@ -376,8 +412,8 @@ stages:
         #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
         #     location: '$(AZURE_LOCATION)'
         #     templateLocation: 'Linked artifact'
-        #     csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
-        #     csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase002.json'
+        #     csmFile: '$(System.DefaultWorkingDirectory)/infra/SqlDatabase/deploy.sqlDatabase.json'
+        #     csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SqlDatabase/params.sqlDatabase002.json'
         #     deploymentMode: 'Validation'
         #     overrideParameters: >
         #       -sqlServerAdministratorLoginPassword "$(password)"
@@ -396,8 +432,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/MySql/deploy.mySql.json'
-            csmParametersFile: 'infra/MySql/params.mySql001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/MySql/deploy.mySql.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/MySql/params.mySql001.json'
             deploymentMode: 'Validation'
             overrideParameters: >
               -mySqlServerAdministratorLoginPassword "$(password)"
@@ -416,8 +452,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Databricks/deploy.databricks.json'
-            csmParametersFile: 'infra/Databricks/params.databricks001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Databricks/deploy.databricks.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Databricks/params.databricks001.json'
             deploymentMode: 'Validation'
         
         # Deploy databricks 002 - validation
@@ -434,8 +470,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Databricks/deploy.databricks.json'
-            csmParametersFile: 'infra/Databricks/params.databricks002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Databricks/deploy.databricks.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Databricks/params.databricks002.json'
             deploymentMode: 'Validation'
         
         # Deploy event hub 001 - validation
@@ -452,8 +488,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/EventHub/deploy.eventHub.json'
-            csmParametersFile: 'infra/EventHub/params.eventHub001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/EventHub/deploy.eventHub.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/EventHub/params.eventHub001.json'
             deploymentMode: 'Validation'
         
         # Deploy Data Factory 001 - validation
@@ -470,8 +506,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/deploy.dataFactory.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/params.dataFactory001.json'
             deploymentMode: 'Validation'
         
         # Deploy Data Factory 002 - validation
@@ -488,8 +524,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/params.dataFactory002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/deploy.dataFactory.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/params.dataFactory002.json'
             deploymentMode: 'Validation'
         
         # Deploy Artifact Storage Account 001 - validation
@@ -572,29 +608,11 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Synapse/deploy.synapse.json'
-            csmParametersFile: 'infra/Synapse/params.synapse001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Synapse/deploy.synapse.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Synapse/params.synapse001.json'
             deploymentMode: 'Validation'
             overrideParameters: >
               -synapseSqlAdministratorPassword "$(password)"
-
-        # Deploy vnet peering 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: vnet_peering_001_validation
-          displayName: Deploy vnet peering 001 - validation
-          enabled: true
-          continueOnError: true
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetworkPeering/deploy.vnetPeering.json'
-            csmParametersFile: 'infra/VirtualNetworkPeering/params.vnetPeering001.json'
-            deploymentMode: 'Validation'
 
   - stage: Deployment
     displayName: 'Deployment of ARM templates'
@@ -632,10 +650,46 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet.json'
             deploymentMode: 'Incremental'
         
+        # Deploy Vnet Peering 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: vnet_peering_001_deployment
+          displayName: Deploy Vnet Peering 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering001.json'
+            deploymentMode: 'Incremental'
+
+        # Deploy Vnet Peering 002
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: vnet_peering_002_deployment
+          displayName: Deploy Vnet Peering 002
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering002.json'
+            deploymentMode: 'Incremental'
+
         # Deploy key vault 001
         - task: AzureResourceManagerTemplateDeployment@3
           name: key_vault_001_deployment
@@ -650,8 +704,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Key Vault 002
@@ -668,8 +722,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault002.json'
             deploymentMode: 'Incremental'
         
         # Deploy Key Vault 003
@@ -686,8 +740,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_LOGGING)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault003.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault003.json'
             deploymentMode: 'Incremental'
         
         # Deploy Log Analytics Workspace 001
@@ -742,8 +796,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage001.json'
             deploymentMode: 'Incremental'
         
         # Deploy storage account 002 - enriched & curated
@@ -760,8 +814,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage002.json'
             deploymentMode: 'Incremental'
         
         # Deploy storage account 003 - workspace
@@ -778,8 +832,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_STORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage003.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage003.json'
             deploymentMode: 'Incremental'
         
         # Deploy secret storage account 001 - raw
@@ -796,8 +850,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage001.json'
             deploymentMode: 'Incremental'
         
         # Deploy secret storage account 002 - enriched & curated
@@ -814,8 +868,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage002.json'
             deploymentMode: 'Incremental'
         
         # Deploy secret storage account 003 - workspace
@@ -832,8 +886,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.secret_storage003.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage003.json'
             deploymentMode: 'Incremental'
         
         # Deploy external storage account 001
@@ -850,8 +904,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.external_storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.external_storage001.json'
             deploymentMode: 'Incremental'
         
         # Generate Password
@@ -882,8 +936,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-            csmParametersFile: 'infra/SqlServer/params.sqlServer001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/SqlServer/deploy.sqlServer.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SqlServer/params.sqlServer001.json'
             deploymentMode: 'Incremental'
             overrideParameters: >
               -administratorLoginPassword "$(password)"
@@ -902,8 +956,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
-            csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/SqlDatabase/deploy.sqlDatabase.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SqlDatabase/params.sqlDatabase001.json'
             deploymentMode: 'Incremental'
             overrideParameters: >
               -sqlServerAdministratorLoginPassword "$(password)"
@@ -936,8 +990,8 @@ stages:
         #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
         #     location: '$(AZURE_LOCATION)'
         #     templateLocation: 'Linked artifact'
-        #     csmFile: 'infra/SqlServer/deploy.sqlServer.json'
-        #     csmParametersFile: 'infra/SqlServer/params.sqlServer002.json'
+        #     csmFile: '$(System.DefaultWorkingDirectory)/infra/SqlServer/deploy.sqlServer.json'
+        #     csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SqlServer/params.sqlServer002.json'
         #     deploymentMode: 'Incremental'
         #     overrideParameters: >
         #       -administratorLoginPassword "$(password)"
@@ -956,8 +1010,8 @@ stages:
         #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
         #     location: '$(AZURE_LOCATION)'
         #     templateLocation: 'Linked artifact'
-        #     csmFile: 'infra/SqlDatabase/deploy.sqlDatabase.json'
-        #     csmParametersFile: 'infra/SqlDatabase/params.sqlDatabase002.json'
+        #     csmFile: '$(System.DefaultWorkingDirectory)/infra/SqlDatabase/deploy.sqlDatabase.json'
+        #     csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SqlDatabase/params.sqlDatabase002.json'
         #     deploymentMode: 'Incremental'
         #     deploymentOutputs: 'hivemetastoreDetails'
         #     overrideParameters: >
@@ -977,8 +1031,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_METADATA)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/MySql/deploy.mySql.json'
-            csmParametersFile: 'infra/MySql/params.mySql001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/MySql/deploy.mySql.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/MySql/params.mySql001.json'
             deploymentMode: 'Incremental'
             deploymentOutputs: 'hivemetastoreDetails001'
             overrideParameters: >
@@ -1017,8 +1071,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Databricks/deploy.databricks.json'
-            csmParametersFile: 'infra/Databricks/params.databricks001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Databricks/deploy.databricks.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Databricks/params.databricks001.json'
             deploymentMode: 'Incremental'
             deploymentOutputs: 'databricksDetails001'
         
@@ -1087,8 +1141,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Databricks/deploy.databricks.json'
-            csmParametersFile: 'infra/Databricks/params.databricks002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Databricks/deploy.databricks.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Databricks/params.databricks002.json'
             deploymentMode: 'Incremental'
             deploymentOutputs: 'databricksDetails002'
         
@@ -1157,8 +1211,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/EventHub/deploy.eventHub.json'
-            csmParametersFile: 'infra/EventHub/params.eventHub001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/EventHub/deploy.eventHub.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/EventHub/params.eventHub001.json'
             deploymentMode: 'Incremental'
         
         # Deploy data factory 001
@@ -1175,8 +1229,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/deploy.dataFactory.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/params.dataFactory001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Data Factory 002
@@ -1193,8 +1247,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/params.dataFactory002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/deploy.dataFactory.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/params.dataFactory002.json'
             deploymentMode: 'Incremental'
         
         # Deploy Artifact Storage Account 001
@@ -1312,26 +1366,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Synapse/deploy.synapse.json'
-            csmParametersFile: 'infra/Synapse/params.synapse001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Synapse/deploy.synapse.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Synapse/params.synapse001.json'
             deploymentMode: 'Incremental'
             overrideParameters: >
               -synapseSqlAdministratorPassword "$(password)"
-
-        # Deploy Vnet Peering 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: vnet_peering_001_deployment
-          displayName: Deploy Vnet Peering 001
-          enabled: true
-          continueOnError: true
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetworkPeering/deploy.vnetPeering.json'
-            csmParametersFile: 'infra/VirtualNetworkPeering/params.vnetPeering001.json'
-            deploymentMode: 'Incremental'

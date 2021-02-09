@@ -185,6 +185,32 @@ jobs:
         parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet.json
         deploymentMode: Validate
     
+    # Deploy Vnet Peering 001 - validation
+    - name: Deploy Vnet Peering 001 - validation
+      id: vnet_peering_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
+        deploymentMode: Validate
+    
+    # Deploy Vnet Peering 002 - validation
+    - name: Deploy Vnet Peering 002 - validation
+      id: vnet_peering_002_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering002.json
+        deploymentMode: Validate
+    
     # Deploy Key Vault 001 - validation
     - name: Deploy Key Vault 001 - validation
       id: key_vault_001_validation
@@ -525,20 +551,6 @@ jobs:
         parameters: ${{ github.workspace }}/infra/Synapse/params.synapse001.json synapseSqlAdministratorPassword="${{ steps.generate_password_004.outputs.password }}"
         deploymentMode: Validate
     
-    # Deploy Vnet Peering 001 - validation
-    - name: Deploy Vnet Peering 001 - validation
-      id: vnet_peering_001_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
-        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
-        deploymentMode: Validate
-      continue-on-error: true
-    
     # Log out from Azure
     - name: Log out from Azure
       id: azure_logout
@@ -578,6 +590,32 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/VirtualNetwork/deploy.vnet.json
         parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet.json
+        deploymentMode: Incremental
+    
+    # Deploy Vnet Peering 001
+    - name: Deploy Vnet Peering 001
+      id: vnet_peering_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
+        deploymentMode: Incremental
+    
+    # Deploy Vnet Peering 002
+    - name: Deploy Vnet Peering 002
+      id: vnet_peering_002_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering002.json
         deploymentMode: Incremental
     
     # Deploy Key Vault 001
@@ -933,20 +971,6 @@ jobs:
         template: ${{ github.workspace }}/infra/Synapse/deploy.synapse.json
         parameters: ${{ github.workspace }}/infra/Synapse/params.synapse001.json synapseSqlAdministratorPassword="${{ steps.generate_password_004.outputs.password }}"
         deploymentMode: Incremental
-    
-    # Deploy Vnet Peering 001
-    - name: Deploy Vnet Peering 001
-      id: vnet_peering_001_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
-        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
-        deploymentMode: Incremental
-      continue-on-error: true
     
     # Log out from Azure
     - name: Log out from Azure

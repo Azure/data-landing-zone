@@ -290,6 +290,15 @@
         }
     },
     {
+        "filePath": "infra/VirtualNetworkPeering/params.vnetPeering002.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.sourceVnetId.value": "${HubVnetId}",
+            "parameters.destinationVnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet"
+        }
+    },
+    {
         "filePath": ".ado/workflows/dataNodeDeployment.yml",
         "fileType": "yaml",
         "parameters": {
