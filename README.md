@@ -104,7 +104,11 @@ This will generate the following JSON output:
 
 Take note of the output. It will be required for the next steps.
 
-For automation purposes of this repo, few more role assignments are required for this service principle. This can be further reduced in a production scenario. Required role assignments include:
+For automation purposes of this repo, few more role assignments are required for this service principle. 
+
+> Note: The number of role assignments can be further reduced in a production scenario. The **Network Contributor** role assignment is just required to automatically setup the vnet peering between the data management environment and the data landing zone. Without this, DNS resolution will not work and in- and outbound traffic will be dropped, because there is no line of sight to the Azure Firewall.
+
+Required role assignments include:
 
 | Role Name | Description | Scope |
 |:----------|:------------|:------|
