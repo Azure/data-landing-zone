@@ -1,33 +1,33 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "databricksName": {
-            "value": "dn001-databricks002-processing"
-        },
-        "databricksVnetId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet"
-        },
-        "databricksManagedResourceGroupId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-databricks002-processing"
-        },
-        "databricksPrivateSubnetName": {
-            "value": "dn001-databricks002-private-subnet"
-        },
-        "databricksPublicSubnetName": {
-            "value": "dn001-databricks002-public-subnet"
-        },
-        "subnetId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
-        },
-        "privateDnsZoneIdDatabricks": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.azuredatabricks.net"
-        },
-        "privateDnsZoneIdBlob": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "<my-region>"
+    },
+    "databricksName": {
+      "value": "mydatalandingzonename-databricks002-processing"
+    },
+    "databricksVnetId": {
+      "value": "/subscriptions/<my-data-landing-zone-subscription-id>/resourceGroups/mydatalandingzonename-network/providers/Microsoft.Network/virtualNetworks/mydatalandingzonename-vnet"
+    },
+    "databricksManagedResourceGroupId": {
+      "value": "/subscriptions/<my-data-landing-zone-subscription-id>/resourceGroups/mydatalandingzonename-databricks002-processing"
+    },
+    "databricksPrivateSubnetName": {
+      "value": "mydatalandingzonename-databricks002-private-subnet"
+    },
+    "databricksPublicSubnetName": {
+      "value": "mydatalandingzonename-databricks002-public-subnet"
+    },
+    "subnetId": {
+      "value": "/subscriptions/<my-data-landing-zone-subscription-id>/resourceGroups/mydatalandingzonename-network/providers/Microsoft.Network/virtualNetworks/mydatalandingzonename-vnet/subnets/mydatalandingzonename-privatelink-subnet"
+    },
+    "privateDnsZoneIdDatabricks": {
+      "value": "<my-global-dns-resource-group-resource-id>/providers/Microsoft.Network/privateDnsZones/privatelink.azuredatabricks.net"
+    },
+    "privateDnsZoneIdBlob": {
+      "value": "<my-global-dns-resource-group-resource-id>/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
     }
+  }
 }
