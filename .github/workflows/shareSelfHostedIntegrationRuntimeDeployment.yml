@@ -43,6 +43,7 @@ jobs:
         deploymentMode: Validate
       env:
         AZURE_RESOURCE_GROUP: 'dn001-processing-domain'
+      continue-on-error: true
     
     # Log out from Azure
     - name: Log out from Azure
@@ -84,7 +85,8 @@ jobs:
         parameters: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
         deploymentMode: Incremental
       env:
-        AZURE_RESOURCE_GROUP: dn001-processing-domain
+        AZURE_RESOURCE_GROUP: 'dn001-processing-domain'
+      continue-on-error: true
     
     # Log out from Azure
     - name: Log out from Azure
