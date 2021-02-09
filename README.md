@@ -32,7 +32,7 @@ You have two options for deploying this reference architecture:
 1. Use the `Deploy to Azure` Button or
 2. Use GitHub Actions or Azure DevOps Pipelines.
 
-# Option 1: `Deploy to Azure` - Quickstart
+# Option 1: Deploy to Azure - Quickstart
 
 | Data Landing Zone |
 |:--------------|
