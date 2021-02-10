@@ -1,31 +1,31 @@
 [CmdletBinding()]
 Param(
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
     $ConfigurationFilePath,
 
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
     $GlobalDnsResourceGroupId,
 
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
     $DataLandingZoneSubscriptionId,
 
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
     $DataLandingZoneName,
 
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
     $Location,
 
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
     $HubVnetId,
@@ -57,6 +57,9 @@ function Remove-SpecialCharsAndWhitespaces($InputString) {
 # Replace Special Characters
 Write-Host "Replacing Special Characters"
 $DataLandingZoneName = Remove-SpecialCharsAndWhitespaces -InputString $DataLandingZoneName
+
+# Reduce Length of DataLandingZoneName
+$DataLandingZoneName = -join $DataLandingZoneName[0..11]
 
 # Loading Configuration File for Parameter Updates
 Write-Host "Loading Configuration File for Parameter Updates"
