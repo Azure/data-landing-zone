@@ -1,4 +1,9 @@
 # Databricks notebook source
+
+# Install the required libraries
+dbutils.library.installPyPI("pyapacheatlas")
+dbutils.library.restartPython()
+
 # Connect to Purview Account
 import json
 import os
