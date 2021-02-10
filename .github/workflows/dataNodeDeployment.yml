@@ -866,7 +866,6 @@ jobs:
         template: ${{ github.workspace }}/infra/Databricks/deploy.databricks.json
         parameters: ${{ github.workspace }}/infra/Databricks/params.databricks001.json
         deploymentMode: Incremental
-      continue-on-error: true
     
     # # Setup databricks 001 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
     # - name: Setup Databricks 001
