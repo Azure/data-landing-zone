@@ -41,6 +41,10 @@ param (
     $GroupIdList
 )
 
+# Import Helper Functions
+Write-Host "Importing Helper Functions"
+. "$PSScriptRoot\Helper.ps1"
+
 # Authentication and get AAD Token
 Write-Host "Logging in and getting AAD Token"
 Get-AadToken `

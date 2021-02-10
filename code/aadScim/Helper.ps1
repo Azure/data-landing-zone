@@ -450,7 +450,7 @@ function Test-Connection {
     # Set body for REST call
     Write-Verbose "Setting body for REST call"
     $body = @{
-        # 'templateId'          = 'dataBricks'
+        'templateId'          = 'dataBricks'
         'useSavedCredentials' = 'false'
         'credentials'         = @(
             @{
@@ -518,7 +518,7 @@ function Save-ProvisioningCredentials {
         Function expects a notification email address to which messages are sent, if there are synchronization issues.
 
     .EXAMPLE
-        Test-Connection -ObjectId '<your-service-principal-object-id>' -JobId '<your-synchronisation-job-id>' -DatabricksInstanceName '<your-databricks-instance-name>' -DatabricksPatToken '<your-databricks-pat-token>' -NotificationEmail '<your-notification-email>'
+        Save-ProvisioningCredentials -ObjectId '<your-service-principal-object-id>' -JobId '<your-synchronisation-job-id>' -DatabricksInstanceName '<your-databricks-instance-name>' -DatabricksPatToken '<your-databricks-pat-token>' -NotificationEmail '<your-notification-email>'
 
     .NOTES
         Author:  Marvin Buss
@@ -575,10 +575,7 @@ function Save-ProvisioningCredentials {
             },
             @{
                 'key'   = 'SyncNotificationSettings'
-                'value' = @{
-                    'Enabled'    = 'true'
-                    'Recipients' = "${NotificationEmail}"
-                }
+                'value' = "{`"Enabled`":true,`"Recipients`":`"${NotificationEmail}`"}"
             },
             @{
                 'key'   = 'SyncAll'
@@ -753,7 +750,7 @@ function Start-SynchronisationJob {
     Write-Verbose "Defining parameters for pscore method"
     $parameters = @{
         'Uri'         = $graphApiUri
-        'Method'      = 'Put'
+        'Method'      = 'Post'
         'Headers'     = $headers
         'ContentType' = 'application/json'
     }
@@ -907,7 +904,7 @@ function New-ScimSetup {
         [String]
         $NotificationEmail,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [String[]]
         $GroupIdList
@@ -921,6 +918,10 @@ function New-ScimSetup {
     $objectId = New-DatabricksEnterpriseApplication `
         -DatabricksWorkspaceName $databricksWorkspaceName
     
+    # Sleep for 5 Seconds
+    Write-Verbose "Sleeping for 5 seconds"
+    Start-Sleep -Seconds 5
+
     # Get Synchronization Template
     Write-Verbose "Getting Synchronization Template"
     Get-SynchronisationTemplate `
@@ -951,7 +952,7 @@ function New-ScimSetup {
     Write-Verbose "Adding Group Assignment"
     foreach ($groupId in $GroupIdList) {
         New-GroupAssignment `
-            -ObjectId $ObjectId `
+            -ObjectId $objectId `
             -GroupId $groupId
     }
     
@@ -961,10 +962,18 @@ function New-ScimSetup {
         -ObjectId $objectId `
         -JobId $jobId
     
+    # Get Provisioning Logs
+    Write-Host "Getting Provisioning Logs"
+    $provisioningLogs = Get-ProvisioningAuditLogs `
+        -ObjectId $objectId `
+        -JobId $jobId
+    
+    Write-Host "Provisioning Logs: ${provisioningLogs}"
+    
     return $objectId, $jobId
 }
 
-function New-GroupAssignment {
+function New-GroupListAssignment {
     <#
     .SYNOPSIS
         Assigns AAD groups to the enterprise application to give them access to the Databricks workspace.
@@ -985,7 +994,7 @@ function New-GroupAssignment {
         Function expects a list of group object ids which is granted access to the Databricks workspace via SCIM.
 
     .EXAMPLE
-        New-GroupAssignment -ObjectId '<your-service-principal-object-id>' -JobId '<your-job-id>' -GroupIdList @('<your-group-id-1>', '<your-group-id-2>')
+        New-GroupListAssignment -ObjectId '<your-service-principal-object-id>' -JobId '<your-job-id>' -GroupIdList @('<your-group-id-1>', '<your-group-id-2>')
 
     .NOTES
         Author:  Marvin Buss
@@ -1017,7 +1026,7 @@ function New-GroupAssignment {
     foreach ($groupId in $GroupIdList) {
         New-GroupAssignment `
             -ObjectId $ObjectId `
-            -GroupId $GroupId
+            -GroupId $groupId
     }
     
     # Start Synchronisation Job
