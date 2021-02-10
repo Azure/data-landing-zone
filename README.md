@@ -45,7 +45,7 @@ If you don’t have an Azure subscription, [create your Azure free account today
 | &nbsp;&nbsp;&nbsp;Data Landing Zone |
 |:------------------|
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-node%2Fmain%2Fdocs%2Freference%2Fdeploy.dataNode.json)
-    
+
 # Option 2: GitHub Actions or Azure DevOps Pipelines
 
 ## 1. Create repository from a template
@@ -76,9 +76,9 @@ A service principal needs to be generated for authentication and authorization f
 # Replace {service-principal-name} and {subscription-id}  with your 
 # Azure subscription id and any name for your service principal.
 az ad sp create-for-rbac \
-  --name {service-principal-name} \
-  --role contributor \
-  --scopes /subscriptions/{subscription-id} \
+  --name "{service-principal-name}" \
+  --role "Contributor" \
+  --scopes "/subscriptions/{subscription-id}" \
   --sdk-auth
 ```
 
@@ -88,7 +88,7 @@ az ad sp create-for-rbac \
 # Azure subscription id and any name for your service principal.
 New-AzADServicePrincipal `
   -DisplayName "{service-principal-name}" `
-  -Role contributor `
+  -Role "Contributor" `
   -Scope "/subscriptions/{subscription-id}"
 ```
 This will generate the following JSON output:
