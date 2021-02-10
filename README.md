@@ -27,10 +27,12 @@ By default, all the services which comes under Data Landing Zone are enabled and
  - [Databricks](https://docs.microsoft.com/en-us/azure/databricks/)
  - [Event Hub](https://docs.microsoft.com/en-us/azure/event-hubs/)
 
+For more details regarding the services which will be deployed, please check [Data Landing Zone](https://github.com/Azure/Enterprise-Scale-Analytics/tree/main/docs/03-datalandingzones).
+
+
 You have two options for deploying this reference architecture:
 1. Use the `Deploy to Azure` Button or
 2. Use GitHub Actions or Azure DevOps Pipelines.
-3. Deployed [Data Management Zone](https://github.com/Azure/data-management-zone)
 
 # Prerequisites
 
