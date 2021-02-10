@@ -1,18 +1,18 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "keyVaultName": {
-            "value": "dn001-keyvault003"
-        },
-        "subnetId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
-        },
-        "privateDnsZoneId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "{regionName}"
+    },
+    "keyVaultName": {
+      "value": "dataLandingZ-keyvault003"
+    },
+    "subnetId": {
+      "value": "/subscriptions/{dataLandingZoneSubscriptionId}/resourceGroups/dataLandingZ-network/providers/Microsoft.Network/virtualNetworks/dataLandingZ-vnet/subnets/dataLandingZ-privatelink-subnet"
+    },
+    "privateDnsZoneId": {
+      "value": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
     }
+  }
 }
