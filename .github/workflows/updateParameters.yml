@@ -59,7 +59,7 @@ jobs:
 
                 \`\`\`YAML
                 env:
-                  AZURE_SUBSCRIPTION_ID: '${{ DATA_LANDING_ZONE_SUBSCRIPTION_ID}}'
+                  AZURE_SUBSCRIPTION_ID: '${{ env.DATA_LANDING_ZONE_SUBSCRIPTION_ID}}'
                   AZURE_RESOURCE_GROUP_NAME_NETWORK: '${{ env.DATA_LANDING_ZONE_NAME }}-network'
                   AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: '${{ env.DATA_LANDING_ZONE_NAME }}-mgmt'
                   AZURE_RESOURCE_GROUP_NAME_INTEGRATION: '${{ env.DATA_LANDING_ZONE_NAME }}-integration'
@@ -80,7 +80,7 @@ jobs:
                 \`\`\`YAML
                 env:
                   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '${{ env.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}'
-                  AZURE_SUBSCRIPTION_ID: '${{ DATA_LANDING_ZONE_SUBSCRIPTION_ID}}'
+                  AZURE_SUBSCRIPTION_ID: '${{ env.DATA_LANDING_ZONE_SUBSCRIPTION_ID}}'
                   AZURE_RESOURCE_GROUP_NAME_NETWORK: '${{ env.DATA_LANDING_ZONE_NAME }}-network'
                   AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: '${{ env.DATA_LANDING_ZONE_NAME }}-mgmt'
                   AZURE_RESOURCE_GROUP_NAME_INTEGRATION: '${{ env.DATA_LANDING_ZONE_NAME }}-integration'
