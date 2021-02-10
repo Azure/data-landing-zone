@@ -12,24 +12,33 @@ By default, all the services which comes under Data Landing Zone are enabled and
   <img src="./docs/media/DataNode.png" alt="Data Landing Zone" width="500"/> 
 </p>
 
- - [Azure Virtual Network](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview)
+ - [Virtual Network](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview)
  - [Network Security Groups](https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview)
  - [Route Tables](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-udr-overview)
- - [Azure Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/general)
+ - [Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/general)
  - [Storage Account](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview)
  - [Data Lake Storage Gen2](https://docs.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-introduction)
- - [Azure Data Factory](https://docs.microsoft.com/en-us/azure/data-factory/)
+ - [Data Factory](https://docs.microsoft.com/en-us/azure/data-factory/)
  - [Self Hosted Integration Runtime](https://docs.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtime)
  - [Log Analytics](https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-create-workspace)
  - [SQL Server](https://docs.microsoft.com/en-us/sql/sql-server/?view=sql-server-ver15)
- - [Azure SQL Database](https://docs.microsoft.com/en-us/azure/azure-sql/database/)
+ - [SQL Database](https://docs.microsoft.com/en-us/azure/azure-sql/database/)
  - [Synapse Workspace](https://docs.microsoft.com/en-us/azure/synapse-analytics/)
- - [Azure Databricks](https://docs.microsoft.com/en-us/azure/databricks/)
+ - [Databricks](https://docs.microsoft.com/en-us/azure/databricks/)
  - [Event Hub](https://docs.microsoft.com/en-us/azure/event-hubs/)
 
 You have two options for deploying this reference architecture:
 1. Use the `Deploy to Azure` Button or
 2. Use GitHub Actions or Azure DevOps Pipelines.
+3. Deployed [Data Management Zone](https://github.com/Azure/data-management-zone)
+
+# Prerequisites
+
+The following prerequisites are required to make this repository work:
+* Azure subscription
+* [User Access Administrator](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#owner) access to the subscription to be able to create a service principal and role assignments for it.
+
+If you don’t have an Azure subscription, [create your Azure free account today](https://azure.microsoft.com/en-us/free/).
 
 # Option 1: Deploy to Azure - Quickstart
 
@@ -39,17 +48,9 @@ You have two options for deploying this reference architecture:
     
 # Option 2: GitHub Actions or Azure DevOps Pipelines
 
-## 1. Prerequisites
+## 1. Create repository from a template
 
-The following prerequisites are required to make this repository work:
-* Azure subscription
-* [User Access Administrator](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#owner) access to the subscription to be able to create a service principal and add it to the subscription.
-
-If you don’t have an Azure subscription, [create your Azure free account today](https://azure.microsoft.com/en-us/free/).
-
-## 2. Create repository from a template
-
-1. On GitHub, navigate to the [main page of the repository](.).
+1. On GitHub, navigate to the main page of the repository.
 2. Above the file list, click **Use this template**
 
 <p align="center">
@@ -66,7 +67,7 @@ If you don’t have an Azure subscription, [create your Azure free account today
 6. Optionally, to include the directory structure and files from all branches in the template, and not just the default branch, select **Include all branches**.
 7. Click **Create repository from template**.
 
-## 3. Setting up the required Service Principal and access
+## 2. Setting up the required Service Principal and access
 
 A service principal needs to be generated for authentication and authorization from GitHub or Azure DevOps to your Azure subscription. This is required to deploy resources to your environment. Just go to the Azure Portal to find the id of your subscription. Then start CLI or PowerShell, login to Azure, set the Azure context and execute the following commands to generate the required credentials:
 
@@ -159,7 +160,7 @@ New-AzRoleAssignment `
 
 Now you can choose, whether you would like to use GitHub Actions or Azure DevOps for your deployment.
 
-## 4. a) GitHub Actions
+## 3. a) GitHub Actions
 
 If you want to use GitHub Actions for deploying the resources, add the previous JSON output as a [repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) with the name `AZURE_CREDENTIALS` in your GitHub repository:
 
@@ -169,7 +170,7 @@ If you want to use GitHub Actions for deploying the resources, add the previous 
 
 To do so, execute the following steps:
 
-1. On GitHub, navigate to the [main page of the repository](/).
+1. On GitHub, navigate to the main page of the repository.
 2. Under your repository name, click on the **Settings** tab.
 3. In the left sidebar, click **Secrets**.
 4. Click **New repository secret**.
@@ -177,7 +178,7 @@ To do so, execute the following steps:
 6. Enter the JSON output from above as value for your secret.
 7. Click **Add secret**.
 
-## 4. b) Azure DevOps
+## 3. b) Azure DevOps
 
 If you want to use Azure DevOps Pipelines for deploying the resources, you need to create an Azure Resource Manager service connection. To do so, execute the following steps:
 
@@ -204,7 +205,7 @@ If you want to use Azure DevOps Pipelines for deploying the resources, you need 
 
 More information can be found [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal).
 
-## 5. Parameter Update Process
+## 4. Parameter Update Process
 
 In order to deploy the ARM templates in this repository to the desired Azure subscription, you'll need to modify some parameters in the forked repository. As updating each parameter file manually is a time consuming process, which could lead as well to undesired user errors, we have simplified the process witha  GitHub Action workflow. After successfully executing the previous steps, please open the <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml"` YAML file</a>. In this file you need to update the environment variables. Once you commit the file with the updated values, a GitHub Action workflow will be triggered that replaces all parameters accordingly. Just click on <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml"`</a> and edit the following section: 
 
@@ -230,11 +231,11 @@ The parameters have the following meaning:
 | AZURE_RESOURCE_MANAGER _CONNECTION_NAME   | Specifies the resource manager connection name in Azure DevOps. You can leave the default value, if you want to use GitHub Actions for your deployment. More details on how to create the resource manager connection in Azure DevOps can be found in step 4. b) or [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal). | `my-connection-name` |
 | HUB_VNET_ID                              | Specifies the resource ID of the vnet to which the landing zone vnet should be peered with. You can leave the default value, if you have not deployed the Management Landing Zone or another Data Landing Zone. We are recommending a mesh network design for the overall data platform, which is why you might have to add additional peering deployments to your forked repository over time (2-way process). | `/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/my-network-rg/providers/Microsoft.Network/virtualNetworks/my-vnet` |
 
-After updating the values, please commit the updated version to the `main` branch. This will kick off a GitHub Action workflow, which will appear under the **Actions** tab of the [main page of the repository](/). The `Update Parameter Files` workflow will update all parameters in your repository according to a certain naming convention. Once the process has finished, it will open a Pull Request in your repository, where you can review the changes made by the workflow. Please follow the instructions in the Pull Request to complete the parameter update process. We are not renaming the environment variables in the workflow files, because this can have undesired outcomes of kicking of an infinite number of workflows. 
+After updating the values, please commit the updated version to the `main` branch. This will kick off a GitHub Action workflow, which will appear under the **Actions** tab of the main page of the repository. The `Update Parameter Files` workflow will update all parameters in your repository according to a certain naming convention. Once the process has finished, it will open a Pull Request in your repository, where you can review the changes made by the workflow. Please follow the instructions in the Pull Request to complete the parameter update process. We are not renaming the environment variables in the workflow files, because this can have undesired outcomes of kicking of an infinite number of workflows. 
 
 After following the instructions in the Pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository.
 
-## 6. (not applicable for GH Actions) Reference pipeline from GitHub repository in Azure DevOps pipelines
+## 5. (not applicable for GH Actions) Reference pipeline from GitHub repository in Azure DevOps pipelines
 
 ### 1. Install Azure DevOps Pipelines GitHub Application
 
@@ -284,23 +285,23 @@ As a last step, you need to reference the Azure DevOps Yaml pipeline, that is st
 
 7. Click on **Continue** and then on **Run**.
 
-## 7. Follow the workflow deployment
+## 6. Follow the workflow deployment
 
 **Congratulations!** You have successfully executed all steps to deploy the template into your environment through GitHub Actions or Azure DevOps.
 
-If you are using GitHub Actions, you can navigate to the **Actions** tab of the [main page of the repository](/), where you will see a workflow with the name `Data Node Deployment` running. Click on it to see how it deploys one service after another. If you run into any issues, please open an issue [here](https://github.com/Azure/data-hub/issues).
+If you are using GitHub Actions, you can navigate to the **Actions** tab of the main page of the repository, where you will see a workflow with the name `Data Node Deployment` running. Click on it to see how it deploys one service after another. If you run into any issues, please open an issue [here](https://github.com/Azure/data-landing-zone/issues).
 
-If you are using Azure DevOps Pipelines, you can navigate to the pipeline that you have created as part of step 6 and follow  how it deploys one service after another. If you run into any issues, please open an issue [here](https://github.com/Azure/data-hub/issues).
+If you are using Azure DevOps Pipelines, you can navigate to the pipeline that you have created as part of step 6 and follow  how it deploys one service after another. If you run into any issues, please open an issue [here](https://github.com/Azure/data-landing-zone/issues).
 
 # Enterprise Scale Analytics Documentation and Implementation
 
 - [Documentation](https://github.com/Azure/Enterprise-Scale-Analytics)
-- [Implementation - Data Management](https://github.com/Azure/data-hub)
-- [Implementation - Data Landing Zone](https://github.com/Azure/data-node)
-- [Implementation - Data Domain - Batch](https://github.com/Azure/data-domain)
+- [Implementation - Data Management](https://github.com/Azure/data-management-zone)
+- [Implementation - Data Landing Zone](https://github.com/Azure/data-landing-zone)
+- [Implementation - Data Domain - Batch](https://github.com/Azure/data-domain-batch)
 - [Implementation - Data Domain - Streaming](https://github.com/Azure/data-domain-streaming)
-- [Implementation - Data Product - Reporting](https://github.com/Azure/data-product)
-- [Implementation - Data Product - Data Science](https://github.com/Azure/data-product-analytics)
+- [Implementation - Data Product - Reporting](https://github.com/Azure/data-product-reporting)
+- [Implementation - Data Product - Analytics & Data Science](https://github.com/Azure/data-product-analytics)
 
 # Contributing
 
