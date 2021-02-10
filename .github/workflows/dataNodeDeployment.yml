@@ -875,6 +875,9 @@ jobs:
         echo "Please run the following command to setup Databricks Workspace 001:
 
         ./code/SetupDatabricksManual.ps1 \`
+          -UserObjectId '{userObjectId}' \`
+          -Password '{password}' \`
+          -TenantId '{tenantId}' \`
           -DatabricksWorkspaceName '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceName }}' \`
           -DatabricksWorkspaceId '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceId }}' \`
           -DatabricksApiUrl '${{ steps.databricks_001_deployment.outputs.databricksApiUrl }}' \`
@@ -937,6 +940,9 @@ jobs:
       run: |
         echo "Please run the following command to setup Databricks Workspace 002:
           ./code/SetupDatabricksManual.ps1 \`
+            -UserObjectId '{userObjectId}' \`
+            -Password '{password}' \`
+            -TenantId '{tenantId}' \`
             -DatabricksWorkspaceName '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceName }}' \`
             -DatabricksWorkspaceId '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceId }}' \`
             -DatabricksApiUrl '${{ steps.databricks_002_deployment.outputs.databricksApiUrl }}' \`

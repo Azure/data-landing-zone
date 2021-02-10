@@ -4,12 +4,17 @@ param (
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $UserName,
+    $UserObjectId,
 
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [String]
     $Password,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $TenantId,
 
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
@@ -105,11 +110,11 @@ Install-Module -Name DatabricksPS
 # Define Service Principal Credentials
 Write-Host "Defining Service Principal credentials"
 $password = ConvertTo-SecureString $Password -AsPlainText -Force
-$credSp = New-Object System.Management.Automation.PSCredential ($UserName, $password)
+$cred = New-Object System.Management.Automation.PSCredential ($UserObjectId, $password)
 
 # Login to Databricks Workspace using Service Principal
 Write-Host "Logging in to Databricks using Service Principal"
-Set-DatabricksEnvironment -TenantID $env:tenantId -ClientID $env:servicePrincipalId -Credential $credSp -AzureResourceID $DatabricksWorkspaceId -ApiRootUrl $DatabricksApiUrl -ServicePrincipal
+Set-DatabricksEnvironment -TenantID $TenantId -ClientID $UserObjectId -Credential $cred -AzureResourceID $DatabricksWorkspaceId -ApiRootUrl $DatabricksApiUrl
 
 
 # *****************************************************************************

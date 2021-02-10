@@ -1118,8 +1118,9 @@ stages:
             echo "Please run the following command to setup Databricks Workspace 001:
 
             ./code/SetupDatabricksManual.ps1 \`
-              -UserName '{userName}' \`
+              -UserObjectId '{userObjectId}' \`
               -Password '{password}' \`
+              -TenantId '{tenantId}' \`
               -DatabricksWorkspaceName '$(databricksWorkspaceName)' \`
               -DatabricksWorkspaceId '$(databricksWorkspaceId)' \`
               -DatabricksApiUrl '$(databricksApiUrl)' \`
@@ -1214,8 +1215,9 @@ stages:
             echo "Please run the following command to setup Databricks Workspace 002:
 
             ./code/SetupDatabricksManual.ps1 \`
-              -UserName '{userName}' \`
+              -UserObjectId '{userObjectId}' \`
               -Password '{password}' \`
+              -TenantId '{tenantId}' \`
               -DatabricksWorkspaceName '$(databricksWorkspaceName)' \`
               -DatabricksWorkspaceId '$(databricksWorkspaceId)' \`
               -DatabricksApiUrl '$(databricksApiUrl)' \`
