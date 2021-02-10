@@ -49,7 +49,7 @@ If you don’t have an Azure subscription, [create your Azure free account today
 
 ## 2. Create repository from a template
 
-1. On GitHub, navigate to the [main page of the repository](/).
+1. On GitHub, navigate to the [main page of the repository](.).
 2. Above the file list, click **Use this template**
 
 <p align="center">
