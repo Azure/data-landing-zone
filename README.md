@@ -33,8 +33,8 @@ You have two options for deploying this reference architecture:
 
 # Option 1: Deploy to Azure - Quickstart
 
-| Data Landing Zone |
-|:--------------|
+| &nbsp;&nbsp;&nbsp;Data Landing Zone |
+|:------------------|
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-node%2Fmain%2Fdocs%2Freference%2Fdeploy.dataNode.json)
     
 # Option 2: GitHub Actions or Azure DevOps Pipelines
@@ -71,7 +71,7 @@ If you don’t have an Azure subscription, [create your Azure free account today
 A service principal needs to be generated for authentication and authorization from GitHub or Azure DevOps to your Azure subscription. This is required to deploy resources to your environment. Just go to the Azure Portal to find the id of your subscription. Then start CLI or PowerShell, login to Azure, set the Azure context and execute the following commands to generate the required credentials:
 
 **Azure CLI**
-```Shell
+```sh
 # Replace {service-principal-name} and {subscription-id}  with your 
 # Azure subscription id and any name for your service principal.
 az ad sp create-for-rbac \
@@ -261,7 +261,7 @@ First you need to add and install the Azure Pipelines GitHub App to your GitHub 
 
 As a last step, you need to reference the Azure DevOps Yaml pipeline, that is stored in your GitHub repository, as a Pipeline in your Azure DevOps Project. To do so, execute the following steps: 
 
-1. Select the project, where you have setup your Resource Manager Connection.
+1. Select the project, where you have setup your `Resource Manager Connection`.
 2. Select **Pipelines** and then **New Pipeline** in order to create a new pipeline.
 
 <p align="center">
