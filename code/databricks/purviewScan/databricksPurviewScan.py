@@ -1,22 +1,32 @@
 # Databricks notebook source
-
 # Install the required libraries
 dbutils.library.installPyPI("pyapacheatlas")
 dbutils.library.restartPython()
 
-# Connect to Purview Account
+# COMMAND ----------
+
+# Leveraging parameters from the ADF pipeline
+dbutils.widgets.text("tenantID","")
+dbutils.widgets.text("clientID","")
+dbutils.widgets.text("purviewAccountName","")
+
+tenant_id = dbutils.widgets.get("tenantID")
+client_id = dbutils.widgets.get("clientID")
+purview_account_name = dbutils.widgets.get("purviewAccountName")
+
+# Fetch the client_secret from the Azure Key Vault
+# specified in spark configuration
+client_secret = spark.conf.get("spark.clientsecret")
+
+# COMMAND ----------
+
+# Connect to Purview
 import json
 import os
 from pyapacheatlas.auth import ServicePrincipalAuthentication
 from pyapacheatlas.core import PurviewClient, AtlasEntity, AtlasProcess, TypeCategory
 from pyapacheatlas.core.util import GuidTracker
 from pyapacheatlas.core.typedef import AtlasAttributeDef, EntityTypeDef, RelationshipTypeDef
-
-# Add your credentials here or set them as environment variables
-tenant_id = "72f988bf-86f1-41af-91ab-2d7cd011db47"
-client_id = "634f564f-ef8f-4beb-be61-baf0b19dc84b"
-client_secret = "t1h7aLacJ.TsT-GWlxaq_769FD5yJBc--8"
-purview_account_name = "hapurview"
 
 oauth = ServicePrincipalAuthentication(
         tenant_id=os.environ.get("TENANT_ID", tenant_id),
@@ -79,7 +89,6 @@ typedef_results = client.upload_typedefs(
   entityDefs = [type_spark_df, type_spark_columns, type_spark_job ],
   relationshipDefs = [spark_column_to_df_relationship],
   force_update=True)
-#print(typedef_results)
 
 # COMMAND ----------
 
@@ -100,9 +109,9 @@ for q in search:
 all_tbls = spark.sql("SHOW TABLES")
 incoming_tables = all_tbls.select("tableName").rdd.flatMap(lambda x: x).collect()
 
-print("- Tables processed")
-print("-- Incoming tables from Databricks: ", incoming_tables)
-print("-- Existing tables in Purview: ", existing_tables)
+print("- PROCESSING TABLES:")
+print("--- Incoming tables from Databricks: ", incoming_tables)
+print("--- Existing tables in Purview: ", existing_tables)
 
 # Removed deleted or renamed tables from Purview.
 for t in existing_tables:
