@@ -87,7 +87,7 @@
         "vmssAdminPassword": "[parameters('vmssAdminPassword')]",
         "dataFactoryId": "[parameters('dataFactoryId')]",
         "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
-        "dataFactorySelfHostedIntegrationRuntimeName": "[concat('datahubSelfHostedIntegrationRuntime', variables('vmssName'))]",
+        "dataFactorySelfHostedIntegrationRuntimeName": "[concat('dataNodeSelfHostedIntegrationRuntime', variables('vmssName'))]",
         "storageAccountId": "[parameters('storageAccountId')]",
         "storageAccountName": "[last(split(variables('storageAccountId'), '/'))]",
         "storageAccountContainerName": "[parameters('storageAccountContainerName')]",

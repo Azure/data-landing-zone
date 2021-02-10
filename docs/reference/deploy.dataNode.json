@@ -27,7 +27,13 @@
         "dnsServerAdresses": {
             "type": "array",
             "metadata": {
-                "description": "List of internal IP adresses of your DNS forwarders or internal IP address of your Azure Firewall if you have enabled DNS forwarding."
+                "description": "Specifies a list of internal IP adresses of your DNS forwarders or internal IP address of your Azure Firewall if you have enabled DNS forwarding."
+            }
+        },
+        "firewallPrivateIp": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the private IP of your (Azure) Firewall."
             }
         },
         "privateDnsZoneResourceGroupId": {
@@ -50,17 +56,21 @@
         "dataNodeName": "[parameters('dataNodeName')]",
         "location": "[parameters('location')]",
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
+        "firewallPrivateIp": "[parameters('firewallPrivateIp')]",
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
         "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
         "storageAccountNames": [
             "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'rawsa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
-            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'enrcursa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'encursa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
             "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
         ],
         "secretStorageAccountNames": [
-            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretrawsa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
-            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretenrcursa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
-            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secretworksa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secrawsa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secencursa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secworksa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
+        ],
+        "externalStorageAccountNames": [
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'extsa001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
         ],
         "databricksNames": [
             "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-databricks001-ingest'), 30)]",
@@ -181,6 +191,9 @@
                     },
                     "dnsServerAdresses": {
                         "value": "[variables('dnsServerAdresses')]"
+                    },
+                    "firewallPrivateIp": {
+                        "value": "[variables('firewallPrivateIp')]"
                     }
                 }
             },
@@ -341,7 +354,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
-            "name": "externalStorageDeployment001",
+            "name": "[take(concat('externalStorageDeployment-', copyIndex(), '-', variables('externalStorageAccountNames')[copyIndex()]), 64)]",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('externalStorageResourceGroupName'))]",
                 "vnetDeployment",
@@ -358,7 +371,7 @@
                         "value": "[variables('location')]"
                     },
                     "storageAccountName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'externalsa001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
+                        "value": "[variables('externalStorageAccountNames')[copyIndex()]]"
                     },
                     "storageAccountType": {
                         "value": "Standard_LRS"
@@ -377,7 +390,12 @@
                     }
                 }
             },
-            "resourceGroup": "[variables('externalStorageResourceGroupName')]"
+            "resourceGroup": "[variables('externalStorageResourceGroupName')]",
+            "copy": {
+                "name": "externalStorageAccountCopy",
+                "count": "[length(variables('externalStorageAccountNames'))]",
+                "mode": "Parallel"
+            }
         },
         {
             "type": "Microsoft.Resources/deployments",
@@ -970,7 +988,8 @@
             "name": "synapse001Deployment",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('processingProductResourceGroupName'))]",
-                "vnetDeployment"
+                "vnetDeployment",
+                "storageAccountCopy"
             ],
             "properties": {
                 "mode": "Incremental",

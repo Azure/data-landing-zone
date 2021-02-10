@@ -32,20 +32,42 @@
     },
     "resources": [
         {
-            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-            "apiVersion": "2020-05-01",
-            "name": "[concat(variables('sourceVnetName'), '/', variables('destinationVnetName'))]",
-            "location": "[variables('location')]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "NetworkPeeringDeployment",
             "properties": {
-                "allowForwardedTraffic": true,
-                "allowGatewayTransit": true,
-                "allowVirtualNetworkAccess": true,
-                "peeringState": "Connected",
-                "remoteVirtualNetwork": {
-                    "id": "[variables('destinationVnetId')]"
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
                 },
-                "useRemoteGateways": false
-            }
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+                            "apiVersion": "2020-05-01",
+                            "name": "[concat(variables('sourceVnetName'), '/', variables('destinationVnetName'))]",
+                            "location": "[variables('location')]",
+                            "properties": {
+                                "allowForwardedTraffic": true,
+                                "allowGatewayTransit": true,
+                                "allowVirtualNetworkAccess": true,
+                                "peeringState": "Connected",
+                                "remoteVirtualNetwork": {
+                                    "id": "[variables('destinationVnetId')]"
+                                },
+                                "useRemoteGateways": false
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            },
+            "subscriptionId": "[split(variables('sourceVnetId'), '/')[2]]",
+            "resourceGroup": "[split(variables('sourceVnetId'), '/')[4]]"
         }
     ],
     "outputs": {}

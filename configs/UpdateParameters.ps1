@@ -1,49 +1,40 @@
 [CmdletBinding()]
 Param(
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
     $ConfigurationFilePath,
 
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $ManagementSubscriptionId,
+    $GlobalDnsResourceGroupId,
 
-    [Parameter(Mandatory)]
-    [ValidateNotNullOrEmpty()]
-    [string]
-    $GlobalDnsRgName,
-
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
     $DataLandingZoneSubscriptionId,
 
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
     $DataLandingZoneName,
 
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
     $Location,
 
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $SynapseStorageAccountName,
-
-    [Parameter(Mandatory)]
-    [ValidateNotNullOrEmpty()]
-    [string]
-    $SynapseStorageAccountFileSystemName,
+    $HubVnetId,
 
     [Parameter(Mandatory=$false)]
-    [Switch]
+    [string]
     $AzureResourceManagerConnectionName
 )
+
 
 function SetValue($Object, $Key, $Value) {
     $p1, $p2 = $Key.Split(".")
@@ -54,6 +45,22 @@ function SetValue($Object, $Key, $Value) {
         $Object.$p1 = $Value
     }
 }
+
+
+function Remove-SpecialCharsAndWhitespaces($InputString) {
+    $SpecialChars = '[#?!`"#$%&*+,-./:;<=>?@^_``|~\{\[\(\)\]\}]'
+    $Replacement  = ''
+    return ($InputString -replace $SpecialChars,$Replacement) -replace "\s", ""
+}
+
+
+# Replace Special Characters
+Write-Host "Replacing Special Characters"
+$DataLandingZoneName = Remove-SpecialCharsAndWhitespaces -InputString $DataLandingZoneName
+
+# Reduce Length of DataLandingZoneName
+Write-Host "Reduce Length of DataLandingZoneName to max 11 Characters"
+$DataLandingZoneName = -join $DataLandingZoneName[0..11]
 
 # Loading Configuration File for Parameter Updates
 Write-Host "Loading Configuration File for Parameter Updates"
@@ -84,7 +91,7 @@ foreach ($config in $configs) {
 
         # Set Content of Parameter File
         Write-Host "Setting Content of Parameter File"
-        $parameterFile | ConvertTo-Json | Set-Content -Path $config.filePath
+        $parameterFile | ConvertTo-Json -Depth 100 | Set-Content -Path $config.filePath
     }
     elseif (($config.fileType.ToLower() -eq "yaml") -or ($config.fileType.ToLower() -eq "yml")) {
         # Load YAML Deployment File
@@ -111,6 +118,8 @@ foreach ($config in $configs) {
         Write-Error "File Type not Supported"
         throw "File Type not Supported"
     }
-
-    
 }
+
+# Set output
+Write-Output "Setting output"
+Write-Output "::set-output name=landingZoneName::${DataLandingZoneName}"
