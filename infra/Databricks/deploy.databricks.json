@@ -85,8 +85,8 @@
             },
             "properties": {
                 "managedResourceGroupId": "[variables('databricksManagedResourceGroupId')]",
-                "publicNetworkAccess": "Disabled",
-                "requiredNsgRules": "NoAzureDatabricksRules",
+                // "publicNetworkAccess": "Disabled",
+                // "requiredNsgRules": "NoAzureDatabricksRules",
                 "parameters": {
                     "storageAccountSkuName": {
                         "value": "Standard_GRS"
@@ -118,180 +118,180 @@
                 "authorizations": [
                 ]
             }
-        },
-        {
-            "type": "Microsoft.Network/privateEndpoints",
-            "apiVersion": "2020-05-01",
-            "name": "[variables('privateEndpointNameUser')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]"
-            ],
-            "location": "[variables('location')]",
-            "properties": {
-                "privateLinkServiceConnections": [
-                    {
-                        "name": "[variables('privateEndpointNameUser')]",
-                        "properties": {
-                            "privateLinkServiceId": "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]",
-                            "groupIds": [
-                                "databricks_ui_api"
-                            ]
-                        }
-                    }
-                ],
-                "manualPrivateLinkServiceConnections": [],
-                "subnet": {
-                    "id": "[variables('subnetId')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-            "apiVersion": "2020-05-01",
-            "name": "[concat(variables('privateEndpointNameUser'), '/aRecord')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameUser'))]"
-            ],
-            "location": "[variables('location')]",
-            "properties": {
-                "privateDnsZoneConfigs": [
-                    {
-                        "name": "[concat(variables('privateEndpointNameUser'), '-aRecord')]",
-                        "properties": {
-                            "privateDnsZoneId": "[variables('privateDnsZoneIdDatabricks')]"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateEndpoints",
-            "apiVersion": "2020-05-01",
-            "name": "[variables('privateEndpointNameData')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]"
-            ],
-            "location": "[variables('location')]",
-            "properties": {
-                "privateLinkServiceConnections": [
-                    {
-                        "name": "[variables('privateEndpointNameData')]",
-                        "properties": {
-                            "privateLinkServiceId": "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]",
-                            "groupIds": [
-                                "databricks_ui_api"
-                            ]
-                        }
-                    }
-                ],
-                "manualPrivateLinkServiceConnections": [],
-                "subnet": {
-                    "id": "[variables('subnetId')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-            "apiVersion": "2020-05-01",
-            "name": "[concat(variables('privateEndpointNameData'), '/aRecord')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameData'))]"
-            ],
-            "location": "[variables('location')]",
-            "properties": {
-                "privateDnsZoneConfigs": [
-                    {
-                        "name": "[concat(variables('privateEndpointNameData'), '-aRecord')]",
-                        "properties": {
-                            "privateDnsZoneId": "[variables('privateDnsZoneIdDatabricks')]"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateEndpoints",
-            "apiVersion": "2020-05-01",
-            "name": "[variables('privateEndpointNameDbfs')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]"
-            ],
-            "location": "[variables('location')]",
-            "properties": {
-                "privateLinkServiceConnections": [
-                    {
-                        "name": "[variables('privateEndpointNameDbfs')]",
-                        "properties": {
-                            "privateLinkServiceId": "[resourceId(variables('databricksManagedResourceGroupName'), 'Microsoft.Storage/storageAccounts', reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').parameters.storageAccountName.value)]",
-                            "groupIds": [
-                                "blob"
-                            ]
-                        }
-                    }
-                ],
-                "manualPrivateLinkServiceConnections": [
-                ],
-                "subnet": {
-                    "id": "[variables('subnetId')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-            "apiVersion": "2020-05-01",
-            "name": "[concat(variables('privateEndpointNameDbfs'), '/aRecord')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameDbfs'))]"
-            ],
-            "location": "[variables('location')]",
-            "properties": {
-                "privateDnsZoneConfigs": [
-                    {
-                        "name": "[concat(variables('privateEndpointNameDbfs'), '-aRecord')]",
-                        "properties": {
-                            "privateDnsZoneId": "[variables('privateDnsZoneIdBlob')]"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-09-01",
-            "name": "cnameDeployment",
-            "dependsOn": [
-                "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]"
-            ],
-            "properties": {
-                "expressionEvaluationOptions": {
-                    "scope": "outer"
-                },
-                "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "parameters": {},
-                    "variables": {},
-                    "resources": [
-                        {
-                            "type": "Microsoft.Network/privateDnsZones/CNAME",
-                            "apiVersion": "2020-06-01",
-                            "name": "[concat(variables('privateDnsZoneNameDatabricks'), '/', variables('location'), '-c2.azuredatabricks.net')]",
-                            "properties": {
-                                "metadata": {},
-                                "TTL": 60,
-                                "CNAMERecord": {
-                                    "cname": "testadb" //"[reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').workspaceUrl]"
-                                }
-                            }
-                        }
-                    ],
-                    "outputs": {}
-                }
-            },
-            "subscriptionId": "[split(variables('privateDnsZoneIdDatabricks'), '/')[2]]",
-            "resourceGroup": "[split(variables('privateDnsZoneIdDatabricks'), '/')[4]]"
         }
+        // {
+        //     "type": "Microsoft.Network/privateEndpoints",
+        //     "apiVersion": "2020-05-01",
+        //     "name": "[variables('privateEndpointNameUser')]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]"
+        //     ],
+        //     "location": "[variables('location')]",
+        //     "properties": {
+        //         "privateLinkServiceConnections": [
+        //             {
+        //                 "name": "[variables('privateEndpointNameUser')]",
+        //                 "properties": {
+        //                     "privateLinkServiceId": "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]",
+        //                     "groupIds": [
+        //                         "databricks_ui_api"
+        //                     ]
+        //                 }
+        //             }
+        //         ],
+        //         "manualPrivateLinkServiceConnections": [],
+        //         "subnet": {
+        //             "id": "[variables('subnetId')]"
+        //         }
+        //     }
+        // },
+        // {
+        //     "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+        //     "apiVersion": "2020-05-01",
+        //     "name": "[concat(variables('privateEndpointNameUser'), '/aRecord')]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameUser'))]"
+        //     ],
+        //     "location": "[variables('location')]",
+        //     "properties": {
+        //         "privateDnsZoneConfigs": [
+        //             {
+        //                 "name": "[concat(variables('privateEndpointNameUser'), '-aRecord')]",
+        //                 "properties": {
+        //                     "privateDnsZoneId": "[variables('privateDnsZoneIdDatabricks')]"
+        //                 }
+        //             }
+        //         ]
+        //     }
+        // },
+        // {
+        //     "type": "Microsoft.Network/privateEndpoints",
+        //     "apiVersion": "2020-05-01",
+        //     "name": "[variables('privateEndpointNameData')]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]"
+        //     ],
+        //     "location": "[variables('location')]",
+        //     "properties": {
+        //         "privateLinkServiceConnections": [
+        //             {
+        //                 "name": "[variables('privateEndpointNameData')]",
+        //                 "properties": {
+        //                     "privateLinkServiceId": "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]",
+        //                     "groupIds": [
+        //                         "databricks_ui_api"
+        //                     ]
+        //                 }
+        //             }
+        //         ],
+        //         "manualPrivateLinkServiceConnections": [],
+        //         "subnet": {
+        //             "id": "[variables('subnetId')]"
+        //         }
+        //     }
+        // },
+        // {
+        //     "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+        //     "apiVersion": "2020-05-01",
+        //     "name": "[concat(variables('privateEndpointNameData'), '/aRecord')]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameData'))]"
+        //     ],
+        //     "location": "[variables('location')]",
+        //     "properties": {
+        //         "privateDnsZoneConfigs": [
+        //             {
+        //                 "name": "[concat(variables('privateEndpointNameData'), '-aRecord')]",
+        //                 "properties": {
+        //                     "privateDnsZoneId": "[variables('privateDnsZoneIdDatabricks')]"
+        //                 }
+        //             }
+        //         ]
+        //     }
+        // },
+        // {
+        //     "type": "Microsoft.Network/privateEndpoints",
+        //     "apiVersion": "2020-05-01",
+        //     "name": "[variables('privateEndpointNameDbfs')]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]"
+        //     ],
+        //     "location": "[variables('location')]",
+        //     "properties": {
+        //         "privateLinkServiceConnections": [
+        //             {
+        //                 "name": "[variables('privateEndpointNameDbfs')]",
+        //                 "properties": {
+        //                     "privateLinkServiceId": "[resourceId(variables('databricksManagedResourceGroupName'), 'Microsoft.Storage/storageAccounts', reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').parameters.storageAccountName.value)]",
+        //                     "groupIds": [
+        //                         "blob"
+        //                     ]
+        //                 }
+        //             }
+        //         ],
+        //         "manualPrivateLinkServiceConnections": [
+        //         ],
+        //         "subnet": {
+        //             "id": "[variables('subnetId')]"
+        //         }
+        //     }
+        // },
+        // {
+        //     "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+        //     "apiVersion": "2020-05-01",
+        //     "name": "[concat(variables('privateEndpointNameDbfs'), '/aRecord')]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameDbfs'))]"
+        //     ],
+        //     "location": "[variables('location')]",
+        //     "properties": {
+        //         "privateDnsZoneConfigs": [
+        //             {
+        //                 "name": "[concat(variables('privateEndpointNameDbfs'), '-aRecord')]",
+        //                 "properties": {
+        //                     "privateDnsZoneId": "[variables('privateDnsZoneIdBlob')]"
+        //                 }
+        //             }
+        //         ]
+        //     }
+        // },
+        // {
+        //     "type": "Microsoft.Resources/deployments",
+        //     "apiVersion": "2020-09-01",
+        //     "name": "cnameDeployment",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Databricks/workspaces', variables('databricksName'))]"
+        //     ],
+        //     "properties": {
+        //         "expressionEvaluationOptions": {
+        //             "scope": "outer"
+        //         },
+        //         "mode": "Incremental",
+        //         "template": {
+        //             "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+        //             "contentVersion": "1.0.0.0",
+        //             "parameters": {},
+        //             "variables": {},
+        //             "resources": [
+        //                 {
+        //                     "type": "Microsoft.Network/privateDnsZones/CNAME",
+        //                     "apiVersion": "2020-06-01",
+        //                     "name": "[concat(variables('privateDnsZoneNameDatabricks'), '/', variables('location'), '-c2.azuredatabricks.net')]",
+        //                     "properties": {
+        //                         "metadata": {},
+        //                         "TTL": 60,
+        //                         "CNAMERecord": {
+        //                             "cname": "testadb" //"[reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').workspaceUrl]"
+        //                         }
+        //                     }
+        //                 }
+        //             ],
+        //             "outputs": {}
+        //         }
+        //     },
+        //     "subscriptionId": "[split(variables('privateDnsZoneIdDatabricks'), '/')[2]]",
+        //     "resourceGroup": "[split(variables('privateDnsZoneIdDatabricks'), '/')[4]]"
+        // }
     ],
     "outputs": {
         "databricksWorkspaceName": {
