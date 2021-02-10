@@ -1113,6 +1113,32 @@ stages:
               -ArmOutputString '$(databricksDetails001)'
               -MakeOutput
         
+        # Setup Databricks 001 - Manual Step - Guidance
+        - bash: |
+            echo "Please run the following command to setup Databricks Workspace 001:
+
+            ./code/SetupDatabricksManual.ps1 \`
+              -UserName '{userName}' \`
+              -Password '{password}' \`
+              -DatabricksWorkspaceName '$(databricksWorkspaceName)' \`
+              -DatabricksWorkspaceId '$(databricksWorkspaceId)' \`
+              -DatabricksApiUrl '$(databricksApiUrl)' \`
+              -DatabricksSubscriptionId '$(databricksSubscriptionId)' \`
+              -DatabricksResourceGroupName '$(databricksResourceGroupName)' \`
+              -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)' \`
+              -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)' \`
+              -HiveUsernameSecretName '$(mySqlUsernameSecretName)' \`
+              -HivePasswordSecretName '$(mySqlPasswordSecretName)' \`
+              -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)' \`
+              -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)' \`
+              -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)' \`
+              -HiveVersion '2.3.7' \`
+              -HadoopVersion '2.7.4' \`
+              -MySqlId '$(mySqlDatabaseId)'
+            "
+          name: setup_databricks_001_manual
+          displayName: Setup Databricks 001 - Manual Step - Guidance
+        
         # # Setup databricks 001 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
         # - task: AzureCLI@2
         #   name: setup_databricks_001
@@ -1182,6 +1208,32 @@ stages:
             arguments: >
               -ArmOutputString '$(databricksDetails002)'
               -MakeOutput
+        
+        # Setup Databricks 002 - Manual Step - Guidance
+        - bash: |
+            echo "Please run the following command to setup Databricks Workspace 002:
+
+            ./code/SetupDatabricksManual.ps1 \`
+              -UserName '{userName}' \`
+              -Password '{password}' \`
+              -DatabricksWorkspaceName '$(databricksWorkspaceName)' \`
+              -DatabricksWorkspaceId '$(databricksWorkspaceId)' \`
+              -DatabricksApiUrl '$(databricksApiUrl)' \`
+              -DatabricksSubscriptionId '$(databricksSubscriptionId)' \`
+              -DatabricksResourceGroupName '$(databricksResourceGroupName)' \`
+              -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)' \`
+              -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)' \`
+              -HiveUsernameSecretName '$(mySqlUsernameSecretName)' \`
+              -HivePasswordSecretName '$(mySqlPasswordSecretName)' \`
+              -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)' \`
+              -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)' \`
+              -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)' \`
+              -HiveVersion '2.3.7' \`
+              -HadoopVersion '2.7.4' \`
+              -MySqlId '$(mySqlDatabaseId)'
+            "
+          name: setup_databricks_002_manual
+          displayName: Setup Databricks 002 - Manual Step - Guidance
         
         # # Setup databricks 002 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
         # - task: AzureCLI@2

@@ -873,22 +873,23 @@ jobs:
       id: setup_databricks_001_manual
       run: |
         echo "Please run the following command to setup Databricks Workspace 001:
-          ./code/SetupDatabricksManual.ps1 \`
-            -DatabricksWorkspaceName '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceName }}' \`
-            -DatabricksWorkspaceId '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceId }}' \`
-            -DatabricksApiUrl '${{ steps.databricks_001_deployment.outputs.databricksApiUrl }}' \`
-            -DatabricksSubscriptionId '${{ steps.databricks_001_deployment.outputs.databricksSubscriptionId }}' \`
-            -DatabricksResourceGroupName '${{ steps.databricks_001_deployment.outputs.databricksResourceGroupName }}' \`
-            -HiveKeyVaultId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseKeyVaultId }}' \`
-            -HiveConnectionStringSecretName '${{ steps.mysql_001_deployment.outputs.mySqlConnectionStringSecretName }}' \`
-            -HiveUsernameSecretName '${{ steps.mysql_001_deployment.outputs.mySqlUsernameSecretName }}' \`
-            -HivePasswordSecretName '${{ steps.mysql_001_deployment.outputs.mySqlPasswordSecretName }}' \`
-            -LogAnalyticsKeyVaultId '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsKeyVaultId }}' \`
-            -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
-            -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
-            -HiveVersion '2.3.7' \`
-            -HadoopVersion '2.7.4' \`
-            -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
+
+        ./code/SetupDatabricksManual.ps1 \`
+          -DatabricksWorkspaceName '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceName }}' \`
+          -DatabricksWorkspaceId '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceId }}' \`
+          -DatabricksApiUrl '${{ steps.databricks_001_deployment.outputs.databricksApiUrl }}' \`
+          -DatabricksSubscriptionId '${{ steps.databricks_001_deployment.outputs.databricksSubscriptionId }}' \`
+          -DatabricksResourceGroupName '${{ steps.databricks_001_deployment.outputs.databricksResourceGroupName }}' \`
+          -HiveKeyVaultId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseKeyVaultId }}' \`
+          -HiveConnectionStringSecretName '${{ steps.mysql_001_deployment.outputs.mySqlConnectionStringSecretName }}' \`
+          -HiveUsernameSecretName '${{ steps.mysql_001_deployment.outputs.mySqlUsernameSecretName }}' \`
+          -HivePasswordSecretName '${{ steps.mysql_001_deployment.outputs.mySqlPasswordSecretName }}' \`
+          -LogAnalyticsKeyVaultId '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsKeyVaultId }}' \`
+          -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
+          -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
+          -HiveVersion '2.3.7' \`
+          -HadoopVersion '2.7.4' \`
+          -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
           "
     
     # # Setup Databricks 001 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
@@ -936,11 +937,11 @@ jobs:
       run: |
         echo "Please run the following command to setup Databricks Workspace 002:
           ./code/SetupDatabricksManual.ps1 \`
-            -DatabricksWorkspaceName '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceName }}' \`
-            -DatabricksWorkspaceId '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceId }}' \`
-            -DatabricksApiUrl '${{ steps.databricks_001_deployment.outputs.databricksApiUrl }}' \`
-            -DatabricksSubscriptionId '${{ steps.databricks_001_deployment.outputs.databricksSubscriptionId }}' \`
-            -DatabricksResourceGroupName '${{ steps.databricks_001_deployment.outputs.databricksResourceGroupName }}' \`
+            -DatabricksWorkspaceName '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceName }}' \`
+            -DatabricksWorkspaceId '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceId }}' \`
+            -DatabricksApiUrl '${{ steps.databricks_002_deployment.outputs.databricksApiUrl }}' \`
+            -DatabricksSubscriptionId '${{ steps.databricks_002_deployment.outputs.databricksSubscriptionId }}' \`
+            -DatabricksResourceGroupName '${{ steps.databricks_002_deployment.outputs.databricksResourceGroupName }}' \`
             -HiveKeyVaultId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseKeyVaultId }}' \`
             -HiveConnectionStringSecretName '${{ steps.mysql_001_deployment.outputs.mySqlConnectionStringSecretName }}' \`
             -HiveUsernameSecretName '${{ steps.mysql_001_deployment.outputs.mySqlUsernameSecretName }}' \`
