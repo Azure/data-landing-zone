@@ -1308,19 +1308,23 @@ stages:
               -MakeOutput
         
         # Upload file to storage account 001
-        - task: AzureFileCopy@3
+        - task: AzureCLI@2
           name: upload_file_001
           displayName: Upload file to storage account 001
           enabled: true
           continueOnError: false
           inputs:
-            sourcePath: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1'
-            additionalArgumentsForBlobCopy: |
-              '/Y'
             azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            destination: AzureBlob
-            storage: $(storageAccountName)
-            containerName: $(storageAccountContainerName)
+            scriptType: pscore
+            scriptLocation: inlineScript
+            inlineScript: |
+              $keys = (az storage account keys list --account-name $(storageDetails.storageAccountName.value) | ConvertFrom-Json)
+              az storage blob upload `
+                --account-name $(storageDetails.storageAccountName.value) `
+                --container-name $(storageDetails.storageAccountContainerName.value) `
+                --name installSHIRGateway.ps1 `
+                --file $(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1 `
+                --account-key $keys[0].value
         
         # Generate Password
         - task: PowerShell@2
