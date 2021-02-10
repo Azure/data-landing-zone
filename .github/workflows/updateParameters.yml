@@ -51,7 +51,7 @@ jobs:
       - name: Define Pull Request Body
         id: define_pull_request_body
         run: |
-          body="This is line `one` \n
+          body="This is line \`one\`\n
                 This is line **two**"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
