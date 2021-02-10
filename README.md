@@ -294,7 +294,7 @@ If you are using Azure DevOps Pipelines, you can navigate to the pipeline that y
 
 # Enterprise Scale Analytics Documentation and Implementation
 
-* [Documentation](https://github.com/Azure/Enterprise-Scale-Analytics)
+- [Documentation](https://github.com/Azure/Enterprise-Scale-Analytics)
 - [Implementation - Data Management](https://github.com/Azure/data-hub)
 - [Implementation - Data Landing Zone](https://github.com/Azure/data-node)
 - [Implementation - Data Domain - Batch](https://github.com/Azure/data-domain)
