@@ -23,19 +23,19 @@ trigger:
       - code/*
 
 variables:
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'datanode001-service-connection'
-  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'
-  AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dn001-network'
-  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dn001-mgmt'
-  AZURE_RESOURCE_GROUP_NAME_INTEGRATION: 'dn001-integration'
-  AZURE_RESOURCE_GROUP_NAME_LOGGING: 'dn001-logging'
-  AZURE_RESOURCE_GROUP_NAME_STORAGE: 'dn001-storage'
-  AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE: 'dn001-secretstorage'
-  AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE: 'dn001-externalstorage'
-  AZURE_RESOURCE_GROUP_NAME_METADATA: 'dn001-metadata'
-  AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: 'dn001-processing-domain'
-  AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: 'dn001-processing-product'
-  AZURE_LOCATION: 'North Europe'
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'datanode001-service-connection'  # Update to '{resourceManagerConnectionName}'
+  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'             # Update to '{subscriptionId}'
+  AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dn001-network'                        # Update to '{dataLandingZoneName}-network'
+  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dn001-mgmt'                        # Update to '{dataLandingZoneName}-mgmt'
+  AZURE_RESOURCE_GROUP_NAME_INTEGRATION: 'dn001-integration'                # Update to '{dataLandingZoneName}-integration'
+  AZURE_RESOURCE_GROUP_NAME_LOGGING: 'dn001-logging'                        # Update to '{dataLandingZoneName}-logging'
+  AZURE_RESOURCE_GROUP_NAME_STORAGE: 'dn001-storage'                        # Update to '{dataLandingZoneName}-storage'
+  AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE: 'dn001-secretstorage'            # Update to '{dataLandingZoneName}-secretstorage'
+  AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE: 'dn001-externalstorage'        # Update to '{dataLandingZoneName}-externalstorage'
+  AZURE_RESOURCE_GROUP_NAME_METADATA: 'dn001-metadata'                      # Update to '{dataLandingZoneName}-metadata'
+  AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: 'dn001-processing-domain'     # Update to '{dataLandingZoneName}-processing-domain'
+  AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: 'dn001-processing-product'   # Update to '{dataLandingZoneName}-processing-product'
+  AZURE_LOCATION: 'North Europe'                                            # Update to '{regionName}'
 
 stages:
   - stage: Validation
@@ -614,6 +614,24 @@ stages:
             overrideParameters: >
               -synapseSqlAdministratorPassword "$(password)"
 
+        # Share Self Hosted Integration Runtime 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: share_self_hosted_integration_runtime_001_validation
+          displayName: Share Self Hosted Integration Runtime 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json'
+            deploymentMode: 'Validation'
+
   - stage: Deployment
     displayName: 'Deployment of ARM templates'
     dependsOn: Validation
@@ -1095,37 +1113,37 @@ stages:
               -ArmOutputString '$(databricksDetails001)'
               -MakeOutput
         
-        # Setup databricks 001
-        - task: AzureCLI@2
-          name: setup_databricks_001
-          displayName: Setup databricks 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            scriptType: pscore
-            scriptLocation: 'scriptPath'
-            scriptPath: '$(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1'
-            powerShellErrorActionPreference: 'stop'
-            addSpnToEnvironment: true
-            failOnStandardError: false
-            powerShellIgnoreLASTEXITCODE: false
-            arguments: >
-              -DatabricksWorkspaceName '$(databricksWorkspaceName)'
-              -DatabricksWorkspaceId '$(databricksWorkspaceId)'
-              -DatabricksApiUrl '$(databricksApiUrl)'
-              -DatabricksSubscriptionId '$(databricksSubscriptionId)'
-              -DatabricksResourceGroupName '$(databricksResourceGroupName)'
-              -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)'
-              -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)'
-              -HiveUsernameSecretName '$(mySqlUsernameSecretName)'
-              -HivePasswordSecretName '$(mySqlPasswordSecretName)'
-              -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)'
-              -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)'
-              -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)'
-              -HiveVersion '2.3.7'
-              -HadoopVersion '2.7.4'
-              -MySqlId '$(mySqlDatabaseId)'
+        # # Setup databricks 001 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
+        # - task: AzureCLI@2
+        #   name: setup_databricks_001
+        #   displayName: Setup databricks 001
+        #   enabled: true
+        #   continueOnError: false
+        #   inputs:
+        #     azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+        #     scriptType: pscore
+        #     scriptLocation: 'scriptPath'
+        #     scriptPath: '$(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1'
+        #     powerShellErrorActionPreference: 'stop'
+        #     addSpnToEnvironment: true
+        #     failOnStandardError: false
+        #     powerShellIgnoreLASTEXITCODE: false
+        #     arguments: >
+        #       -DatabricksWorkspaceName '$(databricksWorkspaceName)'
+        #       -DatabricksWorkspaceId '$(databricksWorkspaceId)'
+        #       -DatabricksApiUrl '$(databricksApiUrl)'
+        #       -DatabricksSubscriptionId '$(databricksSubscriptionId)'
+        #       -DatabricksResourceGroupName '$(databricksResourceGroupName)'
+        #       -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)'
+        #       -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)'
+        #       -HiveUsernameSecretName '$(mySqlUsernameSecretName)'
+        #       -HivePasswordSecretName '$(mySqlPasswordSecretName)'
+        #       -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)'
+        #       -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)'
+        #       -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)'
+        #       -HiveVersion '2.3.7'
+        #       -HadoopVersion '2.7.4'
+        #       -MySqlId '$(mySqlDatabaseId)'
         
         # Deploy databricks 002
         - task: AzureResourceManagerTemplateDeployment@3
@@ -1165,37 +1183,37 @@ stages:
               -ArmOutputString '$(databricksDetails002)'
               -MakeOutput
         
-        # Setup databricks 002
-        - task: AzureCLI@2
-          name: setup_databricks_002
-          displayName: Setup databricks 002
-          enabled: true
-          continueOnError: false
-          inputs:
-            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            scriptType: pscore
-            scriptLocation: 'scriptPath'
-            scriptPath: '$(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1'
-            powerShellErrorActionPreference: 'stop'
-            addSpnToEnvironment: true
-            failOnStandardError: false
-            powerShellIgnoreLASTEXITCODE: false
-            arguments: >
-              -DatabricksWorkspaceName '$(databricksWorkspaceName)'
-              -DatabricksWorkspaceId '$(databricksWorkspaceId)'
-              -DatabricksApiUrl '$(databricksApiUrl)'
-              -DatabricksSubscriptionId '$(databricksSubscriptionId)'
-              -DatabricksResourceGroupName '$(databricksResourceGroupName)'
-              -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)'
-              -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)'
-              -HiveUsernameSecretName '$(mySqlUsernameSecretName)'
-              -HivePasswordSecretName '$(mySqlPasswordSecretName)'
-              -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)'
-              -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)'
-              -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)'
-              -HiveVersion '2.3.7'
-              -HadoopVersion '2.7.4'
-              -MySqlId '$(mySqlDatabaseId)'
+        # # Setup databricks 002 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
+        # - task: AzureCLI@2
+        #   name: setup_databricks_002
+        #   displayName: Setup databricks 002
+        #   enabled: true
+        #   continueOnError: false
+        #   inputs:
+        #     azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+        #     scriptType: pscore
+        #     scriptLocation: 'scriptPath'
+        #     scriptPath: '$(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1'
+        #     powerShellErrorActionPreference: 'stop'
+        #     addSpnToEnvironment: true
+        #     failOnStandardError: false
+        #     powerShellIgnoreLASTEXITCODE: false
+        #     arguments: >
+        #       -DatabricksWorkspaceName '$(databricksWorkspaceName)'
+        #       -DatabricksWorkspaceId '$(databricksWorkspaceId)'
+        #       -DatabricksApiUrl '$(databricksApiUrl)'
+        #       -DatabricksSubscriptionId '$(databricksSubscriptionId)'
+        #       -DatabricksResourceGroupName '$(databricksResourceGroupName)'
+        #       -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)'
+        #       -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)'
+        #       -HiveUsernameSecretName '$(mySqlUsernameSecretName)'
+        #       -HivePasswordSecretName '$(mySqlPasswordSecretName)'
+        #       -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)'
+        #       -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)'
+        #       -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)'
+        #       -HiveVersion '2.3.7'
+        #       -HadoopVersion '2.7.4'
+        #       -MySqlId '$(mySqlDatabaseId)'
         
         # Deploy event hub 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -1371,3 +1389,21 @@ stages:
             deploymentMode: 'Incremental'
             overrideParameters: >
               -synapseSqlAdministratorPassword "$(password)"
+
+        # Share Self Hosted Integration Runtime 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: share_self_hosted_integration_runtime_001_deployment
+          displayName: Share Self Hosted Integration Runtime 001
+          enabled: true
+          continueOnError: true
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json'
+            deploymentMode: 'Incremental'

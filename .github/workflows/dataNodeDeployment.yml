@@ -11,6 +11,7 @@ on:
       - 'infra/KeyVault/**'
       - 'infra/MySql/**'
       - 'infra/SelfHostedIntegrationRuntime/**'
+      - 'infra/ShareSelfHostedIntegrationRuntime/**'
       - 'infra/SqlDatabase/**'
       - 'infra/SqlServer/**'
       - 'infra/Storage/**'
@@ -21,18 +22,18 @@ on:
       - 'code/**'
 
 env:
-  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'
-  AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dn001-network'
-  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dn001-mgmt'
-  AZURE_RESOURCE_GROUP_NAME_INTEGRATION: 'dn001-integration'
-  AZURE_RESOURCE_GROUP_NAME_LOGGING: 'dn001-logging'
-  AZURE_RESOURCE_GROUP_NAME_STORAGE: 'dn001-storage'
-  AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE: 'dn001-secretstorage'
-  AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE: 'dn001-externalstorage'
-  AZURE_RESOURCE_GROUP_NAME_METADATA: 'dn001-metadata'
-  AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: 'dn001-processing-domain'
-  AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: 'dn001-processing-product'
-  AZURE_LOCATION: 'northeurope'
+  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'           # Update to '{subscriptionId}'
+  AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dn001-network'                      # Update to '{dataLandingZoneName}-network'
+  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dn001-mgmt'                      # Update to '{dataLandingZoneName}-mgmt'
+  AZURE_RESOURCE_GROUP_NAME_INTEGRATION: 'dn001-integration'              # Update to '{dataLandingZoneName}-integration'
+  AZURE_RESOURCE_GROUP_NAME_LOGGING: 'dn001-logging'                      # Update to '{dataLandingZoneName}-logging'
+  AZURE_RESOURCE_GROUP_NAME_STORAGE: 'dn001-storage'                      # Update to '{dataLandingZoneName}-storage'
+  AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE: 'dn001-secretstorage'          # Update to '{dataLandingZoneName}-secretstorage'
+  AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE: 'dn001-externalstorage'      # Update to '{dataLandingZoneName}-externalstorage'
+  AZURE_RESOURCE_GROUP_NAME_METADATA: 'dn001-metadata'                    # Update to '{dataLandingZoneName}-metadata'
+  AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: 'dn001-processing-domain'   # Update to '{dataLandingZoneName}-processing-domain'
+  AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: 'dn001-processing-product' # Update to '{dataLandingZoneName}-processing-product'
+  AZURE_LOCATION: 'northeurope'                                           # Update to '{regionName}'
 
 jobs:
   create-resource-group:
@@ -551,6 +552,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/Synapse/params.synapse001.json synapseSqlAdministratorPassword="${{ steps.generate_password_004.outputs.password }}"
         deploymentMode: Validate
     
+    # Share Self Hosted Integration Runtime 001 - validation
+    - name: Share Self Hosted Integration Runtime 001 - validation
+      id: share_self_hosted_integration_runtime_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json
+        parameters: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+        deploymentMode: Validate
+    
     # Log out from Azure
     - name: Log out from Azure
       id: azure_logout
@@ -854,6 +868,31 @@ jobs:
         deploymentMode: Incremental
       continue-on-error: true
     
+    # # Setup databricks 001 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
+    # - name: Setup Databricks 001
+    #   id: setup_databricks_001
+    #   uses: azure/powershell@v1
+    #   with:
+    #     azPSVersion: latest
+    #     inlineScript: |
+    #       Write-Host "Setting Up Databricks Workspace 001"
+    #       & "${{ github.workspace }}/code/SetupDatabricks.ps1" \
+    #         -DatabricksWorkspaceName '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceName }}' \
+    #         -DatabricksWorkspaceId '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceId }}' \
+    #         -DatabricksApiUrl '${{ steps.databricks_001_deployment.outputs.databricksApiUrl }}' \
+    #         -DatabricksSubscriptionId '${{ steps.databricks_001_deployment.outputs.databricksSubscriptionId }}' \
+    #         -DatabricksResourceGroupName '${{ steps.databricks_001_deployment.outputs.databricksResourceGroupName }}' \
+    #         -HiveKeyVaultId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseKeyVaultId }}' \
+    #         -HiveConnectionStringSecretName '${{ steps.mysql_001_deployment.outputs.mySqlConnectionStringSecretName }}' \
+    #         -HiveUsernameSecretName '${{ steps.mysql_001_deployment.outputs.mySqlUsernameSecretName }}' \
+    #         -HivePasswordSecretName '${{ steps.mysql_001_deployment.outputs.mySqlPasswordSecretName }}' \
+    #         -LogAnalyticsKeyVaultId '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsKeyVaultId }}' \
+    #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' \
+    #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' \
+    #         -HiveVersion '2.3.7' \
+    #         -HadoopVersion '2.7.4' \
+    #         -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
+    
     # Deploy Databricks 002
     - name: Deploy Databricks 002
       id: databricks_002_deployment
@@ -867,6 +906,31 @@ jobs:
         parameters: ${{ github.workspace }}/infra/Databricks/params.databricks002.json
         deploymentMode: Incremental
       continue-on-error: true
+    
+    # # Setup databricks 002 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
+    # - name: Setup Databricks 002
+    #   id: setup_databricks_002
+    #   uses: azure/powershell@v1
+    #   with:
+    #     azPSVersion: latest
+    #     inlineScript: |
+    #       Write-Host "Setting Up Databricks Workspace 002"
+    #       & "${{ github.workspace }}/code/SetupDatabricks.ps1" \
+    #         -DatabricksWorkspaceName '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceName }}' \
+    #         -DatabricksWorkspaceId '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceId }}' \
+    #         -DatabricksApiUrl '${{ steps.databricks_002_deployment.outputs.databricksApiUrl }}' \
+    #         -DatabricksSubscriptionId '${{ steps.databricks_002_deployment.outputs.databricksSubscriptionId }}' \
+    #         -DatabricksResourceGroupName '${{ steps.databricks_002_deployment.outputs.databricksResourceGroupName }}' \
+    #         -HiveKeyVaultId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseKeyVaultId }}' \
+    #         -HiveConnectionStringSecretName '${{ steps.mysql_001_deployment.outputs.mySqlConnectionStringSecretName }}' \
+    #         -HiveUsernameSecretName '${{ steps.mysql_001_deployment.outputs.mySqlUsernameSecretName }}' \
+    #         -HivePasswordSecretName '${{ steps.mysql_001_deployment.outputs.mySqlPasswordSecretName }}' \
+    #         -LogAnalyticsKeyVaultId '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsKeyVaultId }}' \
+    #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' \
+    #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' \
+    #         -HiveVersion '2.3.7' \
+    #         -HadoopVersion '2.7.4' \
+    #         -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
     
     # Deploy Event Hub 001
     - name: Deploy Event Hub 001
@@ -971,6 +1035,20 @@ jobs:
         template: ${{ github.workspace }}/infra/Synapse/deploy.synapse.json
         parameters: ${{ github.workspace }}/infra/Synapse/params.synapse001.json synapseSqlAdministratorPassword="${{ steps.generate_password_004.outputs.password }}"
         deploymentMode: Incremental
+    
+    # Share Self Hosted Integration Runtime 001
+    - name: Share Self Hosted Integration Runtime 001
+      id: share_self_hosted_integration_runtime_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json
+        parameters: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+        deploymentMode: Incremental
+      continue-on-error: true
     
     # Log out from Azure
     - name: Log out from Azure
