@@ -59,6 +59,7 @@ Write-Host "Replacing Special Characters"
 $DataLandingZoneName = Remove-SpecialCharsAndWhitespaces -InputString $DataLandingZoneName
 
 # Reduce Length of DataLandingZoneName
+Write-Host "Reduce Length of DataLandingZoneName to max 11 Characters"
 $DataLandingZoneName = -join $DataLandingZoneName[0..11]
 
 # Loading Configuration File for Parameter Updates

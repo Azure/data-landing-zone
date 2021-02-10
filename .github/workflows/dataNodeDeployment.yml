@@ -22,7 +22,7 @@ on:
       - 'code/**'
 
 env:
-  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'           # Update to '{subscriptionId}'
+  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'           # Update to '{dataLandingZoneSubscriptionId}'
   AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dn001-network'                      # Update to '{dataLandingZoneName}-network'
   AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dn001-mgmt'                      # Update to '{dataLandingZoneName}-mgmt'
   AZURE_RESOURCE_GROUP_NAME_INTEGRATION: 'dn001-integration'              # Update to '{dataLandingZoneName}-integration'
