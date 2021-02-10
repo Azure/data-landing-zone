@@ -92,10 +92,10 @@ jobs:
                   AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: '${{ env.DATA_LANDING_ZONE_NAME }}-processing-domain'
                   AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: '${{ env.DATA_LANDING_ZONE_NAME }}-processing-product'
                   AZURE_LOCATION: '${{ env.LOCATION }}'
-                \`\`\`""
+                \`\`\`"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
-          body="${body//$'\r'/'%0D'}" 
+          body="${body//$'\r'/'%0D'}"
           echo "::set-output name=body::$body"
 
       # Create Pull Request
