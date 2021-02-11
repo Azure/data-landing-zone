@@ -112,8 +112,8 @@ Write-Host "Defining Service Principal credentials"
 $password = ConvertTo-SecureString $Password -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ($UserObjectId, $password)
 
-# Login to Databricks Workspace using Service Principal
-Write-Host "Logging in to Databricks using Service Principal"
+# Login to Databricks Workspace
+Write-Host "Logging in to Databricks"
 Set-DatabricksEnvironment -TenantID $TenantId -ClientID $UserObjectId -Credential $cred -AzureResourceID $DatabricksWorkspaceId -ApiRootUrl $DatabricksApiUrl
 
 
