@@ -171,6 +171,16 @@ Remove-DatabricksWorkspaceItem $notebookPath
 
 
 # *****************************************************************************
+#    UPLOAD PURVIEW SCAN NOTEBOOK
+# *****************************************************************************
+
+# Upload Purview Scan Notebook
+Write-Host "Uploading Purview Scan Notebook"
+$notebookPath = "/PurviewSynch"
+Import-DatabricksWorkspaceItem -Path $notebookPath -Format SOURCE -Language PYTHON -LocalPath "code/databricks/purviewScan/databricksPurviewScan.py" -Overwrite $true
+
+
+# *****************************************************************************
 #    UPLOAD GLOBAL INIT SCRIPTS
 # *****************************************************************************
 
