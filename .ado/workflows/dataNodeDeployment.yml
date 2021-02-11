@@ -641,7 +641,7 @@ stages:
         displayName: 'Deployment of ARM templates'
         continueOnError: false
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'windows-latest'
         
         steps:
         # Checkout repository
