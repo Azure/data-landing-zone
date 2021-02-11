@@ -1290,8 +1290,8 @@ stages:
         
         # Generate Pipeline Variables 001
         - task: AzureCLI@2
-          name: generate_pipeline_variables_001
-          displayName: Generate Pipeline Variables 001
+          name: generate_pipeline_variables_005
+          displayName: Generate Pipeline Variables 005
           enabled: true
           continueOnError: false
           inputs:
