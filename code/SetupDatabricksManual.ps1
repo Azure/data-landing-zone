@@ -4,12 +4,17 @@ param (
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $UserObjectId,
+    $UserEmail,
 
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $Password,
+    $UserPassword,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $ClientId,
 
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
@@ -106,15 +111,16 @@ az mysql server restart --ids "${MySqlId}"
 # Install Databricks PS Module
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 Install-Module -Name DatabricksPS
+Update-Module -Name DatabricksPS
 
-# Define Service Principal Credentials
-Write-Host "Defining Service Principal credentials"
-$password = ConvertTo-SecureString $Password -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential ($UserObjectId, $password)
+# Define Credentials
+Write-Host "Defining credentials"
+$secureUserPassword = ConvertTo-SecureString $UserPassword -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential ($UserEmail, $secureUserPassword)
 
 # Login to Databricks Workspace
 Write-Host "Logging in to Databricks"
-Set-DatabricksEnvironment -TenantID $TenantId -ClientID $UserObjectId -Credential $cred -AzureResourceID $DatabricksWorkspaceId -ApiRootUrl $DatabricksApiUrl
+Set-DatabricksEnvironment -TenantID $TenantId -ClientID $ClientId -Credential $cred -AzureResourceID $DatabricksWorkspaceId -ApiRootUrl $DatabricksApiUrl
 
 
 # *****************************************************************************
