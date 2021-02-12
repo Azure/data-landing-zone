@@ -19,12 +19,16 @@
         },
         "dnsServerAdresses": {
             "type": "array",
+            "defaultValue": [
+                "10.0.0.4"
+            ],
             "metadata": {
                 "description": "Specifies a list of internal IP adresses of your DNS forwarders or internal IP address of your Azure Firewall if you have enabled DNS forwarding."
             }
         },
         "firewallPrivateIp": {
             "type": "string",
+            "defaultValue": "10.0.0.4",
             "metadata": {
                 "description": "Specifies the private IP of your (Azure) Firewall."
             }
