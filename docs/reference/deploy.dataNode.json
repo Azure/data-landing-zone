@@ -17,13 +17,6 @@
                 "description": "Name of the data Landing Zone (max 5 characters)."
             }
         },
-        "location": {
-            "type": "string",
-            "defaultValue": "northeurope",
-            "metadata": {
-                "description": "Specifies the location for all resources."
-            }
-        },
         "dnsServerAdresses": {
             "type": "array",
             "metadata": {
@@ -54,7 +47,7 @@
     "variables": {
         "enterpriseScaleAnalyticsCompanyPrefix": "[parameters('enterpriseScaleAnalyticsCompanyPrefix')]",
         "dataNodeName": "[parameters('dataNodeName')]",
-        "location": "[parameters('location')]",
+        "location": "[deployment().location]",
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
         "firewallPrivateIp": "[parameters('firewallPrivateIp')]",
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
