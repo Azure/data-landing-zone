@@ -12,26 +12,23 @@
         "dataNodeName": {
             "type": "string",
             "defaultValue": "dn001",
-            "maxLength": 4,
+            "maxLength": 5,
             "metadata": {
-                "description": "Name of the data node (max 5 characters)."
-            }
-        },
-        "location": {
-            "type": "string",
-            "defaultValue": "northeurope",
-            "metadata": {
-                "description": "Specifies the location for all resources."
+                "description": "Name of the data Landing Zone (max 5 characters)."
             }
         },
         "dnsServerAdresses": {
             "type": "array",
+            "defaultValue": [
+                "10.0.0.4"
+            ],
             "metadata": {
                 "description": "Specifies a list of internal IP adresses of your DNS forwarders or internal IP address of your Azure Firewall if you have enabled DNS forwarding."
             }
         },
         "firewallPrivateIp": {
             "type": "string",
+            "defaultValue": "10.0.0.4",
             "metadata": {
                 "description": "Specifies the private IP of your (Azure) Firewall."
             }
@@ -54,7 +51,7 @@
     "variables": {
         "enterpriseScaleAnalyticsCompanyPrefix": "[parameters('enterpriseScaleAnalyticsCompanyPrefix')]",
         "dataNodeName": "[parameters('dataNodeName')]",
-        "location": "[parameters('location')]",
+        "location": "[deployment().location]",
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
         "firewallPrivateIp": "[parameters('firewallPrivateIp')]",
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
@@ -85,19 +82,19 @@
         "metadataResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-metadata')]",
         "processingDomainResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-processing-domain')]",
         "processingProductResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-processing-product')]",
-        "artifactStorageTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/ArtifactStorage/deploy.storage.json",
-        "databricksTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Databricks/deploy.databricks.json",
-        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/DataFactory/deploy.dataFactory.json",
-        "eventHubTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/EventHub/deploy.eventHub.json",
-        "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/KeyVault/deploy.keyVault.json",
-        "mySqlTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/MySql/deploy.mySql.json",
-        "shirTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/docs/reference/deploy.shir.json",
-        "sqlDatabaseTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlDatabase/deploy.sqlDatabase.json",
-        "sqlServerTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SqlServer/deploy.sqlServer.json",
-        "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Storage/deploy.storage.json",
-        "synapseTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/Synapse/deploy.synapse.json",
-        "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/VirtualNetwork/deploy.vnet.json",
-        "shirScriptLink": "https://raw.githubusercontent.com/Azure/data-node/main/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1"
+        "artifactStorageTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/ArtifactStorage/deploy.storage.json",
+        "databricksTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/Databricks/deploy.databricks.json",
+        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/DataFactory/deploy.dataFactory.json",
+        "eventHubTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/EventHub/deploy.eventHub.json",
+        "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/KeyVault/deploy.keyVault.json",
+        "mySqlTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/MySql/deploy.mySql.json",
+        "shirTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/docs/reference/deploy.shir.json",
+        "sqlDatabaseTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/SqlDatabase/deploy.sqlDatabase.json",
+        "sqlServerTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/SqlServer/deploy.sqlServer.json",
+        "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/Storage/deploy.storage.json",
+        "synapseTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/Synapse/deploy.synapse.json",
+        "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/VirtualNetwork/deploy.vnet.json",
+        "shirScriptLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1"
     },
     "resources": [
         {
