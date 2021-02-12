@@ -57,17 +57,17 @@
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
         "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
         "storageAccountNames": [
-            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'rawsa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
-            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'encursa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
-            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'rawsa', uniqueString(subscription().subscriptionId, variables('storageResourceGroupName'))), 24)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'encursa', uniqueString(subscription().subscriptionId, variables('storageResourceGroupName'))), 24)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa', uniqueString(subscription().subscriptionId, variables('storageResourceGroupName'))), 24)]"
         ],
         "secretStorageAccountNames": [
-            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secrawsa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
-            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secencursa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]",
-            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secworksa', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secrawsa', uniqueString(subscription().subscriptionId, variables('secretStorageResourceGroupName'))), 24)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secencursa', uniqueString(subscription().subscriptionId, variables('secretStorageResourceGroupName'))), 24)]",
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'secworksa', uniqueString(subscription().subscriptionId, variables('secretStorageResourceGroupName'))), 24)]"
         ],
         "externalStorageAccountNames": [
-            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'extsa001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
+            "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'extsa001', uniqueString(subscription().subscriptionId, variables('externalStorageResourceGroupName'))), 24)]"
         ],
         "databricksNames": [
             "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-databricks001-ingest'), 30)]",
@@ -215,7 +215,7 @@
                         "value": "[variables('location')]"
                     },
                     "keyVaultName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-keyvault001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-keyvault001', uniqueString(subscription().subscriptionId, variables('metadataResourceGroupName'))), 24)]"
                     },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
@@ -246,7 +246,7 @@
                         "value": "[variables('location')]"
                     },
                     "keyVaultName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-keyvault002', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-keyvault002', uniqueString(subscription().subscriptionId, variables('metadataResourceGroupName'))), 24)]"
                     },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
@@ -413,7 +413,7 @@
                         "value": "[variables('location')]"
                     },
                     "sqlServerName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver001', uniqueString(subscription().subscriptionId, variables('metadataResourceGroupName'))), 63)]"
                     },
                     "administratorLogin": {
                         "value": "SqlServerMainUser"
@@ -456,7 +456,7 @@
         //                 "value": "[variables('location')]"
         //             },
         //             "sqlServerName": {
-        //                 "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver002', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
+        //                 "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-sqlserver002', uniqueString(subscription().subscriptionId, variables('metadataResourceGroupName'))), 63)]"
         //             },
         //             "administratorLogin": {
         //                 "value": "SqlServerMainUser"
@@ -629,7 +629,7 @@
                         "value": "[variables('location')]"
                     },
                     "mySqlServerName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-mysqlserver001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-mysqlserver001', uniqueString(subscription().subscriptionId, variables('metadataResourceGroupName'))), 63)]"
                     },
                     "mySqlDatabaseName": {
                         "value": "HiveMetastoreDB"
@@ -762,7 +762,7 @@
                         "value": "[variables('location')]"
                     },
                     "eventHubName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-eventhub001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 50)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-eventhub001', uniqueString(subscription().subscriptionId, variables('processingDomainResourceGroupName'))), 50)]"
                     },
                     "eventHubSku": {
                         "value": "Standard"
@@ -808,7 +808,7 @@
                         "value": "[variables('location')]"
                     },
                     "dataFactoryName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-datafactory001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-datafactory001', uniqueString(subscription().subscriptionId, variables('processingDomainResourceGroupName'))), 63)]"
                     },
                     "dataFactoryGitAccount": {
                         "value": ""
@@ -866,7 +866,7 @@
                         "value": "[variables('location')]"
                     },
                     "dataFactoryName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-datafactory002', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-datafactory002', uniqueString(subscription().subscriptionId, variables('integrationResourceGroupName'))), 63)]"
                     },
                     "dataFactoryGitAccount": {
                         "value": ""
@@ -923,7 +923,7 @@
                         "value": "[variables('location')]"
                     },
                     "storageAccountName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'artifactstorage001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'artifactstorage001', uniqueString(subscription().subscriptionId, variables('integrationResourceGroupName'))), 24)]"
                     },
                     "storageAccountType": {
                         "value": "Standard_LRS"
@@ -999,7 +999,7 @@
                         "value": "[variables('location')]"
                     },
                     "synapseWorkspaceName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-synapse001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 50)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-synapse001', uniqueString(subscription().subscriptionId, variables('processingProductResourceGroupName'))), 50)]"
                     },
                     "synapseDefaultStorageAccountName": {
                         "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa')]"
