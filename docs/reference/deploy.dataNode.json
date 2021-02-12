@@ -635,13 +635,13 @@
                         "value": "HiveMetastoreDB"
                     },
                     "mySqlSkuName": {
-                        "value": "B_Gen5_1"
+                        "value": "GP_Gen5_2"
                     },
                     "mySqlSkuTier": {
-                        "value": "Basic"
+                        "value": "GeneralPurpose"
                     },
                     "mySqlSkuCapacity": {
-                        "value": 1
+                        "value": 2
                     },
                     "mySqlSkuSize": {
                         "value": 5120
