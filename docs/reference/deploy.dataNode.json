@@ -508,7 +508,7 @@
                     "sqlDatabaseName": {
                         "value": "AdfMetastoreDB"
                     },
-                    "sqlDatabaseSku": {
+                    "sqlDatabaseSkuName": {
                         "value": "Basic"
                     },
                     "sqlDatabaseTier": {
@@ -649,11 +649,17 @@
                     "mySqlSkuFamily": {
                         "value": "Gen5"
                     },
-                    "administratorLogin": {
+                    "mySqlServerAdministratorLogin": {
                         "value": "ServerMainUser"
                     },
-                    "administratorLoginPassword": {
+                    "mySqlServerAdministratorLoginPassword": {
                         "value": "[variables('administratorLoginPassword')]"
+                    },
+                    "mySqlAdminGroupName": {
+                        "value": ""
+                    },
+                    "mySqlAdminGroupObjectID": {
+                        "value": ""
                     },
                     "keyVaultId": {
                         "value": "[reference('keyVault002Deployment').outputs.keyVaultId.value]"
@@ -700,6 +706,15 @@
                     },
                     "databricksPublicSubnetName": {
                         "value": "[reference('vnetDeployment').outputs.databricksPublicSubnetName001.value]"
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneIdDatabricks": {
+                        "value": "[concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azuredatabricks.net')]"
+                    },
+                    "privateDnsZoneIdBlob": {
+                        "value": "[concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net')]"
                     }
                 }
             },
@@ -737,6 +752,15 @@
                     },
                     "databricksPublicSubnetName": {
                         "value": "[reference('vnetDeployment').outputs.databricksPublicSubnetName002.value]"
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneIdDatabricks": {
+                        "value": "[concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azuredatabricks.net')]"
+                    },
+                    "privateDnsZoneIdBlob": {
+                        "value": "[concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net')]"
                     }
                 }
             },

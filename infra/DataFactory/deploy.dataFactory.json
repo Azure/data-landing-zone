@@ -417,5 +417,10 @@
             "resourceGroup": "[variables('keyVaultResourceGroupName')]"
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "dataFactoryId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+        }
+    }
 }
