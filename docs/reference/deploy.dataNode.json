@@ -40,6 +40,13 @@
                 "description": "Specifies the ID of the resource group of the private dns zones."
             }
         },
+        "hubVnetId": {
+            "type": "string",
+            "defaultValue": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/<your-rg-name>/providers/Microsoft.Network/virtualNetworks/<your-vnet-name>",
+            "metadata": {
+                "description": "Specifies the ID of the resource group of the private dns zones."
+            }
+        },
         "administratorLoginPassword": {
             "type": "securestring",
             "metadata": {
@@ -55,6 +62,7 @@
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
         "firewallPrivateIp": "[parameters('firewallPrivateIp')]",
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
+        "hubVnetId": "[parameters('hubVnetId')]",
         "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
         "storageAccountNames": [
             "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'rawsa', uniqueString(subscription().subscriptionId, variables('storageResourceGroupName'))), 24)]",
@@ -94,6 +102,7 @@
         "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/Storage/deploy.storage.json",
         "synapseTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/Synapse/deploy.synapse.json",
         "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/VirtualNetwork/deploy.vnet.json",
+        "vnetPeeringTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/VirtualNetworkPeering/deploy.vnetPeering.json",
         "shirScriptLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1"
     },
     "resources": [
@@ -191,6 +200,62 @@
                     },
                     "firewallPrivateIp": {
                         "value": "[variables('firewallPrivateIp')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('vnetResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "vnetPeering001Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('vnetResourceGroupName'))]",
+                "vnetDeployment"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('vnetPeeringTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "sourceVnetId": {
+                        "value": "[reference('vnetDeployment').outputs.vnetId.value]"
+                    },
+                    "destinationVnetId": {
+                        "value": "[variables('hubVnetId')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('vnetResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "vnetPeering002Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('vnetResourceGroupName'))]",
+                "vnetDeployment"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('vnetPeeringTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "sourceVnetId": {
+                        "value": "[variables('hubVnetId')]"
+                    },
+                    "destinationVnetId": {
+                        "value": "[reference('vnetDeployment').outputs.vnetId.value]"
                     }
                 }
             },
@@ -963,7 +1028,9 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('integrationResourceGroupName'))]",
                 "dataFactory002Deployment",
-                "vnetDeployment"
+                "vnetDeployment",
+                "vnetPeering001Deployment",
+                "vnetPeering002Deployment"
             ],
             "properties": {
                 "mode": "Incremental",
