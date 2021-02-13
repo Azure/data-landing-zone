@@ -1,6 +1,6 @@
 # Enterprise Scale Analytics - Data Landing Zone
 
-> **General disclaimer** Please be aware that this template is in public preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue in GitHub if you come across any issues that you would like us to fix.
+> **General disclaimer:** Please be aware that this template is in public preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue in GitHub if you come across any issues that you would like us to fix.
 
 # Description
 A Data Landing Zone has several layers to enable agility to service the Data Domains and Data Products within the data landing zone. A new Data Landing Zone is always deployed with a standard set of services to enable the entity to start ingesting and analysing data.
