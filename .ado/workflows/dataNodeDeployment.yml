@@ -1122,21 +1122,21 @@ stages:
               -UserPassword '{password}' \`
               -ClientId '{clientId}' \`
               -TenantId '{tenantId}' \`
-              -DatabricksWorkspaceName '$(databricksWorkspaceName)' \`
-              -DatabricksWorkspaceId '$(databricksWorkspaceId)' \`
-              -DatabricksApiUrl '$(databricksApiUrl)' \`
-              -DatabricksSubscriptionId '$(databricksSubscriptionId)' \`
-              -DatabricksResourceGroupName '$(databricksResourceGroupName)' \`
-              -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)' \`
-              -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)' \`
-              -HiveUsernameSecretName '$(mySqlUsernameSecretName)' \`
-              -HivePasswordSecretName '$(mySqlPasswordSecretName)' \`
-              -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)' \`
-              -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)' \`
-              -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)' \`
-              -HiveVersion '2.3.7' \`
-              -HadoopVersion '2.7.4' \`
-              -MySqlId '$(mySqlDatabaseId)'
+              -DatabricksWorkspaceName $(databricksDetails001.databricksWorkspaceName.value)
+              -DatabricksWorkspaceId $(databricksDetails001.databricksWorkspaceId.value)
+              -DatabricksApiUrl $(databricksDetails001.databricksApiUrl.value)
+              -DatabricksSubscriptionId $(databricksDetails001.databricksSubscriptionId.value)
+              -DatabricksResourceGroupName $(databricksDetails001.databricksResourceGroupName.value)
+              -HiveKeyVaultId $(hivemetastoreDetails001.mySqlDatabaseKeyVaultId.value)
+              -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlConnectionStringSecretName.value)
+              -HiveUsernameSecretName $(hivemetastoreDetails001.mySqlUsernameSecretName.value)
+              -HivePasswordSecretName $(hivemetastoreDetails001.mySqlPasswordSecretName.value)
+              -LogAnalyticsKeyVaultId $(logAnalytics001Details.logAnalyticsKeyVaultId.value)
+              -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value)
+              -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value)
+              -HiveVersion '2.3.7'
+              -HadoopVersion '2.7.4'
+              -MySqlId $(hivemetastoreDetails001.mySqlDatabaseId.value)
             "
           name: setup_databricks_001_manual
           displayName: Setup Databricks 001 - Manual Step - Guidance
@@ -1220,21 +1220,21 @@ stages:
               -UserPassword '{password}' \`
               -ClientId '{clientId}' \`
               -TenantId '{tenantId}' \`
-              -DatabricksWorkspaceName '$(databricksWorkspaceName)' \`
-              -DatabricksWorkspaceId '$(databricksWorkspaceId)' \`
-              -DatabricksApiUrl '$(databricksApiUrl)' \`
-              -DatabricksSubscriptionId '$(databricksSubscriptionId)' \`
-              -DatabricksResourceGroupName '$(databricksResourceGroupName)' \`
-              -HiveKeyVaultId '$(mySqlDatabaseKeyVaultId)' \`
-              -HiveConnectionStringSecretName '$(mySqlConnectionStringSecretName)' \`
-              -HiveUsernameSecretName '$(mySqlUsernameSecretName)' \`
-              -HivePasswordSecretName '$(mySqlPasswordSecretName)' \`
-              -LogAnalyticsKeyVaultId '$(logAnalyticsKeyVaultId)' \`
-              -LogAnalyticsWorkspaceIdSecretName '$(logAnalyticsWorkspaceIdSecretName)' \`
-              -LogAnalyticsWorkspaceKeySecretName '$(logAnalyticsWorkspaceKeySecretName)' \`
-              -HiveVersion '2.3.7' \`
-              -HadoopVersion '2.7.4' \`
-              -MySqlId '$(mySqlDatabaseId)'
+              -DatabricksWorkspaceName $(databricksDetails001.databricksWorkspaceName.value)
+              -DatabricksWorkspaceId $(databricksDetails001.databricksWorkspaceId.value)
+              -DatabricksApiUrl $(databricksDetails001.databricksApiUrl.value)
+              -DatabricksSubscriptionId $(databricksDetails001.databricksSubscriptionId.value)
+              -DatabricksResourceGroupName $(databricksDetails001.databricksResourceGroupName.value)
+              -HiveKeyVaultId $(hivemetastoreDetails001.mySqlDatabaseKeyVaultId.value)
+              -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlConnectionStringSecretName.value)
+              -HiveUsernameSecretName $(hivemetastoreDetails001.mySqlUsernameSecretName.value)
+              -HivePasswordSecretName $(hivemetastoreDetails001.mySqlPasswordSecretName.value)
+              -LogAnalyticsKeyVaultId $(logAnalytics001Details.logAnalyticsKeyVaultId.value)
+              -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value)
+              -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value)
+              -HiveVersion '2.3.7'
+              -HadoopVersion '2.7.4'
+              -MySqlId $(hivemetastoreDetails001.mySqlDatabaseId.value)
             "
           name: setup_databricks_002_manual
           displayName: Setup Databricks 002 - Manual Step - Guidance
