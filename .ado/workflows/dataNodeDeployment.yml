@@ -21,9 +21,30 @@ trigger:
       - infra/VirtualNetworkPeering/*
       - .ado/workflows/dataNodeDeployment.yml
       - code/*
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - infra/ArtifactStorage/*
+      - infra/Databricks/*
+      - infra/DataFactory/*
+      - infra/EventHub/*
+      - infra/KeyVault/*
+      - infra/MySql/*
+      - infra/SelfHostedIntegrationRuntime/*
+      - infra/SqlDatabase/*
+      - infra/SqlServer/*
+      - infra/Storage/*
+      - infra/Synapse/*
+      - infra/VirtualNetwork/*
+      - infra/VirtualNetworkPeering/*
+      - .ado/workflows/dataNodeDeployment.yml
+      - code/*
 
 variables:
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'datanode001-service-connection'  # Update to '{resourceManagerConnectionName}'
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'data-node001-service-connection'  # Update to '{resourceManagerConnectionName}'
   AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'             # Update to '{dataLandingZoneSubscriptionId}'
   AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dn001-network'                        # Update to '{dataLandingZoneName}-network'
   AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dn001-mgmt'                        # Update to '{dataLandingZoneName}-mgmt'
@@ -635,7 +656,7 @@ stages:
   - stage: Deployment
     displayName: 'Deployment of ARM templates'
     dependsOn: Validation
-    condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
+    # condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
     jobs:
       - job: Deployment
         displayName: 'Deployment of ARM templates'
