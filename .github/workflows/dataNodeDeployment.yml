@@ -20,6 +20,25 @@ on:
       - 'infra/VirtualNetworkPeering/**'
       - '.github/workflows/dataNodeDeployment.yml'
       - 'code/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'infra/ArtifactStorage/**'
+      - 'infra/Databricks/**'
+      - 'infra/DataFactory/**'
+      - 'infra/EventHub/**'
+      - 'infra/KeyVault/**'
+      - 'infra/MySql/**'
+      - 'infra/SelfHostedIntegrationRuntime/**'
+      - 'infra/ShareSelfHostedIntegrationRuntime/**'
+      - 'infra/SqlDatabase/**'
+      - 'infra/SqlServer/**'
+      - 'infra/Storage/**'
+      - 'infra/Synapse/**'
+      - 'infra/VirtualNetwork/**'
+      - 'infra/VirtualNetworkPeering/**'
+      - '.github/workflows/dataNodeDeployment.yml'
+      - 'code/**'
 
 env:
   AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'           # Update to '{dataLandingZoneSubscriptionId}'
