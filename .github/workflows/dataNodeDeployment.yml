@@ -894,21 +894,21 @@ jobs:
     #     azPSVersion: latest
     #     inlineScript: |
     #       Write-Host "Setting Up Databricks Workspace 001"
-    #       & "${{ github.workspace }}/code/SetupDatabricks.ps1" \
-    #         -DatabricksWorkspaceName '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceName }}' \
-    #         -DatabricksWorkspaceId '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceId }}' \
-    #         -DatabricksApiUrl '${{ steps.databricks_001_deployment.outputs.databricksApiUrl }}' \
-    #         -DatabricksSubscriptionId '${{ steps.databricks_001_deployment.outputs.databricksSubscriptionId }}' \
-    #         -DatabricksResourceGroupName '${{ steps.databricks_001_deployment.outputs.databricksResourceGroupName }}' \
-    #         -HiveKeyVaultId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseKeyVaultId }}' \
-    #         -HiveConnectionStringSecretName '${{ steps.mysql_001_deployment.outputs.mySqlConnectionStringSecretName }}' \
-    #         -HiveUsernameSecretName '${{ steps.mysql_001_deployment.outputs.mySqlUsernameSecretName }}' \
-    #         -HivePasswordSecretName '${{ steps.mysql_001_deployment.outputs.mySqlPasswordSecretName }}' \
-    #         -LogAnalyticsKeyVaultId '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsKeyVaultId }}' \
-    #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' \
-    #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' \
-    #         -HiveVersion '2.3.7' \
-    #         -HadoopVersion '2.7.4' \
+    #       & "${{ github.workspace }}/code/SetupDatabricks.ps1" `
+    #         -DatabricksWorkspaceName '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceName }}' `
+    #         -DatabricksWorkspaceId '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceId }}' `
+    #         -DatabricksApiUrl '${{ steps.databricks_001_deployment.outputs.databricksApiUrl }}' `
+    #         -DatabricksSubscriptionId '${{ steps.databricks_001_deployment.outputs.databricksSubscriptionId }}' `
+    #         -DatabricksResourceGroupName '${{ steps.databricks_001_deployment.outputs.databricksResourceGroupName }}' `
+    #         -HiveKeyVaultId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseKeyVaultId }}' `
+    #         -HiveConnectionStringSecretName '${{ steps.mysql_001_deployment.outputs.mySqlConnectionStringSecretName }}' `
+    #         -HiveUsernameSecretName '${{ steps.mysql_001_deployment.outputs.mySqlUsernameSecretName }}' `
+    #         -HivePasswordSecretName '${{ steps.mysql_001_deployment.outputs.mySqlPasswordSecretName }}' `
+    #         -LogAnalyticsKeyVaultId '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsKeyVaultId }}' `
+    #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' `
+    #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' `
+    #         -HiveVersion '2.3.7' `
+    #         -HadoopVersion '2.7.4' `
     #         -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
     
     # Deploy Databricks 002
@@ -933,21 +933,21 @@ jobs:
     #     azPSVersion: latest
     #     inlineScript: |
     #       Write-Host "Setting Up Databricks Workspace 002"
-    #       & "${{ github.workspace }}/code/SetupDatabricks.ps1" \
-    #         -DatabricksWorkspaceName '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceName }}' \
-    #         -DatabricksWorkspaceId '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceId }}' \
-    #         -DatabricksApiUrl '${{ steps.databricks_002_deployment.outputs.databricksApiUrl }}' \
-    #         -DatabricksSubscriptionId '${{ steps.databricks_002_deployment.outputs.databricksSubscriptionId }}' \
-    #         -DatabricksResourceGroupName '${{ steps.databricks_002_deployment.outputs.databricksResourceGroupName }}' \
-    #         -HiveKeyVaultId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseKeyVaultId }}' \
-    #         -HiveConnectionStringSecretName '${{ steps.mysql_001_deployment.outputs.mySqlConnectionStringSecretName }}' \
-    #         -HiveUsernameSecretName '${{ steps.mysql_001_deployment.outputs.mySqlUsernameSecretName }}' \
-    #         -HivePasswordSecretName '${{ steps.mysql_001_deployment.outputs.mySqlPasswordSecretName }}' \
-    #         -LogAnalyticsKeyVaultId '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsKeyVaultId }}' \
-    #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' \
-    #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' \
-    #         -HiveVersion '2.3.7' \
-    #         -HadoopVersion '2.7.4' \
+    #       & "${{ github.workspace }}/code/SetupDatabricks.ps1" `
+    #         -DatabricksWorkspaceName '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceName }}' `
+    #         -DatabricksWorkspaceId '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceId }}' `
+    #         -DatabricksApiUrl '${{ steps.databricks_002_deployment.outputs.databricksApiUrl }}' `
+    #         -DatabricksSubscriptionId '${{ steps.databricks_002_deployment.outputs.databricksSubscriptionId }}' `
+    #         -DatabricksResourceGroupName '${{ steps.databricks_002_deployment.outputs.databricksResourceGroupName }}' `
+    #         -HiveKeyVaultId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseKeyVaultId }}' `
+    #         -HiveConnectionStringSecretName '${{ steps.mysql_001_deployment.outputs.mySqlConnectionStringSecretName }}' `
+    #         -HiveUsernameSecretName '${{ steps.mysql_001_deployment.outputs.mySqlUsernameSecretName }}' `
+    #         -HivePasswordSecretName '${{ steps.mysql_001_deployment.outputs.mySqlPasswordSecretName }}' `
+    #         -LogAnalyticsKeyVaultId '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsKeyVaultId }}' `
+    #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' `
+    #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' `
+    #         -HiveVersion '2.3.7' `
+    #         -HadoopVersion '2.7.4' `
     #         -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
     
     # Deploy Event Hub 001
@@ -1009,10 +1009,12 @@ jobs:
       with:
         azPSVersion: latest
         inlineScript: |
-          "Uploading file to Storage Account 001"
-          $storageAccount = Get-AzStorageAccount -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}" -Name "${{ steps.artifact_storage_001_deployment.outputs.storageAccountName }}"
-          $ctx = $storageAccount.Context
-          Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.artifact_storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1" -Blob "installSHIRGateway.ps1" -Force
+          & "${{ github.workspace }}/code/UploadBlob.ps1" `
+            -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}" `
+            -StorageAccountName "${{ steps.artifact_storage_001_deployment.outputs.storageAccountName }}" `
+            -StorageAccountContainerName "${{ steps.artifact_storage_001_deployment.outputs.storageAccountContainerName }}" `
+            -File "${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1" `
+            -Blob "installSHIRGateway.ps1"
     
     # Generate Password
     - name: Generate Password
