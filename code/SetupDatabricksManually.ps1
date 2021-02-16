@@ -101,6 +101,8 @@ param (
 #    RESTART MYSQL SERVER
 # *****************************************************************************
 
+# Restart MySql Server
+Write-Host "Restarting MySql Server"
 az mysql server restart --ids "${MySqlId}"
 
 
@@ -181,12 +183,19 @@ do {
     Start-Sleep -Seconds 5
     $jobRunStatus = Get-DatabricksJobRun -JobRunID $jobInfo.run_id
 } while ($jobRunStatus.end_time -eq 0)
-Write-Host "`r - Notebook execution complete!  Status: $($jobRunStatus.state.result_state)"
-if ($jobRunStatus.state.result_state -eq "FAILED") {
-    Write-Host "       $($jobRunStatus.state.state_message)`n"
+
+# Check Job Result Status
+Write-Host "Checking Job Result Status"
+$jobResultStatus = $jobRunStatus.state.result_state
+if ($jobResultStatus -eq "SUCCESS") {
+    Write-Host "Job executed successfully with result status: '${jobResultStatus}'"
+}
+else {
+    Write-Host "Job did not succeed with result status: '${jobResultStatus}'"
+    throw "Job did not succeed with result status: '${jobResultStatus}'"
 }
 
-# Clean up notebook
+# Remove Workspace Configuration Notebook
 Write-Host "Removing Workspace Configuration Notebook"
 Remove-DatabricksWorkspaceItem $notebookPath
 
@@ -197,11 +206,11 @@ Remove-DatabricksWorkspaceItem $notebookPath
 
 # Update Spark Monitoring Shell Script
 Write-Host "Updating Spark Monitoring Init Script"
-$SparkMonitoringInitScriptContent = Get-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh"
-$SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_SUBSCRIPTION_ID=", "AZ_SUBSCRIPTION_ID=${DatabricksSubscriptionId}"
-$SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_RSRC_GRP_NAME=", "AZ_RSRC_GRP_NAME=${DatabricksResourceGroupName}"
-$SparkMonitoringInitScriptContent = $SparkMonitoringInitScriptContent -Replace "AZ_RSRC_NAME=", "AZ_RSRC_NAME=${DatabricksWorkspaceName}"
-$SparkMonitoringInitScriptContent | Set-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh"
+$sparkMonitoringInitScriptContent = Get-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh"
+$sparkMonitoringInitScriptContent = $sparkMonitoringInitScriptContent -Replace "AZ_SUBSCRIPTION_ID=", "AZ_SUBSCRIPTION_ID=${DatabricksSubscriptionId}"
+$sparkMonitoringInitScriptContent = $sparkMonitoringInitScriptContent -Replace "AZ_RSRC_GRP_NAME=", "AZ_RSRC_GRP_NAME=${DatabricksResourceGroupName}"
+$sparkMonitoringInitScriptContent = $sparkMonitoringInitScriptContent -Replace "AZ_RSRC_NAME=", "AZ_RSRC_NAME=${DatabricksWorkspaceName}"
+$sparkMonitoringInitScriptContent | Set-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh"
 
 # Upload Spark Monitoring Shell Script
 Write-Host "Uploading Spark Monitoring Shell Script"
@@ -209,9 +218,26 @@ Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark-monitoring.sh"
 
 # Upload Hive Metastore Connection Shell Script
 Write-Host "Uploading Hive Metastore Connection Init Script"
-$ExternalMetastoreInitScriptContent = Get-Content -Path "code/databricks/externalMetastore/external-metastore.sh"
-$ExternalMetastoreInitScriptContent = $ExternalMetastoreInitScriptContent -join "`r`n" | Out-String
-$scriptInfo = Add-DatabricksGlobalInitScript -Name "external-metastore" -Script $ExternalMetastoreInitScriptContent -AsPlainText -Position 1 -Enabled $true
+$hiveGlobalInitScriptName = "external-metastore"
+$externalMetastoreInitScriptContent = Get-Content -Path "code/databricks/externalMetastore/external-metastore.sh"
+$externalMetastoreInitScriptContent = $externalMetastoreInitScriptContent -join "`r`n" | Out-String
+try {
+    Write-Host "Adding Databricks Global Init Script '${hiveGlobalInitScriptName}'"
+    Add-DatabricksGlobalInitScript -Name $hiveGlobalInitScriptName -Script $externalMetastoreInitScriptContent -AsPlainText -Position 1 -Enabled $true
+}
+catch {
+    Write-Host "Global Init Script already exists"
+    Write-Host "Updating Databricks Global Init Script '${hiveGlobalInitScriptName}'"
+    $globalInitScripts = Get-DatabricksGlobalInitScript
+    $globalInitScriptId = ""
+    foreach ($globalInitScript in $globalInitScripts) {
+        if ($globalInitScript.name -eq $hiveGlobalInitScriptName) {
+            $globalInitScriptId = $globalInitScript.script_id
+            Break;
+        }
+    }
+    Update-DatabricksGlobalInitScript -ScriptID $globalInitScriptId -Name $hiveGlobalInitScriptName -Script $externalMetastoreInitScriptContent -AsPlainText -Position 1 -Enabled $true
+}
 
 
 # *****************************************************************************
@@ -229,19 +255,25 @@ function Update-DatabricksClusterPolicyValues {
         [Hashtable]
         $ReplacementValues
     )
-
+    # Load Policy
+    Write-Verbose "Loading Policies"
     $policy = Get-Content -Path $ContentPath -Raw | Out-String | ConvertFrom-Json
     
+    # Replace Values in Policy
+    Write-Verbose "Replacing Values in Policy"
     foreach ($rv in $ReplacementValues.GetEnumerator()) {
         if ([bool]($policy.PSobject.Properties.name -match $rv.Name)) {
             $policy.$($rv.Name).value = $rv.Value
         }
     }
 
-    ConvertTo-Json $policy
+    # Convert Policy to JSON
+    Write-Verbose "Converting Policy JSON"
+    $policy = ConvertTo-Json $policy
+    return $policy
 }
 
-# Declare a wrapper function for uploading a new policy or updating an existing policy
+
 function Set-DatabricksClusterPolicy {
     param (
         [Parameter(Mandatory = $true)]
@@ -255,7 +287,7 @@ function Set-DatabricksClusterPolicy {
 
     try {
         Add-DatabricksClusterPolicy -PolicyName $PolicyName -Definition $PolicyJson
-        Write-Host "  - Create new policy `"${PolicyName}`""
+        Write-Host " - Created new policy `"${PolicyName}`""
     }
     catch {
         $clusterPolicies = Get-DatabricksClusterPolicy
@@ -267,7 +299,7 @@ function Set-DatabricksClusterPolicy {
             }
         }
         Update-DatabricksClusterPolicy -PolicyID $policyId -PolicyName $PolicyName -Definition $PolicyJson
-        Write-Host "  - Updated policy `"${PolicyName}`""
+        Write-Host " - Updated policy `"${PolicyName}`""
     }
 }
 
