@@ -1211,8 +1211,8 @@ stages:
               -HadoopVersion '2.7.4' \`
               -MySqlId $(hivemetastoreDetails001.mySqlDatabaseId.value) \`
             "
-          name: setup_databricks_001_manual
-          displayName: Setup Databricks 001 - Manual Step - Guidance
+          name: setup_databricks_002_manual
+          displayName: Setup Databricks 002 - Manual Step - Guidance
         
         # Deploy event hub 001
         - task: AzureResourceManagerTemplateDeployment@3
