@@ -662,7 +662,7 @@ stages:
         displayName: 'Deployment of ARM templates'
         continueOnError: false
         pool:
-          vmImage: 'windows-latest'
+          vmImage: 'ubuntu-latest'
         
         steps:
         # Checkout repository
@@ -1058,6 +1058,22 @@ stages:
             overrideParameters: >
               -mySqlServerAdministratorLoginPassword "$(password)"
         
+        # Restart MySQL 001
+        - task: AzureCLI@2
+          name: mysql_001_restart
+          displayName: Restart MySQL 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            azureSubscription: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+            scriptType: bash
+            scriptLocation: 'scriptPath'
+            scriptPath: '$(System.DefaultWorkingDirectory)/code/restart-mysqlserver.sh'
+            addSpnToEnvironment: false
+            failOnStandardError: false
+            arguments: >
+              --mysqlserverid $(hivemetastoreDetails001.mySqlDatabaseId.value)
+        
         # Deploy databricks 001
         - task: AzureResourceManagerTemplateDeployment@3
           name: databricks_001_deployment
@@ -1107,7 +1123,6 @@ stages:
         #       -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value)
         #       -HiveVersion '2.3.7'
         #       -HadoopVersion '2.7.4'
-        #       -MySqlId $(hivemetastoreDetails001.mySqlDatabaseId.value)
         
         # Setup Databricks 001 - Manual Step - Guidance
         - bash: |
@@ -1185,7 +1200,6 @@ stages:
         #       -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value)
         #       -HiveVersion '2.3.7'
         #       -HadoopVersion '2.7.4'
-        #       -MySqlId $(hivemetastoreDetails001.mySqlDatabaseId.value)
         
         # Setup Databricks 002 - Manual Step - Guidance
         - bash: |

@@ -873,6 +873,16 @@ jobs:
         parameters: ${{ github.workspace }}/infra/MySql/params.mySql001.json mySqlServerAdministratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
         deploymentMode: Incremental
     
+    # Restart MySQL 001
+    - name: Restart MySQL 001
+      id: mysql_001_restart
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          chmod +x $GITHUB_WORKSPACE/code/restart-mysqlserver.sh
+          $GITHUB_WORKSPACE/code/restart-mysqlserver.sh --mysqlserverid "${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}"
+    
     # Deploy Databricks 001
     - name: Deploy Databricks 001
       id: databricks_001_deployment
@@ -909,7 +919,6 @@ jobs:
     #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' `
     #         -HiveVersion '2.3.7' `
     #         -HadoopVersion '2.7.4' `
-    #         -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
     
     - name: Setup Databricks 001 - Manual Step - Guidance
       id: setup_databricks_001_manual
@@ -975,7 +984,6 @@ jobs:
     #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' `
     #         -HiveVersion '2.3.7' `
     #         -HadoopVersion '2.7.4' `
-    #         -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
     
     # Setup Databricks 002 - Manual Step - Guidance
     - name: Setup Databricks 002 - Manual Step - Guidance
