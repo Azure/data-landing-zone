@@ -1128,7 +1128,7 @@ stages:
         - bash: |
             echo "Please run the following Powershell command to setup Databricks Workspace 001:
             ./code/SetupDatabricksManually.ps1 \`
-              -UserEmail '{userObjectId}' \`
+              -UserEmail '{userEmail}' \`
               -UserPassword '{password}' \`
               -ClientId '{clientId}' \`
               -TenantId '{tenantId}' \`
@@ -1204,7 +1204,7 @@ stages:
         - bash: |
             echo "Please run the following Powershell command to setup Databricks Workspace 002:
             ./code/SetupDatabricksManually.ps1 \`
-              -UserEmail '{userObjectId}' \`
+              -UserEmail '{userEmail}' \`
               -UserPassword '{password}' \`
               -ClientId '{clientId}' \`
               -TenantId '{tenantId}' \`
