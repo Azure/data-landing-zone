@@ -189,7 +189,7 @@ If you want to use Azure DevOps Pipelines for deploying the resources, you need 
 1. Enter a user-friendly **Connection name** to use when referring to this service connection. Take note of the name because this will be required in the parameter update process.
 1. Optionally, enter a **Description**.
 1. Click on **Verify and save**.
-![Connection DevOps](./docs/images/ConnectionDevOps.png){ width=20% }
+![Connection DevOps](./docs/images/ConnectionDevOps.png)
 
 More information can be found [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal).
 
