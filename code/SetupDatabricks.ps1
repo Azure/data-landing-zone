@@ -167,20 +167,20 @@ Remove-DatabricksWorkspaceItem $notebookPath
 
 
 # *****************************************************************************
-#    UPLOAD GLOBAL INIT SCRIPTS
+#    UPLOAD INIT SCRIPTS
 # *****************************************************************************
 
 # Update Spark Monitoring Shell Script
 Write-Host "Updating Spark Monitoring Init Script"
-$sparkMonitoringInitScriptContent = Get-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh"
+$sparkMonitoringInitScriptContent = Get-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh" -Encoding UTF8 -Raw
 $sparkMonitoringInitScriptContent = $sparkMonitoringInitScriptContent -Replace "AZ_SUBSCRIPTION_ID=", "AZ_SUBSCRIPTION_ID=${DatabricksSubscriptionId}"
 $sparkMonitoringInitScriptContent = $sparkMonitoringInitScriptContent -Replace "AZ_RSRC_GRP_NAME=", "AZ_RSRC_GRP_NAME=${DatabricksResourceGroupName}"
 $sparkMonitoringInitScriptContent = $sparkMonitoringInitScriptContent -Replace "AZ_RSRC_NAME=", "AZ_RSRC_NAME=${DatabricksWorkspaceName}"
-$sparkMonitoringInitScriptContent | Set-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh"
+$sparkMonitoringInitScriptContent | Set-Content -Path "code/databricks/applicationLogging/spark-monitoring-updated.sh" -Encoding UTF8
 
 # Upload Spark Monitoring Shell Script
 Write-Host "Uploading Spark Monitoring Shell Script"
-Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark-monitoring.sh" -LocalPath "code/databricks/applicationLogging/spark-monitoring.sh" -Overwrite $true
+Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark-monitoring.sh" -LocalPath "code/databricks/applicationLogging/spark-monitoring-updated.sh" -Overwrite $true
 
 # Upload Hive Metastore Connection Shell Script
 Write-Host "Uploading Hive Metastore Connection Init Script"
