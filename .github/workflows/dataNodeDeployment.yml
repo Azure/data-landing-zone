@@ -923,9 +923,8 @@ jobs:
     - name: Setup Databricks 001 - Manual Step - Guidance
       id: setup_databricks_001_manual
       run: |
-        echo "Please run the following powershell command to setup Databricks Workspace 001:
-        
-        ./code/SetupDatabricksManual.ps1 \`
+        echo "Please run the following Powershell command to setup Databricks Workspace 001:
+        ./code/SetupDatabricksManually.ps1 \`
           -UserEmail '{userObjectId}' \`
           -UserPassword '{password}' \`
           -ClientId '{clientId}' \`
@@ -943,8 +942,7 @@ jobs:
           -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
           -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
           -HiveVersion '2.3.7' \`
-          -HadoopVersion '2.7.4' \`
-          -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
+          -HadoopVersion '2.7.4'
         "
 
     # Deploy Databricks 002
@@ -989,9 +987,8 @@ jobs:
     - name: Setup Databricks 002 - Manual Step - Guidance
       id: setup_databricks_002_manual
       run: |
-        echo "Please run the following powershell command to setup Databricks Workspace 002:
-        
-        ./code/SetupDatabricksManual.ps1 \`
+        echo "Please run the following Powershell command to setup Databricks Workspace 002:
+        ./code/SetupDatabricksManually.ps1 \`
           -UserEmail '{userObjectId}' \`
           -UserPassword '{password}' \`
           -ClientId '{clientId}' \`
@@ -1009,10 +1006,9 @@ jobs:
           -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
           -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
           -HiveVersion '2.3.7' \`
-          -HadoopVersion '2.7.4' \`
-          -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
+          -HadoopVersion '2.7.4'
         "
-
+    
     # Deploy Event Hub 001
     - name: Deploy Event Hub 001
       id: eventhub_001_deployment

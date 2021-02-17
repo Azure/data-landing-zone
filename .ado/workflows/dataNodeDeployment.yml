@@ -1126,8 +1126,8 @@ stages:
         
         # Setup Databricks 001 - Manual Step - Guidance
         - bash: |
-            echo "Please run the following powershell command to setup Databricks Workspace 001:
-            ./code/SetupDatabricksManual.ps1 \`
+            echo "Please run the following Powershell command to setup Databricks Workspace 001:
+            ./code/SetupDatabricksManually.ps1 \`
               -UserEmail '{userObjectId}' \`
               -UserPassword '{password}' \`
               -ClientId '{clientId}' \`
@@ -1145,8 +1145,7 @@ stages:
               -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value) \`
               -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value) \`
               -HiveVersion '2.3.7' \`
-              -HadoopVersion '2.7.4' \`
-              -MySqlId $(hivemetastoreDetails001.mySqlDatabaseId.value)
+              -HadoopVersion '2.7.4'
             "
           name: setup_databricks_001_manual
           displayName: Setup Databricks 001 - Manual Step - Guidance
@@ -1203,8 +1202,8 @@ stages:
         
         # Setup Databricks 002 - Manual Step - Guidance
         - bash: |
-            echo "Please run the following powershell command to setup Databricks Workspace 002:
-            ./code/SetupDatabricksManual.ps1 \`
+            echo "Please run the following Powershell command to setup Databricks Workspace 002:
+            ./code/SetupDatabricksManually.ps1 \`
               -UserEmail '{userObjectId}' \`
               -UserPassword '{password}' \`
               -ClientId '{clientId}' \`
@@ -1222,8 +1221,7 @@ stages:
               -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value) \`
               -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value) \`
               -HiveVersion '2.3.7' \`
-              -HadoopVersion '2.7.4' \`
-              -MySqlId $(hivemetastoreDetails001.mySqlDatabaseId.value) \`
+              -HadoopVersion '2.7.4'
             "
           name: setup_databricks_002_manual
           displayName: Setup Databricks 002 - Manual Step - Guidance
