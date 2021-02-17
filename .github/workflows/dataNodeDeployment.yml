@@ -920,6 +920,7 @@ jobs:
     #         -HiveVersion '2.3.7' `
     #         -HadoopVersion '2.7.4' `
     
+    # Setup Databricks 001 - Manual Step - Guidance
     - name: Setup Databricks 001 - Manual Step - Guidance
       id: setup_databricks_001_manual
       run: |
@@ -944,7 +945,7 @@ jobs:
           -HiveVersion '2.3.7' \`
           -HadoopVersion '2.7.4'
         "
-
+    
     # Deploy Databricks 002
     - name: Deploy Databricks 002
       id: databricks_002_deployment
