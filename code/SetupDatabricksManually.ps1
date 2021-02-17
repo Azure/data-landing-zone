@@ -89,22 +89,8 @@ param (
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $HadoopVersion = "2.7.4",
-
-    [Parameter(Mandatory = $true)]
-    [ValidateNotNullOrEmpty()]
-    [String]
-    $MySqlId
+    $HadoopVersion = "2.7.4"
 )
-
-# *****************************************************************************
-#    RESTART MYSQL SERVER
-# *****************************************************************************
-
-# # Restart MySql Server
-# Write-Host "Restarting MySql Server"
-# az mysql server restart --ids "${MySqlId}"
-
 
 # *****************************************************************************
 #    SETUP ENVIRONMENT AND LOGIN TO DATABRICKS
