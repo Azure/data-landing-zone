@@ -42,7 +42,7 @@ You have two options for deploying this reference architecture:
 
 The following prerequisites are required to make this repository work:
 
-* A **Data Management Subscription** deployed.  For more information, check the [Data Management Subscription](https://github.com/Azure/data-management-zone) repo.
+* A **Data Management Subscription** deployed. For more information, check the [Data Management Subscription](https://github.com/Azure/data-management-zone) repo.
 * an Azure subscription
 * [User Access Administrator](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#owner) access to the subscription to be able to create a service principal and role assignments for it.
 
