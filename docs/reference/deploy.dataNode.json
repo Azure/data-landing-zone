@@ -928,7 +928,7 @@
                         "value": "[concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net')]"
                     },
                     "privateDnsZoneIdPortal": {
-                        "value": "[concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azure.com')]"
+                        "value": "[concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com')]"
                     }
                 }
             },
@@ -986,7 +986,7 @@
                         "value": "[concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net')]"
                     },
                     "privateDnsZoneIdPortal": {
-                        "value": "[concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azure.com')]"
+                        "value": "[concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com')]"
                     }
                 }
             },
