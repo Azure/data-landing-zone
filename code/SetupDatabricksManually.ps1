@@ -4,6 +4,26 @@ param (
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [String]
+    $UserEmail,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $UserPassword,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $ClientId,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $TenantId,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [String]
     $DatabricksWorkspaceName,
 
     [Parameter(Mandatory = $true)]
@@ -81,14 +101,14 @@ Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 Install-Module -Name DatabricksPS
 Update-Module -Name DatabricksPS
 
-# Define Service Principal Credentials
-Write-Host "Defining Service Principal credentials"
-$password = ConvertTo-SecureString $env:servicePrincipalKey -AsPlainText -Force
-$credSp = New-Object System.Management.Automation.PSCredential ($env:servicePrincipalId, $password)
+# Define Credentials
+Write-Host "Defining credentials"
+$secureUserPassword = ConvertTo-SecureString $UserPassword -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential ($UserEmail, $secureUserPassword)
 
-# Login to Databricks Workspace using Service Principal
-Write-Host "Logging in to Databricks using Service Principal"
-Set-DatabricksEnvironment -TenantID $env:tenantId -ClientID $env:servicePrincipalId -Credential $credSp -AzureResourceID $DatabricksWorkspaceId -ApiRootUrl $DatabricksApiUrl -ServicePrincipal
+# Login to Databricks Workspace
+Write-Host "Logging in to Databricks"
+Set-DatabricksEnvironment -TenantID $TenantId -ClientID $ClientId -Credential $cred -AzureResourceID $DatabricksWorkspaceId -ApiRootUrl $DatabricksApiUrl
 
 
 # *****************************************************************************
@@ -185,8 +205,7 @@ Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark-monitoring.sh"
 # Upload Hive Metastore Connection Shell Script
 Write-Host "Uploading Hive Metastore Connection Init Script"
 $hiveGlobalInitScriptName = "external-metastore"
-$externalMetastoreInitScriptContent = Get-Content -Path "code/databricks/externalMetastore/external-metastore.sh"
-$externalMetastoreInitScriptContent = $externalMetastoreInitScriptContent -join "`r`n" | Out-String
+$externalMetastoreInitScriptContent = Get-Content -Path "code/databricks/externalMetastore/external-metastore.sh" -Encoding UTF8 -Raw
 try {
     Write-Host "Adding Databricks Global Init Script '${hiveGlobalInitScriptName}'"
     Add-DatabricksGlobalInitScript -Name $hiveGlobalInitScriptName -Script $externalMetastoreInitScriptContent -AsPlainText -Position 1 -Enabled $true

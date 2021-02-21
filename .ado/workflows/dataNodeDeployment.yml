@@ -662,7 +662,7 @@ stages:
         displayName: 'Deployment of ARM templates'
         continueOnError: false
         pool:
-          vmImage: 'windows-latest'
+          vmImage: 'ubuntu-latest'
         
         steps:
         # Checkout repository
@@ -1058,6 +1058,22 @@ stages:
             overrideParameters: >
               -mySqlServerAdministratorLoginPassword "$(password)"
         
+        # Restart MySQL 001
+        - task: AzureCLI@2
+          name: mysql_001_restart
+          displayName: Restart MySQL 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            azureSubscription: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+            scriptType: bash
+            scriptLocation: 'scriptPath'
+            scriptPath: '$(System.DefaultWorkingDirectory)/code/restart-mysqlserver.sh'
+            addSpnToEnvironment: false
+            failOnStandardError: false
+            arguments: >
+              --mysqlserverid $(hivemetastoreDetails001.mySqlDatabaseId.value)
+        
         # Deploy databricks 001
         - task: AzureResourceManagerTemplateDeployment@3
           name: databricks_001_deployment
@@ -1107,7 +1123,32 @@ stages:
         #       -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value)
         #       -HiveVersion '2.3.7'
         #       -HadoopVersion '2.7.4'
-        #       -MySqlId $(hivemetastoreDetails001.mySqlDatabaseId.value)
+        
+        # Setup Databricks 001 - Manual Step - Guidance
+        - bash: |
+            echo "Please run the following Powershell command to setup Databricks Workspace 001:
+            ./code/SetupDatabricksManually.ps1 \`
+              -UserEmail '{userEmail}' \`
+              -UserPassword '{password}' \`
+              -ClientId '{clientId}' \`
+              -TenantId '{tenantId}' \`
+              -DatabricksWorkspaceName $(databricksDetails001.databricksWorkspaceName.value) \`
+              -DatabricksWorkspaceId $(databricksDetails001.databricksWorkspaceId.value) \`
+              -DatabricksApiUrl $(databricksDetails001.databricksApiUrl.value) \`
+              -DatabricksSubscriptionId $(databricksDetails001.databricksSubscriptionId.value) \`
+              -DatabricksResourceGroupName $(databricksDetails001.databricksResourceGroupName.value) \`
+              -HiveKeyVaultId $(hivemetastoreDetails001.mySqlDatabaseKeyVaultId.value) \`
+              -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlConnectionStringSecretName.value) \`
+              -HiveUsernameSecretName $(hivemetastoreDetails001.mySqlUsernameSecretName.value) \`
+              -HivePasswordSecretName $(hivemetastoreDetails001.mySqlPasswordSecretName.value) \`
+              -LogAnalyticsKeyVaultId $(logAnalytics001Details.logAnalyticsKeyVaultId.value) \`
+              -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value) \`
+              -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value) \`
+              -HiveVersion '2.3.7' \`
+              -HadoopVersion '2.7.4'
+            "
+          name: setup_databricks_001_manual
+          displayName: Setup Databricks 001 - Manual Step - Guidance
         
         # Deploy databricks 002
         - task: AzureResourceManagerTemplateDeployment@3
@@ -1158,7 +1199,32 @@ stages:
         #       -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value)
         #       -HiveVersion '2.3.7'
         #       -HadoopVersion '2.7.4'
-        #       -MySqlId $(hivemetastoreDetails001.mySqlDatabaseId.value)
+        
+        # Setup Databricks 002 - Manual Step - Guidance
+        - bash: |
+            echo "Please run the following Powershell command to setup Databricks Workspace 002:
+            ./code/SetupDatabricksManually.ps1 \`
+              -UserEmail '{userEmail}' \`
+              -UserPassword '{password}' \`
+              -ClientId '{clientId}' \`
+              -TenantId '{tenantId}' \`
+              -DatabricksWorkspaceName $(databricksDetails002.databricksWorkspaceName.value) \`
+              -DatabricksWorkspaceId $(databricksDetails002.databricksWorkspaceId.value) \`
+              -DatabricksApiUrl $(databricksDetails002.databricksApiUrl.value) \`
+              -DatabricksSubscriptionId $(databricksDetails002.databricksSubscriptionId.value) \`
+              -DatabricksResourceGroupName $(databricksDetails002.databricksResourceGroupName.value) \`
+              -HiveKeyVaultId $(hivemetastoreDetails001.mySqlDatabaseKeyVaultId.value) \`
+              -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlConnectionStringSecretName.value) \`
+              -HiveUsernameSecretName $(hivemetastoreDetails001.mySqlUsernameSecretName.value) \`
+              -HivePasswordSecretName $(hivemetastoreDetails001.mySqlPasswordSecretName.value) \`
+              -LogAnalyticsKeyVaultId $(logAnalytics001Details.logAnalyticsKeyVaultId.value) \`
+              -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value) \`
+              -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value) \`
+              -HiveVersion '2.3.7' \`
+              -HadoopVersion '2.7.4'
+            "
+          name: setup_databricks_002_manual
+          displayName: Setup Databricks 002 - Manual Step - Guidance
         
         # Deploy event hub 001
         - task: AzureResourceManagerTemplateDeployment@3

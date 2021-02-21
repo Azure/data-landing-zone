@@ -11,16 +11,16 @@ In this implementation, **Regex policy** is used in order to enforce cost center
 
  In this case the custom policy JSON section will be the following: 
 
-~~~ruby
+```JSON
      "custom_tags.costCenter": {
         "type": "regex",
         "pattern": "[A-Z]{5}-[0-9]{5}",
         "isOptional": false,
         "hidden": false
     } 
-~~~
-By setting the value of **"isOptional"** to *false*, it prevents the creation of a cluster without specifying a costCenter with a value which needs to follow the defined pattern ( length of 11 chars, with 5 uppercase chars followed by "-", followed by 5 numbers). 
+```
 
+By setting the value of **"isOptional"** to *false*, it prevents the creation of a cluster without specifying a costCenter with a value which needs to follow the defined pattern ( length of 11 chars, with 5 uppercase chars followed by "-", followed by 5 numbers). 
 
 <p align="center">
   <img width="500" height="400" src="./images/DefiningCostCenter-DatabricksUX.png">

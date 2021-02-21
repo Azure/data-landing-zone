@@ -873,6 +873,16 @@ jobs:
         parameters: ${{ github.workspace }}/infra/MySql/params.mySql001.json mySqlServerAdministratorLoginPassword="${{ steps.generate_password_002.outputs.password }}"
         deploymentMode: Incremental
     
+    # Restart MySQL 001
+    - name: Restart MySQL 001
+      id: mysql_001_restart
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          chmod +x $GITHUB_WORKSPACE/code/restart-mysqlserver.sh
+          $GITHUB_WORKSPACE/code/restart-mysqlserver.sh --mysqlserverid "${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}"
+    
     # Deploy Databricks 001
     - name: Deploy Databricks 001
       id: databricks_001_deployment
@@ -909,7 +919,32 @@ jobs:
     #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' `
     #         -HiveVersion '2.3.7' `
     #         -HadoopVersion '2.7.4' `
-    #         -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
+    
+    # Setup Databricks 001 - Manual Step - Guidance
+    - name: Setup Databricks 001 - Manual Step - Guidance
+      id: setup_databricks_001_manual
+      run: |
+        echo "Please run the following Powershell command to setup Databricks Workspace 001:
+        ./code/SetupDatabricksManually.ps1 \`
+          -UserEmail '{userEmail}' \`
+          -UserPassword '{password}' \`
+          -ClientId '{clientId}' \`
+          -TenantId '{tenantId}' \`
+          -DatabricksWorkspaceName '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceName }}' \`
+          -DatabricksWorkspaceId '${{ steps.databricks_001_deployment.outputs.databricksWorkspaceId }}' \`
+          -DatabricksApiUrl '${{ steps.databricks_001_deployment.outputs.databricksApiUrl }}' \`
+          -DatabricksSubscriptionId '${{ steps.databricks_001_deployment.outputs.databricksSubscriptionId }}' \`
+          -DatabricksResourceGroupName '${{ steps.databricks_001_deployment.outputs.databricksResourceGroupName }}' \`
+          -HiveKeyVaultId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseKeyVaultId }}' \`
+          -HiveConnectionStringSecretName '${{ steps.mysql_001_deployment.outputs.mySqlConnectionStringSecretName }}' \`
+          -HiveUsernameSecretName '${{ steps.mysql_001_deployment.outputs.mySqlUsernameSecretName }}' \`
+          -HivePasswordSecretName '${{ steps.mysql_001_deployment.outputs.mySqlPasswordSecretName }}' \`
+          -LogAnalyticsKeyVaultId '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsKeyVaultId }}' \`
+          -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
+          -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
+          -HiveVersion '2.3.7' \`
+          -HadoopVersion '2.7.4'
+        "
     
     # Deploy Databricks 002
     - name: Deploy Databricks 002
@@ -948,7 +983,32 @@ jobs:
     #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' `
     #         -HiveVersion '2.3.7' `
     #         -HadoopVersion '2.7.4' `
-    #         -MySqlId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseId }}'
+    
+    # Setup Databricks 002 - Manual Step - Guidance
+    - name: Setup Databricks 002 - Manual Step - Guidance
+      id: setup_databricks_002_manual
+      run: |
+        echo "Please run the following Powershell command to setup Databricks Workspace 002:
+        ./code/SetupDatabricksManually.ps1 \`
+          -UserEmail '{userEmail}' \`
+          -UserPassword '{password}' \`
+          -ClientId '{clientId}' \`
+          -TenantId '{tenantId}' \`
+          -DatabricksWorkspaceName '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceName }}' \`
+          -DatabricksWorkspaceId '${{ steps.databricks_002_deployment.outputs.databricksWorkspaceId }}' \`
+          -DatabricksApiUrl '${{ steps.databricks_002_deployment.outputs.databricksApiUrl }}' \`
+          -DatabricksSubscriptionId '${{ steps.databricks_002_deployment.outputs.databricksSubscriptionId }}' \`
+          -DatabricksResourceGroupName '${{ steps.databricks_002_deployment.outputs.databricksResourceGroupName }}' \`
+          -HiveKeyVaultId '${{ steps.mysql_001_deployment.outputs.mySqlDatabaseKeyVaultId }}' \`
+          -HiveConnectionStringSecretName '${{ steps.mysql_001_deployment.outputs.mySqlConnectionStringSecretName }}' \`
+          -HiveUsernameSecretName '${{ steps.mysql_001_deployment.outputs.mySqlUsernameSecretName }}' \`
+          -HivePasswordSecretName '${{ steps.mysql_001_deployment.outputs.mySqlPasswordSecretName }}' \`
+          -LogAnalyticsKeyVaultId '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsKeyVaultId }}' \`
+          -LogAnalyticsWorkspaceIdSecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
+          -LogAnalyticsWorkspaceKeySecretName '${{ steps.log_analytics_001_deployment.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
+          -HiveVersion '2.3.7' \`
+          -HadoopVersion '2.7.4'
+        "
     
     # Deploy Event Hub 001
     - name: Deploy Event Hub 001
