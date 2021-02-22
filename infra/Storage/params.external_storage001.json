@@ -8,6 +8,11 @@
         "storageAccountName": {
             "value": "dn001externalsa001"
         },
+        "storageAccountContainerNames": {
+            "value": [
+                "data"
+            ]
+        },
         "storageAccountType": {
             "value": "Standard_LRS"
         },
