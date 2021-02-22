@@ -1,9 +1,4 @@
 # Databricks notebook source
-# Install the required libraries
-dbutils.library.installPyPI("pyapacheatlas")
-dbutils.library.restartPython()
-
-# COMMAND ----------
 
 # Leveraging parameters from the ADF pipeline
 dbutils.widgets.text("tenantID","")
