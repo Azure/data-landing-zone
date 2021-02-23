@@ -84,6 +84,27 @@
             "metadata": {
                 "description": "Specifies the ID of the private dns zone for data factory portal."
             }
+        },
+        // Parameters from Databricks Table Scan for Purview
+        "databricksLinkedService_accessToken": {
+            "type": "secureString",
+            "metadata": "Secure string for 'accessToken' of 'databricksLinkedService'"
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID": {
+            "type": "string",
+            "defaultValue": "{tenand-id}"
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID": {
+            "type": "string",
+            "defaultValue": "{client-id}"
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName": {
+            "type": "string",
+            "defaultValue": "{purview-account}"
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName": {
+            "type": "string",
+            "defaultValue": "{data-landing-zone}"
         }
     },
     "functions": [],
@@ -107,7 +128,8 @@
         "privateDnsZoneIdDataFactory": "[parameters('privateDnsZoneIdDataFactory')]",
         "privateDnsZoneIdPortal": "[parameters('privateDnsZoneIdPortal')]",
         "privateEndpointNameDataFactory": "[concat(variables('dataFactoryName'), '-datafactory-private-endpoint')]",
-        "privateEndpointNamePortal": "[concat(variables('dataFactoryName'), '-portal-private-endpoint')]"
+        "privateEndpointNamePortal": "[concat(variables('dataFactoryName'), '-portal-private-endpoint')]",
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('dataFactoryName'))]"
     },
     "resources": [
         {
@@ -415,6 +437,141 @@
             },
             "subscriptionId": "[variables('keyVaultSubscriptionId')]",
             "resourceGroup": "[variables('keyVaultResourceGroupName')]"
+        },
+        // Resources for Databricks Table Scan for Purview
+        {
+            "name": "[concat(parameters('dataFactoryName'), '/databricksTableScanPipeline')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "notebookPurviewScan",
+                        "type": "DatabricksNotebook",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 2,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "notebookPath": "/databricksPurviewScan",
+                            "baseParameters": {
+                                "tenantID": {
+                                    "value": "@pipeline().parameters.tenantID",
+                                    "type": "Expression"
+                                },
+                                "clientID": {
+                                    "value": "@pipeline().parameters.clientID",
+                                    "type": "Expression"
+                                },
+                                "purviewAccountName": {
+                                    "value": "@pipeline().parameters.purviewAccountName",
+                                    "type": "Expression"
+                                },
+                                "dataLandingZoneName": "@pipeline().parameters.dataLandingZoneName"
+                            },
+                            "libraries": [
+                                {
+                                    "pypi": {
+                                        "package": "pyapacheatlas"
+                                    }
+                                }
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricksLinkedService",
+                            "type": "LinkedServiceReference"
+                        }
+                    }
+                ],
+                "parameters": {
+                    "tenantID": {
+                        "type": "string"
+                    },
+                    "clientID": {
+                        "type": "string"
+                    },
+                    "purviewAccountName": {
+                        "type": "string"
+                    },
+                    "dataLandingZoneName": {
+                        "type": "string"
+                    }
+                },
+                "annotations": [],
+                "lastPublishTime": "2021-02-10T22:35:54Z"
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/databricksLinkedService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('dataFactoryName'), '/runEveryTenMinutes')]",
+            "type": "Microsoft.DataFactory/factories/triggers",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "description": "Runs every ten minutes, not activated by default",
+                "annotations": [],
+                "runtimeState": "Stopped",
+                "pipelines": [
+                    {
+                        "pipelineReference": {
+                            "referenceName": "databricksTableScanPipeline",
+                            "type": "PipelineReference"
+                        },
+                        "parameters": {
+                            "tenantID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID')]",
+                            "clientID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID')]",
+                            "purviewAccountName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName')]",
+                            "dataLandingZoneName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName')]"
+                        }
+                    }
+                ],
+                "type": "ScheduleTrigger",
+                "typeProperties": {
+                    "recurrence": {
+                        "frequency": "Minute",
+                        "interval": 10,
+                        "startTime": "2021-02-10T19:37:00Z",
+                        "timeZone": "UTC"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/pipelines/databricksTableScanPipeline')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('dataFactoryName'), '/databricksLinkedService')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureDatabricks",
+                "typeProperties": {
+                    // todo: modify path to point to databricks workspace url
+                    "domain": "https://adb-947245053288056.16.azuredatabricks.net",
+                    "accessToken": {
+                        "type": "SecureString",
+                        "value": "[parameters('databricksLinkedService_accessToken')]"
+                    },
+                    "newClusterNodeType": "Standard_DS3_v2",
+                    "newClusterNumOfWorker": "2",
+                    "newClusterSparkConf": {
+                        // todo: modify path to purview client secret in key vault
+                        "spark.clientsecret": "{{secrets/purviewClient/clientSecretKV}}"
+                    },
+                    "newClusterSparkEnvVars": {
+                        "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                    },
+                    "newClusterVersion": "7.3.x-scala2.12"
+                }
+            },
+            "dependsOn": []
         }
     ],
     "outputs": {
