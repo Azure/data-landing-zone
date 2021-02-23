@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "dataFactoryName": {
-            "value": "dn001-datafactory001"
+            "value": "dn001-datafactory003"
         },
         "dataFactoryGitAccount": {
             "value": ""
@@ -40,6 +40,21 @@
         },
         "privateDnsZoneIdPortal": {
             "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com"
+        },
+        "databricksLinkedService_accessToken": {
+            "value": ""
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID": {
+            "value": "{tenand-id}"
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID": {
+            "value": "{client-id}"
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName": {
+            "value": "{purview-account}"
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName": {
+            "value": "{data-landing-zone}"
         }
     }
 }
