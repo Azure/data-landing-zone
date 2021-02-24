@@ -50,8 +50,8 @@ env:
   AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE: 'dn001-secretstorage'          # Update to '{dataLandingZoneName}-secretstorage'
   AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE: 'dn001-externalstorage'      # Update to '{dataLandingZoneName}-externalstorage'
   AZURE_RESOURCE_GROUP_NAME_METADATA: 'dn001-metadata'                    # Update to '{dataLandingZoneName}-metadata'
-  AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: 'dn001-processing-domain'   # Update to '{dataLandingZoneName}-processing-domain'
-  AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: 'dn001-processing-product' # Update to '{dataLandingZoneName}-processing-product'
+  AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: 'dn001-shared-domain'       # Update to '{dataLandingZoneName}-processing-domain'
+  AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: 'dn001-shared-product'     # Update to '{dataLandingZoneName}-processing-product'
   AZURE_LOCATION: 'northeurope'                                           # Update to '{regionName}'
 
 jobs:
