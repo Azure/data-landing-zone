@@ -179,7 +179,7 @@ for dictionary in dict_tables_flat:
   if dictionary["isTemporary"] is False:
     database_name = dictionary["database"]
     
-    # Create an asset for the databricks table
+    # Create an asset for the databricks databricks
     
     atlas_input_database = AtlasEntity(
     name = database_name,
