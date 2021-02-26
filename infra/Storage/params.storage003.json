@@ -8,6 +8,15 @@
         "storageAccountName": {
             "value": "dn001workspacesa"
         },
+        "storageAccountContainerNames": {
+            "value": [
+                "data",
+                "dd001",
+                "dd002",
+                "dp001",
+                "dp002"
+            ]
+        },
         "storageAccountType": {
             "value": "Standard_ZRS"
         },
