@@ -68,8 +68,8 @@ jobs:
             AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE: '${{ steps.update_parameters.outputs.landingZoneName }}-secretstorage'
             AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE: '${{ steps.update_parameters.outputs.landingZoneName }}-externalstorage'
             AZURE_RESOURCE_GROUP_NAME_METADATA: '${{ steps.update_parameters.outputs.landingZoneName }}-metadata'
-            AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: '${{ steps.update_parameters.outputs.landingZoneName }}-processing-domain'
-            AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: '${{ steps.update_parameters.outputs.landingZoneName }}-processing-product'
+            AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: '${{ steps.update_parameters.outputs.landingZoneName }}-shared-domain'
+            AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: '${{ steps.update_parameters.outputs.landingZoneName }}-shared-product'
             AZURE_LOCATION: '${{ env.LOCATION }}'
           \`\`\`
           
@@ -89,8 +89,8 @@ jobs:
             AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE: '${{ steps.update_parameters.outputs.landingZoneName }}-secretstorage'
             AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE: '${{ steps.update_parameters.outputs.landingZoneName }}-externalstorage'
             AZURE_RESOURCE_GROUP_NAME_METADATA: '${{ steps.update_parameters.outputs.landingZoneName }}-metadata'
-            AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: '${{ steps.update_parameters.outputs.landingZoneName }}-processing-domain'
-            AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: '${{ steps.update_parameters.outputs.landingZoneName }}-processing-product'
+            AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: '${{ steps.update_parameters.outputs.landingZoneName }}-shared-domain'
+            AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: '${{ steps.update_parameters.outputs.landingZoneName }}-shared-product'
             AZURE_LOCATION: '${{ env.LOCATION }}'
           \`\`\`"
           body="${body//'%'/'%25'}"
