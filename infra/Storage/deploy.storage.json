@@ -15,6 +15,15 @@
                 "description": "Specifies the name of the storage account."
             }
         },
+        "storageAccountContainerNames": {
+            "type": "array",
+            "defaultValue": [
+                "data"
+            ],
+            "metadata": {
+                "description": "Specifies the names of the blob containers that should be created in the storage account."
+            }
+        },
         "enableHns": {
             "type": "bool",
             "defaultValue": true,
@@ -62,6 +71,7 @@
     "variables": {
         "location": "[parameters('location')]",
         "storageAccountName": "[parameters('storageAccountName')]",
+        "storageAccountContainerNames": "[parameters('storageAccountContainerNames')]",
         "storageAccountType": "[parameters('storageAccountType')]",
         "enableHns": "[parameters('enableHns')]",
         "subnetId": "[parameters('subnetId')]",
@@ -108,6 +118,12 @@
                     "keySource": "Microsoft.Storage"
                 },
                 "networkAcls": {
+                    "resourceAccessRules": [
+                        {
+                            "tenantId": "[subscription().tenantId]",
+                            "resourceId": "/subscriptions/*/resourceGroups/*/providers/Microsoft.Purview/Accounts/*"
+                        }
+                    ],
                     "bypass": "Metrics",
                     "virtualNetworkRules": [
                     ],
@@ -202,20 +218,25 @@
                             "corsRules": []
                         }
                     }
-                },
-                {
-                    "type": "blobServices/containers",
-                    "apiVersion": "2020-08-01-preview",
-                    "name": "[concat('default/', 'data')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-                    ],
-                    "properties": {
-                        "publicAccess": "None",
-                        "metadata": {}
-                    }
                 }
             ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2020-08-01-preview",
+            "name": "[concat(variables('storageAccountName'), '/default/', variables('storageAccountContainerNames')[copyIndex()])]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+            ],
+            "properties": {
+                "publicAccess": "None",
+                "metadata": {}
+            },
+            "copy": {
+                "name": "storageAccountContainerCopy",
+                "count": "[length(variables('storageAccountContainerNames'))]",
+                "mode": "Parallel"
+            }
         },
         {
             "condition": "[variables('enableHns')]",

@@ -342,6 +342,11 @@
                     "storageAccountName": {
                         "value": "[variables('storageAccountNames')[copyIndex()]]"
                     },
+                    "storageAccountContainerNames": {
+                        "value": [
+                            "data"
+                        ]
+                    },
                     "storageAccountType": {
                         "value": "Standard_ZRS"
                     },
@@ -386,6 +391,11 @@
                     },
                     "storageAccountName": {
                         "value": "[variables('secretStorageAccountNames')[copyIndex()]]"
+                    },
+                    "storageAccountContainerNames": {
+                        "value": [
+                            "data"
+                        ]
                     },
                     "storageAccountType": {
                         "value": "Standard_ZRS"
@@ -432,6 +442,11 @@
                     },
                     "storageAccountName": {
                         "value": "[variables('externalStorageAccountNames')[copyIndex()]]"
+                    },
+                    "storageAccountContainerNames": {
+                        "value": [
+                            "data"
+                        ]
                     },
                     "storageAccountType": {
                         "value": "Standard_LRS"

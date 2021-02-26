@@ -276,12 +276,12 @@
         //                 {
         //                     "type": "Microsoft.Network/privateDnsZones/CNAME",
         //                     "apiVersion": "2020-06-01",
-        //                     "name": "[concat(variables('privateDnsZoneNameDatabricks'), '/', variables('location'), '-c2.azuredatabricks.net')]",
+        //                     "name": "[concat(variables('privateDnsZoneNameDatabricks'), '/', variables('location'), '-c2.pl-auth')]",
         //                     "properties": {
         //                         "metadata": {},
         //                         "TTL": 60,
         //                         "CNAMERecord": {
-        //                             "cname": "testadb" //"[reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').workspaceUrl]"
+        //                             "cname": "[reference(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), '2018-04-01').workspaceUrl]"
         //                         }
         //                     }
         //                 }

@@ -8,6 +8,11 @@
         "storageAccountName": {
             "value": "dn001rawsa"
         },
+        "storageAccountContainerNames": {
+            "value": [
+                "data"
+            ]
+        },
         "storageAccountType": {
             "value": "Standard_ZRS"
         },
