@@ -85,7 +85,6 @@
                 "description": "Specifies the ID of the private dns zone for data factory portal."
             }
         },
-        // Parameters from Databricks Table Scan for Purview
         "databricksLinkedService_accessToken": {
             "type": "secureString",
             "metadata": "Secure string for 'accessToken' of 'databricksLinkedService'"
@@ -438,7 +437,6 @@
             "subscriptionId": "[variables('keyVaultSubscriptionId')]",
             "resourceGroup": "[variables('keyVaultResourceGroupName')]"
         },
-        // Resources for Databricks Table Scan for Purview
         {
             "name": "[concat(parameters('dataFactoryName'), '/databricksTableScanPipeline')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
@@ -553,8 +551,7 @@
                 "annotations": [],
                 "type": "AzureDatabricks",
                 "typeProperties": {
-                    // todo: modify path to point to databricks workspace url
-                    "domain": "https://adb-947245053288056.16.azuredatabricks.net",
+                    "domain": "{databricks-uri}",
                     "accessToken": {
                         "type": "SecureString",
                         "value": "[parameters('databricksLinkedService_accessToken')]"
@@ -562,8 +559,7 @@
                     "newClusterNodeType": "Standard_DS3_v2",
                     "newClusterNumOfWorker": "2",
                     "newClusterSparkConf": {
-                        // todo: modify path to purview client secret in key vault
-                        "spark.clientsecret": "{{secrets/purviewClient/clientSecretKV}}"
+                        "spark.clientsecret": "{secret}"
                     },
                     "newClusterSparkEnvVars": {
                         "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
