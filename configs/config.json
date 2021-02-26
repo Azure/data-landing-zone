@@ -264,7 +264,7 @@
         "parameters": {
             "parameters.location.value": "${Location}",
             "parameters.synapseWorkspaceName.value": "${DataLandingZoneName}-synapse001",
-            "parameters.synapseDefaultStorageAccountName.value": "${DataLandingZoneName}worksa",
+            "parameters.synapseDefaultStorageAccountId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-storage/providers/Microsoft.Storage/storageAccounts/${DataLandingZoneName}worksa",
             "parameters.synapseDefaultStorageAccountFileSystem.value": "data",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
             "parameters.privateDnsZoneIdSql.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net",

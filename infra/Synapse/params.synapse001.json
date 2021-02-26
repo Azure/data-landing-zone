@@ -8,8 +8,8 @@
         "synapseWorkspaceName": {
             "value": "dn001-synapse001"
         },
-        "synapseDefaultStorageAccountName": {
-            "value": "dn001workspacesa"
+        "synapseDefaultStorageAccountId": {
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-storage/providers/Microsoft.Storage/storageAccounts/dn001workspacesa"
         },
         "synapseDefaultStorageAccountFileSystem": {
             "value": "data"
