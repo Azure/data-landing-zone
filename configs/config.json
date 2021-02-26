@@ -138,7 +138,7 @@
         "filePath": "infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json",
         "fileType": "json",
         "parameters": {
-            "parameters.destinationDataFactoryId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-processing-domain/providers/Microsoft.DataFactory/factories/${DataLandingZoneName}-datafactory001",
+            "parameters.destinationDataFactoryId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-shared-domain/providers/Microsoft.DataFactory/factories/${DataLandingZoneName}-datafactory001",
             "parameters.sourceDataFactoryId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-integration/providers/Microsoft.DataFactory/factories/${DataLandingZoneName}-datafactory002",
             "parameters.sourceDataFactoryShirId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-integration/providers/Microsoft.DataFactory/factories/${DataLandingZoneName}-datafactory002/integrationruntimes/dataNodeSelfHostedIntegrationRuntime${DataLandingZoneName}Shir001"
         }
