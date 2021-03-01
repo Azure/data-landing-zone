@@ -1,6 +1,5 @@
 {
-    //"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
@@ -14,40 +13,6 @@
             "type": "string",
             "metadata": {
                 "description": "Specifies the name of the data factory."
-            }
-        },
-        "dataFactoryGitAccount": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the account name for the repository connection."
-            }
-        },
-        "dataFactoryGitRepo": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the repo name for the repository connection."
-            }
-        },
-        "dataFactoryGitCollaborationBranch": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the collaboration branch name for the repository connection."
-            }
-        },
-        "dataFactoryGitRootFolder": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the root folder in the branch for the repository connection."
-            }
-        },
-        "dataFactoryGitType": {
-            "type": "string",
-            "allowedValues": [
-                "FactoryGitHubConfiguration",
-                "FactoryVSTSConfiguration"
-            ],
-            "metadata": {
-                "description": "Specifies the type of git connection."
             }
         },
         "keyVaultId": {
@@ -87,8 +52,7 @@
             }
         },
         "databricksLinkedService_accessToken": {
-            "type": "secureString",
-            "metadata": "Secure string for 'accessToken' of 'databricksLinkedService'"
+            "type": "secureString"
         },
         "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID": {
             "type": "string",
@@ -112,11 +76,6 @@
         "location": "[parameters('location')]",
         "dataFactoryName": "[parameters('dataFactoryName')]",
         "azureManagedVnetIntegrationRuntimeName": "azureManagedVnetIntegrationRuntime",
-        "dataFactoryGitAccount": "[parameters('dataFactoryGitAccount')]",
-        "dataFactoryGitRepo": "[parameters('dataFactoryGitRepo')]",
-        "dataFactoryGitCollaborationBranch": "[parameters('dataFactoryGitCollaborationBranch')]",
-        "dataFactoryGitRootFolder": "[parameters('dataFactoryGitRootFolder')]",
-        "dataFactoryGitType": "[parameters('dataFactoryGitType')]",
         "keyVaultId": "[parameters('keyVaultId')]",
         "keyVaultName": "[if(empty(variables('keyVaultId')), 'keyVaultNotSet', last(split(variables('keyVaultId'), '/')))]",
         "keyVaultSubscriptionId": "[if(empty(variables('keyVaultId')), subscription().subscriptionId, split(variables('keyVaultId'), '/')[2])]",
@@ -211,7 +170,7 @@
                 },
                 {
                     "condition": "[not(empty(variables('keyVaultId')))]",
-                    "type": "managedVirtualNetworks/managedPrivateEndpoints",
+                    "type": "managedPrivateEndpoints",
                     "apiVersion": "2018-06-01",
                     "name": "[concat('default/', replace(variables('keyVaultName'), '-', ''))]",
                     "dependsOn": [
@@ -252,7 +211,7 @@
                 },
                 {
                     "condition": "[not(empty(variables('sqlDatabaseId')))]",
-                    "type": "managedVirtualNetworks/managedPrivateEndpoints",
+                    "type": "managedPrivateEndpoints",
                     "apiVersion": "2018-06-01",
                     "name": "[concat('default/', replace(variables('sqlDatabaseName'), '-', ''))]",
                     "dependsOn": [
