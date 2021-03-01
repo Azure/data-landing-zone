@@ -4,7 +4,9 @@
     "parameters": {
         "databricksLinkedService_accessToken": {
             "type": "secureString",
-            "metadata": "Secure string for accessToken of databricksLinkedService"
+            "metadata": {
+                "description": "Secure string for accessToken of databricksLinkedService"
+            }
         },
         "location": {
             "type": "string",
