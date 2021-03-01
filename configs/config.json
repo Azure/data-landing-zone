@@ -43,6 +43,7 @@
         "parameters": {
             "parameters.location.value": "${Location}",
             "parameters.dataFactoryName.value": "${DataLandingZoneName}-datafactory001",
+            "parameters.purviewId.value": "${PurviewId}",
             "parameters.keyVaultId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-metadata/providers/Microsoft.KeyVault/vaults/${DataLandingZoneName}-keyvault001",
             "parameters.sqlServerId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-metadata/providers/Microsoft.Sql/servers/${DataLandingZoneName}-sqlserver001",
             "parameters.sqlDatabaseId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-metadata/providers/Microsoft.Sql/servers/${DataLandingZoneName}-sqlserver001/databases/AdfMetastoreDB",
@@ -57,6 +58,7 @@
         "parameters": {
             "parameters.location.value": "${Location}",
             "parameters.dataFactoryName.value": "${DataLandingZoneName}-datafactory002",
+            "parameters.purviewId.value": "${PurviewId}",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
             "parameters.privateDnsZoneIdDataFactory.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net",
             "parameters.privateDnsZoneIdPortal.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com"
@@ -266,6 +268,7 @@
             "parameters.synapseWorkspaceName.value": "${DataLandingZoneName}-synapse001",
             "parameters.synapseDefaultStorageAccountName.value": "${DataLandingZoneName}worksa",
             "parameters.synapseDefaultStorageAccountFileSystem.value": "data",
+            "parameters.purviewId.value": "${PurviewId}",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
             "parameters.privateDnsZoneIdSql.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net",
             "parameters.privateDnsZoneIdDev.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net"
