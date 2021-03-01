@@ -146,7 +146,7 @@
                         "annotations": [],
                         "type": "AzureDatabricks",
                         "typeProperties": {
-                            "domain": "https://adb-947245053288056.16.azuredatabricks.net",
+                            "domain": "{databricksWorkspaceUrl}",
                             "accessToken": {
                                 "type": "SecureString",
                                 "value": "[parameters('databricksLinkedService_accessToken')]"
@@ -233,7 +233,8 @@
                         "lastPublishTime": "2021-02-10T22:35:54Z"
                     },
                     "dependsOn": [
-                        "[concat(variables('factoryId'), '/linkedServices/databricksLinkedService')]"
+                        "[concat(variables('factoryId'), '/linkedServices/databricksLinkedService')]",
+                         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
                     ]
                 },
                 {
