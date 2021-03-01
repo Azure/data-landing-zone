@@ -162,7 +162,9 @@
                             "newClusterVersion": "7.3.x-scala2.12"
                         }
                     },
-                    "dependsOn": []
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+                    ]
                 },
                 {
                     "name": "[concat(parameters('dataFactoryName'), '/databricksTableScanPipeline')]",
