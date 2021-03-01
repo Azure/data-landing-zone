@@ -65,6 +65,12 @@
                 "description": "Specifies the Azure Active Directory objectID of the SQL admin group."
             }
         },
+        "purviewId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of the purview data catalog that should be linked to the data factory."
+            }
+        },
         "subnetId": {
             "type": "string",
             "metadata": {
@@ -96,6 +102,7 @@
         "synapseComputeSubnetResourceId": "[parameters('synapseComputeSubnetResourceId')]",
         "synapseSqlAdminGroupName": "[parameters('synapseSqlAdminGroupName')]",
         "synapseSqlAdminGroupObjectID": "[parameters('synapseSqlAdminGroupObjectID')]",
+        "purviewId": "[parameters('purviewId')]",
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneIdSql": "[parameters('privateDnsZoneIdSql')]",
         "privateDnsZoneIdDev": "[parameters('privateDnsZoneIdDev')]",
@@ -132,7 +139,10 @@
                     "linkedAccessCheckOnTargetResource": true,
                     "preventDataExfiltration": true
                 },
-                "connectivityEndpoints": {}
+                "connectivityEndpoints": {},
+                "purviewConfiguration": {
+                    "purviewResourceId": "[variables('purviewId')]"
+                }
             },
             "resources": [
                 {
