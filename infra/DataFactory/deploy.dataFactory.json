@@ -2,6 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "databricksLinkedService_accessToken": {
+            "type": "secureString",
+            "metadata": "Secure string for accessToken of databricksLinkedService"
+        },
         "location": {
             "type": "string",
             "defaultValue": "[resourceGroup().location]",
@@ -14,7 +18,41 @@
             "metadata": {
                 "description": "Specifies the name of the data factory."
             }
-        }, 
+        },
+        "dataFactoryGitAccount": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the account name for the repository connection."
+            }
+        },
+        "dataFactoryGitRepo": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the repo name for the repository connection."
+            }
+        },
+        "dataFactoryGitCollaborationBranch": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the collaboration branch name for the repository connection."
+            }
+        },
+        "dataFactoryGitRootFolder": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the root folder in the branch for the repository connection."
+            }
+        },
+        "dataFactoryGitType": {
+            "type": "string",
+            "allowedValues": [
+                "FactoryGitHubConfiguration",
+                "FactoryVSTSConfiguration"
+            ],
+            "metadata": {
+                "description": "Specifies the type of git connection."
+            }
+        },
         "keyVaultId": {
             "type": "string",
             "metadata": {
@@ -54,9 +92,15 @@
     },
     "functions": [],
     "variables": {
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('dataFactoryName'))]",
         "location": "[parameters('location')]",
         "dataFactoryName": "[parameters('dataFactoryName')]",
         "azureManagedVnetIntegrationRuntimeName": "azureManagedVnetIntegrationRuntime",
+        "dataFactoryGitAccount": "[parameters('dataFactoryGitAccount')]",
+        "dataFactoryGitRepo": "[parameters('dataFactoryGitRepo')]",
+        "dataFactoryGitCollaborationBranch": "[parameters('dataFactoryGitCollaborationBranch')]",
+        "dataFactoryGitRootFolder": "[parameters('dataFactoryGitRootFolder')]",
+        "dataFactoryGitType": "[parameters('dataFactoryGitType')]",
         "keyVaultId": "[parameters('keyVaultId')]",
         "keyVaultName": "[if(empty(variables('keyVaultId')), 'keyVaultNotSet', last(split(variables('keyVaultId'), '/')))]",
         "keyVaultSubscriptionId": "[if(empty(variables('keyVaultId')), subscription().subscriptionId, split(variables('keyVaultId'), '/')[2])]",
@@ -71,20 +115,123 @@
         "privateEndpointNamePortal": "[concat(variables('dataFactoryName'), '-portal-private-endpoint')]"
     },
     "resources": [
-        {
-            "type": "Microsoft.DataFactory/factories",
-            "apiVersion": "2018-06-01",
-            "name": "[variables('dataFactoryName')]",
-            "location": "[variables('location')]",
-            "identity": {
-                "type": "SystemAssigned"
-            },
-            "properties": {
-                "globalParameters": {
+                {
+                    "type": "Microsoft.DataFactory/factories",
+                    "apiVersion": "2018-06-01",
+                    "name": "[variables('dataFactoryName')]",
+                    "location": "[variables('location')]",
+                    "identity": {
+                        "type": "SystemAssigned"
+                    },
+                    "properties": {
+                        // "repoConfiguration": {
+                        //     "accountName": "[variables('dataFactoryGitAccount')]",
+                        //     "repositoryName": "[variables('dataFactoryGitRepo')]",
+                        //     "collaborationBranch": "[variables('dataFactoryGitCollaborationBranch')]",
+                        //     "rootFolder": "[variables('dataFactoryGitRootFolder')]",
+                        //     "type": "[variables('dataFactoryGitType')]"
+                        // },
+                        "globalParameters": {
+                        },
+                        "publicNetworkAccess": "Disabled"
+                    },
+                    "resources": [
+                        {
+                    "name": "[concat(parameters('dataFactoryName'), '/databricksLinkedService')]",
+                    "type": "Microsoft.DataFactory/factories/linkedServices",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "annotations": [],
+                        "type": "AzureDatabricks",
+                        "typeProperties": {
+                            "domain": "https://adb-947245053288056.16.azuredatabricks.net",
+                            "accessToken": {
+                                "type": "SecureString",
+                                "value": "[parameters('databricksLinkedService_accessToken')]"
+                            },
+                            "newClusterNodeType": "Standard_DS3_v2",
+                            "newClusterNumOfWorker": "2",
+                            "newClusterSparkConf": {
+                                "spark.clientsecret": "{{secrets/purviewClient/clientSecretKV}}"
+                            },
+                            "newClusterSparkEnvVars": {
+                                "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                            },
+                            "newClusterVersion": "7.3.x-scala2.12"
+                        }
+                    },
+                    "dependsOn": []
                 },
-                "publicNetworkAccess": "Disabled"
-            },
-            "resources": [
+                {
+                    "name": "[concat(parameters('dataFactoryName'), '/databricksTableScanPipeline')]",
+                    "type": "Microsoft.DataFactory/factories/pipelines",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "activities": [
+                            {
+                                "name": "notebookPurviewScan",
+                                "type": "DatabricksNotebook",
+                                "dependsOn": [],
+                                "policy": {
+                                    "timeout": "7.00:00:00",
+                                    "retry": 2,
+                                    "retryIntervalInSeconds": 30,
+                                    "secureOutput": false,
+                                    "secureInput": false
+                                },
+                                "userProperties": [],
+                                "typeProperties": {
+                                    "notebookPath": "/databricksPurviewScan",
+                                    "baseParameters": {
+                                        "tenantID": {
+                                            "value": "@pipeline().parameters.tenantID",
+                                            "type": "Expression"
+                                        },
+                                        "clientID": {
+                                            "value": "@pipeline().parameters.clientID",
+                                            "type": "Expression"
+                                        },
+                                        "purviewAccountName": {
+                                            "value": "@pipeline().parameters.purviewAccountName",
+                                            "type": "Expression"
+                                        },
+                                        "dataLandingZoneName": "@pipeline().parameters.dataLandingZoneName"
+                                    },
+                                    "libraries": [
+                                        {
+                                            "pypi": {
+                                                "package": "pyapacheatlas"
+                                            }
+                                        }
+                                    ]
+                                },
+                                "linkedServiceName": {
+                                    "referenceName": "databricksLinkedService",
+                                    "type": "LinkedServiceReference"
+                                }
+                            }
+                        ],
+                        "parameters": {
+                            "tenantID": {
+                                "type": "string"
+                            },
+                            "clientID": {
+                                "type": "string"
+                            },
+                            "purviewAccountName": {
+                                "type": "string"
+                            },
+                            "dataLandingZoneName": {
+                                "type": "string"
+                            }
+                        },
+                        "annotations": [],
+                        "lastPublishTime": "2021-02-10T22:35:54Z"
+                    },
+                    "dependsOn": [
+                        "[concat(variables('factoryId'), '/linkedServices/databricksLinkedService')]"
+                    ]
+                },
                 {
                     "type": "managedVirtualNetworks",
                     "apiVersion": "2018-06-01",
