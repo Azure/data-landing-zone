@@ -187,7 +187,8 @@
                     }
                 },
                     "dependsOn": [
-                        "[concat(variables('factoryId'), '/pipelines/databricksTableScanPipeline')]"
+                        "[concat(variables('factoryId'), '/pipelines/databricksTableScanPipeline')]",
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
                     ]
                 },
                 {
@@ -219,75 +220,75 @@
                     ]
             },
             {
-                "name": "[concat(parameters('dataFactoryName'), '/databricksTableScanPipeline')]",
-                "type": "Microsoft.DataFactory/factories/pipelines",
-                "apiVersion": "2018-06-01",
-                "properties": {
-                "activities": [
-                    {
-                        "name": "notebookPurviewScan",
-                        "type": "DatabricksNotebook",
-                        "dependsOn": [],
-                        "policy": {
-                            "timeout": "7.00:00:00",
-                            "retry": 2,
-                            "retryIntervalInSeconds": 30,
-                            "secureOutput": false,
-                            "secureInput": false
-                        },
-                        "userProperties": [],
-                        "typeProperties": {
-                            "notebookPath": "/databricksPurviewScan",
-                            "baseParameters": {
-                                "tenantID": {
-                                    "value": "@pipeline().parameters.tenantID",
-                                    "type": "Expression"
-                                },
-                                "clientID": {
-                                    "value": "@pipeline().parameters.clientID",
-                                    "type": "Expression"
-                                },
-                                "purviewAccountName": {
-                                    "value": "@pipeline().parameters.purviewAccountName",
-                                    "type": "Expression"
-                                },
-                                "dataLandingZoneName": "@pipeline().parameters.dataLandingZoneName"
+                    "name": "[concat(parameters('dataFactoryName'), '/databricksTableScanPipeline')]",
+                    "type": "Microsoft.DataFactory/factories/pipelines",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                    "activities": [
+                        {
+                            "name": "notebookPurviewScan",
+                            "type": "DatabricksNotebook",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "7.00:00:00",
+                                "retry": 2,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
                             },
-                            "libraries": [
-                                {
-                                    "pypi": {
-                                        "package": "pyapacheatlas"
+                            "userProperties": [],
+                            "typeProperties": {
+                                "notebookPath": "/databricksPurviewScan",
+                                "baseParameters": {
+                                    "tenantID": {
+                                        "value": "@pipeline().parameters.tenantID",
+                                        "type": "Expression"
+                                    },
+                                    "clientID": {
+                                        "value": "@pipeline().parameters.clientID",
+                                        "type": "Expression"
+                                    },
+                                    "purviewAccountName": {
+                                        "value": "@pipeline().parameters.purviewAccountName",
+                                        "type": "Expression"
+                                    },
+                                    "dataLandingZoneName": "@pipeline().parameters.dataLandingZoneName"
+                                },
+                                "libraries": [
+                                    {
+                                        "pypi": {
+                                            "package": "pyapacheatlas"
+                                        }
                                     }
-                                }
-                            ]
-                        },
-                        "linkedServiceName": {
-                            "referenceName": "databricksLinkedService",
-                            "type": "LinkedServiceReference"
+                                ]
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "databricksLinkedService",
+                                "type": "LinkedServiceReference"
+                            }
                         }
-                    }
-                ],
-                "parameters": {
-                    "tenantID": {
-                        "type": "string"
+                    ],
+                    "parameters": {
+                        "tenantID": {
+                            "type": "string"
+                        },
+                        "clientID": {
+                            "type": "string"
+                        },
+                        "purviewAccountName": {
+                            "type": "string"
+                        },
+                        "dataLandingZoneName": {
+                            "type": "string"
+                        }
                     },
-                    "clientID": {
-                        "type": "string"
+                    "annotations": [],
+                    "lastPublishTime": "2021-02-10T22:35:54Z"
                     },
-                    "purviewAccountName": {
-                        "type": "string"
-                    },
-                    "dataLandingZoneName": {
-                        "type": "string"
-                    }
-                },
-                "annotations": [],
-                "lastPublishTime": "2021-02-10T22:35:54Z"
-                },
-                "dependsOn": [
-                    "[concat(variables('factoryId'), '/linkedServices/databricksLinkedService')]",
+                    "dependsOn": [
+                        "[concat(variables('factoryId'), '/linkedServices/databricksLinkedService')]",
                         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
-                ]
+                    ]
                 },
                 {
                     "type": "managedVirtualNetworks",
