@@ -1090,8 +1090,8 @@
                     "synapseWorkspaceName": {
                         "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-synapse001', uniqueString(subscription().subscriptionId, variables('processingProductResourceGroupName'))), 50)]"
                     },
-                    "synapseDefaultStorageAccountName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa')]"
+                    "synapseDefaultStorageAccountId": {
+                        "value": "[resourceId(variables('storageResourceGroupName'), 'Microsoft.Storage/storageAccounts', take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa', uniqueString(subscription().subscriptionId, variables('storageResourceGroupName'))), 24))]"
                     },
                     "synapseDefaultStorageAccountFileSystem": {
                         "value": "data"
