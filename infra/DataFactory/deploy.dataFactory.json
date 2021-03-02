@@ -32,7 +32,7 @@
                 "description": "Secure string for accessToken of databricksLinkedService"
             }
         },
-        "databricksWorkSpaceUrl": {
+        "databricksWorkspaceUrl": {
             "type": "string",
             "metadata": {
                 "description": "Specifies databricks workspace url."
@@ -141,7 +141,7 @@
         "purviewAccountName": "[parameters('purviewAccountName')]",
         "databricksAccessToken": "[parameters('databricksAccessToken')]",
         "dataLandingZoneName": "[parameters('dataLandingZoneName')]",
-        "databricksWorkspaceUrl": "[parameters('databricksWorkSpaceUrl')]",
+        "databricksWorkspaceUrl": "[parameters('databricksWorkspaceUrl')]",
         "purviewSecretPath": "[parameters('purviewSecretPath')]",
         "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('dataFactoryName'))]",
         "location": "[parameters('location')]",
