@@ -133,197 +133,161 @@
         "privateEndpointNamePortal": "[concat(variables('dataFactoryName'), '-portal-private-endpoint')]"
     },
     "resources": [
+        {
+        "type": "Microsoft.DataFactory/factories",
+        "apiVersion": "2018-06-01",
+        "name": "[variables('dataFactoryName')]",
+        "location": "[variables('location')]",
+        "identity": {
+            "type": "SystemAssigned"
+        },
+        "properties": {
+            // "repoConfiguration": {
+            //     "accountName": "[variables('dataFactoryGitAccount')]",
+            //     "repositoryName": "[variables('dataFactoryGitRepo')]",
+            //     "collaborationBranch": "[variables('dataFactoryGitCollaborationBranch')]",
+            //     "rootFolder": "[variables('dataFactoryGitRootFolder')]",
+            //     "type": "[variables('dataFactoryGitType')]"
+            // },
+            "globalParameters": {
+            },
+            "publicNetworkAccess": "Disabled"
+        },
+        "resources": [
+            {
+                "name": "[concat(parameters('dataFactoryName'), '/runEveryTenMinutes')]",
+                "type": "Microsoft.DataFactory/factories/triggers",
+                "apiVersion": "2018-06-01",
+                "properties": {
+                    "description": "Runs every ten minutes, not activated by default",
+                    "annotations": [],
+                    "runtimeState": "Stopped",
+                    "pipelines": [
+                        {
+                            "pipelineReference": {
+                                "referenceName": "databricksTableScanPipeline",
+                                "type": "PipelineReference"
+                            },
+                            "parameters": {
+                                "tenantID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID')]",
+                                "clientID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID')]",
+                                "purviewAccountName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName')]",
+                                "dataLandingZoneName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName')]"
+                            }
+                        }
+                    ],
+                    "type": "ScheduleTrigger",
+                    "typeProperties": {
+                        "recurrence": {
+                            "frequency": "Minute",
+                            "interval": 10,
+                            "startTime": "2021-02-10T19:37:00Z",
+                            "timeZone": "UTC"
+                        }
+                    }
+                },
+                    "dependsOn": [
+                        "[concat(variables('factoryId'), '/pipelines/databricksTableScanPipeline')]"
+                    ]
+                },
                 {
-                    "name": "[concat(parameters('dataFactoryName'), '/runEveryTenMinutes')]",
-                    "type": "Microsoft.DataFactory/factories/triggers",
+                    "name": "[concat(parameters('dataFactoryName'), '/databricksLinkedService')]",
+                    "type": "Microsoft.DataFactory/factories/linkedServices",
                     "apiVersion": "2018-06-01",
                     "properties": {
-                        "description": "Runs every ten minutes, not activated by default",
                         "annotations": [],
-                        "runtimeState": "Stopped",
-                        "pipelines": [
-                            {
-                                "pipelineReference": {
-                                    "referenceName": "databricksTableScanPipeline",
-                                    "type": "PipelineReference"
-                                },
-                                "parameters": {
-                                    "tenantID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID')]",
-                                    "clientID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID')]",
-                                    "purviewAccountName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName')]",
-                                    "dataLandingZoneName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName')]"
-                                }
-                            }
-                        ],
-                        "type": "ScheduleTrigger",
+                        "type": "AzureDatabricks",
                         "typeProperties": {
-                            "recurrence": {
-                                "frequency": "Minute",
-                                "interval": 10,
-                                "startTime": "2021-02-10T19:37:00Z",
-                                "timeZone": "UTC"
-                            }
+                            "domain": "{databricksWorkspaceUrl}",
+                            "accessToken": {
+                                "type": "SecureString",
+                                "value": "[parameters('databricksLinkedService_accessToken')]"
+                            },
+                            "newClusterNodeType": "Standard_DS3_v2",
+                            "newClusterNumOfWorker": "2",
+                            "newClusterSparkConf": {
+                                "spark.clientsecret": "{{secrets/purviewClient/clientSecretKV}}"
+                            },
+                            "newClusterSparkEnvVars": {
+                                "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                            },
+                            "newClusterVersion": "7.3.x-scala2.12"
                         }
                     },
                     "dependsOn": [
-                        "[concat(variables('factoryId'), '/pipelines/databricksTableScanPipeline')]"
-                ]
-        },
-        {
-                    "type": "Microsoft.DataFactory/factories",
-                    "apiVersion": "2018-06-01",
-                    "name": "[variables('dataFactoryName')]",
-                    "location": "[variables('location')]",
-                    "identity": {
-                        "type": "SystemAssigned"
-                    },
-                    "properties": {
-                        // "repoConfiguration": {
-                        //     "accountName": "[variables('dataFactoryGitAccount')]",
-                        //     "repositoryName": "[variables('dataFactoryGitRepo')]",
-                        //     "collaborationBranch": "[variables('dataFactoryGitCollaborationBranch')]",
-                        //     "rootFolder": "[variables('dataFactoryGitRootFolder')]",
-                        //     "type": "[variables('dataFactoryGitType')]"
-                        // },
-                        "globalParameters": {
-                        },
-                        "publicNetworkAccess": "Disabled"
-                    },
-                    "resources": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+                    ]
+            },
+            {
+                "name": "[concat(parameters('dataFactoryName'), '/databricksTableScanPipeline')]",
+                "type": "Microsoft.DataFactory/factories/pipelines",
+                "apiVersion": "2018-06-01",
+                "properties": {
+                "activities": [
                     {
-                        "name": "[concat(parameters('dataFactoryName'), '/runEveryTenMinutes')]",
-                        "type": "Microsoft.DataFactory/factories/triggers",
-                        "apiVersion": "2018-06-01",
-                        "properties": {
-                            "description": "Runs every ten minutes, not activated by default",
-                            "annotations": [],
-                            "runtimeState": "Stopped",
-                            "pipelines": [
+                        "name": "notebookPurviewScan",
+                        "type": "DatabricksNotebook",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 2,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "notebookPath": "/databricksPurviewScan",
+                            "baseParameters": {
+                                "tenantID": {
+                                    "value": "@pipeline().parameters.tenantID",
+                                    "type": "Expression"
+                                },
+                                "clientID": {
+                                    "value": "@pipeline().parameters.clientID",
+                                    "type": "Expression"
+                                },
+                                "purviewAccountName": {
+                                    "value": "@pipeline().parameters.purviewAccountName",
+                                    "type": "Expression"
+                                },
+                                "dataLandingZoneName": "@pipeline().parameters.dataLandingZoneName"
+                            },
+                            "libraries": [
                                 {
-                                    "pipelineReference": {
-                                        "referenceName": "databricksTableScanPipeline",
-                                        "type": "PipelineReference"
-                                    },
-                                    "parameters": {
-                                        "tenantID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID')]",
-                                        "clientID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID')]",
-                                        "purviewAccountName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName')]",
-                                        "dataLandingZoneName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName')]"
+                                    "pypi": {
+                                        "package": "pyapacheatlas"
                                     }
                                 }
-                            ],
-                            "type": "ScheduleTrigger",
-                            "typeProperties": {
-                                "recurrence": {
-                                    "frequency": "Minute",
-                                    "interval": 10,
-                                    "startTime": "2021-02-10T19:37:00Z",
-                                    "timeZone": "UTC"
-                                }
-                            }
+                            ]
                         },
-                        "dependsOn": [
-                            "[concat(variables('factoryId'), '/pipelines/databricksTableScanPipeline')]"
-                        ]
+                        "linkedServiceName": {
+                            "referenceName": "databricksLinkedService",
+                            "type": "LinkedServiceReference"
+                        }
+                    }
+                ],
+                "parameters": {
+                    "tenantID": {
+                        "type": "string"
                     },
-                    {
-                        "name": "[concat(parameters('dataFactoryName'), '/databricksLinkedService')]",
-                        "type": "Microsoft.DataFactory/factories/linkedServices",
-                        "apiVersion": "2018-06-01",
-                        "properties": {
-                            "annotations": [],
-                            "type": "AzureDatabricks",
-                            "typeProperties": {
-                                "domain": "{databricksWorkspaceUrl}",
-                                "accessToken": {
-                                    "type": "SecureString",
-                                    "value": "[parameters('databricksLinkedService_accessToken')]"
-                                },
-                                "newClusterNodeType": "Standard_DS3_v2",
-                                "newClusterNumOfWorker": "2",
-                                "newClusterSparkConf": {
-                                    "spark.clientsecret": "{{secrets/purviewClient/clientSecretKV}}"
-                                },
-                                "newClusterSparkEnvVars": {
-                                    "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
-                                },
-                                "newClusterVersion": "7.3.x-scala2.12"
-                            }
-                        },
-                        "dependsOn": [
-                            "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
-                        ]
+                    "clientID": {
+                        "type": "string"
                     },
-                    {
-                        "name": "[concat(parameters('dataFactoryName'), '/databricksTableScanPipeline')]",
-                        "type": "Microsoft.DataFactory/factories/pipelines",
-                        "apiVersion": "2018-06-01",
-                        "properties": {
-                        "activities": [
-                            {
-                                "name": "notebookPurviewScan",
-                                "type": "DatabricksNotebook",
-                                "dependsOn": [],
-                                "policy": {
-                                    "timeout": "7.00:00:00",
-                                    "retry": 2,
-                                    "retryIntervalInSeconds": 30,
-                                    "secureOutput": false,
-                                    "secureInput": false
-                                },
-                                "userProperties": [],
-                                "typeProperties": {
-                                    "notebookPath": "/databricksPurviewScan",
-                                    "baseParameters": {
-                                        "tenantID": {
-                                            "value": "@pipeline().parameters.tenantID",
-                                            "type": "Expression"
-                                        },
-                                        "clientID": {
-                                            "value": "@pipeline().parameters.clientID",
-                                            "type": "Expression"
-                                        },
-                                        "purviewAccountName": {
-                                            "value": "@pipeline().parameters.purviewAccountName",
-                                            "type": "Expression"
-                                        },
-                                        "dataLandingZoneName": "@pipeline().parameters.dataLandingZoneName"
-                                    },
-                                    "libraries": [
-                                        {
-                                            "pypi": {
-                                                "package": "pyapacheatlas"
-                                            }
-                                        }
-                                    ]
-                                },
-                                "linkedServiceName": {
-                                    "referenceName": "databricksLinkedService",
-                                    "type": "LinkedServiceReference"
-                                }
-                            }
-                        ],
-                        "parameters": {
-                            "tenantID": {
-                                "type": "string"
-                            },
-                            "clientID": {
-                                "type": "string"
-                            },
-                            "purviewAccountName": {
-                                "type": "string"
-                            },
-                            "dataLandingZoneName": {
-                                "type": "string"
-                            }
-                        },
-                        "annotations": [],
-                        "lastPublishTime": "2021-02-10T22:35:54Z"
+                    "purviewAccountName": {
+                        "type": "string"
                     },
-                    "dependsOn": [
-                        "[concat(variables('factoryId'), '/linkedServices/databricksLinkedService')]",
-                         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
-                    ]
+                    "dataLandingZoneName": {
+                        "type": "string"
+                    }
+                },
+                "annotations": [],
+                "lastPublishTime": "2021-02-10T22:35:54Z"
+                },
+                "dependsOn": [
+                    "[concat(variables('factoryId'), '/linkedServices/databricksLinkedService')]",
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+                ]
                 },
                 {
                     "type": "managedVirtualNetworks",
