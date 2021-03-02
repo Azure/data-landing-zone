@@ -43,6 +43,18 @@
         },
         "databricksLinkedService_accessToken": {
             "value": ""
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID": {
+            "value": ""
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID": {
+            "value": ""
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName": {
+            "value": ""
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName": {
+            "value": ""
         }
     }
 }

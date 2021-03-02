@@ -2,6 +2,22 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+         "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID": {
+            "type": "string",
+            "defaultValue": "{tenand-id}"
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID": {
+            "type": "string",
+            "defaultValue": "{client-id}"
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName": {
+            "type": "string",
+            "defaultValue": "{purview-account}"
+        },
+        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName": {
+            "type": "string",
+            "defaultValue": "{data-landing-zone}"
+        },
         "databricksLinkedService_accessToken": {
             "type": "secureString",
             "metadata": {
@@ -118,6 +134,42 @@
     },
     "resources": [
                 {
+                    "name": "[concat(parameters('dataFactoryName'), '/runEveryTenMinutes')]",
+                    "type": "Microsoft.DataFactory/factories/triggers",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "description": "Runs every ten minutes, not activated by default",
+                        "annotations": [],
+                        "runtimeState": "Stopped",
+                        "pipelines": [
+                            {
+                                "pipelineReference": {
+                                    "referenceName": "databricksTableScanPipeline",
+                                    "type": "PipelineReference"
+                                },
+                                "parameters": {
+                                    "tenantID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID')]",
+                                    "clientID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID')]",
+                                    "purviewAccountName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName')]",
+                                    "dataLandingZoneName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName')]"
+                                }
+                            }
+                        ],
+                        "type": "ScheduleTrigger",
+                        "typeProperties": {
+                            "recurrence": {
+                                "frequency": "Minute",
+                                "interval": 10,
+                                "startTime": "2021-02-10T19:37:00Z",
+                                "timeZone": "UTC"
+                            }
+                        }
+                    },
+                    "dependsOn": [
+                        "[concat(variables('factoryId'), '/pipelines/databricksTableScanPipeline')]"
+                ]
+        },
+        {
                     "type": "Microsoft.DataFactory/factories",
                     "apiVersion": "2018-06-01",
                     "name": "[variables('dataFactoryName')]",
@@ -138,39 +190,75 @@
                         "publicNetworkAccess": "Disabled"
                     },
                     "resources": [
-                        {
-                    "name": "[concat(parameters('dataFactoryName'), '/databricksLinkedService')]",
-                    "type": "Microsoft.DataFactory/factories/linkedServices",
-                    "apiVersion": "2018-06-01",
-                    "properties": {
-                        "annotations": [],
-                        "type": "AzureDatabricks",
-                        "typeProperties": {
-                            "domain": "{databricksWorkspaceUrl}",
-                            "accessToken": {
-                                "type": "SecureString",
-                                "value": "[parameters('databricksLinkedService_accessToken')]"
-                            },
-                            "newClusterNodeType": "Standard_DS3_v2",
-                            "newClusterNumOfWorker": "2",
-                            "newClusterSparkConf": {
-                                "spark.clientsecret": "{{secrets/purviewClient/clientSecretKV}}"
-                            },
-                            "newClusterSparkEnvVars": {
-                                "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
-                            },
-                            "newClusterVersion": "7.3.x-scala2.12"
-                        }
+                    {
+                        "name": "[concat(parameters('dataFactoryName'), '/runEveryTenMinutes')]",
+                        "type": "Microsoft.DataFactory/factories/triggers",
+                        "apiVersion": "2018-06-01",
+                        "properties": {
+                            "description": "Runs every ten minutes, not activated by default",
+                            "annotations": [],
+                            "runtimeState": "Stopped",
+                            "pipelines": [
+                                {
+                                    "pipelineReference": {
+                                        "referenceName": "databricksTableScanPipeline",
+                                        "type": "PipelineReference"
+                                    },
+                                    "parameters": {
+                                        "tenantID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID')]",
+                                        "clientID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID')]",
+                                        "purviewAccountName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName')]",
+                                        "dataLandingZoneName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName')]"
+                                    }
+                                }
+                            ],
+                            "type": "ScheduleTrigger",
+                            "typeProperties": {
+                                "recurrence": {
+                                    "frequency": "Minute",
+                                    "interval": 10,
+                                    "startTime": "2021-02-10T19:37:00Z",
+                                    "timeZone": "UTC"
+                                }
+                            }
+                        },
+                        "dependsOn": [
+                            "[concat(variables('factoryId'), '/pipelines/databricksTableScanPipeline')]"
+                        ]
                     },
-                    "dependsOn": [
-                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
-                    ]
-                },
-                {
-                    "name": "[concat(parameters('dataFactoryName'), '/databricksTableScanPipeline')]",
-                    "type": "Microsoft.DataFactory/factories/pipelines",
-                    "apiVersion": "2018-06-01",
-                    "properties": {
+                    {
+                        "name": "[concat(parameters('dataFactoryName'), '/databricksLinkedService')]",
+                        "type": "Microsoft.DataFactory/factories/linkedServices",
+                        "apiVersion": "2018-06-01",
+                        "properties": {
+                            "annotations": [],
+                            "type": "AzureDatabricks",
+                            "typeProperties": {
+                                "domain": "{databricksWorkspaceUrl}",
+                                "accessToken": {
+                                    "type": "SecureString",
+                                    "value": "[parameters('databricksLinkedService_accessToken')]"
+                                },
+                                "newClusterNodeType": "Standard_DS3_v2",
+                                "newClusterNumOfWorker": "2",
+                                "newClusterSparkConf": {
+                                    "spark.clientsecret": "{{secrets/purviewClient/clientSecretKV}}"
+                                },
+                                "newClusterSparkEnvVars": {
+                                    "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                                },
+                                "newClusterVersion": "7.3.x-scala2.12"
+                            }
+                        },
+                        "dependsOn": [
+                            "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+                        ]
+                    },
+                    {
+                        "name": "[concat(parameters('dataFactoryName'), '/databricksTableScanPipeline')]",
+                        "type": "Microsoft.DataFactory/factories/pipelines",
+                        "apiVersion": "2018-06-01",
+                        "properties": {
                         "activities": [
                             {
                                 "name": "notebookPurviewScan",
