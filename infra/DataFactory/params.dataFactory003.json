@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "dataFactoryName": {
-            "value": "dn001-datafactory002"
+            "value": "dn001-datafactory003"
         },
         "dataFactoryGitAccount": {
             "value": ""
@@ -24,7 +24,7 @@
             "value": "FactoryGitHubConfiguration"
         },
         "purviewId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-governance/providers/Microsoft.Purview/accounts/dh-purview001"
+            "value": ""
         },
         "keyVaultId": {
             "value": ""
@@ -45,25 +45,25 @@
             "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com"
         },
         "databricksAccessToken": {
-            "value": ""
+            "value": "{access-token}"
         },
         "tenantId": {
-            "value": ""
+            "value": "{tenand-id}"
         },
         "purviewClientId": {
-            "value": ""
+            "value": "{client-id}"
         },
         "purviewAccountName": {
-            "value": ""
+            "value": "{purview-account}"
         },
         "dataLandingZoneName": {
-            "value": ""
+            "value": "{data-landing-zone}"
         },
         "databricksWorkspaceUrl": {
-            "value": ""
+            "value": "{databricks-workspace-url}"
         },
         "purviewSecretPath": {
-            "value": ""
+            "value": "{{path/keyVault/secret}}"
         }
     }
 }

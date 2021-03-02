@@ -43,6 +43,27 @@
         },
         "privateDnsZoneIdPortal": {
             "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com"
+        },
+        "databricksAccessToken": {
+            "value": ""
+        },
+        "tenantId": {
+            "value": ""
+        },
+        "purviewClientId": {
+            "value": ""
+        },
+        "purviewAccountName": {
+            "value": ""
+        },
+        "dataLandingZoneName": {
+            "value": ""
+        },
+        "databricksWorkspaceUrl": {
+            "value": ""
+        },
+        "purviewSecretPath": {
+            "value": ""
         }
     }
 }

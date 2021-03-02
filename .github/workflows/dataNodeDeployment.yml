@@ -518,6 +518,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/DataFactory/params.dataFactory002.json
         deploymentMode: Validate
     
+    # Deploy Data Factory 003 (Optional) - validation
+    - name: Deploy Data Factory 003 (Optional) - validation
+      id: data_factory_003_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/DataFactory/deploy.dataFactory.json
+        parameters: ${{ github.workspace }}/infra/DataFactory/params.dataFactory003.json
+        deploymentMode: Validate
+    
     # Deploy Artifact Storage Account 001 - validation
     - name: Deploy Artifact Storage Account 001 - validation
       id: artifact_storage_001_validation
