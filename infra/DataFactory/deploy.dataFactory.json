@@ -2,26 +2,46 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-         "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID": {
+        "tenantId": {
             "type": "string",
-            "defaultValue": "{tenand-id}"
+            "metadata": {
+                "description": "Specifies the tenant ID."
+            }
         },
-        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID": {
+        "purviewClientId": {
             "type": "string",
-            "defaultValue": "{client-id}"
+            "metadata": {
+                "description": "Specifies the client ID of the service principal with access to Purview."
+            }
         },
-        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName": {
+        "purviewAccountName": {
             "type": "string",
-            "defaultValue": "{purview-account}"
+            "metadata": {
+                "description": "Specifies the name of the Purview account in the hub."
+            }
         },
-        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName": {
+        "dataLandingZoneName": {
             "type": "string",
-            "defaultValue": "{data-landing-zone}"
+            "metadata": {
+                "description": "Specifies the name of the data landing zone."
+            }
         },
-        "databricksLinkedService_accessToken": {
+        "databricksAccessToken": {
             "type": "secureString",
             "metadata": {
                 "description": "Secure string for accessToken of databricksLinkedService"
+            }
+        },
+        "databricksWorkSpaceUrl": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies databricks workspace url."
+            }
+        },
+        "purviewSecretPath": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies purview sp secret."
             }
         },
         "location": {
@@ -71,6 +91,12 @@
                 "description": "Specifies the type of git connection."
             }
         },
+        "purviewId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of the purview data catalog that should be linked to the data factory."
+            }
+        },
         "keyVaultId": {
             "type": "string",
             "metadata": {
@@ -110,15 +136,23 @@
     },
     "functions": [],
     "variables": {
+        "tenantId": "[parameters('tenantId')]",
+        "purviewClientId": "[parameters('purviewClientId')]",
+        "purviewAccountName": "[parameters('purviewAccountName')]",
+        "databricksAccessToken": "[parameters('databricksAccessToken')]",
+        "dataLandingZoneName": "[parameters('dataLandingZoneName')]",
+        "databricksWorkspaceUrl": "[parameters('databricksWorkSpaceUrl')]",
+        "purviewSecretPath": "[parameters('purviewSecretPath')]",
         "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('dataFactoryName'))]",
         "location": "[parameters('location')]",
         "dataFactoryName": "[parameters('dataFactoryName')]",
-        "azureManagedVnetIntegrationRuntimeName": "azureManagedVnetIntegrationRuntime",
+        "defaultManagedVnetIntegrationRuntimeName": "AutoResolveIntegrationRuntime",
         "dataFactoryGitAccount": "[parameters('dataFactoryGitAccount')]",
         "dataFactoryGitRepo": "[parameters('dataFactoryGitRepo')]",
         "dataFactoryGitCollaborationBranch": "[parameters('dataFactoryGitCollaborationBranch')]",
         "dataFactoryGitRootFolder": "[parameters('dataFactoryGitRootFolder')]",
         "dataFactoryGitType": "[parameters('dataFactoryGitType')]",
+        "purviewId": "[parameters('purviewId')]",
         "keyVaultId": "[parameters('keyVaultId')]",
         "keyVaultName": "[if(empty(variables('keyVaultId')), 'keyVaultNotSet', last(split(variables('keyVaultId'), '/')))]",
         "keyVaultSubscriptionId": "[if(empty(variables('keyVaultId')), subscription().subscriptionId, split(variables('keyVaultId'), '/')[2])]",
@@ -151,11 +185,14 @@
             // },
             "globalParameters": {
             },
-            "publicNetworkAccess": "Disabled"
+            "publicNetworkAccess": "Disabled",
+                "purviewConfiguration": {
+                    "purviewResourceId": "[variables('purviewId')]"
+                }
         },
         "resources": [
             {
-                "name": "[concat(parameters('dataFactoryName'), '/runEveryTenMinutes')]",
+                "name": "[concat(variables('dataFactoryName'), '/runEveryTenMinutes')]",
                 "type": "Microsoft.DataFactory/factories/triggers",
                 "apiVersion": "2018-06-01",
                 "properties": {
@@ -169,10 +206,10 @@
                                 "type": "PipelineReference"
                             },
                             "parameters": {
-                                "tenantID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID')]",
-                                "clientID": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID')]",
-                                "purviewAccountName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName')]",
-                                "dataLandingZoneName": "[parameters('runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName')]"
+                                "tenantID": "[variables('tenantId')]",
+                                "clientID": "[variables('purviewClientId')]",
+                                "purviewAccountName": "[variables('purviewAccountName')]",
+                                "dataLandingZoneName": "[variables('dataLandingZoneName')]"
                             }
                         }
                     ],
@@ -192,22 +229,22 @@
                     ]
                 },
                 {
-                    "name": "[concat(parameters('dataFactoryName'), '/databricksLinkedService')]",
+                    "name": "[concat(variables('dataFactoryName'), '/databricksLinkedService')]",
                     "type": "Microsoft.DataFactory/factories/linkedServices",
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "annotations": [],
                         "type": "AzureDatabricks",
                         "typeProperties": {
-                            "domain": "{databricksWorkspaceUrl}",
+                            "domain": "[variables('databricksWorkspaceUrl')]",
                             "accessToken": {
                                 "type": "SecureString",
-                                "value": "[parameters('databricksLinkedService_accessToken')]"
+                                "value": "[variables('databricksAccessToken')]"
                             },
                             "newClusterNodeType": "Standard_DS3_v2",
                             "newClusterNumOfWorker": "2",
                             "newClusterSparkConf": {
-                                "spark.clientsecret": "{{secrets/purviewClient/clientSecretKV}}"
+                                "spark.clientsecret": "[variables('purviewSecretPath')]"
                             },
                             "newClusterSparkEnvVars": {
                                 "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
@@ -220,7 +257,7 @@
                     ]
             },
             {
-                    "name": "[concat(parameters('dataFactoryName'), '/databricksTableScanPipeline')]",
+                    "name": "[concat(variables('dataFactoryName'), '/databricksTableScanPipeline')]",
                     "type": "Microsoft.DataFactory/factories/pipelines",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -302,7 +339,7 @@
                 {
                     "type": "integrationRuntimes",
                     "apiVersion": "2018-06-01",
-                    "name": "AutoResolveIntegrationRuntime",
+                    "name": "[variables('defaultManagedVnetIntegrationRuntimeName')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]"
@@ -321,32 +358,6 @@
                     }
                 },
                 {
-                    "type": "integrationRuntimes",
-                    "apiVersion": "2018-06-01",
-                    "name": "[variables('azureManagedVnetIntegrationRuntimeName')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
-                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]"
-                    ],
-                    "properties": {
-                        "type": "Managed",
-                        "typeProperties": {
-                            "computeProperties": {
-                                "location": "[variables('location')]",
-                                "dataFlowProperties": {
-                                    "computeType": "General",
-                                    "coreCount": 8,
-                                    "timeToLive": 0
-                                }
-                            }
-                        },
-                        "managedVirtualNetwork": {
-                            "type": "ManagedVirtualNetworkReference",
-                            "referenceName": "default"
-                        }
-                    }
-                },
-                {
                     "condition": "[not(empty(variables('keyVaultId')))]",
                     "type": "managedVirtualNetworks/managedPrivateEndpoints",
                     "apiVersion": "2018-06-01",
@@ -354,7 +365,7 @@
                     "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
-                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('azureManagedVnetIntegrationRuntimeName'))]"
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]"
                     ],
                     "properties": {
                         "privateLinkResourceId": "[variables('keyVaultId')]",
@@ -369,7 +380,7 @@
                     "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
-                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('azureManagedVnetIntegrationRuntimeName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('keyVaultName'), '-', ''))]"
                     ],
                     "properties": {
@@ -378,7 +389,7 @@
                         "additionalProperties": {},
                         "connectVia": {
                             "type": "IntegrationRuntimeReference",
-                            "referenceName": "[variables('azureManagedVnetIntegrationRuntimeName')]"
+                            "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
                         },
                         "description": "Key Vault for data product",
                         "parameters": {},
@@ -395,7 +406,7 @@
                     "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
-                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('azureManagedVnetIntegrationRuntimeName'))]"
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]"
                     ],
                     "properties": {
                         "privateLinkResourceId": "[variables('sqlServerId')]",
@@ -410,7 +421,7 @@
                     "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
-                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('azureManagedVnetIntegrationRuntimeName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('sqlDatabaseName'), '-', ''))]",
                         "[resourceId('Microsoft.DataFactory/factories/linkedservices', variables('dataFactoryName'), replace(variables('keyVaultName'), '-', ''))]"
                     ],
@@ -420,7 +431,7 @@
                         "additionalProperties": {},
                         "connectVia": {
                             "type": "IntegrationRuntimeReference",
-                            "referenceName": "[variables('azureManagedVnetIntegrationRuntimeName')]"
+                            "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
                         },
                         "description": "Key Vault for data product",
                         "parameters": {},

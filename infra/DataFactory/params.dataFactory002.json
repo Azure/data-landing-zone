@@ -23,6 +23,9 @@
         "dataFactoryGitType": {
             "value": "FactoryGitHubConfiguration"
         },
+        "purviewId": {
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-governance/providers/Microsoft.Purview/accounts/dh-purview001"
+        },
         "keyVaultId": {
             "value": ""
         },
@@ -41,19 +44,25 @@
         "privateDnsZoneIdPortal": {
             "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com"
         },
-        "databricksLinkedService_accessToken": {
+        "databricksAccessToken": {
             "value": ""
         },
-        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID": {
+        "tenantId": {
             "value": ""
         },
-        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID": {
+        "purviewClientId": {
             "value": ""
         },
-        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName": {
+        "purviewAccountName": {
             "value": ""
         },
-        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName": {
+        "dataLandingZoneName": {
+            "value": ""
+        },
+        "databricksWorkspaceUrl": {
+            "value": ""
+        },
+        "purviewSecretPath": {
             "value": ""
         }
     }

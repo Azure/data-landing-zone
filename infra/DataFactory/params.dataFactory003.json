@@ -23,14 +23,17 @@
         "dataFactoryGitType": {
             "value": "FactoryGitHubConfiguration"
         },
+        "purviewId": {
+            "value": ""
+        },
         "keyVaultId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
+            "value": ""
         },
         "sqlServerId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.Sql/servers/dn001-sqlserver001"
+            "value": ""
         },
         "sqlDatabaseId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.Sql/servers/dn001-sqlserver001/databases/AdfMetastoreDB"
+            "value": ""
         },
         "subnetId": {
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
@@ -41,20 +44,26 @@
         "privateDnsZoneIdPortal": {
             "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com"
         },
-        "databricksLinkedService_accessToken": {
-            "value": ""
+        "databricksAccessToken": {
+            "value": "{access-token}"
         },
-        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_tenantID": {
+        "tenantId": {
             "value": "{tenand-id}"
         },
-        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_clientID": {
+        "purviewClientId": {
             "value": "{client-id}"
         },
-        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_purviewAccountName": {
+        "purviewAccountName": {
             "value": "{purview-account}"
         },
-        "runEveryTenMinutes_properties_databricksTableScanPipeline_parameters_dataLandingZoneName": {
+        "dataLandingZoneName": {
             "value": "{data-landing-zone}"
+        },
+        "databricksWorkspaceUrl": {
+            "value": "{databricks-workspace-url}"
+        },
+        "purviewSecretPath": {
+            "value": "{{path/keyVault/secret}}"
         }
     }
 }

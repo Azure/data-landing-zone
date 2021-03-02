@@ -40,6 +40,13 @@
                 "description": "Specifies the ID of the resource group of the private dns zones."
             }
         },
+        "purviewId": {
+            "type": "string",
+            "defaultValue": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/<your-rg-name>/providers/Microsoft.Purview/accounts/<your-purview-name>",
+            "metadata": {
+                "description": "Specifies the ID of the purview account."
+            }
+        },
         "hubVnetId": {
             "type": "string",
             "defaultValue": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/<your-rg-name>/providers/Microsoft.Network/virtualNetworks/<your-vnet-name>",
@@ -62,6 +69,7 @@
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
         "firewallPrivateIp": "[parameters('firewallPrivateIp')]",
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
+        "purviewId": "[parameters('purviewId')]",
         "hubVnetId": "[parameters('hubVnetId')]",
         "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
         "storageAccountNames": [
@@ -927,6 +935,9 @@
                     "dataFactoryGitType": {
                         "value": "FactoryGitHubConfiguration"
                     },
+                    "purviewId": {
+                        "value": "[variables('purviewId')]"
+                    },
                     "keyVaultId": {
                         "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
                     },
@@ -984,6 +995,9 @@
                     },
                     "dataFactoryGitType": {
                         "value": "FactoryGitHubConfiguration"
+                    },
+                    "purviewId": {
+                        "value": "[variables('purviewId')]"
                     },
                     "keyVaultId": {
                         "value": ""
@@ -1105,8 +1119,8 @@
                     "synapseWorkspaceName": {
                         "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-synapse001', uniqueString(subscription().subscriptionId, variables('processingProductResourceGroupName'))), 50)]"
                     },
-                    "synapseDefaultStorageAccountName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), variables('dataNodeName'), 'worksa')]"
+                    "synapseDefaultStorageAccountId": {
+                        "value": "[resourceId(variables('storageResourceGroupName'), 'Microsoft.Storage/storageAccounts', variables('storageAccountNames')[2])]"
                     },
                     "synapseDefaultStorageAccountFileSystem": {
                         "value": "data"
@@ -1128,6 +1142,9 @@
                     },
                     "synapseSqlAdminGroupObjectID": {
                         "value": ""
+                    },
+                    "purviewId": {
+                        "value": "[variables('purviewId')]"
                     },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
