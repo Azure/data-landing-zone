@@ -344,7 +344,7 @@
                         {
                             "type": "Microsoft.Databricks/workspaces/providers/roleAssignments",
                             "apiVersion": "2018-09-01-preview",
-                            "name": "[concat(variables('databricksWorkspaceName'), '/Microsoft.Authorization/', guid(uniqueString(variables('dataFactoryName'))))]",
+                            "name": "[concat(variables('databricksWorkspaceName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('dataFactoryName'), resourceGroup().id))))]",
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                                 "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
