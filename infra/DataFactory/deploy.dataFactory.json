@@ -73,6 +73,12 @@
                 "description": "Specifies the resource id of the sql database that should be linked to the data factory."
             }
         },
+        "databricksWorkspaceId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of the databricks workspace."
+            }
+        },
         "subnetId": {
             "type": "string",
             "metadata": {
@@ -110,6 +116,8 @@
         "sqlServerId": "[parameters('sqlServerId')]",
         "sqlDatabaseId": "[parameters('sqlDatabaseId')]",
         "sqlDatabaseName": "[if(empty(variables('sqlDatabaseId')), 'sqlDatabaseNotSet', last(split(variables('sqlDatabaseId'), '/')))]",
+        "databricksWorkspaceId": "[parameters('databricksWorkspaceId')]",
+        "databricksWorkspaceName": "[last(split(variables('databricksWorkspaceId'), '/'))]",
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneIdDataFactory": "[parameters('privateDnsZoneIdDataFactory')]",
         "privateDnsZoneIdPortal": "[parameters('privateDnsZoneIdPortal')]",
@@ -260,8 +268,94 @@
                             }
                         }
                     }
+                },
+                {
+                    "condition": "[not(empty(variables('databricksWorkspaceId')))]",
+                    "type": "linkedservices",
+                    "apiVersion": "2018-06-01",
+                    "name": "[replace(variables('databricksWorkspaceName'), '-', '')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
+                        "[resourceId('Microsoft.Resources/deployments', concat(variables('dataFactoryName'), '-Databricks-RoleAssignment'))]"
+                    ],
+                    "properties": {
+                        "type": "AzureDatabricks",
+                        "annotations": [],
+                        "additionalProperties": {},
+                        "connectVia": {
+                            "type": "IntegrationRuntimeReference",
+                            "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
+                        },
+                        "description": "Azure Databricks - ingestion",
+                        "parameters": {
+                            "DatabricksClusterType": {
+                                "type": "String",
+                                "defaultValue": "Standard_DS3_v2"
+                            },
+                            "DatabricksAutoscale": {
+                                "type": "String",
+                                "defaultValue": "1:15"
+                            },
+                            "DatabrickClusterVersion": {
+                                "type": "String",
+                                "defaultValue": "7.3.x-scala2.12"
+                            }
+                        },
+                        "typeProperties": {
+                            "domain": "[concat('https://', reference(variables('databricksWorkspaceId'), '2018-04-01').workspaceUrl)]",
+                            "authentication": "MSI",
+                            "workspaceResourceId": "[variables('databricksWorkspaceId')]",
+                            "newClusterNodeType": "@linkedService().DatabricksClusterType",
+                            "newClusterNumOfWorker": "@linkedService().DatabricksAutoscale",
+                            "newClusterSparkEnvVars": {
+                                "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                            },
+                            "newClusterCustomTags": {
+                                "costCenter": "AAAAA-12345"
+                            },
+                            "newClusterVersion": "@linkedService().DatabrickClusterVersion",
+                            "newClusterDriverNodeType": "@linkedService().DatabricksClusterType"
+                        }
+                    }
                 }
             ]
+        },
+        {
+            "condition": "[not(empty(variables('databricksWorkspaceId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "[concat(variables('dataFactoryName'), '-Databricks-RoleAssignment')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+            ],
+            "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Databricks/workspaces/providers/roleAssignments",
+                            "apiVersion": "2018-09-01-preview",
+                            "name": "[concat(variables('databricksWorkspaceName'), '/Microsoft.Authorization/', guid(uniqueString(variables('dataFactoryName'))))]",
+                            "properties": {
+                                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                                "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            },
+            "subscriptionId": "[split(variables('databricksWorkspaceId'), '/')[2]]",
+            "resourceGroup": "[split(variables('databricksWorkspaceId'), '/')[4]]"
         },
         {
             "type": "Microsoft.Network/privateEndpoints",
