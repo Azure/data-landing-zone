@@ -117,7 +117,9 @@
         "sqlDatabaseId": "[parameters('sqlDatabaseId')]",
         "sqlDatabaseName": "[if(empty(variables('sqlDatabaseId')), 'sqlDatabaseNotSet', last(split(variables('sqlDatabaseId'), '/')))]",
         "databricksWorkspaceId": "[parameters('databricksWorkspaceId')]",
-        "databricksWorkspaceName": "[last(split(variables('databricksWorkspaceId'), '/'))]",
+        "databricksWorkspaceName": "[if(empty(variables('databricksWorkspaceId')), 'databricksWorkspaceNotSet', last(split(variables('databricksWorkspaceId'), '/')))]",
+        "databricksWorkspaceSubscriptionId": "[if(empty(variables('databricksWorkspaceId')), subscription().subscriptionId, split(variables('databricksWorkspaceId'), '/')[2])]",
+        "databricksWorkspaceResourceGroupName": "[if(empty(variables('databricksWorkspaceId')), resourceGroup().name, split(variables('databricksWorkspaceId'), '/')[4])]",
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneIdDataFactory": "[parameters('privateDnsZoneIdDataFactory')]",
         "privateDnsZoneIdPortal": "[parameters('privateDnsZoneIdPortal')]",
@@ -354,8 +356,8 @@
                     "outputs": {}
                 }
             },
-            "subscriptionId": "[split(variables('databricksWorkspaceId'), '/')[2]]",
-            "resourceGroup": "[split(variables('databricksWorkspaceId'), '/')[4]]"
+            "subscriptionId": "[variables('databricksWorkspaceSubscriptionId')]",
+            "resourceGroup": "[variables('databricksWorkspaceResourceGroupName')]"
         },
         {
             "type": "Microsoft.Network/privateEndpoints",
