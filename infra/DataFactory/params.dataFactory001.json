@@ -38,6 +38,18 @@
         "databricksWorkspaceId": {
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-shared-domain/providers/Microsoft.Databricks/workspaces/dn001-databricks001-ingest"
         },
+        "rawStorageAccountId": {
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-storage/providers/Microsoft.Storage/storageAccounts/dn001rawsa"
+        },
+        "rawStorageAccountFileSystemName": {
+            "value": "data"
+        },
+        "encurStorageAccountId": {
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-storage/providers/Microsoft.Storage/storageAccounts/dn001enrcursa"
+        },
+        "encurStorageAccountFileSystemName": {
+            "value": "data"
+        },
         "subnetId": {
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
         },

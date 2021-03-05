@@ -79,6 +79,30 @@
                 "description": "Specifies the resource id of the databricks workspace."
             }
         },
+        "rawStorageAccountId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of the raw storage account."
+            }
+        },
+        "rawStorageAccountFileSystemName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the file system of the raw storage account."
+            }
+        },
+        "encurStorageAccountId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of the curated & enriched storage account."
+            }
+        },
+        "encurStorageAccountFileSystemName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the file system of the curated & enriched storage account."
+            }
+        },
         "subnetId": {
             "type": "string",
             "metadata": {
@@ -120,6 +144,16 @@
         "databricksWorkspaceName": "[if(empty(variables('databricksWorkspaceId')), 'databricksWorkspaceNotSet', last(split(variables('databricksWorkspaceId'), '/')))]",
         "databricksWorkspaceSubscriptionId": "[if(empty(variables('databricksWorkspaceId')), subscription().subscriptionId, split(variables('databricksWorkspaceId'), '/')[2])]",
         "databricksWorkspaceResourceGroupName": "[if(empty(variables('databricksWorkspaceId')), resourceGroup().name, split(variables('databricksWorkspaceId'), '/')[4])]",
+        "rawStorageAccountId": "[parameters('rawStorageAccountId')]",
+        "rawStorageAccountFileSystemName": "[parameters('rawStorageAccountFileSystemName')]",
+        "rawStorageAccountName": "[if(empty(variables('rawStorageAccountId')), 'rawStorageAccountNotSet', last(split(variables('rawStorageAccountId'), '/')))]",
+        "rawStorageAccountSubscriptionId": "[if(empty(variables('rawStorageAccountId')), subscription().subscriptionId, split(variables('rawStorageAccountId'), '/')[2])]",
+        "rawStorageAccountResourceGroupName": "[if(empty(variables('rawStorageAccountId')), resourceGroup().name, split(variables('rawStorageAccountId'), '/')[4])]",
+        "encurStorageAccountId": "[parameters('encurStorageAccountId')]",
+        "encurStorageAccountFileSystemName": "[parameters('encurStorageAccountFileSystemName')]",
+        "encurStorageAccountName": "[if(empty(variables('encurStorageAccountId')), 'encurStorageAccountNotSet', last(split(variables('encurStorageAccountId'), '/')))]",
+        "encurStorageAccountSubscriptionId": "[if(empty(variables('encurStorageAccountId')), subscription().subscriptionId, split(variables('encurStorageAccountId'), '/')[2])]",
+        "encurStorageAccountResourceGroupName": "[if(empty(variables('encurStorageAccountId')), resourceGroup().name, split(variables('encurStorageAccountId'), '/')[4])]",
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneIdDataFactory": "[parameters('privateDnsZoneIdDataFactory')]",
         "privateDnsZoneIdPortal": "[parameters('privateDnsZoneIdPortal')]",
@@ -215,7 +249,7 @@
                             "type": "IntegrationRuntimeReference",
                             "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
                         },
-                        "description": "Key Vault for data product",
+                        "description": "Key Vault for secrets",
                         "parameters": {},
                         "typeProperties": {
                             "baseUrl": "[concat('https://', variables('keyVaultName'), '.vault.azure.net/')]"
@@ -257,7 +291,7 @@
                             "type": "IntegrationRuntimeReference",
                             "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
                         },
-                        "description": "Key Vault for data product",
+                        "description": "SQL Database for Metadata",
                         "parameters": {},
                         "typeProperties": {
                             "connectionString": {
@@ -321,6 +355,88 @@
                             "newClusterDriverNodeType": "@linkedService().DatabricksClusterType"
                         }
                     }
+                },
+                {
+                    "condition": "[not(empty(variables('rawStorageAccountId')))]",
+                    "type": "managedVirtualNetworks/managedPrivateEndpoints",
+                    "apiVersion": "2018-06-01",
+                    "name": "[concat('default/', replace(variables('rawStorageAccountName'), '-', ''))]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]"
+                    ],
+                    "properties": {
+                        "privateLinkResourceId": "[variables('rawStorageAccountId')]",
+                        "groupId": "dfs"
+                    }
+                },
+                {
+                    "condition": "[not(empty(variables('rawStorageAccountId')))]",
+                    "type": "linkedservices",
+                    "apiVersion": "2018-06-01",
+                    "name": "[replace(variables('rawStorageAccountName'), '-', '')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('rawStorageAccountName'), '-', ''))]"
+                    ],
+                    "properties": {
+                        "type": "AzureBlobFS",
+                        "annotations": [],
+                        "additionalProperties": {},
+                        "connectVia": {
+                            "type": "IntegrationRuntimeReference",
+                            "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
+                        },
+                        "description": "Raw Storage Account for Metadata driven Copy",
+                        "parameters": {},
+                        "typeProperties": {
+                            "url": "[concat('https://', variables('rawStorageAccountName'), '.dfs.core.windows.net')]"
+                        }
+                    }
+                },
+                {
+                    "condition": "[not(empty(variables('encurStorageAccountId')))]",
+                    "type": "managedVirtualNetworks/managedPrivateEndpoints",
+                    "apiVersion": "2018-06-01",
+                    "name": "[concat('default/', replace(variables('encurStorageAccountName'), '-', ''))]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]"
+                    ],
+                    "properties": {
+                        "privateLinkResourceId": "[variables('encurStorageAccountId')]",
+                        "groupId": "dfs"
+                    }
+                },
+                {
+                    "condition": "[not(empty(variables('encurStorageAccountId')))]",
+                    "type": "linkedservices",
+                    "apiVersion": "2018-06-01",
+                    "name": "[replace(variables('encurStorageAccountName'), '-', '')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('encurStorageAccountName'), '-', ''))]"
+                    ],
+                    "properties": {
+                        "type": "AzureBlobFS",
+                        "annotations": [],
+                        "additionalProperties": {},
+                        "connectVia": {
+                            "type": "IntegrationRuntimeReference",
+                            "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
+                        },
+                        "description": "Enriched and Curated Storage Account for Metadata driven Copy",
+                        "parameters": {},
+                        "typeProperties": {
+                            "url": "[concat('https://', variables('encurStorageAccountName'), '.dfs.core.windows.net')]"
+                        }
+                    }
                 }
             ]
         },
@@ -358,6 +474,68 @@
             },
             "subscriptionId": "[variables('databricksWorkspaceSubscriptionId')]",
             "resourceGroup": "[variables('databricksWorkspaceResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "RawStorageAccountRoleAssignment",
+            "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
+                            "apiVersion": "2018-09-01-preview",
+                            "name": "[concat(variables('rawStorageAccountName'), '/default/', variables('rawStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('dataFactoryName'), resourceGroup().id))))]",
+                            "properties": {
+                                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+                                "principalId": "[reference(resourceId('Microsoft.Synapse/workspaces', variables('dataFactoryName')), '2019-06-01-preview', 'Full').identity.principalId]"
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            },
+            "subscriptionId": "[variables('rawStorageAccountSubscriptionId')]",
+            "resourceGroup": "[variables('rawStorageAccountResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "EncurStorageAccountRoleAssignment",
+            "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
+                            "apiVersion": "2018-09-01-preview",
+                            "name": "[concat(variables('encurStorageAccountName'), '/default/', variables('encurStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('dataFactoryName'), resourceGroup().id))))]",
+                            "properties": {
+                                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+                                "principalId": "[reference(resourceId('Microsoft.Synapse/workspaces', variables('dataFactoryName')), '2019-06-01-preview', 'Full').identity.principalId]"
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            },
+            "subscriptionId": "[variables('encurStorageAccountSubscriptionId')]",
+            "resourceGroup": "[variables('encurStorageAccountResourceGroupName')]"
         },
         {
             "type": "Microsoft.Network/privateEndpoints",
