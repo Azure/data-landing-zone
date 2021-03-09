@@ -478,7 +478,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
-            "name": "RawStorageAccountRoleAssignment",
+            "name": "[concat(variables('dataFactoryName'), '-RawStorageAccount-RoleAssignment')]",
             "properties": {
                 "expressionEvaluationOptions": {
                     "scope": "outer"
@@ -509,7 +509,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
-            "name": "EncurStorageAccountRoleAssignment",
+            "name": "[concat(variables('dataFactoryName'), '-EncurStorageAccount-RoleAssignment')]",
             "properties": {
                 "expressionEvaluationOptions": {
                     "scope": "outer"

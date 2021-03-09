@@ -33,7 +33,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
-            "name": "AdfRoleAssignment",
+            "name": "[concat(variables('destinationDataFactoryName'), '-Adf-RoleAssignment')]",
             "properties": {
                 "expressionEvaluationOptions": {
                     "scope": "outer"

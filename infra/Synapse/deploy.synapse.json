@@ -180,7 +180,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
-            "name": "SynapseRoleAssignment",
+            "name": "[concat(variables('synapseWorkspaceName'), '-Synapse-RoleAssignment')]",
             "properties": {
                 "expressionEvaluationOptions": {
                     "scope": "outer"
