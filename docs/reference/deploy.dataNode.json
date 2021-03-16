@@ -63,8 +63,8 @@
     },
     "functions": [],
     "variables": {
-        "enterpriseScaleAnalyticsCompanyPrefix": "[parameters('enterpriseScaleAnalyticsCompanyPrefix')]",
-        "dataNodeName": "[parameters('dataNodeName')]",
+        "enterpriseScaleAnalyticsCompanyPrefix": "[toLower(parameters('enterpriseScaleAnalyticsCompanyPrefix'))]",
+        "dataNodeName": "[toLower(parameters('dataNodeName'))]",
         "location": "[deployment().location]",
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
         "firewallPrivateIp": "[parameters('firewallPrivateIp')]",
