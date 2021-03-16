@@ -195,7 +195,7 @@
                         {
                             "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
                             "apiVersion": "2018-09-01-preview",
-                            "name": "[concat(variables('synapseDefaultStorageAccountName'), '/default/', variables('synapseDefaultStorageAccountFileSystem'), '/Microsoft.Authorization/', guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('synapseDefaultStorageAccountName'), variables('synapseDefaultStorageAccountFileSystem')), resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName')), resourceGroup().id))))]",
+                            "name": "[concat(variables('synapseDefaultStorageAccountName'), '/default/', variables('synapseDefaultStorageAccountFileSystem'), '/Microsoft.Authorization/', guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('synapseDefaultStorageAccountName'), 'default', variables('synapseDefaultStorageAccountFileSystem')), resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName')), resourceGroup().id))))]",
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
                                 "principalId": "[reference(resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName')), '2019-06-01-preview', 'Full').identity.principalId]"
