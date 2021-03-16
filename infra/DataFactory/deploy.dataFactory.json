@@ -462,7 +462,7 @@
                         {
                             "type": "Microsoft.Databricks/workspaces/providers/roleAssignments",
                             "apiVersion": "2018-09-01-preview",
-                            "name": "[concat(variables('databricksWorkspaceName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('dataFactoryName'), resourceGroup().id))))]",
+                            "name": "[concat(variables('databricksWorkspaceName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('databricksWorkspaceId'), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id))))]",
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                                 "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
@@ -493,7 +493,7 @@
                         {
                             "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
                             "apiVersion": "2018-09-01-preview",
-                            "name": "[concat(variables('rawStorageAccountName'), '/default/', variables('rawStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('dataFactoryName'), resourceGroup().id))))]",
+                            "name": "[concat(variables('rawStorageAccountName'), '/default/', variables('rawStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('rawStorageAccountName'), variables('rawStorageAccountFileSystemName')), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id))))]",
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
                                 "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
@@ -524,7 +524,7 @@
                         {
                             "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
                             "apiVersion": "2018-09-01-preview",
-                            "name": "[concat(variables('encurStorageAccountName'), '/default/', variables('encurStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('dataFactoryName'), resourceGroup().id))))]",
+                            "name": "[concat(variables('encurStorageAccountName'), '/default/', variables('encurStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('encurStorageAccountName'), variables('encurStorageAccountFileSystemName')), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id))))]",
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
                                 "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
