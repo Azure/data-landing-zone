@@ -496,7 +496,7 @@
                             "name": "[concat(variables('rawStorageAccountName'), '/default/', variables('rawStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('dataFactoryName'), resourceGroup().id))))]",
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
-                                "principalId": "[reference(resourceId('Microsoft.Synapse/workspaces', variables('dataFactoryName')), '2019-06-01-preview', 'Full').identity.principalId]"
+                                "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
                             }
                         }
                     ],
@@ -527,7 +527,7 @@
                             "name": "[concat(variables('encurStorageAccountName'), '/default/', variables('encurStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('dataFactoryName'), resourceGroup().id))))]",
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
-                                "principalId": "[reference(resourceId('Microsoft.Synapse/workspaces', variables('dataFactoryName')), '2019-06-01-preview', 'Full').identity.principalId]"
+                                "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
                             }
                         }
                     ],

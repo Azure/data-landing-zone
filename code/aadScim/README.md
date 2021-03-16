@@ -10,17 +10,17 @@ Link: https://docs.microsoft.com/en-us/graph/api/applicationtemplate-instantiate
 
 2. Create the provisioning job based on the template
 
-Rights: TBD
+Rights: Application.ReadWrite.OwnedBy, Directory.ReadWrite.All
 Link: https://docs.microsoft.com/en-us/graph/api/synchronization-synchronizationtemplate-list?tabs=http&view=graph-rest-beta
 
 3. Create the provisioning job
 
-Rights: TBD
+Rights: Application.ReadWrite.OwnedBy, Directory.ReadWrite.All
 Link: https://docs.microsoft.com/en-us/graph/api/synchronization-synchronizationjob-post?tabs=http&view=graph-rest-beta
 
 4. Validate Credentials
 
-Rights: TBD
+Rights: Application.ReadWrite.OwnedBy, Directory.ReadWrite.All
 Link: https://docs.microsoft.com/en-us/graph/api/synchronization-synchronizationjob-validatecredentials?tabs=http&view=graph-rest-beta
 
 5. Save your credentials
@@ -30,5 +30,5 @@ Link: TBD
 
 6. Start the provisioning job
 
-Rights: TBD
+Rights: Application.ReadWrite.OwnedBy, Directory.ReadWrite.All
 Link: https://docs.microsoft.com/en-us/graph/api/synchronization-synchronizationjob-start?tabs=http&view=graph-rest-beta
