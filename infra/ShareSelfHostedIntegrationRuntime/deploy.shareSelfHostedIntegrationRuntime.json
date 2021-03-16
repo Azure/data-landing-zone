@@ -33,7 +33,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
-            "name": "AdfRoleAssignment",
+            "name": "[concat(variables('destinationDataFactoryName'), '-Adf-RoleAssignment')]",
             "properties": {
                 "expressionEvaluationOptions": {
                     "scope": "outer"
@@ -48,7 +48,7 @@
                         {
                             "type": "Microsoft.DataFactory/factories/providers/roleAssignments",
                             "apiVersion": "2018-09-01-preview",
-                            "name": "[concat(variables('sourceDataFactoryName'), '/Microsoft.Authorization/', guid(uniqueString(variables('destinationDataFactoryName'))))]",
+                            "name": "[concat(variables('sourceDataFactoryName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('sourceDataFactoryId'), variables('destinationDataFactoryId'), resourceGroup().id))))]",
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                                 "principalId": "[reference(variables('destinationDataFactoryId'), '2018-06-01', 'Full').identity.principalId]"
@@ -66,7 +66,7 @@
             "apiVersion": "2020-06-01",
             "name": "[concat('delayFor', copyIndex())]",
             "dependsOn": [
-                "AdfRoleAssignment"
+                "[concat(variables('destinationDataFactoryName'), '-Adf-RoleAssignment')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -93,7 +93,7 @@
             "apiVersion": "2018-06-01",
             "name": "[concat(variables('destinationDataFactoryName'), '/dataNodeSharedSelfHostedIntegrationRuntime')]",
             "dependsOn": [
-                "AdfRoleAssignment",
+                "[concat(variables('destinationDataFactoryName'), '-Adf-RoleAssignment')]",
                 "DeploymentDelay"
             ],
             "properties": {

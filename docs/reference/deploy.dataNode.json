@@ -905,7 +905,9 @@
                 "vnetDeployment",
                 "keyVault001Deployment",
                 "sqlserver001Deployment",
-                "sqlDatabase001Deployment"
+                "sqlDatabase001Deployment",
+                "databricks001Deployment",
+                "storageAccountCopy"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -946,6 +948,21 @@
                     },
                     "sqlDatabaseId": {
                         "value": "[reference('sqlDatabase001Deployment').outputs.sqlDatabaseId.value]"
+                    },
+                    "databricksWorkspaceId": {
+                        "value": "[reference('databricks001Deployment').outputs.databricksWorkspaceId.value]"
+                    },
+                    "rawStorageAccountId": {
+                        "value": "[reference(take(concat('storageDeployment-', 0, '-', variables('storageAccountNames')[0]), 64)).outputs.storageAccountId]"
+                    },
+                    "rawStorageAccountFileSystemName": {
+                        "value": "data"
+                    },
+                    "encurStorageAccountId": {
+                        "value": "[reference(take(concat('storageDeployment-', 2, '-', variables('storageAccountNames')[2]), 64)).outputs.storageAccountId]"
+                    },
+                    "encurStorageAccountFileSystemName": {
+                        "value": "data"
                     },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
@@ -1006,6 +1023,21 @@
                         "value": ""
                     },
                     "sqlDatabaseId": {
+                        "value": ""
+                    },
+                    "databricksWorkspaceId": {
+                        "value": ""
+                    },
+                    "rawStorageAccountId": {
+                        "value": ""
+                    },
+                    "rawStorageAccountFileSystemName": {
+                        "value": ""
+                    },
+                    "encurStorageAccountId": {
+                        "value": ""
+                    },
+                    "encurStorageAccountFileSystemName": {
                         "value": ""
                     },
                     "subnetId": {

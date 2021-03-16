@@ -47,6 +47,9 @@
             "parameters.keyVaultId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-metadata/providers/Microsoft.KeyVault/vaults/${DataLandingZoneName}-keyvault001",
             "parameters.sqlServerId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-metadata/providers/Microsoft.Sql/servers/${DataLandingZoneName}-sqlserver001",
             "parameters.sqlDatabaseId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-metadata/providers/Microsoft.Sql/servers/${DataLandingZoneName}-sqlserver001/databases/AdfMetastoreDB",
+            "parameters.databricksWorkspaceId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-shared-domain/providers/Microsoft.Databricks/workspaces/${DataLandingZoneName}-databricks001-ingest",
+            "parameters.rawStorageAccountId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-storage/providers/Microsoft.Storage/storageAccounts/${DataLandingZoneName}rawsa",
+            "parameters.encurStorageAccountId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-storage/providers/Microsoft.Storage/storageAccounts/${DataLandingZoneName}encursa",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
             "parameters.privateDnsZoneIdDataFactory.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net",
             "parameters.privateDnsZoneIdPortal.value": "${GlobalDnsResourceGroupId}/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com"

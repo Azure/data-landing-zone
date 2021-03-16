@@ -35,6 +35,21 @@
         "sqlDatabaseId": {
             "value": ""
         },
+        "databricksWorkspaceId": {
+            "value": ""
+        },
+        "rawStorageAccountId": {
+            "value": ""
+        },
+        "rawStorageAccountFileSystemName": {
+            "value": ""
+        },
+        "encurStorageAccountId": {
+            "value": ""
+        },
+        "encurStorageAccountFileSystemName": {
+            "value": ""
+        },
         "subnetId": {
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
         },
