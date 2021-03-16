@@ -145,12 +145,12 @@
         "databricksWorkspaceSubscriptionId": "[if(empty(variables('databricksWorkspaceId')), subscription().subscriptionId, split(variables('databricksWorkspaceId'), '/')[2])]",
         "databricksWorkspaceResourceGroupName": "[if(empty(variables('databricksWorkspaceId')), resourceGroup().name, split(variables('databricksWorkspaceId'), '/')[4])]",
         "rawStorageAccountId": "[parameters('rawStorageAccountId')]",
-        "rawStorageAccountFileSystemName": "[parameters('rawStorageAccountFileSystemName')]",
+        "rawStorageAccountFileSystemName": "[if(empty(variables('rawStorageAccountId')), 'rawStorageAccountFileSystemNotSet', parameters('rawStorageAccountFileSystemName'))]",
         "rawStorageAccountName": "[if(empty(variables('rawStorageAccountId')), 'rawStorageAccountNotSet', last(split(variables('rawStorageAccountId'), '/')))]",
         "rawStorageAccountSubscriptionId": "[if(empty(variables('rawStorageAccountId')), subscription().subscriptionId, split(variables('rawStorageAccountId'), '/')[2])]",
         "rawStorageAccountResourceGroupName": "[if(empty(variables('rawStorageAccountId')), resourceGroup().name, split(variables('rawStorageAccountId'), '/')[4])]",
         "encurStorageAccountId": "[parameters('encurStorageAccountId')]",
-        "encurStorageAccountFileSystemName": "[parameters('encurStorageAccountFileSystemName')]",
+        "encurStorageAccountFileSystemName": "[if(empty(variables('encurStorageAccountId')), 'encurStorageAccountFileSystemNotSet', parameters('encurStorageAccountFileSystemName'))]",
         "encurStorageAccountName": "[if(empty(variables('encurStorageAccountId')), 'encurStorageAccountNotSet', last(split(variables('encurStorageAccountId'), '/')))]",
         "encurStorageAccountSubscriptionId": "[if(empty(variables('encurStorageAccountId')), subscription().subscriptionId, split(variables('encurStorageAccountId'), '/')[2])]",
         "encurStorageAccountResourceGroupName": "[if(empty(variables('encurStorageAccountId')), resourceGroup().name, split(variables('encurStorageAccountId'), '/')[4])]",
@@ -476,6 +476,7 @@
             "resourceGroup": "[variables('databricksWorkspaceResourceGroupName')]"
         },
         {
+            "condition": "[not(empty(variables('rawStorageAccountId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[concat(variables('dataFactoryName'), '-RawStorageAccount-RoleAssignment')]",
@@ -507,6 +508,7 @@
             "resourceGroup": "[variables('rawStorageAccountResourceGroupName')]"
         },
         {
+            "condition": "[not(empty(variables('encurStorageAccountId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[concat(variables('dataFactoryName'), '-EncurStorageAccount-RoleAssignment')]",
