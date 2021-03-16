@@ -953,13 +953,13 @@
                         "value": "[reference('databricks001Deployment').outputs.databricksWorkspaceId.value]"
                     },
                     "rawStorageAccountId": {
-                        "value": "[reference(take(concat('storageDeployment-', 0, '-', variables('storageAccountNames')[0]), 64)).outputs.storageAccountId]"
+                        "value": "[reference(take(concat('storageDeployment-0-', variables('storageAccountNames')[0]), 64)).outputs.storageAccountId.value]"
                     },
                     "rawStorageAccountFileSystemName": {
                         "value": "data"
                     },
                     "encurStorageAccountId": {
-                        "value": "[reference(take(concat('storageDeployment-', 2, '-', variables('storageAccountNames')[2]), 64)).outputs.storageAccountId]"
+                        "value": "[reference(take(concat('storageDeployment-1-', variables('storageAccountNames')[1]), 64)).outputs.storageAccountId.value]"
                     },
                     "encurStorageAccountFileSystemName": {
                         "value": "data"
@@ -1152,7 +1152,7 @@
                         "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-', variables('dataNodeName'), '-synapse001', uniqueString(subscription().subscriptionId, variables('processingProductResourceGroupName'))), 50)]"
                     },
                     "synapseDefaultStorageAccountId": {
-                        "value": "[resourceId(variables('storageResourceGroupName'), 'Microsoft.Storage/storageAccounts', variables('storageAccountNames')[2])]"
+                        "value": "[reference(take(concat('storageDeployment-2-', variables('storageAccountNames')[2]), 64)).outputs.storageAccountId.value]"
                     },
                     "synapseDefaultStorageAccountFileSystem": {
                         "value": "data"

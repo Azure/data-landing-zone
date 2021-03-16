@@ -444,7 +444,7 @@
             "condition": "[not(empty(variables('databricksWorkspaceId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
-            "name": "[concat(variables('dataFactoryName'), '-Databricks-RoleAssignment')]",
+            "name": "[take(concat(variables('dataFactoryName'), '-Databricks-RoleAssignment'), 64)]",
             "dependsOn": [
                 "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
             ],
@@ -479,7 +479,7 @@
             "condition": "[not(empty(variables('rawStorageAccountId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
-            "name": "[concat(variables('dataFactoryName'), '-RawStorageAccount-RoleAssignment')]",
+            "name": "[take(concat(variables('dataFactoryName'), '-RawStorageAccount-RoleAssignment'), 64)]",
             "properties": {
                 "expressionEvaluationOptions": {
                     "scope": "outer"
@@ -511,7 +511,7 @@
             "condition": "[not(empty(variables('encurStorageAccountId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
-            "name": "[concat(variables('dataFactoryName'), '-EncurStorageAccount-RoleAssignment')]",
+            "name": "[take(concat(variables('dataFactoryName'), '-EncurStorageAccount-RoleAssignment'), 64)]",
             "properties": {
                 "expressionEvaluationOptions": {
                     "scope": "outer"
