@@ -181,6 +181,9 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[concat(variables('synapseWorkspaceName'), '-Synapse-RoleAssignment')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName'))]"
+            ],
             "properties": {
                 "expressionEvaluationOptions": {
                     "scope": "outer"
