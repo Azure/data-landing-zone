@@ -480,6 +480,9 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[take(concat(variables('dataFactoryName'), '-RawStorageAccount-RoleAssignment'), 64)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+            ],
             "properties": {
                 "expressionEvaluationOptions": {
                     "scope": "outer"
@@ -512,6 +515,9 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[take(concat(variables('dataFactoryName'), '-EncurStorageAccount-RoleAssignment'), 64)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+            ],
             "properties": {
                 "expressionEvaluationOptions": {
                     "scope": "outer"
