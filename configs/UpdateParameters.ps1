@@ -26,7 +26,7 @@ Param(
     $Location,
 
     [Parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
+    [AllowEmptyString()]
     [string]
     $PurviewId,
 
