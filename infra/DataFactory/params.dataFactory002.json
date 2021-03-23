@@ -1,63 +1,63 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "dataFactoryName": {
-            "value": "dn001-datafactory002"
-        },
-        "dataFactoryGitAccount": {
-            "value": ""
-        },
-        "dataFactoryGitRepo": {
-            "value": ""
-        },
-        "dataFactoryGitCollaborationBranch": {
-            "value": ""
-        },
-        "dataFactoryGitRootFolder": {
-            "value": ""
-        },
-        "dataFactoryGitType": {
-            "value": "FactoryGitHubConfiguration"
-        },
-        "purviewId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-governance/providers/Microsoft.Purview/accounts/dh-purview001"
-        },
-        "keyVaultId": {
-            "value": ""
-        },
-        "sqlServerId": {
-            "value": ""
-        },
-        "sqlDatabaseId": {
-            "value": ""
-        },
-        "databricksWorkspaceId": {
-            "value": ""
-        },
-        "rawStorageAccountId": {
-            "value": ""
-        },
-        "rawStorageAccountFileSystemName": {
-            "value": ""
-        },
-        "encurStorageAccountId": {
-            "value": ""
-        },
-        "encurStorageAccountFileSystemName": {
-            "value": ""
-        },
-        "subnetId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
-        },
-        "privateDnsZoneIdDataFactory": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net"
-        },
-        "privateDnsZoneIdPortal": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "{regionName}"
+    },
+    "dataFactoryName": {
+      "value": "datalandingz-datafactory002"
+    },
+    "dataFactoryGitAccount": {
+      "value": ""
+    },
+    "dataFactoryGitRepo": {
+      "value": ""
+    },
+    "dataFactoryGitCollaborationBranch": {
+      "value": ""
+    },
+    "dataFactoryGitRootFolder": {
+      "value": ""
+    },
+    "dataFactoryGitType": {
+      "value": "FactoryGitHubConfiguration"
+    },
+    "purviewId": {
+      "value": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{purviewName}"
+    },
+    "keyVaultId": {
+      "value": ""
+    },
+    "sqlServerId": {
+      "value": ""
+    },
+    "sqlDatabaseId": {
+      "value": ""
+    },
+    "databricksWorkspaceId": {
+      "value": ""
+    },
+    "rawStorageAccountId": {
+      "value": ""
+    },
+    "rawStorageAccountFileSystemName": {
+      "value": ""
+    },
+    "encurStorageAccountId": {
+      "value": ""
+    },
+    "encurStorageAccountFileSystemName": {
+      "value": ""
+    },
+    "subnetId": {
+      "value": "/subscriptions/{dataLandingZoneSubscriptionId}/resourceGroups/datalandingz-network/providers/Microsoft.Network/virtualNetworks/datalandingz-vnet/subnets/datalandingz-privatelink-subnet"
+    },
+    "privateDnsZoneIdDataFactory": {
+      "value": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net"
+    },
+    "privateDnsZoneIdPortal": {
+      "value": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com"
     }
+  }
 }
