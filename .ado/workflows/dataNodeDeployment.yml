@@ -640,7 +640,7 @@ stages:
           name: share_self_hosted_integration_runtime_001_validation
           displayName: Share Self Hosted Integration Runtime 001 - validation
           enabled: true
-          continueOnError: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
