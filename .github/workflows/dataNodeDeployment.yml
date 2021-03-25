@@ -583,6 +583,7 @@ jobs:
         template: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json
         parameters: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
         deploymentMode: Validate
+      continue-on-error: true
     
     # Log out from Azure
     - name: Log out from Azure
@@ -958,7 +959,6 @@ jobs:
         template: ${{ github.workspace }}/infra/Databricks/deploy.databricks.json
         parameters: ${{ github.workspace }}/infra/Databricks/params.databricks002.json
         deploymentMode: Incremental
-      continue-on-error: true
     
     # # Setup databricks 002 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
     # - name: Setup Databricks 002

@@ -13,7 +13,7 @@ env:
   DATA_LANDING_ZONE_NAME: '{dataLandingZoneName}' # Choose max. 11 characters. They will be used as a prefix for all services. If not unique, deployment can fail for some services.
   LOCATION: '{regionName}'                        # Specifies the region for all services (e.g. 'northeurope', 'eastus', etc.)
   HUB_VNET_ID: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}'
-  PURVIEW_ID: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{purviewName}'
+  PURVIEW_ID: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{purviewName}' # If no Purview account is deployed, leave it empty string.
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '{resourceManagerConnectionName}'
 
 jobs:
@@ -94,7 +94,9 @@ jobs:
             AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN: '${{ steps.update_parameters.outputs.landingZoneName }}-shared-domain'
             AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT: '${{ steps.update_parameters.outputs.landingZoneName }}-shared-product'
             AZURE_LOCATION: '${{ env.LOCATION }}'
-          \`\`\`"
+          \`\`\`
+          
+          Now, merge the pull request into your \`main\` branch."
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"
