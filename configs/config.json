@@ -286,7 +286,7 @@
             "parameters.dataNodeName.value": "${DataLandingZoneName}",
             "parameters.dataNodeNumber.value": "${DataLandingZoneNumber}",
             "parameters.dnsServerAdresses.value": [
-                "${DnsServerAdresses}"
+                "${DnsServerAdress}"
             ],
             "parameters.firewallPrivateIp.value": "${FirewallPrivateIp}"
         }

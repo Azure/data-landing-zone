@@ -43,7 +43,7 @@ Param(
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $DnsServerAdresses,
+    $DnsServerAdress,
 
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
@@ -118,8 +118,8 @@ foreach ($config in $configs) {
             $key = $parameterReplacementPair.Key
             $value = $parameterReplacementPair.Value
             if ($value -is [array]) {
-                foreach ($item in $value) {
-                    $item = $ExecutionContext.InvokeCommand.ExpandString($item)
+                for ($i = 0; $i -lt $value.Count; $i++) {
+                    $value[$i] = $ExecutionContext.InvokeCommand.ExpandString($value[$i])
                 }
             }
             else {
