@@ -1,51 +1,51 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "sqlServerId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.Sql/servers/dn001-sqlserver001"
-        },
-        "sqlServerAdministratorLoginPassword": {
-            "value": "<your-secure-password>"
-        },
-        "sqlDatabaseName": {
-            "value": "AdfMetastoreDB"
-        },
-        "sqlDatabaseSkuName": {
-            "value": "Basic"
-        },
-        "sqlDatabaseTier": {
-            "value": "Basic"
-        },
-        "sqlDatabaseCapacity": {
-            "value": 5
-        },
-        "sqlDatabaseMaxSizeInBytes": {
-            "value": 524288000
-        },
-        "sqlDatabaseZoneRedundant": {
-            "value": false
-        },
-        "sqlDatabaseLicenseType": {
-            "value": "LicenseIncluded"
-        },
-        "sqlDatabaseReadReplicaCount": {
-            "value": 0
-        },
-        "sqlDatabaseMinCapacity": {
-            "value": "0.5"
-        },
-        "sqlDatabaseStorageAccountType": {
-            "value": "GRS"
-        },
-        "sqlDatabaseAutoPauseDelay": {
-            "value": -1
-        },
-        "keyVaultId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "{regionName}"
+    },
+    "sqlServerId": {
+      "value": "/subscriptions/{dataLandingZoneSubscriptionId}/resourceGroups/datalanding-metadata/providers/Microsoft.Sql/servers/datalanding-sqlserver001"
+    },
+    "sqlServerAdministratorLoginPassword": {
+      "value": "<your-secure-password>"
+    },
+    "sqlDatabaseName": {
+      "value": "AdfMetastoreDB"
+    },
+    "sqlDatabaseSkuName": {
+      "value": "Basic"
+    },
+    "sqlDatabaseTier": {
+      "value": "Basic"
+    },
+    "sqlDatabaseCapacity": {
+      "value": 5
+    },
+    "sqlDatabaseMaxSizeInBytes": {
+      "value": 524288000
+    },
+    "sqlDatabaseZoneRedundant": {
+      "value": false
+    },
+    "sqlDatabaseLicenseType": {
+      "value": "LicenseIncluded"
+    },
+    "sqlDatabaseReadReplicaCount": {
+      "value": 0
+    },
+    "sqlDatabaseMinCapacity": {
+      "value": "0.5"
+    },
+    "sqlDatabaseStorageAccountType": {
+      "value": "GRS"
+    },
+    "sqlDatabaseAutoPauseDelay": {
+      "value": -1
+    },
+    "keyVaultId": {
+      "value": "/subscriptions/{dataLandingZoneSubscriptionId}/resourceGroups/datalanding-metadata/providers/Microsoft.KeyVault/vaults/datalanding-keyvault001"
     }
+  }
 }
