@@ -1,29 +1,27 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "vnetName": {
-            "value": "dn001-vnet"
-        },
-        "dataNodeName": {
-            "value": "dn001"
-        },
-        "dataNodeNumber": {
-            "value": "1"
-        },
-        "deployDatabricksNsg": {
-            "value": true
-        },
-        "dnsServerAdresses": {
-            "value": [
-                "10.0.0.4"
-            ]
-        },
-        "firewallPrivateIp": {
-            "value": "10.0.0.4"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "{regionName}"
+    },
+    "vnetName": {
+      "value": "datalanding-vnet"
+    },
+    "dataNodeName": {
+      "value": "datalanding"
+    },
+    "dataNodeNumber": {
+      "value": "1"
+    },
+    "deployDatabricksNsg": {
+      "value": true
+    },
+    "dnsServerAdresses": {
+      "value": "10.0.0.4"
+    },
+    "firewallPrivateIp": {
+      "value": "10.0.0.4"
     }
+  }
 }
