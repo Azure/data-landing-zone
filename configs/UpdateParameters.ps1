@@ -117,6 +117,7 @@ foreach ($config in $configs) {
         foreach ( $parameterReplacementPair in $parameterReplacements.GetEnumerator() ) {
             $key = $parameterReplacementPair.Key
             $value = $parameterReplacementPair.Value
+            Write-Host $value.GetType()
             $value = $ExecutionContext.InvokeCommand.ExpandString($value)
 
             # Replace Parameter
