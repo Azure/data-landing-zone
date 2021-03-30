@@ -285,7 +285,9 @@
             "parameters.vnetName.value": "${DataLandingZoneName}-vnet",
             "parameters.dataNodeName.value": "${DataLandingZoneName}",
             "parameters.dataNodeNumber.value": "${DataLandingZoneNumber}",
-            "parameters.dnsServerAdresses.value": "${DnsServerAdresses}",
+            "parameters.dnsServerAdresses.value": [
+                "${DnsServerAdresses}"
+            ],
             "parameters.firewallPrivateIp.value": "${FirewallPrivateIp}"
         }
     },
