@@ -117,8 +117,14 @@ foreach ($config in $configs) {
         foreach ( $parameterReplacementPair in $parameterReplacements.GetEnumerator() ) {
             $key = $parameterReplacementPair.Key
             $value = $parameterReplacementPair.Value
-            Write-Host $value.GetType()
-            $value = $ExecutionContext.InvokeCommand.ExpandString($value)
+            if ($value -is [array]) {
+                foreach ($item in $value) {
+                    $item = $ExecutionContext.InvokeCommand.ExpandString($item)
+                }
+            }
+            else {
+                $value = $ExecutionContext.InvokeCommand.ExpandString($value)
+            }
 
             # Replace Parameter
             Write-Host "Replacing Parameter '${key}' with Value '${value}'"
