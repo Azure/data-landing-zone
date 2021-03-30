@@ -12,8 +12,11 @@ env:
   DATA_LANDING_ZONE_SUBSCRIPTION_ID: '{dataLandingZoneSubscriptionId}'
   DATA_LANDING_ZONE_NAME: '{dataLandingZoneName}' # Choose max. 11 characters. They will be used as a prefix for all services. If not unique, deployment can fail for some services.
   LOCATION: '{regionName}'                        # Specifies the region for all services (e.g. 'northeurope', 'eastus', etc.)
-  HUB_VNET_ID: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}'
   PURVIEW_ID: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{purviewName}' # If no Purview account is deployed, leave it empty string.
+  HUB_VNET_ID: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}'
+  DNS_SERVER_ADRESS: '10.0.0.4'
+  FIREWALL_PRIVATE_IP_ADDRESS: '10.0.0.4'
+  DATA_LANDING_ZONE_NUMBER: '1'
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '{resourceManagerConnectionName}'
 
 jobs:
@@ -44,9 +47,12 @@ jobs:
             -GlobalDnsResourceGroupId '${{ env.GLOBAL_DNS_RESOURCE_GROUP_ID }}' \
             -DataLandingZoneSubscriptionId '${{ env.DATA_LANDING_ZONE_SUBSCRIPTION_ID }}' \
             -DataLandingZoneName '${{ env.DATA_LANDING_ZONE_NAME }}' \
+            -DataLandingZoneNumber '${{ env.DATA_LANDING_ZONE_NUMBER }}' \
             -Location '${{ env.LOCATION }}' \
             -PurviewId '${{ env.PURVIEW_ID }}' \
             -HubVnetId '${{ env.HUB_VNET_ID }}' \
+            -DnsServerAdresses (, '${{ env.DNS_SERVER_ADRESS }}') \
+            -FirewallPrivateIp '${{ env.FIREWALL_PRIVATE_IP_ADDRESS }}' \
             -AzureResourceManagerConnectionName '${{ env.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}'
       
       # Define Pull Request Body

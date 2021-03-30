@@ -23,6 +23,11 @@ Param(
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
+    $DataLandingZoneNumber,
+
+    [Parameter(Mandatory=$true)]
+    [ValidateNotNullOrEmpty()]
+    [string]
     $Location,
 
     [Parameter(Mandatory=$true)]
@@ -34,6 +39,16 @@ Param(
     [ValidateNotNullOrEmpty()]
     [string]
     $HubVnetId,
+
+    [Parameter(Mandatory=$true)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $DnsServerAdresses,
+
+    [Parameter(Mandatory=$true)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $FirewallPrivateIp,
 
     [Parameter(Mandatory=$false)]
     [string]
@@ -74,6 +89,17 @@ $DataLandingZoneName = $DataLandingZoneName.ToLower()
 # Loading Configuration File for Parameter Updates
 Write-Host "Loading Configuration File for Parameter Updates"
 $configs = Get-Content -Path $ConfigurationFilePath -Raw | Out-String | ConvertFrom-Json
+
+# Evaluate Data Node Number
+try {
+    $DataLandingZoneNumber = [int]$DataLandingZoneNumber
+    if ($DataLandingZoneNumber -lt 1 -or $DataLandingZoneNumber -gt 255) {
+        throw "Data Landing Zone number must be in the interval [1, 255]."
+    }
+}
+catch {
+    throw "Please provide a valid int in the interval [1, 255] for the Data Landing Zone number."
+}
 
 foreach ($config in $configs) {
     # Get Replacement Key-Value Pairs

@@ -97,10 +97,16 @@
                 "description": "Specifies the resource id of the curated & enriched storage account."
             }
         },
-        "encurStorageAccountFileSystemName": {
+        "enrichedStorageAccountFileSystemName": {
             "type": "string",
             "metadata": {
-                "description": "Specifies the name of the file system of the curated & enriched storage account."
+                "description": "Specifies the name of the enriched file system of the curated & enriched storage account."
+            }
+        },
+        "curatedStorageAccountFileSystemName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the curated file system of the curated & enriched storage account."
             }
         },
         "subnetId": {
@@ -150,7 +156,8 @@
         "rawStorageAccountSubscriptionId": "[if(empty(variables('rawStorageAccountId')), subscription().subscriptionId, split(variables('rawStorageAccountId'), '/')[2])]",
         "rawStorageAccountResourceGroupName": "[if(empty(variables('rawStorageAccountId')), resourceGroup().name, split(variables('rawStorageAccountId'), '/')[4])]",
         "encurStorageAccountId": "[parameters('encurStorageAccountId')]",
-        "encurStorageAccountFileSystemName": "[if(empty(variables('encurStorageAccountId')), 'encurStorageAccountFileSystemNotSet', parameters('encurStorageAccountFileSystemName'))]",
+        "enrichedStorageAccountFileSystemName": "[if(empty(variables('encurStorageAccountId')), 'enrichedStorageAccountFileSystemNotSet', parameters('enrichedStorageAccountFileSystemName'))]",
+        "curatedStorageAccountFileSystemName": "[if(empty(variables('encurStorageAccountId')), 'curatedStorageAccountFileSystemNotSet', parameters('curatedStorageAccountFileSystemName'))]",
         "encurStorageAccountName": "[if(empty(variables('encurStorageAccountId')), 'encurStorageAccountNotSet', last(split(variables('encurStorageAccountId'), '/')))]",
         "encurStorageAccountSubscriptionId": "[if(empty(variables('encurStorageAccountId')), subscription().subscriptionId, split(variables('encurStorageAccountId'), '/')[2])]",
         "encurStorageAccountResourceGroupName": "[if(empty(variables('encurStorageAccountId')), resourceGroup().name, split(variables('encurStorageAccountId'), '/')[4])]",
@@ -516,7 +523,7 @@
         //     "condition": "[not(empty(variables('encurStorageAccountId')))]",
         //     "type": "Microsoft.Resources/deployments",
         //     "apiVersion": "2019-10-01",
-        //     "name": "[take(concat(variables('dataFactoryName'), '-EncurStorageAccount-RoleAssignment'), 64)]",
+        //     "name": "[take(concat(variables('dataFactoryName'), '-EnrichedStorageAccount-RoleAssignment'), 64)]",
         //     "dependsOn": [
         //         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
         //     ],
@@ -534,7 +541,42 @@
         //                 {
         //                     "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
         //                     "apiVersion": "2018-09-01-preview",
-        //                     "name": "[concat(variables('encurStorageAccountName'), '/default/', variables('encurStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('encurStorageAccountName'), 'default', variables('encurStorageAccountFileSystemName')), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id))))]",
+        //                     "name": "[concat(variables('encurStorageAccountName'), '/default/', variables('enrichedStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('encurStorageAccountName'), 'default', variables('enrichedStorageAccountFileSystemName')), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id))))]",
+        //                     "properties": {
+        //                         "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+        //                         "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
+        //                     }
+        //                 }
+        //             ],
+        //             "outputs": {}
+        //         }
+        //     },
+        //     "subscriptionId": "[variables('encurStorageAccountSubscriptionId')]",
+        //     "resourceGroup": "[variables('encurStorageAccountResourceGroupName')]"
+        // },
+        // {
+        //     "condition": "[not(empty(variables('encurStorageAccountId')))]",
+        //     "type": "Microsoft.Resources/deployments",
+        //     "apiVersion": "2019-10-01",
+        //     "name": "[take(concat(variables('dataFactoryName'), '-CuratedStorageAccount-RoleAssignment'), 64)]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+        //     ],
+        //     "properties": {
+        //         "expressionEvaluationOptions": {
+        //             "scope": "outer"
+        //         },
+        //         "mode": "Incremental",
+        //         "template": {
+        //             "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+        //             "contentVersion": "1.0.0.0",
+        //             "parameters": {},
+        //             "variables": {},
+        //             "resources": [
+        //                 {
+        //                     "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
+        //                     "apiVersion": "2018-09-01-preview",
+        //                     "name": "[concat(variables('encurStorageAccountName'), '/default/', variables('curatedStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('encurStorageAccountName'), 'default', variables('curatedStorageAccountFileSystemName')), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id))))]",
         //                     "properties": {
         //                         "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
         //                         "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"

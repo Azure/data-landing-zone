@@ -47,7 +47,10 @@
         "encurStorageAccountId": {
             "value": ""
         },
-        "encurStorageAccountFileSystemName": {
+        "enrichedStorageAccountFileSystemName": {
+            "value": ""
+        },
+        "curatedStorageAccountFileSystemName": {
             "value": ""
         },
         "subnetId": {

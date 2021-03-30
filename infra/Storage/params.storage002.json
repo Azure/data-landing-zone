@@ -10,7 +10,8 @@
         },
         "storageAccountContainerNames": {
             "value": [
-                "data"
+                "enriched",
+                "curated"
             ]
         },
         "storageAccountType": {

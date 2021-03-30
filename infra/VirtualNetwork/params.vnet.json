@@ -11,6 +11,9 @@
         "dataNodeName": {
             "value": "dn001"
         },
+        "dataNodeNumber": {
+            "value": "1"
+        },
         "deployDatabricksNsg": {
             "value": true
         },
