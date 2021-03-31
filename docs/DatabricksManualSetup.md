@@ -8,11 +8,11 @@ Due to the following service limitations, Databricks needs to be setup manually:
 
 ## Manual Databricks configuration
 
-Due to the issue mentioned above, we cannot rely on the application workflow, but only rely on the on-behalf workflow. This means, that instead of using a Service Principle for authentication, we need to rely on a user being authenticated against the workspace. Only then, we can use the Databricks API to create a Key Vault backed secret scopes. If you are ok with Databricks backed secret scopes, then you can already automate the complete setup end-to-end. However, for managebility reasons, we are recommending to use Key Vaults for storing secrets.
+Due to the issue mentioned above, we cannot rely on the application workflow, but only rely on the on-behalf workflow. This means, that instead of using a Service Principle for authentication, we need to rely on a user being authenticated against the workspace. Only then, we can use the Databricks API to create a Key Vault backed secret scopes. If you are ok with Databricks backed secret scopes, then you can already automate the complete setup end-to-end. However, for manageability reasons, we are recommending to use Key Vaults for storing secrets.
 
 In order to simplify the manual setup and configuration of Databricks, we are providing a Powershell script (`SetupDatabricksManually.ps1`) as well as pre-defined commands in the DevOps and GitHub workflows. You can copy and paste these commands into your Powershell console to setup your Databricks workspaces manually by executing a single script. The Powershell script will perform the following actions in your Databricks workspace: 
 
-1. Setup of Key Vault backed secret scopes and the respective ACLs. These secret scopes store the credentials that are required for connecting to the external Hive Metastore as well as the Log Analytics workspace.
+1. Setup of Key Vault backed secret scopes and the respective ACLs. These secret scopes store the credentials that are required for connecting to the external Hive metastore as well as the Log Analytics workspace.
 2. Execution of a Databricks Notebook to achieve the following:
     - Download of Jar Files from maven, which are required for connecting to the external Hive metastore. This will allow you to access the external Hive metastore, even if maven is down.
     - Download and build of jars required for [application logging](https://github.com/mspnp/spark-monitoring) in Databricks.
@@ -67,5 +67,5 @@ After deploying the Data Landing Zone successfully, execute the following steps:
 
 3. Clone the repository and open your Powershell console in the root of the cloned repository.
 4. Copy and paste the command into your Powershell console and execute the command.
-5. Watch the output in the Powershell console and see how the different steup steps are executed one after another.
+5. Watch the output in the Powershell console and see how the different setup steps are executed one after another.
  
