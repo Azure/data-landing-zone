@@ -45,7 +45,7 @@ The data mesh architecture consists of
 * One or more data domains in each data node,
 * One or more data products in each data node.
 
-Each of these assets can evolve independently over time, because of different requirements and lifecycles (e.g. one of the data nodes may requires RA-GRS storage accounts at some point). Therefore it is important to have an IaC representation of each of these assets in a Git repository, so that changes can be implemented based on requirements in the respective node, domain or product.
+Each of these assets can evolve independently over time, because of different requirements and lifecycle (e.g. one of the data nodes may requires RA-GRS storage accounts at some point). Therefore it is important to have an IaC representation of each of these assets in a Git repository, so that changes can be implemented based on requirements in the respective node, domain or product.
 To not start from scratch for each asset, teams can leverage the templates provided by the Data Platform Ops team. In order to automate the deployment of a deployment template, it is recommended to implement a forking pattern.
 
 For example, if a new data needs to be created, the responsible data node ops team can request a new node through a management tool like ServiceNow, Power Apps or other kinds of applications. After the request has been approved, the following process gets kicked off based on the provided parameters:
@@ -67,7 +67,7 @@ A forking pattern should be chosen, because it allows the different ops teams to
 Best practices for Git repositories should be adopted in order to enforce the use of branches and pull requests. This includes:
 
 * Securing the main branch
-* Using branches for changes, updates and imporvements
+* Using branches for changes, updates and improvements
 * Defining code owners, who have to approve pull requests, before merging them into the main branch
 * Validating branches through automated testing
 * Limiting the number of actions and persons in the team, who can trigger build and release pipelines
@@ -88,13 +88,13 @@ The data hub is at the heart of the data mesh architecture and it constitutes of
 |Data Product Team|In charge of Data Products deployment and updates| One team per Data Product |
 
 # Step by Step Node Deployment Process
-This deployment process is for the on-boarding of a new Data Node to a Data Mesh. It assumes that the Data Plaform Hub has been deployed and is already operational ready for Nodes to be deployed and connected to it.
+This deployment process is for the on-boarding of a new Data Node to a Data Mesh. It assumes that the Data Platform Hub has been deployed and is already operational ready for Nodes to be deployed and connected to it.
 
 ### Cloud Environment provisioning:
 Refer to the diagram for visual representation of the steps
 
 * Step 1: The Azure subscription provisioning is completed by the Cloud Platform Ops team.
-This should result in a subscription provisioned with the corporate RBAC settings configured ready to be used by the Data Plaform Ops.
+This should result in a subscription provisioned with the corporate RBAC settings configured ready to be used by the Data Platform Ops.
 
 * Step 2: The Cloud Platform Ops or Data Platform Ops prepares the Data Node environment e.g. connect the Node network to the Hub network, configure service principals in AAD, set-up the DevOps Git repositories.
 
