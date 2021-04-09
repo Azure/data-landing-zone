@@ -135,7 +135,7 @@ Additional required role assignments include:
 | [Network Contributor](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#network-contributor) | In order to setup vnet peering between the Data Landing Zone vnet and the Data Management Landing Zone vnet, the service principal needs **Network Contributor** access rights on the resource group of the remote vnet. | (Resource Group Scope) `/subscriptions/{{datamanagement}subscriptionId}/resourceGroups/{resourceGroupName}` |
 <!-- | [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) | Required to share the self-hosted integration runtime that gets deployed into the `integration-rg` resource group with other Data Factories, like the one in the `processing-domain-rg` resource group, the service principal needs **User Access Administrator** rights on the Data Factory that gets deployed into the `integration-rg` resource group. It is also required to assign the Data Factory and Synapse managed identities access on the respective storage account file systems. | (Resource Scope) `/subscriptions/{{datalandingzone}subscriptionId}` | -->
 
-To add these role assignments, you can use the [Azure Portal](https://portal.azure.com/) or run the following commands:
+To add these role assignments, you can use the [Azure Portal](https://portal.azure.com/) or run the following commands using Azure CLI/Azure Powershell:
 
 #### Azure CLI - Add role assignments
 
@@ -144,13 +144,13 @@ To add these role assignments, you can use the [Azure Portal](https://portal.azu
 az ad sp list --display-name "{servicePrincipalName}" --query "[].{objectId:objectId}" --output tsv
 
 # Add role assignment
-# 1. Resource Scope
+# Resource Scope level assignment
 az role assignment create \
   --assignee "{servicePrincipalObjectId}" \
   --role "{roleName}" \
   --scopes "{scope}"
 
-# 2. Resource group scope
+# Resource group scope level assignment
 az role assignment create \
   --assignee "{servicePrincipalObjectId}" \
   --role "{roleName}" \
@@ -164,13 +164,13 @@ az role assignment create \
 $spObjectId = (Get-AzADServicePrincipal -DisplayName "{servicePrincipalName}").id
 
 # Add role assignment
-# 1. Resource Scope
+# For Resource Scope level assignment
 New-AzRoleAssignment `
   -ObjectId $spObjectId `
   -RoleDefinitionName "{roleName}" `
   -Scope "{scope}"
 
-# 2. Resource group scope
+# For Resource group scope level assignment
 New-AzRoleAssignment `
   -ObjectId $spObjectId `
   -RoleDefinitionName "{roleName}" `
