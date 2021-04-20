@@ -389,7 +389,7 @@
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
                         "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('rawStorageAccountName'), '-', ''))]",
-                        "[take(concat(variables('dataFactoryName'), '-RawStorageAccount-RoleAssignment'), 64)]"
+                        "[resourceId('Microsoft.Resources/deployments', take(concat(variables('dataFactoryName'), '-RawStorageAccount-RoleAssignment'), 64))]"
                     ],
                     "properties": {
                         "type": "AzureBlobFS",
@@ -431,7 +431,8 @@
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
                         "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
                         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('encurStorageAccountName'), '-', ''))]",
-                        "[take(concat(variables('dataFactoryName'), '-EncurStorageAccount-RoleAssignment'), 64)]"
+                        "[resourceId('Microsoft.Resources/deployments', take(concat(variables('dataFactoryName'), '-EnrichedStorageAccount-RoleAssignment'), 64))]",
+                        "[resourceId('Microsoft.Resources/deployments', take(concat(variables('dataFactoryName'), '-CuratedStorageAccount-RoleAssignment'), 64))]"
                     ],
                     "properties": {
                         "type": "AzureBlobFS",
