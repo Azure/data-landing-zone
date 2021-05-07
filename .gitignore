@@ -340,3 +340,6 @@ ASALocalRun/
 healthchecksdb
 .vscode/settings.json
 secrets.ps1
+
+#General
+.DS_Store 
