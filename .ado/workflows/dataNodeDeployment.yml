@@ -1074,10 +1074,10 @@ stages:
             arguments: >
               --mysqlserverid $(hivemetastoreDetails001.mySqlDatabaseId.value)
         
-        # Deploy databricks 001
+        # Deploy Databricks 001
         - task: AzureResourceManagerTemplateDeployment@3
           name: databricks_001_deployment
-          displayName: Deploy databricks 001
+          displayName: Deploy Databricks 001
           enabled: true
           continueOnError: false
           inputs:
@@ -1093,10 +1093,10 @@ stages:
             deploymentMode: 'Incremental'
             deploymentOutputs: 'databricksDetails001'
         
-        # # Setup databricks 001 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
+        # # Setup Databricks 001 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
         # - task: AzureCLI@2
         #   name: setup_databricks_001
-        #   displayName: Setup databricks 001
+        #   displayName: Setup Databricks 001
         #   enabled: true
         #   continueOnError: false
         #   inputs:
@@ -1150,10 +1150,10 @@ stages:
           name: setup_databricks_001_manual
           displayName: Setup Databricks 001 - Manual Step - Guidance
         
-        # Deploy databricks 002
+        # Deploy Databricks 002
         - task: AzureResourceManagerTemplateDeployment@3
           name: databricks_002_deployment
-          displayName: Deploy databricks 002
+          displayName: Deploy Databricks 002
           enabled: true
           continueOnError: false
           inputs:
@@ -1226,10 +1226,10 @@ stages:
           name: setup_databricks_002_manual
           displayName: Setup Databricks 002 - Manual Step - Guidance
         
-        # Deploy event hub 001
+        # Deploy Event Hub 001
         - task: AzureResourceManagerTemplateDeployment@3
           name: event_hub_001_deployment
-          displayName: Deploy event hub 001
+          displayName: Deploy Event Hub 001
           enabled: true
           continueOnError: false
           inputs:
