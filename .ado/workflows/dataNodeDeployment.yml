@@ -12,7 +12,8 @@ trigger:
       - infra/EventHub/*
       - infra/KeyVault/*
       - infra/MySql/*
-      - infra/SelfHostedIntegrationRuntime/*
+      - infra/SelfHostedIntegrationRuntimeDataFactory/*
+      - infra/SelfHostedIntegrationRuntimePurview/*
       - infra/SqlDatabase/*
       - infra/SqlServer/*
       - infra/Storage/*
@@ -33,7 +34,8 @@ pr:
       - infra/EventHub/*
       - infra/KeyVault/*
       - infra/MySql/*
-      - infra/SelfHostedIntegrationRuntime/*
+      - infra/SelfHostedIntegrationRuntimeDataFactory/*
+      - infra/SelfHostedIntegrationRuntimePurview/*
       - infra/SqlDatabase/*
       - infra/SqlServer/*
       - infra/Storage/*
@@ -595,15 +597,50 @@ stages:
             resourceGroupName: ${{ variables.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
             location: ${{ variables.AZURE_LOCATION }}
             templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/deploy.shir.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/params.shir001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntimeDataFactory/deploy.shir.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntimeDataFactory/params.shir001.json'
             deploymentMode: 'Validation'
             overrideParameters: >
               -vmssAdminPassword "$(password)"
         
+        # # Generate Password
+        # - task: PowerShell@2
+        #   name: generate_password_004
+        #   displayName: Generate Password
+        #   enabled: true
+        #   continueOnError: false
+        #   inputs:
+        #     targetType: 'filePath'
+        #     filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
+        #     errorActionPreference: 'stop'
+        #     failOnStderr: false
+        #     ignoreLASTEXITCODE: false
+        #     pwsh: true
+        
+        # # Deploy SHIR 002 - validation
+        # - task: AzureResourceManagerTemplateDeployment@3
+        #   name: shir_002_validation
+        #   displayName: Deploy SHIR 002 - validation
+        #   enabled: true
+        #   continueOnError: false
+        #   inputs:
+        #     deploymentScope: 'Resource Group'
+        #     azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+        #     subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+        #     action: 'Create Or Update Resource Group'
+        #     resourceGroupName: ${{ variables.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
+        #     location: ${{ variables.AZURE_LOCATION }}
+        #     templateLocation: 'Linked artifact'
+        #     csmFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntimePurview/deploy.shir.json'
+        #     csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntimePurview/params.shir001.json'
+        #     deploymentMode: 'Validation'
+        #     overrideParameters: >
+        #       -vmssAdminPassword "$(password)"
+        #       -shirAuthKey "$(shirAuthKey)"
+        
         # Generate Password
         - task: PowerShell@2
-          name: generate_password_004
+          name: generate_password_005
           displayName: Generate Password
           enabled: true
           continueOnError: false
@@ -1313,7 +1350,7 @@ stages:
               -ResourceGroupName ${{ variables.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
               -StorageAccountName $(storageDetails.storageAccountName.value)
               -StorageAccountContainerName $(storageDetails.storageAccountContainerName.value)
-              -File "$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1"
+              -File "$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntimeDataFactory/installSHIRGateway.ps1"
               -Blob "installSHIRGateway.ps1"
             errorActionPreference: 'stop'
             failOnStandardError: false
@@ -1347,15 +1384,50 @@ stages:
             resourceGroupName: ${{ variables.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
             location: ${{ variables.AZURE_LOCATION }}
             templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/deploy.shir.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/params.shir001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntimeDataFactory/deploy.shir.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntimeDataFactory/params.shir001.json'
             deploymentMode: 'Incremental'
             overrideParameters: >
               -vmssAdminPassword "$(password)"
         
+        # # Generate Password
+        # - task: PowerShell@2
+        #   name: generate_password_004
+        #   displayName: Generate Password
+        #   enabled: true
+        #   continueOnError: false
+        #   inputs:
+        #     targetType: 'filePath'
+        #     filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
+        #     errorActionPreference: 'stop'
+        #     failOnStderr: false
+        #     ignoreLASTEXITCODE: false
+        #     pwsh: true
+        
+        # # Deploy SHIR 002
+        # - task: AzureResourceManagerTemplateDeployment@3
+        #   name: shir_002_deployment
+        #   displayName: Deploy SHIR 002
+        #   enabled: true
+        #   continueOnError: false
+        #   inputs:
+        #     deploymentScope: 'Resource Group'
+        #     azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+        #     subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+        #     action: 'Create Or Update Resource Group'
+        #     resourceGroupName: ${{ variables.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
+        #     location: ${{ variables.AZURE_LOCATION }}
+        #     templateLocation: 'Linked artifact'
+        #     csmFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntimePurview/deploy.shir.json'
+        #     csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntimePurview/params.shir001.json'
+        #     deploymentMode: 'Incremental'
+        #     overrideParameters: >
+        #       -vmssAdminPassword "$(password)"
+        #       -shirAuthKey "$(shirAuthKey)"
+        
         # Generate Password
         - task: PowerShell@2
-          name: generate_password_004
+          name: generate_password_005
           displayName: Generate Password
           enabled: true
           continueOnError: false
