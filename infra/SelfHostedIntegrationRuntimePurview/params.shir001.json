@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "vmssName": {
+            "value": "dn001Shir002"
+        },
+        "vmssSkuTier": {
+            "value": "Standard"
+        },
+        "vmssSkuName": {
+            "value": "Standard_DS2_v2"
+        },
+        "vmssSkuCapacity": {
+            "value": 1
+        },
+        "vmssAdminUsername": {
+            "value": "VmssMainUser"
+        },
+        "vmssAdminPassword": {
+            "value": "<your-password>"
+        },
+        "shirAuthKey": {
+            "value": "<your-auth-key>"
+        },
+        "storageAccountId": {
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-integration/providers/Microsoft.Storage/storageAccounts/dn001artifactstorage001"
+        },
+        "storageAccountContainerName": {
+            "value": "scripts"
+        },
+        "subnetId": {
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-subnet"
+        }
+    }
+}
