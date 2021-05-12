@@ -363,9 +363,31 @@
                         }
                     },
                     {
-                        "name": "[concat(variables('dataNodeName'), '-dd001-subnet')]",
+                        "name": "[concat(variables('dataNodeName'), '-pbi-gateway-subnet')]",
                         "properties": {
                             "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.6.0/24')]",
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]"
+                            },
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataNodeName'), '-routetable'))]"
+                            },
+                            "delegations": [
+                                {
+                                    "name": "powerbigateway",
+                                    "properties": {
+                                        "serviceName": "Microsoft.PowerPlatform/vnetaccesslinks"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "[concat(variables('dataNodeName'), '-dd001-subnet')]",
+                        "properties": {
+                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.7.0/24')]",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
@@ -379,7 +401,7 @@
                     {
                         "name": "[concat(variables('dataNodeName'), '-dd001-privatelink-subnet')]",
                         "properties": {
-                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.7.0/24')]",
+                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.8.0/24')]",
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
                             "networkSecurityGroup": {
@@ -393,7 +415,7 @@
                     {
                         "name": "[concat(variables('dataNodeName'), '-dd002-subnet')]",
                         "properties": {
-                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.8.0/24')]",
+                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.9.0/24')]",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
@@ -407,7 +429,7 @@
                     {
                         "name": "[concat(variables('dataNodeName'), '-dd002-privatelink-subnet')]",
                         "properties": {
-                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.9.0/24')]",
+                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.10.0/24')]",
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
                             "networkSecurityGroup": {
@@ -421,7 +443,7 @@
                     {
                         "name": "[concat(variables('dataNodeName'), '-dp001-subnet')]",
                         "properties": {
-                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.10.0/24')]",
+                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.11.0/24')]",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
                             "networkSecurityGroup": {
@@ -435,7 +457,7 @@
                     {
                         "name": "[concat(variables('dataNodeName'), '-dp001-privatelink-subnet')]",
                         "properties": {
-                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.11.0/24')]",
+                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.12.0/24')]",
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
                             "networkSecurityGroup": {
@@ -449,7 +471,7 @@
                     {
                         "name": "[concat(variables('dataNodeName'), '-dp002-subnet')]",
                         "properties": {
-                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.12.0/24')]",
+                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.13.0/24')]",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
@@ -463,7 +485,7 @@
                     {
                         "name": "[concat(variables('dataNodeName'), '-dp002-privatelink-subnet')]",
                         "properties": {
-                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.13.0/24')]",
+                            "addressPrefix": "[concat('10.', variables('dataNodeNumber'), '.14.0/24')]",
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
                             "networkSecurityGroup": {

@@ -21,12 +21,6 @@
                 "description": "Specifies the ID of the vnet that should be used for vnet injection."
             }
         },
-        "databricksManagedResourceGroupId": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the name of the resource group that is managed by databricks."
-            }
-        },
         "databricksPrivateSubnetName": {
             "type": "string",
             "metadata": {
@@ -61,7 +55,7 @@
     "variables": {
         "location": "[parameters('location')]",
         "databricksName": "[parameters('databricksName')]",
-        "databricksManagedResourceGroupId": "[parameters('databricksManagedResourceGroupId')]",
+        "databricksManagedResourceGroupId": "[concat(subscription().id, '/resourceGroups/', variables('databricksName'), '-mrg')]",
         "databricksManagedResourceGroupName": "[last(split(variables('databricksManagedResourceGroupId'), '/'))]",
         "databricksVnetId": "[parameters('databricksVnetId')]",
         "databricksPrivateSubnetName": "[parameters('databricksPrivateSubnetName')]",
