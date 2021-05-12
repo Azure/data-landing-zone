@@ -10,7 +10,7 @@ on:
       - 'infra/EventHub/**'
       - 'infra/KeyVault/**'
       - 'infra/MySql/**'
-      - 'infra/SelfHostedIntegrationRuntime/**'
+      - 'infra/SelfHostedIntegrationRuntimeDataFactory/**'
       - 'infra/ShareSelfHostedIntegrationRuntime/**'
       - 'infra/SqlDatabase/**'
       - 'infra/SqlServer/**'
@@ -29,7 +29,7 @@ on:
       - 'infra/EventHub/**'
       - 'infra/KeyVault/**'
       - 'infra/MySql/**'
-      - 'infra/SelfHostedIntegrationRuntime/**'
+      - 'infra/SelfHostedIntegrationRuntimeDataFactory/**'
       - 'infra/ShareSelfHostedIntegrationRuntime/**'
       - 'infra/SqlDatabase/**'
       - 'infra/SqlServer/**'
@@ -547,8 +547,8 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
         region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/deploy.shir.json
-        parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminPassword="${{ steps.generate_password_003.outputs.password }}"
+        template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntimeDataFactory/deploy.shir.json
+        parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntimeDataFactory/params.shir001.json vmssAdminPassword="${{ steps.generate_password_003.outputs.password }}"
         deploymentMode: Validate
     
     # Generate Password
@@ -1073,7 +1073,7 @@ jobs:
             -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}" `
             -StorageAccountName "${{ steps.artifact_storage_001_deployment.outputs.storageAccountName }}" `
             -StorageAccountContainerName "${{ steps.artifact_storage_001_deployment.outputs.storageAccountContainerName }}" `
-            -File "${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1" `
+            -File "${{ github.workspace }}/infra/SelfHostedIntegrationRuntimeDataFactory/installSHIRGateway.ps1" `
             -Blob "installSHIRGateway.ps1"
     
     # Generate Password
@@ -1092,8 +1092,8 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
         region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/deploy.shir.json
-        parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminPassword="${{ steps.generate_password_003.outputs.password }}"
+        template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntimeDataFactory/deploy.shir.json
+        parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntimeDataFactory/params.shir001.json vmssAdminPassword="${{ steps.generate_password_003.outputs.password }}"
         deploymentMode: Incremental
     
     # Generate Password
