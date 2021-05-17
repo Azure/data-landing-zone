@@ -3,7 +3,6 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "defaultValue": "[resourceGroup().location]",
             "type": "string",
             "metadata": {
                 "description": "Specifies the location for all resources."
@@ -20,6 +19,13 @@
             "metadata": {
                 "description": "Specifies the resource id of the key vault to store the storage access key."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -28,6 +34,7 @@
         "logAnalyticsWorkspaceName": "[parameters('logAnalyticsWorkspaceName')]",
         "keyVaultId": "[parameters('keyVaultId')]",
         "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]",
+        "tags": "[parameters('tags')]",
         "logAnalyticsWorkspaceIdSecretName": "logAnalyticsWorkspaceId",
         "logAnalyticsWorkspaceKeySecretName": "logAnalyticsWorkspaceKey"
     },
@@ -36,6 +43,7 @@
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2020-08-01",
             "name": "[variables('logAnalyticsWorkspaceName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "properties": {
                 "sku": {

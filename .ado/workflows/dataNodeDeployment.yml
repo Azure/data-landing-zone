@@ -99,6 +99,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy Vnet Peering 001 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -153,6 +155,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault001.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy key vault 002 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -171,6 +175,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault002.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy key vault 003 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -189,6 +195,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault003.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy Log Analytics Workspace 001 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -207,6 +215,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/LogAnalytics/deploy.logAnalytics.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/LogAnalytics/params.logAnalytics001.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy storage account 001 - raw - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -225,6 +235,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.storage001.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy storage account 002 - enriched & curated - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -243,6 +255,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.storage002.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy storage account 003 - workspace - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -261,6 +275,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.storage003.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy secret storage account 001 - raw - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -279,6 +295,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage001.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy secret storage account 002 - enriched & curated - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -297,6 +315,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage002.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy secret storage account 003 - workspace - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -315,6 +335,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage003.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy external storage account 001 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -333,6 +355,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.external_storage001.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Generate Password
           - task: PowerShell@2
@@ -367,6 +391,7 @@ stages:
               deploymentMode: "Validation"
               overrideParameters: >
                 -administratorLoginPassword "$(password)"
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy sql database 001 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -387,6 +412,7 @@ stages:
               deploymentMode: "Validation"
               overrideParameters: >
                 -sqlServerAdministratorLoginPassword "$(password)"
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Generate Password
           - task: PowerShell@2
@@ -421,6 +447,7 @@ stages:
           #     deploymentMode: 'Validation'
           #     overrideParameters: >
           #       -administratorLoginPassword "$(password)"
+          #       -tags "${{ variables.AZURE_TAGS }}"
 
           # # Deploy sql database 002 - validation
           # - task: AzureResourceManagerTemplateDeployment@3
@@ -441,6 +468,7 @@ stages:
           #     deploymentMode: 'Validation'
           #     overrideParameters: >
           #       -sqlServerAdministratorLoginPassword "$(password)"
+          #       -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy My SQL 001 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -461,6 +489,7 @@ stages:
               deploymentMode: "Validation"
               overrideParameters: >
                 -mySqlServerAdministratorLoginPassword "$(password)"
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy databricks 001 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -479,6 +508,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Databricks/deploy.databricks.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Databricks/params.databricks001.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy databricks 002 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -497,6 +528,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Databricks/deploy.databricks.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Databricks/params.databricks002.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy event hub 001 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -515,6 +548,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/EventHub/deploy.eventHub.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/EventHub/params.eventHub001.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy Data Factory 001 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -533,6 +568,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/DataFactory/deploy.dataFactory.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/DataFactory/params.dataFactory001.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy Data Factory 002 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -551,6 +588,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/DataFactory/deploy.dataFactory.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/DataFactory/params.dataFactory002.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy Artifact Storage Account 001 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -569,6 +608,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/params.storage001.json"
               deploymentMode: "Validation"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Generate Password
           - task: PowerShell@2
@@ -603,6 +644,7 @@ stages:
               deploymentMode: "Validation"
               overrideParameters: >
                 -vmssAdminPassword "$(password)"
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # # Generate Password
           # - task: PowerShell@2
@@ -637,6 +679,7 @@ stages:
           #     deploymentMode: 'Validation'
           #     overrideParameters: >
           #       -vmssAdminPassword "$(password)"
+          #       -tags "${{ variables.AZURE_TAGS }}"
           #       -shirAuthKey "$(shirAuthKey)"
 
           # Generate Password
@@ -672,6 +715,7 @@ stages:
               deploymentMode: "Validation"
               overrideParameters: >
                 -synapseSqlAdministratorPassword "$(password)"
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Share Self Hosted Integration Runtime 001 - validation
           - task: AzureResourceManagerTemplateDeployment@3
@@ -730,6 +774,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy Vnet Peering 001
           - task: AzureResourceManagerTemplateDeployment@3
@@ -784,6 +830,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault001.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy Key Vault 002
           - task: AzureResourceManagerTemplateDeployment@3
@@ -802,6 +850,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault002.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy Key Vault 003
           - task: AzureResourceManagerTemplateDeployment@3
@@ -820,6 +870,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault003.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy Log Analytics Workspace 001
           - task: AzureResourceManagerTemplateDeployment@3
@@ -839,6 +891,8 @@ stages:
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/LogAnalytics/params.logAnalytics001.json"
               deploymentMode: "Incremental"
               deploymentOutputs: "logAnalytics001Details"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy storage account 001 - raw
           - task: AzureResourceManagerTemplateDeployment@3
@@ -857,6 +911,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.storage001.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy storage account 002 - enriched & curated
           - task: AzureResourceManagerTemplateDeployment@3
@@ -875,6 +931,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.storage002.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy storage account 003 - workspace
           - task: AzureResourceManagerTemplateDeployment@3
@@ -893,6 +951,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.storage003.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy secret storage account 001 - raw
           - task: AzureResourceManagerTemplateDeployment@3
@@ -911,6 +971,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage001.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy secret storage account 002 - enriched & curated
           - task: AzureResourceManagerTemplateDeployment@3
@@ -929,6 +991,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage002.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy secret storage account 003 - workspace
           - task: AzureResourceManagerTemplateDeployment@3
@@ -947,6 +1011,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.secret_storage003.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy external storage account 001
           - task: AzureResourceManagerTemplateDeployment@3
@@ -965,6 +1031,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Storage/params.external_storage001.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Generate Password
           - task: PowerShell@2
@@ -999,6 +1067,7 @@ stages:
               deploymentMode: "Incremental"
               overrideParameters: >
                 -administratorLoginPassword "$(password)"
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy sql database 001
           - task: AzureResourceManagerTemplateDeployment@3
@@ -1019,6 +1088,7 @@ stages:
               deploymentMode: "Incremental"
               overrideParameters: >
                 -sqlServerAdministratorLoginPassword "$(password)"
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Generate Password
           - task: PowerShell@2
@@ -1053,6 +1123,7 @@ stages:
           #     deploymentMode: 'Incremental'
           #     overrideParameters: >
           #       -administratorLoginPassword "$(password)"
+          #       -tags "${{ variables.AZURE_TAGS }}"
 
           # # Deploy sql database 002
           # - task: AzureResourceManagerTemplateDeployment@3
@@ -1074,6 +1145,7 @@ stages:
           #     deploymentOutputs: 'hivemetastoreDetails'
           #     overrideParameters: >
           #       -sqlServerAdministratorLoginPassword "$(password)"
+          #       -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy My SQL 001
           - task: AzureResourceManagerTemplateDeployment@3
@@ -1095,6 +1167,7 @@ stages:
               deploymentOutputs: "hivemetastoreDetails001"
               overrideParameters: >
                 -mySqlServerAdministratorLoginPassword "$(password)"
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Restart MySQL 001
           - task: AzureCLI@2
@@ -1130,6 +1203,8 @@ stages:
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Databricks/params.databricks001.json"
               deploymentMode: "Incremental"
               deploymentOutputs: "databricksDetails001"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # # Setup Databricks 001 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
           # - task: AzureCLI@2
@@ -1206,6 +1281,8 @@ stages:
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/Databricks/params.databricks002.json"
               deploymentMode: "Incremental"
               deploymentOutputs: "databricksDetails002"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # # Setup databricks 002 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
           # - task: AzureCLI@2
@@ -1281,6 +1358,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/EventHub/deploy.eventHub.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/EventHub/params.eventHub001.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy data factory 001
           - task: AzureResourceManagerTemplateDeployment@3
@@ -1299,6 +1378,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/DataFactory/deploy.dataFactory.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/DataFactory/params.dataFactory001.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy Data Factory 002
           - task: AzureResourceManagerTemplateDeployment@3
@@ -1317,6 +1398,8 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/DataFactory/deploy.dataFactory.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/DataFactory/params.dataFactory002.json"
               deploymentMode: "Incremental"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Deploy Artifact Storage Account 001
           - task: AzureResourceManagerTemplateDeployment@3
@@ -1336,6 +1419,8 @@ stages:
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/params.storage001.json"
               deploymentMode: "Incremental"
               deploymentOutputs: "storageDetails"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Upload File to Storage Account 001
           - task: AzurePowerShell@4
@@ -1390,6 +1475,7 @@ stages:
               deploymentMode: "Incremental"
               overrideParameters: >
                 -vmssAdminPassword "$(password)"
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # # Generate Password
           # - task: PowerShell@2
@@ -1424,6 +1510,7 @@ stages:
           #     deploymentMode: 'Incremental'
           #     overrideParameters: >
           #       -vmssAdminPassword "$(password)"
+          #       -tags "${{ variables.AZURE_TAGS }}"
           #       -shirAuthKey "$(shirAuthKey)"
 
           # Generate Password
@@ -1459,6 +1546,7 @@ stages:
               deploymentMode: "Incremental"
               overrideParameters: >
                 -synapseSqlAdministratorPassword "$(password)"
+                -tags "${{ variables.AZURE_TAGS }}"
 
           # Share Self Hosted Integration Runtime 001
           - task: AzureResourceManagerTemplateDeployment@3

@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -126,6 +125,13 @@
             "metadata": {
                 "description": "Specifies the ID of the private dns zone for data factory portal."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -164,6 +170,7 @@
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneIdDataFactory": "[parameters('privateDnsZoneIdDataFactory')]",
         "privateDnsZoneIdPortal": "[parameters('privateDnsZoneIdPortal')]",
+        "tags": "[parameters('tags')]",
         "privateEndpointNameDataFactory": "[concat(variables('dataFactoryName'), '-datafactory-private-endpoint')]",
         "privateEndpointNamePortal": "[concat(variables('dataFactoryName'), '-portal-private-endpoint')]"
     },
@@ -172,6 +179,7 @@
             "type": "Microsoft.DataFactory/factories",
             "apiVersion": "2018-06-01",
             "name": "[variables('dataFactoryName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "identity": {
                 "type": "SystemAssigned"
@@ -598,6 +606,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointNameDataFactory')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
             ],
@@ -644,6 +653,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointNamePortal')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
             ],
