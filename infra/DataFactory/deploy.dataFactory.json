@@ -312,57 +312,57 @@
                         }
                     }
                 },
-                // {
-                //     "condition": "[not(empty(variables('databricksWorkspaceId')))]",
-                //     "type": "linkedservices",
-                //     "apiVersion": "2018-06-01",
-                //     "name": "[replace(variables('databricksWorkspaceName'), '-', '')]",
-                //     "dependsOn": [
-                //         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
-                //         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
-                //         "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
-                //         "[resourceId('Microsoft.Resources/deployments', take(concat(variables('dataFactoryName'), '-Databricks-RoleAssignment'), 64))]"
-                //     ],
-                //     "properties": {
-                //         "type": "AzureDatabricks",
-                //         "annotations": [],
-                //         "additionalProperties": {},
-                //         "connectVia": {
-                //             "type": "IntegrationRuntimeReference",
-                //             "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
-                //         },
-                //         "description": "Azure Databricks - ingestion",
-                //         "parameters": {
-                //             "DatabricksClusterType": {
-                //                 "type": "String",
-                //                 "defaultValue": "Standard_DS3_v2"
-                //             },
-                //             "DatabricksAutoscale": {
-                //                 "type": "String",
-                //                 "defaultValue": "1:15"
-                //             },
-                //             "DatabrickClusterVersion": {
-                //                 "type": "String",
-                //                 "defaultValue": "7.3.x-scala2.12"
-                //             }
-                //         },
-                //         "typeProperties": {
-                //             "domain": "[if(empty(variables('databricksWorkspaceId')), 'https://adb-0000000000000000.0.azuredatabricks.net', concat('https://', reference(resourceId(variables('databricksWorkspaceSubscriptionId'), variables('databricksWorkspaceResourceGroupName'), 'Microsoft.Databricks/workspaces', variables('databricksWorkspaceName')), '2018-04-01').workspaceUrl))]",
-                //             "authentication": "MSI",
-                //             "workspaceResourceId": "[variables('databricksWorkspaceId')]",
-                //             "newClusterNodeType": "@linkedService().DatabricksClusterType",
-                //             "newClusterNumOfWorker": "@linkedService().DatabricksAutoscale",
-                //             "newClusterSparkEnvVars": {
-                //                 "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
-                //             },
-                //             "newClusterCustomTags": {
-                //                 "costCenter": "AAAAA-12345"
-                //             },
-                //             "newClusterVersion": "@linkedService().DatabrickClusterVersion",
-                //             "newClusterDriverNodeType": "@linkedService().DatabricksClusterType"
-                //         }
-                //     }
-                // },
+                {
+                    "condition": "[not(empty(variables('databricksWorkspaceId')))]",
+                    "type": "linkedservices",
+                    "apiVersion": "2018-06-01",
+                    "name": "[replace(variables('databricksWorkspaceName'), '-', '')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
+                        "[resourceId('Microsoft.Resources/deployments', take(concat(variables('dataFactoryName'), '-Databricks-RoleAssignment'), 64))]"
+                    ],
+                    "properties": {
+                        "type": "AzureDatabricks",
+                        "annotations": [],
+                        "additionalProperties": {},
+                        "connectVia": {
+                            "type": "IntegrationRuntimeReference",
+                            "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
+                        },
+                        "description": "Azure Databricks - ingestion",
+                        "parameters": {
+                            "DatabricksClusterType": {
+                                "type": "String",
+                                "defaultValue": "Standard_DS3_v2"
+                            },
+                            "DatabricksAutoscale": {
+                                "type": "String",
+                                "defaultValue": "1:15"
+                            },
+                            "DatabrickClusterVersion": {
+                                "type": "String",
+                                "defaultValue": "7.3.x-scala2.12"
+                            }
+                        },
+                        "typeProperties": {
+                            "domain": "[if(empty(variables('databricksWorkspaceId')), 'https://adb-0000000000000000.0.azuredatabricks.net', concat('https://', reference(resourceId(variables('databricksWorkspaceSubscriptionId'), variables('databricksWorkspaceResourceGroupName'), 'Microsoft.Databricks/workspaces', variables('databricksWorkspaceName')), '2018-04-01').workspaceUrl))]",
+                            "authentication": "MSI",
+                            "workspaceResourceId": "[variables('databricksWorkspaceId')]",
+                            "newClusterNodeType": "@linkedService().DatabricksClusterType",
+                            "newClusterNumOfWorker": "@linkedService().DatabricksAutoscale",
+                            "newClusterSparkEnvVars": {
+                                "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                            },
+                            "newClusterCustomTags": {
+                                "costCenter": "AAAAA-12345"
+                            },
+                            "newClusterVersion": "@linkedService().DatabrickClusterVersion",
+                            "newClusterDriverNodeType": "@linkedService().DatabricksClusterType"
+                        }
+                    }
+                },
                 {
                     "condition": "[not(empty(variables('rawStorageAccountId')))]",
                     "type": "managedVirtualNetworks/managedPrivateEndpoints",
@@ -378,33 +378,33 @@
                         "groupId": "dfs"
                     }
                 },
-                // {
-                //     "condition": "[not(empty(variables('rawStorageAccountId')))]",
-                //     "type": "linkedservices",
-                //     "apiVersion": "2018-06-01",
-                //     "name": "[replace(variables('rawStorageAccountName'), '-', '')]",
-                //     "dependsOn": [
-                //         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
-                //         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
-                //         "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
-                //         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('rawStorageAccountName'), '-', ''))]",
-                //         "[resourceId('Microsoft.Resources/deployments', take(concat(variables('dataFactoryName'), '-RawStorageAccount-RoleAssignment'), 64))]"
-                //     ],
-                //     "properties": {
-                //         "type": "AzureBlobFS",
-                //         "annotations": [],
-                //         "additionalProperties": {},
-                //         "connectVia": {
-                //             "type": "IntegrationRuntimeReference",
-                //             "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
-                //         },
-                //         "description": "Raw Storage Account for Metadata driven Copy",
-                //         "parameters": {},
-                //         "typeProperties": {
-                //             "url": "[concat('https://', variables('rawStorageAccountName'), '.dfs.core.windows.net')]"
-                //         }
-                //     }
-                // },
+                {
+                    "condition": "[not(empty(variables('rawStorageAccountId')))]",
+                    "type": "linkedservices",
+                    "apiVersion": "2018-06-01",
+                    "name": "[replace(variables('rawStorageAccountName'), '-', '')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('rawStorageAccountName'), '-', ''))]",
+                        "[take(concat(variables('dataFactoryName'), '-RawStorageAccount-RoleAssignment'), 64)]"
+                    ],
+                    "properties": {
+                        "type": "AzureBlobFS",
+                        "annotations": [],
+                        "additionalProperties": {},
+                        "connectVia": {
+                            "type": "IntegrationRuntimeReference",
+                            "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
+                        },
+                        "description": "Raw Storage Account for Metadata driven Copy",
+                        "parameters": {},
+                        "typeProperties": {
+                            "url": "[concat('https://', variables('rawStorageAccountName'), '.dfs.core.windows.net')]"
+                        }
+                    }
+                },
                 {
                     "condition": "[not(empty(variables('encurStorageAccountId')))]",
                     "type": "managedVirtualNetworks/managedPrivateEndpoints",
@@ -419,176 +419,181 @@
                         "privateLinkResourceId": "[variables('encurStorageAccountId')]",
                         "groupId": "dfs"
                     }
+                },
+                {
+                    "condition": "[not(empty(variables('encurStorageAccountId')))]",
+                    "type": "linkedservices",
+                    "apiVersion": "2018-06-01",
+                    "name": "[replace(variables('encurStorageAccountName'), '-', '')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('encurStorageAccountName'), '-', ''))]",
+                        "[take(concat(variables('dataFactoryName'), '-EnrichedStorageAccount-RoleAssignment'), 64)]",
+                        "[take(concat(variables('dataFactoryName'), '-CuratedStorageAccount-RoleAssignment'), 64)]"
+                    ],
+                    "properties": {
+                        "type": "AzureBlobFS",
+                        "annotations": [],
+                        "additionalProperties": {},
+                        "connectVia": {
+                            "type": "IntegrationRuntimeReference",
+                            "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
+                        },
+                        "description": "Enriched and Curated Storage Account for Metadata driven Copy",
+                        "parameters": {},
+                        "typeProperties": {
+                            "url": "[concat('https://', variables('encurStorageAccountName'), '.dfs.core.windows.net')]"
+                        }
+                    }
                 }
-                // {
-                //     "condition": "[not(empty(variables('encurStorageAccountId')))]",
-                //     "type": "linkedservices",
-                //     "apiVersion": "2018-06-01",
-                //     "name": "[replace(variables('encurStorageAccountName'), '-', '')]",
-                //     "dependsOn": [
-                //         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
-                //         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', variables('dataFactoryName'), 'default')]",
-                //         "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('defaultManagedVnetIntegrationRuntimeName'))]",
-                //         "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints',  variables('dataFactoryName'), 'default', replace(variables('encurStorageAccountName'), '-', ''))]",
-                //         "[resourceId('Microsoft.Resources/deployments', take(concat(variables('dataFactoryName'), '-EncurStorageAccount-RoleAssignment'), 64))]"
-                //     ],
-                //     "properties": {
-                //         "type": "AzureBlobFS",
-                //         "annotations": [],
-                //         "additionalProperties": {},
-                //         "connectVia": {
-                //             "type": "IntegrationRuntimeReference",
-                //             "referenceName": "[variables('defaultManagedVnetIntegrationRuntimeName')]"
-                //         },
-                //         "description": "Enriched and Curated Storage Account for Metadata driven Copy",
-                //         "parameters": {},
-                //         "typeProperties": {
-                //             "url": "[concat('https://', variables('encurStorageAccountName'), '.dfs.core.windows.net')]"
-                //         }
-                //     }
-                // }
             ]
         },
-        // {
-        //     "condition": "[not(empty(variables('databricksWorkspaceId')))]",
-        //     "type": "Microsoft.Resources/deployments",
-        //     "apiVersion": "2019-10-01",
-        //     "name": "[take(concat(variables('dataFactoryName'), '-Databricks-RoleAssignment'), 64)]",
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
-        //     ],
-        //     "properties": {
-        //         "expressionEvaluationOptions": {
-        //             "scope": "outer"
-        //         },
-        //         "mode": "Incremental",
-        //         "template": {
-        //             "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-        //             "contentVersion": "1.0.0.0",
-        //             "parameters": {},
-        //             "variables": {},
-        //             "resources": [
-        //                 {
-        //                     "type": "Microsoft.Databricks/workspaces/providers/roleAssignments",
-        //                     "apiVersion": "2018-09-01-preview",
-        //                     "name": "[concat(variables('databricksWorkspaceName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('databricksWorkspaceId'), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id))))]",
-        //                     "properties": {
-        //                         "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
-        //                         "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
-        //                     }
-        //                 }
-        //             ],
-        //             "outputs": {}
-        //         }
-        //     },
-        //     "subscriptionId": "[variables('databricksWorkspaceSubscriptionId')]",
-        //     "resourceGroup": "[variables('databricksWorkspaceResourceGroupName')]"
-        // },
-        // {
-        //     "condition": "[not(empty(variables('rawStorageAccountId')))]",
-        //     "type": "Microsoft.Resources/deployments",
-        //     "apiVersion": "2019-10-01",
-        //     "name": "[take(concat(variables('dataFactoryName'), '-RawStorageAccount-RoleAssignment'), 64)]",
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
-        //     ],
-        //     "properties": {
-        //         "expressionEvaluationOptions": {
-        //             "scope": "outer"
-        //         },
-        //         "mode": "Incremental",
-        //         "template": {
-        //             "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-        //             "contentVersion": "1.0.0.0",
-        //             "parameters": {},
-        //             "variables": {},
-        //             "resources": [
-        //                 {
-        //                     "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
-        //                     "apiVersion": "2018-09-01-preview",
-        //                     "name": "[concat(variables('rawStorageAccountName'), '/default/', variables('rawStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('rawStorageAccountName'), 'default', variables('rawStorageAccountFileSystemName')), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id))))]",
-        //                     "properties": {
-        //                         "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
-        //                         "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
-        //                     }
-        //                 }
-        //             ],
-        //             "outputs": {}
-        //         }
-        //     },
-        //     "subscriptionId": "[variables('rawStorageAccountSubscriptionId')]",
-        //     "resourceGroup": "[variables('rawStorageAccountResourceGroupName')]"
-        // },
-        // {
-        //     "condition": "[not(empty(variables('encurStorageAccountId')))]",
-        //     "type": "Microsoft.Resources/deployments",
-        //     "apiVersion": "2019-10-01",
-        //     "name": "[take(concat(variables('dataFactoryName'), '-EnrichedStorageAccount-RoleAssignment'), 64)]",
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
-        //     ],
-        //     "properties": {
-        //         "expressionEvaluationOptions": {
-        //             "scope": "outer"
-        //         },
-        //         "mode": "Incremental",
-        //         "template": {
-        //             "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-        //             "contentVersion": "1.0.0.0",
-        //             "parameters": {},
-        //             "variables": {},
-        //             "resources": [
-        //                 {
-        //                     "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
-        //                     "apiVersion": "2018-09-01-preview",
-        //                     "name": "[concat(variables('encurStorageAccountName'), '/default/', variables('enrichedStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('encurStorageAccountName'), 'default', variables('enrichedStorageAccountFileSystemName')), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id))))]",
-        //                     "properties": {
-        //                         "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
-        //                         "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
-        //                     }
-        //                 }
-        //             ],
-        //             "outputs": {}
-        //         }
-        //     },
-        //     "subscriptionId": "[variables('encurStorageAccountSubscriptionId')]",
-        //     "resourceGroup": "[variables('encurStorageAccountResourceGroupName')]"
-        // },
-        // {
-        //     "condition": "[not(empty(variables('encurStorageAccountId')))]",
-        //     "type": "Microsoft.Resources/deployments",
-        //     "apiVersion": "2019-10-01",
-        //     "name": "[take(concat(variables('dataFactoryName'), '-CuratedStorageAccount-RoleAssignment'), 64)]",
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
-        //     ],
-        //     "properties": {
-        //         "expressionEvaluationOptions": {
-        //             "scope": "outer"
-        //         },
-        //         "mode": "Incremental",
-        //         "template": {
-        //             "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-        //             "contentVersion": "1.0.0.0",
-        //             "parameters": {},
-        //             "variables": {},
-        //             "resources": [
-        //                 {
-        //                     "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
-        //                     "apiVersion": "2018-09-01-preview",
-        //                     "name": "[concat(variables('encurStorageAccountName'), '/default/', variables('curatedStorageAccountFileSystemName'), '/Microsoft.Authorization/', guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('encurStorageAccountName'), 'default', variables('curatedStorageAccountFileSystemName')), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id))))]",
-        //                     "properties": {
-        //                         "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
-        //                         "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
-        //                     }
-        //                 }
-        //             ],
-        //             "outputs": {}
-        //         }
-        //     },
-        //     "subscriptionId": "[variables('encurStorageAccountSubscriptionId')]",
-        //     "resourceGroup": "[variables('encurStorageAccountResourceGroupName')]"
-        // },
+        {
+            "condition": "[not(empty(variables('databricksWorkspaceId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "[take(concat(variables('dataFactoryName'), '-Databricks-RoleAssignment'), 64)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+            ],
+            "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Authorization/roleAssignments",
+                            "apiVersion": "2021-04-01-preview",
+                            "name": "[guid(uniqueString(concat(variables('databricksWorkspaceId'), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id)))]",
+                            "scope": "[format('Microsoft.Databricks/workspaces/{0}', variables('databricksWorkspaceName'))]",
+                            "properties": {
+                                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                                "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            },
+            "subscriptionId": "[variables('databricksWorkspaceSubscriptionId')]",
+            "resourceGroup": "[variables('databricksWorkspaceResourceGroupName')]"
+        },
+        {
+            "condition": "[not(empty(variables('rawStorageAccountId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "[take(concat(variables('dataFactoryName'), '-RawStorageAccount-RoleAssignment'), 64)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+            ],
+            "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Authorization/roleAssignments",
+                            "apiVersion": "2021-04-01-preview",
+                            "name": "[guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('rawStorageAccountName'), 'default', variables('rawStorageAccountFileSystemName')), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id)))]",
+                            "scope": "[format('Microsoft.Storage/storageAccounts/{0}/blobServices/default/containers/{1}', variables('rawStorageAccountName'), variables('rawStorageAccountFileSystemName'))]",
+                            "properties": {
+                                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+                                "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            },
+            "subscriptionId": "[variables('rawStorageAccountSubscriptionId')]",
+            "resourceGroup": "[variables('rawStorageAccountResourceGroupName')]"
+        },
+        {
+            "condition": "[not(empty(variables('encurStorageAccountId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "[take(concat(variables('dataFactoryName'), '-EnrichedStorageAccount-RoleAssignment'), 64)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+            ],
+            "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Authorization/roleAssignments",
+                            "apiVersion": "2021-04-01-preview",
+                            "name": "[guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('encurStorageAccountName'), 'default', variables('enrichedStorageAccountFileSystemName')), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id)))]",
+                            "scope": "[format('Microsoft.Storage/storageAccounts/{0}/blobServices/default/containers/{1}', variables('encurStorageAccountName'), variables('enrichedStorageAccountFileSystemName'))]",
+                            "properties": {
+                                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+                                "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            },
+            "subscriptionId": "[variables('encurStorageAccountSubscriptionId')]",
+            "resourceGroup": "[variables('encurStorageAccountResourceGroupName')]"
+        },
+        {
+            "condition": "[not(empty(variables('encurStorageAccountId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "[take(concat(variables('dataFactoryName'), '-CuratedStorageAccount-RoleAssignment'), 64)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+            ],
+            "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Authorization/roleAssignments",
+                            "apiVersion": "2021-04-01-preview",
+                            "name": "[guid(uniqueString(concat(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('encurStorageAccountName'), 'default', variables('curatedStorageAccountFileSystemName')), resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), resourceGroup().id)))]",
+                            "scope": "[format('Microsoft.Storage/storageAccounts/{0}/blobServices/default/containers/{1}', variables('encurStorageAccountName'), variables('curatedStorageAccountFileSystemName'))]",
+                            "properties": {
+                                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+                                "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName')), '2018-06-01', 'Full').identity.principalId]"
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            },
+            "subscriptionId": "[variables('encurStorageAccountSubscriptionId')]",
+            "resourceGroup": "[variables('encurStorageAccountResourceGroupName')]"
+        },
         {
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",

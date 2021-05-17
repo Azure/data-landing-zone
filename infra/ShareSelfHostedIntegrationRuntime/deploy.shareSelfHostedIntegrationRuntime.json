@@ -46,11 +46,12 @@
                     "variables": {},
                     "resources": [
                         {
-                            "type": "Microsoft.DataFactory/factories/providers/roleAssignments",
-                            "apiVersion": "2018-09-01-preview",
-                            "name": "[concat(variables('sourceDataFactoryName'), '/Microsoft.Authorization/', guid(uniqueString(concat(variables('sourceDataFactoryId'), variables('destinationDataFactoryId'), resourceGroup().id))))]",
+                            "type": "Microsoft.Authorization/roleAssignments",
+                            "apiVersion": "2021-04-01-preview",
+                            "name": "[guid(uniqueString(concat(variables('sourceDataFactoryId'), variables('destinationDataFactoryId'), resourceGroup().id)))]",
+                            "scope": "[format('Microsoft.DataFactory/factories/{0}', variables('sourceDataFactoryName'))]",
                             "properties": {
-                                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                                 "principalId": "[reference(variables('destinationDataFactoryId'), '2018-06-01', 'Full').identity.principalId]"
                             }
                         }

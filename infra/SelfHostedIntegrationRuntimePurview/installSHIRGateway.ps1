@@ -176,5 +176,4 @@ Trace-Log "Gateway download location: $gwPath"
 
 Download-Gateway $uri $gwPath
 Install-Gateway $gwPath
-
 Register-Gateway $gatewayKey
