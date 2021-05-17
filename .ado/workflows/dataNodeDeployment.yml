@@ -62,8 +62,46 @@ variables:
   AZURE_TAGS: '{"CostCenter": "ABCDE-12345", "Owner": "EnterpriseScaleAnalytics"}'
 
 stages:
+  - stage: CreateResourceGroups
+    displayName: "Create Resource Groups"
+    jobs:
+      - job: CreateResourceGroups
+        displayName: "Create Resource Groups"
+        continueOnError: false
+        pool:
+          vmImage: "ubuntu-latest"
+
+        steps:
+          # Checkout code
+          - checkout: self
+            name: checkout_repository
+            displayName: Checkout repository
+            submodules: true
+            lfs: false
+            clean: true
+            continueOnError: false
+            enabled: true
+
+          # Deploy Resource Groups
+          - task: AzureResourceManagerTemplateDeployment@3
+            name: resource_groups_deployment
+            displayName: Deploy Resource Groups
+            enabled: true
+            continueOnError: false
+            inputs:
+              deploymentScope: "Subscription"
+              azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+              subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+              location: ${{ variables.AZURE_LOCATION }}
+              templateLocation: "Linked artifact"
+              csmFile: "$(System.DefaultWorkingDirectory)/infra/ResourceGroups/deploy.resourceGroups.json"
+              csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/ResourceGroups/params.resourceGroups001.json"
+              overrideParameters: >
+                -tags "${{ variables.AZURE_TAGS }}"
+
   - stage: Validation
     displayName: "Validation of ARM templates"
+    dependsOn: CreateResourceGroups
     jobs:
       - job: Validation
         displayName: "Validation of ARM templates"

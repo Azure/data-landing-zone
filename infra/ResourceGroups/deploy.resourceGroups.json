@@ -1,0 +1,116 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "dataNodeName": {
+            "type": "string",
+            "defaultValue": "dh",
+            "metadata": {
+                "description": "Specifies the name of the data node."
+            }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[parameters('location')]",
+        "dataNodeName": "[parameters('dataNodeName')]",
+        "tags": "[parameters('tags')]",
+        "vnetResourceGroupName": "[concat(variables('dataNodeName'), '-network')]",
+        "managementResourceGroupName": "[concat(variables('dataNodeName'), '-mgmt')]",
+        "integrationResourceGroupName": "[concat(variables('dataNodeName'), '-integration')]",
+        "storageResourceGroupName": "[concat(variables('dataNodeName'), '-storage')]",
+        "secretStorageResourceGroupName": "[concat(variables('dataNodeName'), '-secretstorage')]",
+        "externalStorageResourceGroupName": "[concat(variables('dataNodeName'), '-externalstorage')]",
+        "metadataResourceGroupName": "[concat(variables('dataNodeName'), '-metadata')]",
+        "processingDomainResourceGroupName": "[concat(variables('dataNodeName'), '-shared-domain')]",
+        "processingProductResourceGroupName": "[concat(variables('dataNodeName'), '-shared-product')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('vnetResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('managementResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('integrationResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('storageResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('secretStorageResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('externalStorageResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('metadataResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('processingDomainResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('processingProductResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        }
+    ],
+    "outputs": {}
+}

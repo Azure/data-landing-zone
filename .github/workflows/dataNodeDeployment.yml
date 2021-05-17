@@ -61,6 +61,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check Out Repository
+        id: checkout_repository
+        uses: actions/checkout@v2
+
       # Login to Azure
       - name: Azure Login
         id: azure_login
@@ -68,105 +73,16 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_network
-        uses: azure/cli@v1
+      # Deploy Resource Groups
+      - name: Deploy Resource Groups
+        id: resource_groups_deployment
+        uses: azure/arm-deploy@v1
         with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_management
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_integration
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_logging
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_LOGGING }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_LOGGING }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_storage
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_STORAGE }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_secretstorage
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_SECRETSTORAGE }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_externalstorage
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_EXTERNALSTORAGE }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_metadata
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_METADATA }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_processing_domain
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGDOMAIN }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_processing_product
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_PROCESSINGPRODUCT }}
+          scope: subscription
+          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          region: ${{ env.AZURE_LOCATION }}
+          template: ${{ github.workspace }}/infra/ResourceGroups/deploy.resourceGroups.json
+          parameters: ${{ github.workspace }}/infra/ResourceGroups/params.resourceGroups001.json
 
       # Log out from Azure
       - name: Log out from Azure
