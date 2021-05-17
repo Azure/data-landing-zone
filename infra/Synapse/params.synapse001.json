@@ -18,7 +18,7 @@
             "value": "SqlServerMainUser"
         },
         "synapseSqlAdministratorPassword": {
-            "value": "Qwertz12345!"
+            "value": "<your-secure-password>"
         },
         "synapseDatalakeAnalyticsResourceId": {
             "value": ""
