@@ -6,6 +6,8 @@
     Skip = @(
         'Template Should Not Contain Blanks',
         'DeploymentTemplate Must Not Contain Hardcoded Uri'
-        'DependsOn Best Practices'
+        'DependsOn Best Practices',
+        'Outputs Must Not Contain Secrets',
+        'IDs Should Be Derived From ResourceIDs'
     )
 }

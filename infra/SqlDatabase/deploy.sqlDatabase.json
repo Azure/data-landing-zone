@@ -73,8 +73,9 @@
         },
         "sqlDatabaseReadReplicaCount": {
             "type": "int",
-            "defaultValue": 0,
             "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
             "metadata": {
                 "description": "Specifies the number of readonly secondary replicas associated with the database."
             }
@@ -100,8 +101,9 @@
         },
         "sqlDatabaseAutoPauseDelay": {
             "type": "int",
-            "defaultValue": -1,
             "minValue": -1,
+            "maxValue": 10080,
+            "defaultValue": -1,
             "metadata": {
                 "description": "Specifies the time in minutes after which database is automatically paused (only applies to serverless tier)."
             }

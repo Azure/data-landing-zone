@@ -5,7 +5,7 @@
         "location": {
             "value": "northeurope"
         },
-        "dataHubName": {
+        "dataNodeName": {
             "value": "dn001"
         },
         "tags": {

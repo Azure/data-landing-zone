@@ -79,10 +79,7 @@ function Get-AadToken {
         $response = Invoke-RestMethod @parameters
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to get AAD Token failed"
         throw "REST API call failed"
     }
 
@@ -209,10 +206,7 @@ function New-DatabricksEnterpriseApplication {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to register Databricks Enterprise Application failed"
         throw "REST API call failed"
     }
 
@@ -269,7 +263,7 @@ function Get-SynchronisationTemplate {
         'Content-Type'  = 'application/json'
         'Authorization' = "Bearer ${Global:accessToken}"
     }
-    
+
     # Define parameters for REST method
     Write-Verbose "Defining parameters for pscore method"
     $parameters = @{
@@ -286,10 +280,7 @@ function Get-SynchronisationTemplate {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to get synchronisation template failed"
         throw "REST API call failed"
     }
     return $response
@@ -361,10 +352,7 @@ function New-SynchronisationJob {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to create new synchronisation job failed"
         throw "REST API call failed"
     }
 
@@ -379,13 +367,13 @@ function New-SynchronisationJob {
 }
 
 
-function Test-Connection {
+function Test-DatabricksConnection {
     <#
     .SYNOPSIS
         Test the connection between the Databricks workspace and the application.
 
     .DESCRIPTION
-        Test-Connection tests whether the connection between Databricks and the enterprise application can
+        Test-DatabricksConnection tests whether the connection between Databricks and the enterprise application can
         be successfully established with the provided parameters.
 
     .PARAMETER ObjectId
@@ -404,7 +392,7 @@ function Test-Connection {
         Function expects a Databricks PAT token from the workspace.
 
     .EXAMPLE
-        Test-Connection -ObjectId '<your-service-principal-object-id>' -JobId '<your-synchronisation-job-id>' -DatabricksInstanceName '<your-databricks-instance-name>' -DatabricksPatToken '<your-databricks-pat-token>'
+        Test-DatabricksConnection -ObjectId '<your-service-principal-object-id>' -JobId '<your-synchronisation-job-id>' -DatabricksInstanceName '<your-databricks-instance-name>' -DatabricksPatToken '<your-databricks-pat-token>'
 
     .NOTES
         Author:  Marvin Buss
@@ -481,10 +469,7 @@ function Test-Connection {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to test connection failed"
         throw "REST API call failed"
     }
     return $response
@@ -601,10 +586,7 @@ function Save-ProvisioningCredentials {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to save provisioning credentials failed"
         throw "REST API call failed"
     }
     return $response
@@ -628,7 +610,7 @@ function New-GroupAssignment {
         Function expects a group object id which is granted access to the Databricks workspace via SCIM.
 
     .EXAMPLE
-        Test-Connection -ObjectId '<your-service-principal-object-id>' -GroupId '<your-group-id>'
+        New-GroupAssignment -ObjectId '<your-service-principal-object-id>' -GroupId '<your-group-id>'
 
     .NOTES
         Author:  Marvin Buss
@@ -686,10 +668,7 @@ function New-GroupAssignment {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to create new group assignment failed"
         throw "REST API call failed"
     }
     return $response
@@ -762,10 +741,7 @@ function Start-SynchronisationJob {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to start synchronisation job failed"
         throw "REST API call failed"
     }
     return $response
@@ -840,10 +816,7 @@ function Get-ProvisioningAuditLogs {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to get provisioning logs failed"
         throw "REST API call failed"
     }
     return $response
@@ -917,7 +890,7 @@ function New-ScimSetup {
     Write-Verbose "Instantiating Databricks Enterprise Application"
     $objectId = New-DatabricksEnterpriseApplication `
         -DatabricksWorkspaceName $databricksWorkspaceName
-    
+
     # Sleep for 5 Seconds
     Write-Verbose "Sleeping for 5 seconds"
     Start-Sleep -Seconds 5
@@ -926,20 +899,20 @@ function New-ScimSetup {
     Write-Verbose "Getting Synchronization Template"
     Get-SynchronisationTemplate `
         -ObjectId $objectId
-    
+
     # Create Synchronization Job
     Write-Verbose "Creating Synchronization Job"
     $jobId = New-SynchronisationJob `
         -ObjectId $objectId
-    
+
     # Test Connection to Databricks Workspace
     Write-Verbose "Testing Connection to Databricks Workspace"
-    Test-Connection `
+    Test-DatabricksConnection `
         -ObjectId $objectId `
         -JobId $jobId `
         -DatabricksInstanceName $DatabricksInstanceName `
         -DatabricksPatToken $DatabricksPatToken
-    
+
     # Save Provisioning Credentials for Enterprise Application
     Write-Verbose "Saving Provisioning Credentials for Enterprise Application"
     Save-ProvisioningCredentials `
@@ -947,7 +920,7 @@ function New-ScimSetup {
         -DatabricksInstanceName $DatabricksInstanceName `
         -DatabricksPatToken $DatabricksPatToken `
         -NotificationEmail $NotificationEmail
-    
+
     # Add Group Assignment
     Write-Verbose "Adding Group Assignment"
     foreach ($groupId in $GroupIdList) {
@@ -955,21 +928,21 @@ function New-ScimSetup {
             -ObjectId $objectId `
             -GroupId $groupId
     }
-    
+
     # Start Synchronisation Job
     Write-Verbose "Starting Synchronisation Job"
     Start-SynchronisationJob `
         -ObjectId $objectId `
         -JobId $jobId
-    
+
     # Get Provisioning Logs
-    Write-Host "Getting Provisioning Logs"
+    Write-Output "Getting Provisioning Logs"
     $provisioningLogs = Get-ProvisioningAuditLogs `
         -ObjectId $objectId `
         -JobId $jobId
-    
-    Write-Host "Provisioning Logs: ${provisioningLogs}"
-    
+
+    Write-Output "Provisioning Logs: ${provisioningLogs}"
+
     return $objectId, $jobId
 }
 
@@ -1020,7 +993,7 @@ function New-GroupListAssignment {
     # Validate authentication
     Write-Verbose "Validating authentication"
     Assert-Authentication
-    
+
     # Add Group Assignment
     Write-Verbose "Adding Group Assignment"
     foreach ($groupId in $GroupIdList) {
@@ -1028,12 +1001,12 @@ function New-GroupListAssignment {
             -ObjectId $ObjectId `
             -GroupId $groupId
     }
-    
+
     # Start Synchronisation Job
     Write-Verbose "Starting Synchronisation Job"
     Start-SynchronisationJob `
         -ObjectId $objectId `
         -JobId $jobId
-    
+
     return $objectId, $jobId
 }

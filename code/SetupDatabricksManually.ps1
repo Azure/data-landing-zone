@@ -102,12 +102,12 @@ Install-Module -Name DatabricksPS
 Update-Module -Name DatabricksPS
 
 # Define Credentials
-Write-Host "Defining credentials"
+Write-Output "Defining credentials"
 $secureUserPassword = ConvertTo-SecureString $UserPassword -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ($UserEmail, $secureUserPassword)
 
 # Login to Databricks Workspace
-Write-Host "Logging in to Databricks"
+Write-Output "Logging in to Databricks"
 Set-DatabricksEnvironment -TenantID $TenantId -ClientID $ClientId -Credential $cred -AzureResourceID $DatabricksWorkspaceId -ApiRootUrl $DatabricksApiUrl
 
 
@@ -116,26 +116,26 @@ Set-DatabricksEnvironment -TenantID $TenantId -ClientID $ClientId -Credential $c
 # *****************************************************************************
 
 # Create Databricks Hive Secret Scope
-Write-Host "Creating Databricks Hive Secret Scope"
+Write-Output "Creating Databricks Hive Secret Scope"
 $hiveSecretScopeName = "hiveSecretScope"
 try {
-    Write-Host "Adding secret scope"
+    Write-Output "Adding secret scope"
     Add-DatabricksSecretScope -ScopeName $hiveSecretScopeName -AzureKeyVaultResourceID $HiveKeyVaultId
 }
 catch {
-    Write-Host "Secret Scope already exists"
+    Write-Output "Secret Scope already exists"
 }
 Add-DatabricksSecretScopeACL -ScopeName $hiveSecretScopeName -Principal "users" -Permission Read
 
 # Create Databricks Log Analytics Secret Scope
-Write-Host "Creating Databricks Log Analytics Secret Scope"
+Write-Output "Creating Databricks Log Analytics Secret Scope"
 $logAnalyticsSecretScopeName = "logAnalyticsSecretScope"
 try {
-    Write-Host "Adding secret scope"
+    Write-Output "Adding secret scope"
     Add-DatabricksSecretScope -ScopeName $logAnalyticsSecretScopeName -AzureKeyVaultResourceID $LogAnalyticsKeyVaultId
 }
 catch {
-    Write-Host "Secret Scope already exists"
+    Write-Output "Secret Scope already exists"
 }
 Add-DatabricksSecretScopeACL -ScopeName $logAnalyticsSecretScopeName -Principal "users" -Permission Read
 
@@ -145,12 +145,12 @@ Add-DatabricksSecretScopeACL -ScopeName $logAnalyticsSecretScopeName -Principal 
 # *****************************************************************************
 
 # Upload Workspace Configuration Notebook
-Write-Host "Uploading Workspace Configuration Notebook"
+Write-Output "Uploading Workspace Configuration Notebook"
 $notebookPath = "/ConfigureDatabricksWorkspace"
 Import-DatabricksWorkspaceItem -Path $notebookPath -Format SOURCE -Language SCALA -LocalPath "code/databricks/ConfigureDatabricksWorkspace.scala" -Overwrite $true
 
 # Execute Workspace Configuration Notebook as a Job
-Write-Host "Executing Workspace Configuration Notebook"
+Write-Output "Executing Workspace Configuration Notebook"
 $runName = "WorkspaceConfigurationExecution"
 $jobClusterDefinition = @{
     "spark_version" = "7.5.x-scala2.12"
@@ -165,24 +165,24 @@ $jobInfo = New-DatabricksJobRun -RunName $runName -NewClusterDefinition $jobClus
 
 # Monitor the job status and wait for completion
 do {
-    Write-Host -NoNewline "`r - Running .."
+    Write-Output -NoNewline "`r - Running .."
     Start-Sleep -Seconds 5
     $jobRunStatus = Get-DatabricksJobRun -JobRunID $jobInfo.run_id
 } while ($jobRunStatus.end_time -eq 0)
 
 # Check Job Result Status
-Write-Host "Checking Job Result Status"
+Write-Output "Checking Job Result Status"
 $jobResultStatus = $jobRunStatus.state.result_state
 if ($jobResultStatus -eq "SUCCESS") {
-    Write-Host "Job executed successfully with result status: '${jobResultStatus}'"
+    Write-Output "Job executed successfully with result status: '${jobResultStatus}'"
 }
 else {
-    Write-Host "Job did not succeed with result status: '${jobResultStatus}'"
+    Write-Output "Job did not succeed with result status: '${jobResultStatus}'"
     throw "Job did not succeed with result status: '${jobResultStatus}'"
 }
 
 # Remove Workspace Configuration Notebook
-Write-Host "Removing Workspace Configuration Notebook"
+Write-Output "Removing Workspace Configuration Notebook"
 Remove-DatabricksWorkspaceItem $notebookPath
 
 
@@ -191,7 +191,7 @@ Remove-DatabricksWorkspaceItem $notebookPath
 # *****************************************************************************
 
 # Update Spark Monitoring Shell Script
-Write-Host "Updating Spark Monitoring Init Script"
+Write-Output "Updating Spark Monitoring Init Script"
 $sparkMonitoringInitScriptContent = Get-Content -Path "code/databricks/applicationLogging/spark-monitoring.sh" -Encoding UTF8 -Raw
 $sparkMonitoringInitScriptContent = $sparkMonitoringInitScriptContent -Replace "AZ_SUBSCRIPTION_ID=", "AZ_SUBSCRIPTION_ID=${DatabricksSubscriptionId}"
 $sparkMonitoringInitScriptContent = $sparkMonitoringInitScriptContent -Replace "AZ_RSRC_GRP_NAME=", "AZ_RSRC_GRP_NAME=${DatabricksResourceGroupName}"
@@ -199,20 +199,20 @@ $sparkMonitoringInitScriptContent = $sparkMonitoringInitScriptContent -Replace "
 $sparkMonitoringInitScriptContent | Set-Content -Path "code/databricks/applicationLogging/spark-monitoring-updated.sh" -Encoding UTF8
 
 # Upload Spark Monitoring Shell Script
-Write-Host "Uploading Spark Monitoring Shell Script"
+Write-Output "Uploading Spark Monitoring Shell Script"
 Upload-DatabricksFSFile -Path "/databricks/spark-monitoring/spark-monitoring.sh" -LocalPath "code/databricks/applicationLogging/spark-monitoring-updated.sh" -Overwrite $true
 
 # Upload Hive Metastore Connection Shell Script
-Write-Host "Uploading Hive Metastore Connection Init Script"
+Write-Output "Uploading Hive Metastore Connection Init Script"
 $hiveGlobalInitScriptName = "external-metastore"
 $externalMetastoreInitScriptContent = Get-Content -Path "code/databricks/externalMetastore/external-metastore.sh" -Encoding UTF8 -Raw
 try {
-    Write-Host "Adding Databricks Global Init Script '${hiveGlobalInitScriptName}'"
+    Write-Output "Adding Databricks Global Init Script '${hiveGlobalInitScriptName}'"
     Add-DatabricksGlobalInitScript -Name $hiveGlobalInitScriptName -Script $externalMetastoreInitScriptContent -AsPlainText -Position 1 -Enabled $true
 }
 catch {
-    Write-Host "Global Init Script already exists"
-    Write-Host "Updating Databricks Global Init Script '${hiveGlobalInitScriptName}'"
+    Write-Output "Global Init Script already exists"
+    Write-Output "Updating Databricks Global Init Script '${hiveGlobalInitScriptName}'"
     $globalInitScripts = Get-DatabricksGlobalInitScript
     $globalInitScriptId = ""
     foreach ($globalInitScript in $globalInitScripts) {
@@ -243,7 +243,7 @@ function Update-DatabricksClusterPolicyValues {
     # Load Policy
     Write-Verbose "Loading Policies"
     $policy = Get-Content -Path $ContentPath -Raw | Out-String | ConvertFrom-Json
-    
+
     # Replace Values in Policy
     Write-Verbose "Replacing Values in Policy"
     foreach ($rv in $ReplacementValues.GetEnumerator()) {
@@ -264,7 +264,7 @@ function Set-DatabricksClusterPolicy {
         [Parameter(Mandatory = $true)]
         [string]
         $PolicyName,
-        
+
         [Parameter(Mandatory = $true)]
         [string]
         $PolicyJson
@@ -272,7 +272,7 @@ function Set-DatabricksClusterPolicy {
 
     try {
         Add-DatabricksClusterPolicy -PolicyName $PolicyName -Definition $PolicyJson
-        Write-Host " - Created new policy `"${PolicyName}`""
+        Write-Output " - Created new policy `"${PolicyName}`""
     }
     catch {
         $clusterPolicies = Get-DatabricksClusterPolicy
@@ -284,7 +284,7 @@ function Set-DatabricksClusterPolicy {
             }
         }
         Update-DatabricksClusterPolicy -PolicyID $policyId -PolicyName $PolicyName -Definition $PolicyJson
-        Write-Host " - Updated policy `"${PolicyName}`""
+        Write-Output " - Updated policy `"${PolicyName}`""
     }
 }
 
@@ -298,11 +298,11 @@ $policyValues = @{
 }
 
 # Load All-Purpose Policy
-Write-Host "Loading All-Purpose Policy"
+Write-Output "Loading All-Purpose Policy"
 $allPurposePolicy = Update-DatabricksClusterPolicyValues -ContentPath "code/databricks/policies/allPurposePolicy.json" -ReplacementValues $policyValues
 Set-DatabricksClusterPolicy -PolicyName "AllPurposeClusterPolicy" -PolicyJson $allPurposePolicy
 
 # Load Job Policy
-Write-Host "Loading Job Policy"
+Write-Output "Loading Job Policy"
 $jobPolicy = Update-DatabricksClusterPolicyValues -ContentPath "code/databricks/policies/jobPolicy.json" -ReplacementValues $policyValues
 Set-DatabricksClusterPolicy -PolicyName "JobClusterPolicy" -PolicyJson $jobPolicy

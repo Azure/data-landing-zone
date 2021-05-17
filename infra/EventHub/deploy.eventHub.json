@@ -86,7 +86,7 @@
     "resources": [
         {
             "type": "Microsoft.EventHub/namespaces",
-            "apiVersion": "2017-04-01",
+            "apiVersion": "2018-01-01-preview",
             "name": "[variables('eventHubName')]",
             "tags": "[variables('tags')]",
             "location": "[variables('location')]",
@@ -102,10 +102,11 @@
                 "zoneRedundant": true
             },
             "resources": [
-                // {
-                //     "name": "default",
+                // {  // Uncomment this to deploy an event hub in the event hub namespace
                 //     "type": "eventhubs",
-                //     "apiVersion": "2017-04-01",
+                //     "apiVersion": "2018-01-01-preview",
+                //     "name": "default",
+                //     "tags": "[variables('tags')]",
                 //     "properties": {
                 //         "messageRetentionInDays": 3,
                 //         "partitionCount": 1,
