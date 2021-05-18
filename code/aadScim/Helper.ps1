@@ -1,5 +1,5 @@
-$Global:accessToken = $null
-$Global:accessTokenExpiry = $null
+$accessToken = $null
+$accessTokenExpiry = $null
 
 function Get-AadToken {
     <#
@@ -121,13 +121,12 @@ function Assert-Authentication {
 
     # Check authentication
     Write-Verbose "Checking authentication"
-    if ([string]::IsNullOrEmpty($Global:accessToken) -or [string]::IsNullOrEmpty($Global:accessTokenExpiry)) {
+    if ([string]::IsNullOrEmpty($accessToken) -or [string]::IsNullOrEmpty($accessTokenExpiry)) {
         # Not authenticated
         Write-Verbose "Please authenticate before invoking Microsoft Graph REST APIs"
         throw "Not authenticated"
-        
     }
-    elseif (($Global:accessTokenExpiry - $unixTime) -le 600) {
+    elseif (($accessTokenExpiry - $unixTime) -le 600) {
         # Access token expired
         Write-Verbose "Microsoft Access token expired"
         throw "Microsoft Access token expired"
@@ -214,9 +213,9 @@ function New-DatabricksEnterpriseApplication {
     Write-Verbose "Checking response"
     $objectId = $response.servicePrincipal.objectId
     Write-Verbose "SP ID: ${objectId}"
-    if (!$objectId) { 
-        Write-Verbose "Instantiation service principal object id is null" 
-        throw "Instantiation service principal object id is null" 
+    if (!$objectId) {
+        Write-Verbose "Instantiation service principal object id is null"
+        throw "Instantiation service principal object id is null"
     }
     return $objectId
 }
@@ -360,8 +359,8 @@ function New-SynchronisationJob {
     Write-Verbose "Checking response"
     $jobId = $response.id
     if (!$jobId) {
-        Write-Verbose "Synchronisation job id is null" 
-        throw "Synchronisation job id is null" 
+        Write-Verbose "Synchronisation job id is null"
+        throw "Synchronisation job id is null"
     }
     return $jobId
 }
@@ -754,7 +753,7 @@ function Get-ProvisioningAuditLogs {
         Monitors the provisioning job status.
 
     .DESCRIPTION
-        Get-ProvisioningAuditLogs can be used to track the progress of the current provisioning job 
+        Get-ProvisioningAuditLogs can be used to track the progress of the current provisioning job
         cycle as well as statistics to date such as the number of users and groups that have been
         created in the Databricks workspace.
 
@@ -856,6 +855,7 @@ function New-ScimSetup {
         GitHub:  @marvinbuss
     #>
     [CmdletBinding()]
+    [OutputType("System.Object[]")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -974,6 +974,7 @@ function New-GroupListAssignment {
         GitHub:  @marvinbuss
     #>
     [CmdletBinding()]
+    [OutputType("System.Object[]")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

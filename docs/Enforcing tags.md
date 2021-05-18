@@ -8,7 +8,7 @@ Cluster tags allow to easily monitor the cost of cloud resources used by various
 
 In this implementation, **Regex policy** is used in order to enforce cost center tags definition when user creates a new Databricks cluster. As a result, Azure Databricks applies these tags to the cloud resources like VMs and disk volumes associated to the specific cluster.
 
-In this case the custom policy JSON section will be the following: 
+In this case the custom policy JSON section will be the following:
 
 ```JSON
 "custom_tags.costCenter": {

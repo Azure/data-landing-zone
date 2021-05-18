@@ -144,8 +144,8 @@ $notebookParams = @{
 $jobInfo = New-DatabricksJobRun -RunName $runName -NewClusterDefinition $jobClusterDefinition -NotebookPath $notebookPath -NotebookParameters $notebookParams
 
 # Monitor the job status and wait for completion
+Write-Output " - Running - "
 do {
-    Write-Output -NoNewline "`r - Running .."
     Start-Sleep -Seconds 5
     $jobRunStatus = Get-DatabricksJobRun -JobRunID $jobInfo.run_id
 } while ($jobRunStatus.end_time -eq 0)
