@@ -4,25 +4,25 @@ Azure Databricks supports SCIM, or System for Cross-domain Identity Management, 
 
 ## Prerequisites
 
-* Databricks Workspace
-* Global Administrator rights for Azure AD
+- Databricks Workspace
+- Global Administrator rights for Azure AD
 
 ## Setup Databricks Scim Enterprise Application
 
 1. Generate a Databricks Personal Access Token. A detailed step by step guidance can be found [here](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/authentication#--generate-a-personal-access-token).
 2. Create an AAD Application/Service Principal. A detailed step by step guidance can be found [here](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/aad/app-aad-token#configure-an-app-in-azure-portal). Instead of granting it the `AzureDatabricks` API permission, grant it the following API permissions:
-    * Microsoft Graph > Application permissions > Directory.Readwrite.All
-    * Microsoft Graph > Application permissions > Application.Readwrite.Ownedby
-    * Microsoft Graph > Application permissions > Application.ReadWrite.All
+    - Microsoft Graph > Application permissions > Directory.Readwrite.All
+    - Microsoft Graph > Application permissions > Application.Readwrite.Ownedby
+    - Microsoft Graph > Application permissions > Application.ReadWrite.All
 3. Take note of the following environment parameters of your Databricks workspace and the previously registered AAD application:
-    * Tenant ID
-    * Client ID and Secret of the Application
-    * Databricks Workspace Name, Instance Name (e.g. `adb-5555555555555555.19.azuredatabricks.net`), Personal Access Token
-    * Notification Email address, which will be used to send messaged, if the synchronization fails.
-    * Optional AAD User or Security Group Object IDs.
+    - Tenant ID
+    - Client ID and Secret of the Application
+    - Databricks Workspace Name, Instance Name (e.g. `adb-5555555555555555.19.azuredatabricks.net`), Personal Access Token
+    - Notification Email address, which will be used to send messaged, if the synchronization fails.
+    - Optional AAD User or Security Group Object IDs.
 4. Clone the repository and execute the following PowerShell command from the root folder of the repository:
 
-```Powershell
+```powershell
 ./code/aadScim/DatabricksScimSetup.ps1 `
     -TenantId '{tenantId}' `
     -ClientId '{clientId}' `
