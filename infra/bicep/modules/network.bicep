@@ -21,6 +21,7 @@ param dataDomain001SubnetAddressPrefix string = '10.1.6.0/24'
 param dataDomain002SubnetAddressPrefix string = '10.1.7.0/24'
 param dataProduct001SubnetAddressPrefix string = '10.1.8.0/24'
 param dataProduct002SubnetAddressPrefix string = '10.1.9.0/24'
+param dataManagementZoneVnetId string
 
 // Variables
 var servicesSubnetName = 'ServicesSubnet'
@@ -34,6 +35,9 @@ var dataDomain001SubnetName = 'DataDomain001Subnet'
 var dataDomain002SubnetName = 'DataDomain002Subnet'
 var dataProduct001SubnetName = 'DataProduct001Subnet'
 var dataProduct002SubnetName = 'DataProduct002Subnet'
+var dataManagementZoneVnetSubscriptionId = split(dataManagementZoneVnetId, '/')[2]
+var dataManagementZoneVnetResourceGroupName = split(dataManagementZoneVnetId, '/')[4]
+var dataManagementZoneVnetName = last(split(dataManagementZoneVnetId, '/'))
 
 // Resources
 resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
@@ -416,6 +420,27 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
   }
 }
 
-// Todo: Vnet peering
+resource dataLandingZoneDataManagementZoneVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-11-01' = {
+  name: '${vnet.name}/${dataManagementZoneVnetName}'
+  properties: {
+    allowForwardedTraffic: true
+    allowGatewayTransit: true
+    allowVirtualNetworkAccess: true
+    peeringState: 'Connected'
+    remoteVirtualNetwork: {
+      id: dataManagementZoneVnetId
+    }
+    useRemoteGateways: true
+  }
+}
+
+module dataManagementZoneDataLandingZoneVnetPeering 'network/dataManagementZoneVnetPeering.bicep' = {
+  name: 'dataManagementZoneDataLandingZoneVnetPeering'
+  scope: resourceGroup(dataManagementZoneVnetSubscriptionId, dataManagementZoneVnetResourceGroupName)
+  params: {
+    dataLandingZoneVnetId: vnet.id
+    dataManagementZoneVnetId: dataManagementZoneVnetId
+  }
+}
 
 // Outputs

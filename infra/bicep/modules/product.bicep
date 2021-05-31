@@ -6,6 +6,7 @@ targetScope = 'resourceGroup'
 param location string
 param prefix string
 param tags object
+@secure()
 param administratorPassword string
 param synapseSqlAdminGroupName string
 param synapseSqlAdminGroupObjectID string
@@ -16,10 +17,12 @@ param synapsePrivateDnsZoneIdDev string
 param databricksVnetId string
 param databricksPrivateSubnetName string
 param databricksPublicSubnetName string
-param privateEndpointSubnetId string
+param subnetId string
 param purviewId string
 
 // Variables
+var synapseDefaultStorageAccountSubscriptionId = split(synapseDefaultStorageAccountFileSystemId, '/')[2]
+var synapseDefaultStorageAccountResourceGroupName = split(synapseDefaultStorageAccountFileSystemId, '/')[4]
 var synapseDefaultStorageAccountFileSystemName = split(synapseDefaultStorageAccountFileSystemId, '/')[-1]
 var synapseDefaultStorageAccountName = split(synapseDefaultStorageAccountFileSystemId, '/')[7]
 var synapsePrivateEndpointNameSql = '${synapse.name}-sql-private-endpoint'
@@ -111,15 +114,6 @@ resource synapseAadAdministrators 'Microsoft.Synapse/workspaces/administrators@2
   }
 }
 
-resource synapseRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  name: guid(uniqueString(synapseDefaultStorageAccountFileSystemId, synapse.id))
-  scope: 'Microsoft.Storage/storageAccounts/${synapseDefaultStorageAccountName}/blobServices/default/containers/${synapseDefaultStorageAccountFileSystemName}'
-  properties: {
-    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
-    principalId: synapse.identity.principalId
-  }
-}
-
 resource synapsePrivateEndpointSql 'Microsoft.Network/privateEndpoints@2020-11-01' = {
   name: synapsePrivateEndpointNameSql
   location: location
@@ -139,7 +133,7 @@ resource synapsePrivateEndpointSql 'Microsoft.Network/privateEndpoints@2020-11-0
       }
     ]
     subnet: {
-      id: privateEndpointSubnetId
+      id: subnetId
     }
   }
 }
@@ -177,7 +171,7 @@ resource synapsePrivateEndpointSqlOnDemand 'Microsoft.Network/privateEndpoints@2
       }
     ]
     subnet: {
-      id: privateEndpointSubnetId
+      id: subnetId
     }
   }
 }
@@ -215,7 +209,7 @@ resource synapsePrivateEndpointDev 'Microsoft.Network/privateEndpoints@2020-11-0
       }
     ]
     subnet: {
-      id: privateEndpointSubnetId
+      id: subnetId
     }
   }
 }
@@ -231,6 +225,14 @@ resource synapsePrivateEndpointDevARecord 'Microsoft.Network/privateEndpoints/pr
         }
       }
     ]
+  }
+}
+
+module synapseRoleAssignment 'product/synapseRoleAssignment.bicep' = {
+  name: 'synapseRoleAssignment'
+  params: {
+    storageAccountFileSystemId: synapseDefaultStorageAccountFileSystemId
+    synapseId: synapse.id
   }
 }
 

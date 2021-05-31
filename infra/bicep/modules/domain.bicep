@@ -13,10 +13,12 @@ param databricksPrivateSubnetName string
 param databricksPublicSubnetName string
 param privateEndpointSubnetId string
 param purviewId string
+param eventhubPrivateDnsZoneId string
 
 // Variables
 var datafactoryPrivateEndpointNameDatafactory = '${datafactory.name}-datafactory-private-endpoint'
 var datafactoryPrivateEndpointNamePortal = '${datafactory.name}-portal-private-endpoint'
+var eventhubNamespace001PrivateEndpointName = '${eventhubNamespace001.name}-private-endpoint'
 
 // Resources
 resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
@@ -137,6 +139,86 @@ resource datafactoryPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpo
         name: '${datafactoryPrivateEndpointPortal.name}-arecord'
         properties: {
           privateDnsZoneId: datafactoryPrivateDnsZoneIdPortal
+        }
+      }
+    ]
+  }
+}
+
+resource eventhubNamespace001 'Microsoft.EventHub/namespaces@2021-01-01-preview' = {
+  name: '${prefix}-domain-eventhub001'
+  location: location
+  tags: tags
+  sku: {
+    name: 'Standard'
+    tier: 'Standard'
+    capacity: 1
+  }
+  properties: {
+    isAutoInflateEnabled: true
+    kafkaEnabled: true
+    maximumThroughputUnits: 1
+    zoneRedundant: true
+  }
+}
+
+resource eventhub001 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = if (false) { // Set to true to deploy an Event Hub in the namespace
+  name: 'default'
+  parent: eventhubNamespace001
+  properties: {
+    captureDescription: {
+      destination: {
+        name: 'default'
+        properties: {
+          archiveNameFormat: ''
+          blobContainer: ''
+          storageAccountResourceId: ''
+        }
+      }
+      enabled: true
+      encoding: 'Avro'
+      intervalInSeconds: 900
+      sizeLimitInBytes: 10485760
+      skipEmptyArchives: true
+    }
+    messageRetentionInDays: 3
+    partitionCount: 1
+    status: 'Active'
+  }
+}
+
+resource eventhubNamespace001PrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11-01' = {
+  name: eventhubNamespace001PrivateEndpointName
+  location: location
+  tags: tags
+  properties: {
+    manualPrivateLinkServiceConnections: []
+    privateLinkServiceConnections: [
+      {
+        name: eventhubNamespace001PrivateEndpointName
+        properties: {
+          groupIds: [
+            'namespace'
+          ]
+          privateLinkServiceId: eventhubNamespace001.id
+          requestMessage: ''
+        }
+      }
+    ]
+    subnet: {
+      id: privateEndpointSubnetId
+    }
+  }
+}
+
+resource eventhubNamespace001PrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+  name: '${eventhubNamespace001PrivateEndpoint.name}/aRecord'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: '${eventhubNamespace001PrivateEndpoint.name}-arecord'
+        properties: {
+          privateDnsZoneId: eventhubPrivateDnsZoneId
         }
       }
     ]
