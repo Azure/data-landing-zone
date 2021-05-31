@@ -1,5 +1,5 @@
 // This template is used as a module from the network.bicep template. 
-// The module contains a template to create vnet peering from the data management zone vnet.
+// The module contains a template to create a role assignment of the Synase MSI to a file system.
 targetScope = 'resourceGroup'
 
 // Parameters
@@ -7,7 +7,7 @@ param storageAccountFileSystemId string
 param synapseId string
 
 // Variables
-var storageAccountFileSystemName = split(storageAccountFileSystemId, '/')[-1]
+var storageAccountFileSystemName = last(split(storageAccountFileSystemId, '/'))
 var storageAccountName = split(storageAccountFileSystemId, '/')[7]
 var synapseSubscriptionId = split(synapseId, '/')[2]
 var synapseResourceGroupName = split(synapseId, '/')[4]

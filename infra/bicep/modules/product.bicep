@@ -228,8 +228,9 @@ resource synapsePrivateEndpointDevARecord 'Microsoft.Network/privateEndpoints/pr
   }
 }
 
-module synapseRoleAssignment 'product/synapseRoleAssignment.bicep' = {
-  name: 'synapseRoleAssignment'
+module synapseStorageRoleAssignment 'product/synapseRoleAssignmentStorage.bicep' = {
+  name: 'synapseStorageRoleAssignment'
+  scope: resourceGroup(synapseDefaultStorageAccountSubscriptionId, synapseDefaultStorageAccountResourceGroupName)
   params: {
     storageAccountFileSystemId: synapseDefaultStorageAccountFileSystemId
     synapseId: synapse.id

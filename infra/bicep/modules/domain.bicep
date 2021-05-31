@@ -6,6 +6,8 @@ targetScope = 'resourceGroup'
 param location string
 param prefix string
 param tags object
+param storageAccountRawFileSystemId string
+param storageAccountEnrichedCuratedFileSystemId string
 param datafactoryPrivateDnsZoneIdDataFactory string
 param datafactoryPrivateDnsZoneIdPortal string
 param databricksVnetId string
@@ -16,9 +18,13 @@ param purviewId string
 param eventhubPrivateDnsZoneId string
 
 // Variables
+var storageAccountRawSubscriptionId = split(storageAccountRawFileSystemId, '/')[2]
+var storageAccountRawResourceGroupName = split(storageAccountRawFileSystemId, '/')[4]
+var storageAccountEnrichedCuratedSubscriptionId = split(storageAccountEnrichedCuratedFileSystemId, '/')[2]
+var storageAccountEnrichedCuratedResourceGroupName = split(storageAccountEnrichedCuratedFileSystemId, '/')[4]
 var datafactoryPrivateEndpointNameDatafactory = '${datafactory.name}-datafactory-private-endpoint'
 var datafactoryPrivateEndpointNamePortal = '${datafactory.name}-portal-private-endpoint'
-var eventhubNamespace001PrivateEndpointName = '${eventhubNamespace001.name}-private-endpoint'
+var eventhubNamespacePrivateEndpointName = '${eventhubNamespace.name}-private-endpoint'
 
 // Resources
 resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
@@ -66,8 +72,6 @@ resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
     publicNetworkAccess: 'Disabled'
   }
 }
-
-// Todo: Role Assignments and ADF setup with linked services
 
 resource datafactoryPrivateEndpointDatafactory 'Microsoft.Network/privateEndpoints@2020-11-01' = {
   name: datafactoryPrivateEndpointNameDatafactory
@@ -145,8 +149,8 @@ resource datafactoryPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpo
   }
 }
 
-resource eventhubNamespace001 'Microsoft.EventHub/namespaces@2021-01-01-preview' = {
-  name: '${prefix}-domain-eventhub001'
+resource eventhubNamespace 'Microsoft.EventHub/namespaces@2021-01-01-preview' = {
+  name: '${prefix}-domain-eventhub'
   location: location
   tags: tags
   sku: {
@@ -162,9 +166,9 @@ resource eventhubNamespace001 'Microsoft.EventHub/namespaces@2021-01-01-preview'
   }
 }
 
-resource eventhub001 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = if (false) { // Set to true to deploy an Event Hub in the namespace
+resource eventhub 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = if (false) { // Set to true to deploy an Event Hub in the namespace
   name: 'default'
-  parent: eventhubNamespace001
+  parent: eventhubNamespace
   properties: {
     captureDescription: {
       destination: {
@@ -187,20 +191,20 @@ resource eventhub001 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview
   }
 }
 
-resource eventhubNamespace001PrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11-01' = {
-  name: eventhubNamespace001PrivateEndpointName
+resource eventhubNamespacePrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11-01' = {
+  name: eventhubNamespacePrivateEndpointName
   location: location
   tags: tags
   properties: {
     manualPrivateLinkServiceConnections: []
     privateLinkServiceConnections: [
       {
-        name: eventhubNamespace001PrivateEndpointName
+        name: eventhubNamespacePrivateEndpointName
         properties: {
           groupIds: [
             'namespace'
           ]
-          privateLinkServiceId: eventhubNamespace001.id
+          privateLinkServiceId: eventhubNamespace.id
           requestMessage: ''
         }
       }
@@ -211,12 +215,12 @@ resource eventhubNamespace001PrivateEndpoint 'Microsoft.Network/privateEndpoints
   }
 }
 
-resource eventhubNamespace001PrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
-  name: '${eventhubNamespace001PrivateEndpoint.name}/aRecord'
+resource eventhubNamespacePrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+  name: '${eventhubNamespacePrivateEndpoint.name}/aRecord'
   properties: {
     privateDnsZoneConfigs: [
       {
-        name: '${eventhubNamespace001PrivateEndpoint.name}-arecord'
+        name: '${eventhubNamespacePrivateEndpoint.name}-arecord'
         properties: {
           privateDnsZoneId: eventhubPrivateDnsZoneId
         }
@@ -224,5 +228,34 @@ resource eventhubNamespace001PrivateEndpointARecord 'Microsoft.Network/privateEn
     ]
   }
 }
+
+module datafactoryStorageRawRoleAssignment 'domain/dataFactoryRoleAssignmentStorage.bicep' = {
+  name: 'datafactoryStorageRawRoleAssignment'
+  scope: resourceGroup(storageAccountRawSubscriptionId, storageAccountRawResourceGroupName)
+  params: {
+    datafactoryId: datafactory.id
+    storageAccountFileSystemId: storageAccountRawFileSystemId
+  }
+}
+
+module datafactoryStorageEnrichedCuratedRoleAssignment 'domain/dataFactoryRoleAssignmentStorage.bicep' = {
+  name: 'datafactoryStorageEnrichedCuratedRoleAssignment'
+  scope: resourceGroup(storageAccountEnrichedCuratedSubscriptionId, storageAccountEnrichedCuratedResourceGroupName)
+  params: {
+    datafactoryId: datafactory.id
+    storageAccountFileSystemId: storageAccountEnrichedCuratedFileSystemId
+  }
+}
+
+module datafactoryDatabricksRoleAssignment 'domain/dataFactoryRoleAssignmentDatabricks.bicep' = {
+  name: 'datafactoryDatabricksRoleAssignment'
+  scope: resourceGroup()
+  params: {
+    datafactoryId: datafactory.id
+    databricksId: databricks.id
+  }
+}
+
+// Todo: Role Assignments and ADF setup with linked services
 
 // Outputs

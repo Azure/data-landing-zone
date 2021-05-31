@@ -1,5 +1,5 @@
-// This template is used as a module from the network.bicep template. 
-// The module contains a template to create vnet peering from the data management zone vnet.
+// This template is used as a module from the main.bicep template. 
+// The module contains a template to create network resources.
 targetScope = 'resourceGroup'
 
 // Parameters
@@ -21,8 +21,8 @@ param privateDnsZoneIdKeyVault string
 var administratorUsername = 'SqlServerMainUser'
 var keyVault001PrivateEndpointName = '${keyVault001.name}-private-endpoint'
 var keyVault002PrivateEndpointName = '${keyVault002.name}-private-endpoint'
-var sqlserver001PrivateEndpointName = '${sqlserver001.name}-private-endpoint'
-var mysqlserver001PrivateEndpointName = '${mysqlserver001.name}-private-endpoint'
+var sqlserverPrivateEndpointName = '${sqlserver.name}-private-endpoint'
+var mysqlserverPrivateEndpointName = '${mysqlserver.name}-private-endpoint'
 
 // Resources
 resource keyVault001 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
@@ -157,8 +157,8 @@ resource keyVault002PrivateEndpointARecord 'Microsoft.Network/privateEndpoints/p
   }
 }
 
-resource sqlserver001 'Microsoft.Sql/servers@2020-11-01-preview' = {
-  name: '${prefix}-sqlserver001'
+resource sqlserver 'Microsoft.Sql/servers@2020-11-01-preview' = {
+  name: '${prefix}-sqlserver'
   location: location
   tags: tags
   identity: {
@@ -176,8 +176,8 @@ resource sqlserver001 'Microsoft.Sql/servers@2020-11-01-preview' = {
   }
 }
 
-resource sqlserver001Administrators 'Microsoft.Sql/servers/administrators@2020-11-01-preview' = if (sqlserverAdminGroupName != null && sqlserverAdminGroupObjectID != null) {
-  name: '${sqlserver001.name}/ActiveDirectory'
+resource sqlserverAdministrators 'Microsoft.Sql/servers/administrators@2020-11-01-preview' = if (sqlserverAdminGroupName != null && sqlserverAdminGroupObjectID != null) {
+  name: '${sqlserver.name}/ActiveDirectory'
   properties: {
     administratorType: 'ActiveDirectory'
     login: sqlserverAdminGroupName
@@ -186,20 +186,20 @@ resource sqlserver001Administrators 'Microsoft.Sql/servers/administrators@2020-1
   }
 }
 
-resource sqlserver001PrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11-01' = {
-  name: sqlserver001PrivateEndpointName
+resource sqlserverPrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11-01' = {
+  name: sqlserverPrivateEndpointName
   location: location
   tags: tags
   properties: {
     manualPrivateLinkServiceConnections: []
     privateLinkServiceConnections: [
       {
-        name: sqlserver001PrivateEndpointName
+        name: sqlserverPrivateEndpointName
         properties: {
           groupIds: [
             'sqlServer'
           ]
-          privateLinkServiceId: sqlserver001.id
+          privateLinkServiceId: sqlserver.id
           requestMessage: ''
         }
       }
@@ -210,12 +210,12 @@ resource sqlserver001PrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11
   }
 }
 
-resource sqlserver001PrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
-  name: '${sqlserver001PrivateEndpoint.name}/aRecord'
+resource sqlserverPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+  name: '${sqlserverPrivateEndpoint.name}/aRecord'
   properties: {
     privateDnsZoneConfigs: [
       {
-        name: '${sqlserver001PrivateEndpoint.name}-arecord'
+        name: '${sqlserverPrivateEndpoint.name}-arecord'
         properties: {
           privateDnsZoneId: privateDnsZoneIdSqlServer
         }
@@ -224,8 +224,8 @@ resource sqlserver001PrivateEndpointARecord 'Microsoft.Network/privateEndpoints/
   }
 }
 
-resource sqlserver001AdfMetastoreDb 'Microsoft.Sql/servers/databases@2020-11-01-preview' = {
-  name: '${sqlserver001.name}/AdfMetastoreDb'
+resource sqlserverAdfMetastoreDb 'Microsoft.Sql/servers/databases@2020-11-01-preview' = {
+  name: '${sqlserver.name}/AdfMetastoreDb'
   location: location
   tags: tags
   sku: {
@@ -248,8 +248,8 @@ resource sqlserver001AdfMetastoreDb 'Microsoft.Sql/servers/databases@2020-11-01-
   }
 }
 
-resource mysqlserver001 'Microsoft.DBForMySQL/servers@2017-12-01' = {
-  name: '${prefix}-mysqlserver001'
+resource mysqlserver 'Microsoft.DBForMySQL/servers@2017-12-01' = {
+  name: '${prefix}-mysqlserver'
   location: location
   tags: tags
   identity: {
@@ -280,24 +280,24 @@ resource mysqlserver001 'Microsoft.DBForMySQL/servers@2017-12-01' = {
   }
 }
 
-resource mysqlserver001Configuration001 'Microsoft.DBForMySQL/servers/configurations@2017-12-01' = {
-  name: '${mysqlserver001.name}/lower_case_table_names'
+resource mysqlserverConfiguration001 'Microsoft.DBForMySQL/servers/configurations@2017-12-01' = {
+  name: '${mysqlserver.name}/lower_case_table_names'
   properties: {
     value: '2'
     source: 'user-override'
   }
 }
 
-resource mysqlserver001HiveMetastoreDb 'Microsoft.DBForMySQL/servers/databases@2017-12-01' = {
-  name: '${mysqlserver001.name}/HiveMetastoreDb'
+resource mysqlserverHiveMetastoreDb 'Microsoft.DBForMySQL/servers/databases@2017-12-01' = {
+  name: '${mysqlserver.name}/HiveMetastoreDb'
   properties: {
     charset: 'latin1'
     collation: 'latin1_swedish_ci'
   }
 }
 
-resource mysqlserver001Administrators 'Microsoft.DBForMySQL/servers/administrators@2017-12-01' = {
-  name: '${mysqlserver001.name}/ActiveDirectory'
+resource mysqlserverAdministrators 'Microsoft.DBForMySQL/servers/administrators@2017-12-01' = {
+  name: '${mysqlserver.name}/ActiveDirectory'
   properties: {
     administratorType: 'ActiveDirectory'
     login: mysqlserverAdminGroupName
@@ -306,20 +306,20 @@ resource mysqlserver001Administrators 'Microsoft.DBForMySQL/servers/administrato
   }
 }
 
-resource mysqlserver001PrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11-01' = {
-  name: mysqlserver001PrivateEndpointName
+resource mysqlserverPrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11-01' = {
+  name: mysqlserverPrivateEndpointName
   location: location
   tags: tags
   properties: {
     manualPrivateLinkServiceConnections: []
     privateLinkServiceConnections: [
       {
-        name: mysqlserver001PrivateEndpointName
+        name: mysqlserverPrivateEndpointName
         properties: {
           groupIds: [
             'mysqlServer'
           ]
-          privateLinkServiceId: mysqlserver001.id
+          privateLinkServiceId: mysqlserver.id
           requestMessage: ''
         }
       }
@@ -330,12 +330,12 @@ resource mysqlserver001PrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-
   }
 }
 
-resource mysqlserver001PrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
-  name: '${mysqlserver001PrivateEndpoint.name}/aRecord'
+resource mysqlserverPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+  name: '${mysqlserverPrivateEndpoint.name}/aRecord'
   properties: {
     privateDnsZoneConfigs: [
       {
-        name: '${mysqlserver001PrivateEndpoint.name}-arecord'
+        name: '${mysqlserverPrivateEndpoint.name}-arecord'
         properties: {
           privateDnsZoneId: privateDnsZoneIdMySqlServer
         }
@@ -344,8 +344,8 @@ resource mysqlserver001PrivateEndpointARecord 'Microsoft.Network/privateEndpoint
   }
 }
 
-resource mysqlserver001UsernameSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault002.name}/${mysqlserver001.name}Username'
+resource mysqlserverUsernameSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
+  name: '${keyVault002.name}/${mysqlserver.name}Username'
   properties: {
     attributes: {
       enabled: true
@@ -355,8 +355,8 @@ resource mysqlserver001UsernameSecretDeployment 'Microsoft.KeyVault/vaults/secre
   }
 }
 
-resource mysqlserver001PasswordSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault002.name}/${mysqlserver001.name}Password'
+resource mysqlserverPasswordSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
+  name: '${keyVault002.name}/${mysqlserver.name}Password'
   properties: {
     attributes: {
       enabled: true
@@ -366,14 +366,14 @@ resource mysqlserver001PasswordSecretDeployment 'Microsoft.KeyVault/vaults/secre
   }
 }
 
-resource mysqlserver001ConnectionStringSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault002.name}/${mysqlserver001.name}ConnectionString'
+resource mysqlserverConnectionStringSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
+  name: '${keyVault002.name}/${mysqlserver.name}ConnectionString'
   properties: {
     attributes: {
       enabled: true
     }
     contentType: 'text/plain'
-    value: 'jdbc:mysql://${mysqlserver001.name}.mysql.database.azure.com:3306/${mysqlserver001HiveMetastoreDb.name}?useSSL=true&requireSSL=false&enabledSslProtocolSuites=TLSv1.2'
+    value: 'jdbc:mysql://${mysqlserver.name}.mysql.database.azure.com:3306/${mysqlserverHiveMetastoreDb.name}?useSSL=true&requireSSL=false&enabledSslProtocolSuites=TLSv1.2'
   }
 }
 

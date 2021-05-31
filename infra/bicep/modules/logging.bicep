@@ -1,5 +1,5 @@
-// This template is used as a module from the network.bicep template. 
-// The module contains a template to create vnet peering from the data management zone vnet.
+// This template is used as a module from the main.bicep template.
+// The module contains a template to create network resources.
 targetScope = 'resourceGroup'
 
 // Parameters
