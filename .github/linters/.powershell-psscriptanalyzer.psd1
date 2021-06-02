@@ -10,6 +10,9 @@
     ExcludeRules = @(
        'PSUseShouldProcessForStateChangingFunctions',
        'PSReviewUnusedParameter'
+       'PSAvoidGlobalVars'
+       'PSAvoidUsingPlainTextForPassword'
+       'PSAvoidUsingConvertToSecureStringWithPlainText'
     )
     #IncludeRules = @( )
 }

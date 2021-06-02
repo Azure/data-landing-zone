@@ -148,8 +148,8 @@
     },
     "resources": [
         {
-            "apiVersion": "2019-06-01-preview",
             "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2020-08-01-preview",
             "name": "[concat(variables('sqlServerName'), '/', variables('sqlDatabaseName'))]",
             "tags": "[variables('tags')]",
             "location": "[variables('location')]",

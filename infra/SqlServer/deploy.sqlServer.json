@@ -74,8 +74,8 @@
     },
     "resources": [
         {
-            "apiVersion": "2019-06-01-preview",
             "type": "Microsoft.Sql/servers",
+            "apiVersion": "2020-08-01-preview",
             "name": "[variables('sqlServerName')]",
             "tags": "[variables('tags')]",
             "location": "[variables('location')]",
@@ -93,7 +93,7 @@
                 {
                     "condition": "[and(not(empty(variables('sqlAdminGroupObjectID'))), not(empty(variables('sqlAdminGroupObjectID'))))]",
                     "type": "administrators",
-                    "apiVersion": "2019-06-01-preview",
+                    "apiVersion": "2020-08-01-preview",
                     "name": "ActiveDirectory",
                     "dependsOn": [
                         "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
