@@ -68,7 +68,7 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
 }
 
 resource databricksNsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
-  name: '${prefix}-nsg'
+  name: '${prefix}-databricks-nsg'
   location: location
   tags: tags
   properties: {
@@ -429,7 +429,7 @@ resource dataLandingZoneDataManagementZoneVnetPeering 'Microsoft.Network/virtual
     remoteVirtualNetwork: {
       id: dataManagementZoneVnetId
     }
-    useRemoteGateways: true
+    useRemoteGateways: false
   }
 }
 

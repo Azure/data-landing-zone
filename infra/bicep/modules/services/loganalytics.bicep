@@ -4,13 +4,13 @@ targetScope = 'resourceGroup'
 // Parameters
 param location string
 param tags object
-param logananalyticsName string
+param logAnanalyticsName string
 
 // Variables
 
 // Resources
-resource loganalytics001 'Microsoft.OperationalInsights/workspaces@2020-10-01' = {
-  name: logananalyticsName
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2020-10-01' = {
+  name: logAnanalyticsName
   location: location
   tags: tags
   properties: {
@@ -25,5 +25,4 @@ resource loganalytics001 'Microsoft.OperationalInsights/workspaces@2020-10-01' =
 }
 
 // Outputs
-output logAnalyticsWorkspaceId string = loganalytics001.properties.customerId
-output logAnalyticsWorkspaceKey string = listkeys(loganalytics001.id, loganalytics001.apiVersion).primarySharedKey
+output logAnalyticsWorkspaceCustomerId string = logAnalytics.properties.customerId

@@ -32,33 +32,37 @@ module logAnalytics001 'services/loganalytics.bicep' = {
   params: {
     location: location
     tags: tags
-    logananalyticsName: logAnalytics001Name
+    logAnanalyticsName: logAnalytics001Name
   }
 }
 
-resource logAnalytics001Ref 'Microsoft.OperationalInsights/workspaces@2020-10-01' existing = {
-  name: logAnalytics001Name
-}
-
 resource logAnalytics001IdSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault001.name}/logAnalyticsWorkspaceId'
+  name: '${keyVault001Name}/logAnalyticsWorkspaceId'
+  dependsOn: [
+    keyVault001
+    logAnalytics001
+  ]
   properties: {
     attributes: {
       enabled: true
     }
     contentType: 'text/plain'
-    value: logAnalytics001Ref.properties.customerId
+    value: logAnalytics001.outputs.logAnalyticsWorkspaceCustomerId
   }
 }
 
 resource logAnalytics001KeySecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault001.name}/logAnalyticsWorkspaceKey'
+  name: '${keyVault001Name}/logAnalyticsWorkspaceKey'
+  dependsOn: [
+    keyVault001
+    logAnalytics001
+  ]
   properties: {
     attributes: {
       enabled: true
     }
     contentType: 'text/plain'
-    value: listkeys(logAnalytics001Ref.id, logAnalytics001Ref.apiVersion).primarySharedKey
+    value: listkeys(resourceId('Microsoft.OperationalInsights/workspaces', logAnalytics001Name), '2020-10-01').primarySharedKey
   }
 }
 

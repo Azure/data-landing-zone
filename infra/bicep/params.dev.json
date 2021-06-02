@@ -1,0 +1,101 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "environment": {
+            "value": "dev"
+        },
+        "prefix": {
+            "value": "dn001"
+        },
+        "vnetAddressPrefix": {
+            "value": "10.1.0.0/16"
+        },
+        "servicesSubnetAddressPrefix": {
+            "value": "10.1.0.0/24"
+        },
+        "databricksDomainPublicSubnetAddressPrefix": {
+            "value": "10.1.1.0/24"
+        },
+        "databricksDomainPrivateSubnetAddressPrefix": {
+            "value": "10.1.2.0/24"
+        },
+        "databricksProductPublicSubnetAddressPrefix": {
+            "value": "10.1.3.0/24"
+        },
+        "databricksProductPrivateSubnetAddressPrefix": {
+            "value": "10.1.4.0/24"
+        },
+        "powerBiGatewaySubnetAddressPrefix": {
+            "value": "10.1.5.0/24"
+        },
+        "dataDomain001SubnetAddressPrefix": {
+            "value": "10.1.6.0/24"
+        },
+        "dataDomain002SubnetAddressPrefix": {
+            "value": "10.1.7.0/24"
+        },
+        "dataProduct001SubnetAddressPrefix": {
+            "value": "10.1.8.0/24"
+        },
+        "dataProduct002SubnetAddressPrefix": {
+            "value": "10.1.9.0/24"
+        },
+        "dataManagementZoneVnetId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dh-dev-network/providers/Microsoft.Network/virtualNetworks/dh-dev-vnet"
+        },
+        "firewallPrivateIp": {
+            "value": "10.0.0.4"
+        },
+        "dnsServerAdresses": {
+            "value": [
+              "10.0.0.4"
+            ]
+        },
+        "administratorPassword": {
+            "value": "Qwertz12345!"
+        },
+        "purviewId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/synapse-rg/providers/Microsoft.Purview/accounts/marvtest"
+        },
+        "purviewSelfHostedIntegrationRuntimeAuthKey": {
+            "value": ""
+        },
+        "deploySelfHostedIntegrationRuntimes": {
+            "value": false
+        },
+        "privateDnsZoneIdKeyVault": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dh-dev-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
+        },
+        "privateDnsZoneIdDataFactory": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dh-dev-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net"
+        },
+        "privateDnsZoneIdDataFactoryPortal": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dh-dev-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com"
+        },
+        "privateDnsZoneIdBlob": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dh-dev-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
+        },
+        "privateDnsZoneIdDfs": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dh-dev-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net"
+        },
+        "privateDnsZoneIdSqlServer": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dh-dev-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net"
+        },
+        "privateDnsZoneIdMySqlServer": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dh-dev-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com"
+        },
+        "privateDnsZoneIdEventhubNamespace": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dh-dev-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net"
+        },
+        "privateDnsZoneIdSynapseDev": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dh-dev-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net"
+        },
+        "privateDnsZoneIdSynapseSql": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dh-dev-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net"
+        }
+    }
+}

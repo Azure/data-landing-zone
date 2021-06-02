@@ -46,8 +46,8 @@ module datafactoryIntegration001 'services/datafactoryintegration.bicep' = {
   }
 }
 
-resource datafactoryIntegration001IntegrationRuntime001 'Microsoft.DataFactory/factories/integrationRuntimes@2018-06-01' = if (deploySelfHostedIntegrationRuntimes) {
-  name: '${datafactoryIntegration001Name}/dataLandingZoneSelfHostedIntegrationRuntime${shir001Name}'
+resource datafactoryIntegration001IntegrationRuntime001 'Microsoft.DataFactory/factories/integrationRuntimes@2018-06-01' = {
+  name: '${datafactoryIntegration001Name}/dataLandingZoneSelfHostedIntegrationRuntime-${shir001Name}'
   dependsOn: [
     datafactoryIntegration001
   ]

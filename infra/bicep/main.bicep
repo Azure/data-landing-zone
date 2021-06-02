@@ -21,21 +21,21 @@ param vnetAddressPrefix string = '10.1.0.0/16'
 @description('Specifies the address space of the subnet that is used for general services of the data landing zone.')
 param servicesSubnetAddressPrefix string = '10.1.0.0/24'
 @description('Specifies the address space of the public subnet that is used for the shared domain databricks workspace.')
-param databricksDomainPublicSubnetAddressPrefix string = '10.1.1.0/16'
+param databricksDomainPublicSubnetAddressPrefix string = '10.1.1.0/24'
 @description('Specifies the address space of the private subnet that is used for the shared domain databricks workspace.')
-param databricksDomainPrivateSubnetAddressPrefix string = '10.1.2.0/16'
+param databricksDomainPrivateSubnetAddressPrefix string = '10.1.2.0/24'
 @description('Specifies the address space of the public subnet that is used for the shared product databricks workspace.')
-param databricksProductPublicSubnetAddressPrefix string = '10.1.3.0/16'
+param databricksProductPublicSubnetAddressPrefix string = '10.1.3.0/24'
 @description('Specifies the address space of the private subnet that is used for the shared product databricks workspace.')
-param databricksProductPrivateSubnetAddressPrefix string = '10.1.4.0/16'
+param databricksProductPrivateSubnetAddressPrefix string = '10.1.4.0/24'
 @description('Specifies the address space of the subnet that is used for the power bi gateway.')
-param powerBiGatewaySubnetAddressPrefix string = '10.1.5.0/16'
+param powerBiGatewaySubnetAddressPrefix string = '10.1.5.0/24'
 @description('Specifies the address space of the subnet that is used for data domain 001.')
-param dataDomain001SubnetAddressPrefix string = '10.1.6.0/16'
+param dataDomain001SubnetAddressPrefix string = '10.1.6.0/24'
 @description('Specifies the address space of the subnet that is used for data domain 002.')
-param dataDomain002SubnetAddressPrefix string = '10.1.7.0/16'
+param dataDomain002SubnetAddressPrefix string = '10.1.7.0/24'
 @description('Specifies the address space of the subnet that is used for data product 001.')
-param dataProduct001SubnetAddressPrefix string = '10.1.8.0/16'
+param dataProduct001SubnetAddressPrefix string = '10.1.8.0/24'
 @description('Specifies the address space of the subnet that is used for data product 002.')
 param dataProduct002SubnetAddressPrefix string = '10.1.9.0/24'
 @description('Specifies the resource Id of the vnet in the data management zone.')
@@ -255,8 +255,8 @@ resource sharedDomainResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-0
   properties: {}
 }
 
-module sharedDOmainServices 'modules/domain.bicep' = {
-  name: 'sharedDOmainServices'
+module sharedDomainServices 'modules/domain.bicep' = {
+  name: 'sharedDomainServices'
   scope: sharedDomainResourceGroup
   params: {
     location: location

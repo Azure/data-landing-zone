@@ -16,6 +16,9 @@ resource eventhubNamespace 'Microsoft.EventHub/namespaces@2021-01-01-preview' = 
   name: eventhubnamespaceName
   location: location
   tags: tags
+  identity: {
+    type: 'SystemAssigned'
+  }
   sku: {
     name: 'Standard'
     tier: 'Standard'

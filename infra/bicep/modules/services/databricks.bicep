@@ -20,7 +20,7 @@ resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
     name: 'premium'
   }
   properties: {
-    managedResourceGroupId: databricksName
+    managedResourceGroupId: '${subscription().id}/resourceGroups/${databricksName}-rg'
     parameters: {
       customVirtualNetworkId: {
         value: vnetId
@@ -33,11 +33,6 @@ resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
       }
       enableNoPublicIp: {
         value: true
-      }
-      encryption: {
-        value: {
-          keySource: 'Default'
-        }
       }
       prepareEncryption: {
         value: true

@@ -28,9 +28,7 @@ resource sqlserver 'Microsoft.Sql/servers@2020-11-01-preview' = {
   properties: {
     administratorLogin: administratorUsername
     administratorLoginPassword: administratorPassword
-    administrators: {
-      azureADOnlyAuthentication: true
-    }
+    administrators: {}
     minimalTlsVersion: '1.2'
     publicNetworkAccess: 'Disabled'
     version: '12.0'
@@ -69,7 +67,7 @@ resource sqlserverAdfMetastoreDb 'Microsoft.Sql/servers/databases@2020-11-01-pre
     maxSizeBytes: 524288000
     minCapacity: 1
     requestedBackupStorageRedundancy: 'Geo'
-    zoneRedundant: true
+    zoneRedundant: false
   }
 }
 

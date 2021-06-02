@@ -65,11 +65,11 @@ resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
       virtualNetworkRules: []
       resourceAccessRules: []
     }
-    routingPreference: {
-      routingChoice: 'MicrosoftRouting'
-      publishInternetEndpoints: false
-      publishMicrosoftEndpoints: false
-    }
+    // routingPreference: {  // Not supported for thsi account
+    //   routingChoice: 'MicrosoftRouting'
+    //   publishInternetEndpoints: false
+    //   publishMicrosoftEndpoints: false
+    // }
     supportsHttpsTrafficOnly: true
   }
 }
@@ -86,7 +86,7 @@ resource storageExternalManagementPolicies 'Microsoft.Storage/storageAccounts/ma
           definition: {
             actions: {
               baseBlob: {
-                enableAutoTierToHotFromCool: true
+                // enableAutoTierToHotFromCool: true  // Not available for this configuration
                 tierToCool: {
                   // daysAfterLastAccessTimeGreaterThan: 90  // Not available for HNS storage yet
                   daysAfterModificationGreaterThan: 90
@@ -124,7 +124,6 @@ resource storageExternalManagementPolicies 'Microsoft.Storage/storageAccounts/ma
               }
             }
             filters: {
-              blobIndexMatch: []
               blobTypes: [
                 'blockBlob'
               ]

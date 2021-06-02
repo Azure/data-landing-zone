@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1.14562",
-      "templateHash": "12399164398433930758"
+      "templateHash": "7748019647503674456"
     }
   },
   "parameters": {
@@ -52,56 +52,56 @@
     },
     "databricksDomainPublicSubnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.1.1.0/16",
+      "defaultValue": "10.1.1.0/24",
       "metadata": {
         "description": "Specifies the address space of the public subnet that is used for the shared domain databricks workspace."
       }
     },
     "databricksDomainPrivateSubnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.1.2.0/16",
+      "defaultValue": "10.1.2.0/24",
       "metadata": {
         "description": "Specifies the address space of the private subnet that is used for the shared domain databricks workspace."
       }
     },
     "databricksProductPublicSubnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.1.3.0/16",
+      "defaultValue": "10.1.3.0/24",
       "metadata": {
         "description": "Specifies the address space of the public subnet that is used for the shared product databricks workspace."
       }
     },
     "databricksProductPrivateSubnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.1.4.0/16",
+      "defaultValue": "10.1.4.0/24",
       "metadata": {
         "description": "Specifies the address space of the private subnet that is used for the shared product databricks workspace."
       }
     },
     "powerBiGatewaySubnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.1.5.0/16",
+      "defaultValue": "10.1.5.0/24",
       "metadata": {
         "description": "Specifies the address space of the subnet that is used for the power bi gateway."
       }
     },
     "dataDomain001SubnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.1.6.0/16",
+      "defaultValue": "10.1.6.0/24",
       "metadata": {
         "description": "Specifies the address space of the subnet that is used for data domain 001."
       }
     },
     "dataDomain002SubnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.1.7.0/16",
+      "defaultValue": "10.1.7.0/24",
       "metadata": {
         "description": "Specifies the address space of the subnet that is used for data domain 002."
       }
     },
     "dataProduct001SubnetAddressPrefix": {
       "type": "string",
-      "defaultValue": "10.1.8.0/16",
+      "defaultValue": "10.1.8.0/24",
       "metadata": {
         "description": "Specifies the address space of the subnet that is used for data product 001."
       }
@@ -393,7 +393,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "14340520783295265543"
+              "templateHash": "902847927963814153"
             }
           },
           "parameters": {
@@ -514,7 +514,7 @@
             {
               "type": "Microsoft.Network/networkSecurityGroups",
               "apiVersion": "2020-11-01",
-              "name": "[format('{0}-nsg', parameters('prefix'))]",
+              "name": "[format('{0}-databricks-nsg', parameters('prefix'))]",
               "location": "[parameters('location')]",
               "tags": "[parameters('tags')]",
               "properties": {
@@ -671,7 +671,7 @@
                       "addressPrefix": "[parameters('databricksDomainPublicSubnetAddressPrefix')]",
                       "addressPrefixes": [],
                       "networkSecurityGroup": {
-                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-databricks-nsg', parameters('prefix')))]"
                       },
                       "routeTable": {
                         "id": "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
@@ -696,7 +696,7 @@
                       "addressPrefix": "[parameters('databricksDomainPrivateSubnetAddressPrefix')]",
                       "addressPrefixes": [],
                       "networkSecurityGroup": {
-                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-databricks-nsg', parameters('prefix')))]"
                       },
                       "routeTable": {
                         "id": "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
@@ -721,7 +721,7 @@
                       "addressPrefix": "[parameters('databricksProductPublicSubnetAddressPrefix')]",
                       "addressPrefixes": [],
                       "networkSecurityGroup": {
-                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-databricks-nsg', parameters('prefix')))]"
                       },
                       "routeTable": {
                         "id": "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
@@ -746,7 +746,7 @@
                       "addressPrefix": "[parameters('databricksProductPrivateSubnetAddressPrefix')]",
                       "addressPrefixes": [],
                       "networkSecurityGroup": {
-                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-databricks-nsg', parameters('prefix')))]"
                       },
                       "routeTable": {
                         "id": "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
@@ -865,7 +865,7 @@
                 ]
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-databricks-nsg', parameters('prefix')))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]",
                 "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
               ]
@@ -882,7 +882,7 @@
                 "remoteVirtualNetwork": {
                   "id": "[parameters('dataManagementZoneVnetId')]"
                 },
-                "useRemoteGateways": true
+                "useRemoteGateways": false
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('prefix')))]"
@@ -914,7 +914,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "9166394159448980003"
+                      "templateHash": "5230197201569450586"
                     }
                   },
                   "parameters": {
@@ -943,7 +943,7 @@
                         "remoteVirtualNetwork": {
                           "id": "[parameters('dataLandingZoneVnetId')]"
                         },
-                        "useRemoteGateways": true
+                        "useRemoteGateways": false
                       }
                     }
                   ]
@@ -1020,7 +1020,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "10744814824540331584"
+              "templateHash": "12681212996502001786"
             }
           },
           "parameters": {
@@ -1049,22 +1049,23 @@
             {
               "type": "Microsoft.KeyVault/vaults/secrets",
               "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/logAnalyticsWorkspaceId', 'keyVault001')]",
+              "name": "[format('{0}/logAnalyticsWorkspaceId', variables('keyVault001Name'))]",
               "properties": {
                 "attributes": {
                   "enabled": true
                 },
                 "contentType": "text/plain",
-                "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalytics001Name')), '2020-10-01').customerId]"
+                "value": "[reference(resourceId('Microsoft.Resources/deployments', 'logAnalytics001'), '2019-10-01').outputs.logAnalyticsWorkspaceCustomerId.value]"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'keyVault001')]"
+                "[resourceId('Microsoft.Resources/deployments', 'keyVault001')]",
+                "[resourceId('Microsoft.Resources/deployments', 'logAnalytics001')]"
               ]
             },
             {
               "type": "Microsoft.KeyVault/vaults/secrets",
               "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/logAnalyticsWorkspaceKey', 'keyVault001')]",
+              "name": "[format('{0}/logAnalyticsWorkspaceKey', variables('keyVault001Name'))]",
               "properties": {
                 "attributes": {
                   "enabled": true
@@ -1073,7 +1074,8 @@
                 "value": "[listkeys(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalytics001Name')), '2020-10-01').primarySharedKey]"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'keyVault001')]"
+                "[resourceId('Microsoft.Resources/deployments', 'keyVault001')]",
+                "[resourceId('Microsoft.Resources/deployments', 'logAnalytics001')]"
               ]
             },
             {
@@ -1239,7 +1241,7 @@
                   "tags": {
                     "value": "[parameters('tags')]"
                   },
-                  "logananalyticsName": {
+                  "logAnanalyticsName": {
                     "value": "[variables('logAnalytics001Name')]"
                   }
                 },
@@ -1250,7 +1252,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "14546489684100219439"
+                      "templateHash": "15911499764289670026"
                     }
                   },
                   "parameters": {
@@ -1260,7 +1262,7 @@
                     "tags": {
                       "type": "object"
                     },
-                    "logananalyticsName": {
+                    "logAnanalyticsName": {
                       "type": "string"
                     }
                   },
@@ -1269,7 +1271,7 @@
                     {
                       "type": "Microsoft.OperationalInsights/workspaces",
                       "apiVersion": "2020-10-01",
-                      "name": "[parameters('logananalyticsName')]",
+                      "name": "[parameters('logAnanalyticsName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
                       "properties": {
@@ -1284,13 +1286,9 @@
                     }
                   ],
                   "outputs": {
-                    "logAnalyticsWorkspaceId": {
+                    "logAnalyticsWorkspaceCustomerId": {
                       "type": "string",
-                      "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logananalyticsName'))).customerId]"
-                    },
-                    "logAnalyticsWorkspaceKey": {
-                      "type": "string",
-                      "value": "[listkeys(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logananalyticsName')), '2020-10-01').primarySharedKey]"
+                      "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnanalyticsName'))).customerId]"
                     }
                   }
                 }
@@ -1356,7 +1354,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "4833791998050708669"
+              "templateHash": "1570357849738083722"
             }
           },
           "parameters": {
@@ -1404,10 +1402,9 @@
           },
           "resources": [
             {
-              "condition": "[parameters('deploySelfHostedIntegrationRuntimes')]",
               "type": "Microsoft.DataFactory/factories/integrationRuntimes",
               "apiVersion": "2018-06-01",
-              "name": "[format('{0}/dataLandingZoneSelfHostedIntegrationRuntime{1}', variables('datafactoryIntegration001Name'), variables('shir001Name'))]",
+              "name": "[format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name'))]",
               "properties": {
                 "type": "SelfHosted",
                 "description": "[format('Data Landing Zone - Self Hosted Integration Runtime running on {0}', variables('shir001Name'))]"
@@ -1586,7 +1583,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "9804041981381103368"
+                      "templateHash": "9270265691172426739"
                     }
                   },
                   "parameters": {
@@ -1625,6 +1622,9 @@
                       "name": "[parameters('datafactoryName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
+                      "identity": {
+                        "type": "SystemAssigned"
+                      },
                       "properties": {
                         "globalParameters": {},
                         "publicNetworkAccess": "Disabled",
@@ -1792,7 +1792,7 @@
                     "value": "[parameters('administratorPassword')]"
                   },
                   "datafactoryIntegrationRuntimeAuthKey": {
-                    "value": "[listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1]), '2018-06-01').authKey1]"
+                    "value": "[listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1]), '2018-06-01').authKey1]"
                   },
                   "storageAccountContainerName": {
                     "value": "[reference(resourceId('Microsoft.Resources/deployments', 'artifactstorage001'), '2019-10-01').outputs.storageAccountContainerName.value]"
@@ -2061,7 +2061,7 @@
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', 'artifactstorage001')]",
-                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
+                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
               ]
             },
             {
@@ -2417,7 +2417,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "944272040914621785"
+              "templateHash": "6636989078691364758"
             }
           },
           "parameters": {
@@ -2493,7 +2493,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "9377021369894419616"
+                      "templateHash": "10579517856211424030"
                     }
                   },
                   "parameters": {
@@ -2577,11 +2577,6 @@
                           "virtualNetworkRules": [],
                           "resourceAccessRules": []
                         },
-                        "routingPreference": {
-                          "routingChoice": "MicrosoftRouting",
-                          "publishInternetEndpoints": false,
-                          "publishMicrosoftEndpoints": false
-                        },
                         "supportsHttpsTrafficOnly": true
                       }
                     },
@@ -2599,7 +2594,6 @@
                               "definition": {
                                 "actions": {
                                   "baseBlob": {
-                                    "enableAutoTierToHotFromCool": true,
                                     "tierToCool": {
                                       "daysAfterModificationGreaterThan": 90
                                     }
@@ -2616,7 +2610,6 @@
                                   }
                                 },
                                 "filters": {
-                                  "blobIndexMatch": [],
                                   "blobTypes": [
                                     "blockBlob"
                                   ],
@@ -2767,7 +2760,7 @@
                       "copy": {
                         "count": "[length(parameters('fileSystemNames'))]",
                         "input": {
-                          "storageFileSystemId": "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageName'), 'default', parameters('fileSystemNames')[copyIndex()])]"
+                          "storageFileSystemId": "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('storageNameCleaned'), 'default', parameters('fileSystemNames')[copyIndex()])]"
                         }
                       }
                     }
@@ -2814,7 +2807,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "9377021369894419616"
+                      "templateHash": "10579517856211424030"
                     }
                   },
                   "parameters": {
@@ -2898,11 +2891,6 @@
                           "virtualNetworkRules": [],
                           "resourceAccessRules": []
                         },
-                        "routingPreference": {
-                          "routingChoice": "MicrosoftRouting",
-                          "publishInternetEndpoints": false,
-                          "publishMicrosoftEndpoints": false
-                        },
                         "supportsHttpsTrafficOnly": true
                       }
                     },
@@ -2920,7 +2908,6 @@
                               "definition": {
                                 "actions": {
                                   "baseBlob": {
-                                    "enableAutoTierToHotFromCool": true,
                                     "tierToCool": {
                                       "daysAfterModificationGreaterThan": 90
                                     }
@@ -2937,7 +2924,6 @@
                                   }
                                 },
                                 "filters": {
-                                  "blobIndexMatch": [],
                                   "blobTypes": [
                                     "blockBlob"
                                   ],
@@ -3088,7 +3074,7 @@
                       "copy": {
                         "count": "[length(parameters('fileSystemNames'))]",
                         "input": {
-                          "storageFileSystemId": "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageName'), 'default', parameters('fileSystemNames')[copyIndex()])]"
+                          "storageFileSystemId": "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('storageNameCleaned'), 'default', parameters('fileSystemNames')[copyIndex()])]"
                         }
                       }
                     }
@@ -3135,7 +3121,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "9377021369894419616"
+                      "templateHash": "10579517856211424030"
                     }
                   },
                   "parameters": {
@@ -3219,11 +3205,6 @@
                           "virtualNetworkRules": [],
                           "resourceAccessRules": []
                         },
-                        "routingPreference": {
-                          "routingChoice": "MicrosoftRouting",
-                          "publishInternetEndpoints": false,
-                          "publishMicrosoftEndpoints": false
-                        },
                         "supportsHttpsTrafficOnly": true
                       }
                     },
@@ -3241,7 +3222,6 @@
                               "definition": {
                                 "actions": {
                                   "baseBlob": {
-                                    "enableAutoTierToHotFromCool": true,
                                     "tierToCool": {
                                       "daysAfterModificationGreaterThan": 90
                                     }
@@ -3258,7 +3238,6 @@
                                   }
                                 },
                                 "filters": {
-                                  "blobIndexMatch": [],
                                   "blobTypes": [
                                     "blockBlob"
                                   ],
@@ -3409,7 +3388,7 @@
                       "copy": {
                         "count": "[length(parameters('fileSystemNames'))]",
                         "input": {
-                          "storageFileSystemId": "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', parameters('storageName'), 'default', parameters('fileSystemNames')[copyIndex()])]"
+                          "storageFileSystemId": "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('storageNameCleaned'), 'default', parameters('fileSystemNames')[copyIndex()])]"
                         }
                       }
                     }
@@ -3425,7 +3404,7 @@
             },
             "storageRawFileSystemId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'storageRaw'), '2019-10-01').outputs.storageFileSystemIds.value[0]]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'storageRaw'), '2019-10-01').outputs.storageFileSystemIds.value[0].storageFileSystemId]"
             },
             "storageEnrichedCuratedId": {
               "type": "string",
@@ -3433,7 +3412,7 @@
             },
             "storageEnrichedCuratedFileSystemId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'storageEnrichedCurated'), '2019-10-01').outputs.storageFileSystemIds.value[0]]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'storageEnrichedCurated'), '2019-10-01').outputs.storageFileSystemIds.value[0].storageFileSystemId]"
             },
             "storageWorkspaceId": {
               "type": "string",
@@ -3441,7 +3420,7 @@
             },
             "storageWorkspaceFileSystemId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'storageWorkspace'), '2019-10-01').outputs.storageFileSystemIds.value[0]]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'storageWorkspace'), '2019-10-01').outputs.storageFileSystemIds.value[0].storageFileSystemId]"
             }
           }
         }
@@ -3485,7 +3464,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "301669832541891707"
+              "templateHash": "4799461784598790167"
             }
           },
           "parameters": {
@@ -3548,7 +3527,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "11992928402033025234"
+                      "templateHash": "2037613535849699201"
                     }
                   },
                   "parameters": {
@@ -3631,11 +3610,6 @@
                           "virtualNetworkRules": [],
                           "resourceAccessRules": []
                         },
-                        "routingPreference": {
-                          "routingChoice": "MicrosoftRouting",
-                          "publishInternetEndpoints": false,
-                          "publishMicrosoftEndpoints": false
-                        },
                         "supportsHttpsTrafficOnly": true
                       }
                     },
@@ -3653,7 +3627,6 @@
                               "definition": {
                                 "actions": {
                                   "baseBlob": {
-                                    "enableAutoTierToHotFromCool": true,
                                     "tierToCool": {
                                       "daysAfterModificationGreaterThan": 90
                                     }
@@ -3670,7 +3643,6 @@
                                   }
                                 },
                                 "filters": {
-                                  "blobIndexMatch": [],
                                   "blobTypes": [
                                     "blockBlob"
                                   ],
@@ -3834,7 +3806,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "10288600151789985094"
+              "templateHash": "16346241682600251319"
             }
           },
           "parameters": {
@@ -4272,7 +4244,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "8113541174060793481"
+                      "templateHash": "3931828577918550372"
                     }
                   },
                   "parameters": {
@@ -4323,9 +4295,7 @@
                       "properties": {
                         "administratorLogin": "[parameters('administratorUsername')]",
                         "administratorLoginPassword": "[parameters('administratorPassword')]",
-                        "administrators": {
-                          "azureADOnlyAuthentication": true
-                        },
+                        "administrators": {},
                         "minimalTlsVersion": "1.2",
                         "publicNetworkAccess": "Disabled",
                         "version": "12.0"
@@ -4368,7 +4338,7 @@
                         "maxSizeBytes": 524288000,
                         "minCapacity": 1,
                         "requestedBackupStorageRedundancy": "Geo",
-                        "zoneRedundant": true
+                        "zoneRedundant": false
                       },
                       "dependsOn": [
                         "[resourceId('Microsoft.Sql/servers', parameters('sqlserverName'))]"
@@ -4671,7 +4641,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "sharedDOmainServices",
+      "name": "sharedDomainServices",
       "resourceGroup": "[format('{0}-shared-domain', variables('name'))]",
       "properties": {
         "expressionEvaluationOptions": {
@@ -4741,7 +4711,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "15614280500452542874"
+              "templateHash": "16334049904142172431"
             }
           },
           "parameters": {
@@ -4847,7 +4817,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "1313272439897233242"
+                      "templateHash": "10025836831328081020"
                     }
                   },
                   "parameters": {
@@ -4882,7 +4852,7 @@
                         "name": "premium"
                       },
                       "properties": {
-                        "managedResourceGroupId": "[parameters('databricksName')]",
+                        "managedResourceGroupId": "[format('{0}/resourceGroups/{1}-rg', subscription().id, parameters('databricksName'))]",
                         "parameters": {
                           "customVirtualNetworkId": {
                             "value": "[parameters('vnetId')]"
@@ -4895,11 +4865,6 @@
                           },
                           "enableNoPublicIp": {
                             "value": true
-                          },
-                          "encryption": {
-                            "value": {
-                              "keySource": "Default"
-                            }
                           },
                           "prepareEncryption": {
                             "value": true
@@ -4957,7 +4922,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "1178548940574483246"
+                      "templateHash": "10681228852820684691"
                     }
                   },
                   "parameters": {
@@ -4988,6 +4953,9 @@
                       "name": "[parameters('eventhubnamespaceName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
+                      "identity": {
+                        "type": "SystemAssigned"
+                      },
                       "sku": {
                         "name": "Standard",
                         "tier": "Standard",
@@ -5110,7 +5078,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "16940970469768652652"
+                      "templateHash": "8529648024909088001"
                     }
                   },
                   "parameters": {
@@ -5175,6 +5143,9 @@
                       "name": "[parameters('datafactoryName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
+                      "identity": {
+                        "type": "SystemAssigned"
+                      },
                       "properties": {
                         "globalParameters": {},
                         "publicNetworkAccess": "Disabled",
@@ -5540,7 +5511,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "2101427851744761565"
+                      "templateHash": "16848691429098486424"
                     }
                   },
                   "parameters": {
@@ -5554,7 +5525,7 @@
                   "functions": [],
                   "variables": {
                     "storageAccountFileSystemName": "[last(split(parameters('storageAccountFileSystemId'), '/'))]",
-                    "storageAccountName": "[split(parameters('storageAccountFileSystemId'), '/')[7]]",
+                    "storageAccountName": "[split(parameters('storageAccountFileSystemId'), '/')[8]]",
                     "datafactorySubscriptionId": "[split(parameters('datafactoryId'), '/')[2]]",
                     "datafactoryResourceGroupName": "[split(parameters('datafactoryId'), '/')[4]]",
                     "datafactoryName": "[last(split(parameters('datafactoryId'), '/'))]"
@@ -5567,7 +5538,8 @@
                       "name": "[guid(uniqueString(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', split(format('{0}/default/{1}', variables('storageAccountName'), variables('storageAccountFileSystemName')), '/')[0], split(format('{0}/default/{1}', variables('storageAccountName'), variables('storageAccountFileSystemName')), '/')[1], split(format('{0}/default/{1}', variables('storageAccountName'), variables('storageAccountFileSystemName')), '/')[2]), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySubscriptionId'), variables('datafactoryResourceGroupName')), 'Microsoft.DataFactory/factories', variables('datafactoryName'))))]",
                       "properties": {
                         "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
-                        "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySubscriptionId'), variables('datafactoryResourceGroupName')), 'Microsoft.DataFactory/factories', variables('datafactoryName')), '2018-06-01', 'full').identity.principalId]"
+                        "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySubscriptionId'), variables('datafactoryResourceGroupName')), 'Microsoft.DataFactory/factories', variables('datafactoryName')), '2018-06-01', 'full').identity.principalId]",
+                        "principalType": "ServicePrincipal"
                       }
                     }
                   ]
@@ -5603,7 +5575,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "2101427851744761565"
+                      "templateHash": "16848691429098486424"
                     }
                   },
                   "parameters": {
@@ -5617,7 +5589,7 @@
                   "functions": [],
                   "variables": {
                     "storageAccountFileSystemName": "[last(split(parameters('storageAccountFileSystemId'), '/'))]",
-                    "storageAccountName": "[split(parameters('storageAccountFileSystemId'), '/')[7]]",
+                    "storageAccountName": "[split(parameters('storageAccountFileSystemId'), '/')[8]]",
                     "datafactorySubscriptionId": "[split(parameters('datafactoryId'), '/')[2]]",
                     "datafactoryResourceGroupName": "[split(parameters('datafactoryId'), '/')[4]]",
                     "datafactoryName": "[last(split(parameters('datafactoryId'), '/'))]"
@@ -5630,7 +5602,8 @@
                       "name": "[guid(uniqueString(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', split(format('{0}/default/{1}', variables('storageAccountName'), variables('storageAccountFileSystemName')), '/')[0], split(format('{0}/default/{1}', variables('storageAccountName'), variables('storageAccountFileSystemName')), '/')[1], split(format('{0}/default/{1}', variables('storageAccountName'), variables('storageAccountFileSystemName')), '/')[2]), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySubscriptionId'), variables('datafactoryResourceGroupName')), 'Microsoft.DataFactory/factories', variables('datafactoryName'))))]",
                       "properties": {
                         "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
-                        "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySubscriptionId'), variables('datafactoryResourceGroupName')), 'Microsoft.DataFactory/factories', variables('datafactoryName')), '2018-06-01', 'full').identity.principalId]"
+                        "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySubscriptionId'), variables('datafactoryResourceGroupName')), 'Microsoft.DataFactory/factories', variables('datafactoryName')), '2018-06-01', 'full').identity.principalId]",
+                        "principalType": "ServicePrincipal"
                       }
                     }
                   ]
@@ -5664,7 +5637,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "18335768647718930408"
+                      "templateHash": "3170349211861953845"
                     }
                   },
                   "parameters": {
@@ -5690,7 +5663,8 @@
                       "name": "[guid(uniqueString(resourceId('Microsoft.Databricks/workspaces', variables('databricksName')), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySubscriptionId'), variables('datafactoryResourceGroupName')), 'Microsoft.DataFactory/factories', variables('datafactoryName'))))]",
                       "properties": {
                         "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
-                        "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySubscriptionId'), variables('datafactoryResourceGroupName')), 'Microsoft.DataFactory/factories', variables('datafactoryName')), '2018-06-01', 'full').identity.principalId]"
+                        "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySubscriptionId'), variables('datafactoryResourceGroupName')), 'Microsoft.DataFactory/factories', variables('datafactoryName')), '2018-06-01', 'full').identity.principalId]",
+                        "principalType": "ServicePrincipal"
                       }
                     }
                   ]
@@ -5778,7 +5752,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "11774271853476160662"
+              "templateHash": "16580712287606723116"
             }
           },
           "parameters": {
@@ -5876,7 +5850,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "1313272439897233242"
+                      "templateHash": "10025836831328081020"
                     }
                   },
                   "parameters": {
@@ -5911,7 +5885,7 @@
                         "name": "premium"
                       },
                       "properties": {
-                        "managedResourceGroupId": "[parameters('databricksName')]",
+                        "managedResourceGroupId": "[format('{0}/resourceGroups/{1}-rg', subscription().id, parameters('databricksName'))]",
                         "parameters": {
                           "customVirtualNetworkId": {
                             "value": "[parameters('vnetId')]"
@@ -5924,11 +5898,6 @@
                           },
                           "enableNoPublicIp": {
                             "value": true
-                          },
-                          "encryption": {
-                            "value": {
-                              "keySource": "Default"
-                            }
                           },
                           "prepareEncryption": {
                             "value": true
@@ -6347,7 +6316,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "16927606098418221893"
+                      "templateHash": "10336898227818705673"
                     }
                   },
                   "parameters": {
@@ -6361,7 +6330,7 @@
                   "functions": [],
                   "variables": {
                     "storageAccountFileSystemName": "[last(split(parameters('storageAccountFileSystemId'), '/'))]",
-                    "storageAccountName": "[split(parameters('storageAccountFileSystemId'), '/')[7]]",
+                    "storageAccountName": "[split(parameters('storageAccountFileSystemId'), '/')[8]]",
                     "synapseSubscriptionId": "[split(parameters('synapseId'), '/')[2]]",
                     "synapseResourceGroupName": "[split(parameters('synapseId'), '/')[4]]",
                     "synapseName": "[last(split(parameters('synapseId'), '/'))]"
@@ -6374,7 +6343,8 @@
                       "name": "[guid(uniqueString(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', split(format('{0}/default/{1}', variables('storageAccountName'), variables('storageAccountFileSystemName')), '/')[0], split(format('{0}/default/{1}', variables('storageAccountName'), variables('storageAccountFileSystemName')), '/')[1], split(format('{0}/default/{1}', variables('storageAccountName'), variables('storageAccountFileSystemName')), '/')[2]), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('synapseSubscriptionId'), variables('synapseResourceGroupName')), 'Microsoft.Synapse/workspaces', variables('synapseName'))))]",
                       "properties": {
                         "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
-                        "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('synapseSubscriptionId'), variables('synapseResourceGroupName')), 'Microsoft.Synapse/workspaces', variables('synapseName')), '2021-03-01', 'full').identity.principalId]"
+                        "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('synapseSubscriptionId'), variables('synapseResourceGroupName')), 'Microsoft.Synapse/workspaces', variables('synapseName')), '2021-03-01', 'full').identity.principalId]",
+                        "principalType": "ServicePrincipal"
                       }
                     }
                   ]

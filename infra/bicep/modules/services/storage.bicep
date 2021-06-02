@@ -65,11 +65,11 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
       virtualNetworkRules: []
       resourceAccessRules: []
     }
-    routingPreference: {
-      routingChoice: 'MicrosoftRouting'
-      publishInternetEndpoints: false
-      publishMicrosoftEndpoints: false
-    }
+    // routingPreference: {  // Not supported for thsi account
+    //   routingChoice: 'MicrosoftRouting'
+    //   publishInternetEndpoints: false
+    //   publishMicrosoftEndpoints: false
+    // }
     supportsHttpsTrafficOnly: true
   }
 }
@@ -86,7 +86,7 @@ resource storageManagementPolicies 'Microsoft.Storage/storageAccounts/management
           definition: {
             actions: {
               baseBlob: {
-                enableAutoTierToHotFromCool: true
+                // enableAutoTierToHotFromCool: true  // Not available for HNS storage yet
                 tierToCool: {
                   // daysAfterLastAccessTimeGreaterThan: 90  // Not available for HNS storage yet
                   daysAfterModificationGreaterThan: 90
@@ -124,7 +124,6 @@ resource storageManagementPolicies 'Microsoft.Storage/storageAccounts/management
               }
             }
             filters: {
-              blobIndexMatch: []
               blobTypes: [
                 'blockBlob'
               ]
@@ -260,5 +259,5 @@ resource storagePrivateEndpointDfsARecord 'Microsoft.Network/privateEndpoints/pr
 // Outputs
 output storageId string = storage.id
 output storageFileSystemIds array = [for fileSystemName in fileSystemNames: {
-  storageFileSystemId: resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', storageName, 'default', fileSystemName)
+  storageFileSystemId: resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', storageNameCleaned, 'default', fileSystemName)
 }]

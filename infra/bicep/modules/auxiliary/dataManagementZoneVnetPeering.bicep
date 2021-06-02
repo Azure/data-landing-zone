@@ -21,7 +21,7 @@ resource dataManagementZoneDataLandingZoneVnetPeering 'Microsoft.Network/virtual
     remoteVirtualNetwork: {
       id: dataLandingZoneVnetId
     }
-    useRemoteGateways: true
+    useRemoteGateways: false
   }
 }
 

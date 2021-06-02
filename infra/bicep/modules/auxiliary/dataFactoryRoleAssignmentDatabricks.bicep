@@ -1,4 +1,3 @@
-// This template is used as a module from the network.bicep template. 
 // The module contains a template to create a role assignment to Databricks.
 targetScope = 'resourceGroup'
 
@@ -28,6 +27,7 @@ resource synapseRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-
   properties: {
     roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
     principalId: datafactory.identity.principalId
+    principalType: 'ServicePrincipal'
   }
 }
 

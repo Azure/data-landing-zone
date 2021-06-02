@@ -33,6 +33,9 @@ resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
   name: datafactoryName
   location: location
   tags: tags
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     globalParameters: {}
     publicNetworkAccess: 'Disabled'

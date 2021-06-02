@@ -67,8 +67,8 @@ module storageWorkspace 'services/storage.bicep' = {
 
 // Outputs
 output storageRawId string = storageRaw.outputs.storageId
-output storageRawFileSystemId string = storageRaw.outputs.storageFileSystemIds[0]
+output storageRawFileSystemId string = storageRaw.outputs.storageFileSystemIds[0].storageFileSystemId
 output storageEnrichedCuratedId string = storageEnrichedCurated.outputs.storageId
-output storageEnrichedCuratedFileSystemId string = storageEnrichedCurated.outputs.storageFileSystemIds[0]
+output storageEnrichedCuratedFileSystemId string = storageEnrichedCurated.outputs.storageFileSystemIds[0].storageFileSystemId
 output storageWorkspaceId string = storageWorkspace.outputs.storageId
-output storageWorkspaceFileSystemId string = storageWorkspace.outputs.storageFileSystemIds[0]
+output storageWorkspaceFileSystemId string = storageWorkspace.outputs.storageFileSystemIds[0].storageFileSystemId
