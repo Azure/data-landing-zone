@@ -4,7 +4,6 @@ targetScope = 'resourceGroup'
 // Parameters
 param location string
 param tags object
-param subnetId string
 param artifactstorageName string
 
 // Variables

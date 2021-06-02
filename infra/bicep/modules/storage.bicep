@@ -1,5 +1,5 @@
 // This template is used as a module from the main.bicep template. 
-// The module contains a template to create network resources.
+// The module contains a template to create storage resources.
 targetScope = 'resourceGroup'
 
 // Parameters
@@ -23,49 +23,52 @@ var dataProductFileSystemNames = [
 ]
 
 // Resources
-module storageRaw 'datalake.bicep' = {
+module storageRaw 'services/storage.bicep' = {
   name: 'storageRaw'
   scope: resourceGroup()
   params: {
     location: location
-    prefix: prefix
     tags: tags
     subnetId: subnetId
+    storageName: '${prefix}-raw'
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: domainFileSytemNames
-    layer: 'raw'
   }
 }
 
-module storageEnrichedCurated 'datalake.bicep' = {
+module storageEnrichedCurated 'services/storage.bicep' = {
   name: 'storageEnrichedCurated'
   scope: resourceGroup()
   params: {
     location: location
-    prefix: prefix
     tags: tags
     subnetId: subnetId
+    storageName: '${prefix}-encur'
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: domainFileSytemNames
-    layer: 'encur'
   }
 }
 
-module storageWorkspace 'datalake.bicep' = {
+module storageWorkspace 'services/storage.bicep' = {
   name: 'storageWorkspace'
   scope: resourceGroup()
   params: {
     location: location
-    prefix: prefix
     tags: tags
     subnetId: subnetId
+    storageName: '${prefix}-work'
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: dataProductFileSystemNames
-    layer: 'work'
   }
 }
 
 // Outputs
+output storageRawId string = storageRaw.outputs.storageId
+output storageRawFileSystemId string = storageRaw.outputs.storageFileSystemIds[0]
+output storageEnrichedCuratedId string = storageEnrichedCurated.outputs.storageId
+output storageEnrichedCuratedFileSystemId string = storageEnrichedCurated.outputs.storageFileSystemIds[0]
+output storageWorkspaceId string = storageWorkspace.outputs.storageId
+output storageWorkspaceFileSystemId string = storageWorkspace.outputs.storageFileSystemIds[0]

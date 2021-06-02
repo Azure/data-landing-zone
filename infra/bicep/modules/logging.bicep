@@ -1,5 +1,5 @@
 // This template is used as a module from the main.bicep template.
-// The module contains a template to create network resources.
+// The module contains a template to create logging resources.
 targetScope = 'resourceGroup'
 
 // Parameters

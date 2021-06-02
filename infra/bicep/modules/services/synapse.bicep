@@ -18,8 +18,6 @@ param privateDnsZoneIdSynapseDev string
 param purviewId string
 
 // Variables
-var synapseDefaultStorageAccountSubscriptionId = split(synapseDefaultStorageAccountFileSystemId, '/')[2]
-var synapseDefaultStorageAccountResourceGroupName = split(synapseDefaultStorageAccountFileSystemId, '/')[4]
 var synapseDefaultStorageAccountFileSystemName = last(split(synapseDefaultStorageAccountFileSystemId, '/'))
 var synapseDefaultStorageAccountName = split(synapseDefaultStorageAccountFileSystemId, '/')[7]
 var synapsePrivateEndpointNameSql = '${synapse.name}-sql-private-endpoint'
@@ -36,7 +34,7 @@ resource synapse 'Microsoft.Synapse/workspaces@2021-03-01' = {
   }
   properties: {
     defaultDataLakeStorage: {
-      accountUrl: 'https://${synapseDefaultStorageAccountName}.dfs.core.windows.net'
+      accountUrl: 'https://${synapseDefaultStorageAccountName}.dfs.${environment().suffixes.storage}' 
       filesystem: synapseDefaultStorageAccountFileSystemName
     }
     managedResourceGroupName: synapseName

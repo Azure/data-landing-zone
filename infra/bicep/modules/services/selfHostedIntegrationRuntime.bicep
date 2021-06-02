@@ -4,7 +4,6 @@ targetScope = 'resourceGroup'
 
 // Parameters
 param location string
-param prefix string
 param tags object
 param subnetId string
 param vmssName string
@@ -13,6 +12,7 @@ param vmssSkuTier string = 'Standard'
 param vmssSkuCapacity int = 1
 param storageAccountId string
 param storageAccountContainerName string
+param administratorUsername string = 'VmssMainUser'
 @secure()
 param administratorPassword string
 @secure()
@@ -22,7 +22,6 @@ param datafactoryIntegrationRuntimeAuthKey string
 var storageAccountName = last(split(storageAccountId, '/'))
 
 // Resources
-
 resource loadbalancer001 'Microsoft.Network/loadBalancers@2020-11-01' = {
   name: '${vmssName}-lb'
   location: location
@@ -128,7 +127,7 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
     virtualMachineProfile: {
       priority: 'Regular'
       osProfile: {
-        adminUsername: 'VmssMainUser'
+        adminUsername: administratorUsername
         adminPassword: administratorPassword
         computerNamePrefix: take(vmssName, 9)
       }
@@ -191,7 +190,7 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
               autoUpgradeMinorVersion: true
               settings: {
                 fileUris: [
-                  'https://${storageAccountName}.blob.core.windows.net/${storageAccountContainerName}/installSHIRGateway.ps1'
+                  'https://${storageAccountName}.blob.${environment().suffixes.storage}/${storageAccountContainerName}/installSHIRGateway.ps1'
                 ]
               }
               protectedSettings: {

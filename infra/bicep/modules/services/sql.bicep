@@ -113,4 +113,5 @@ resource sqlserverPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/pri
 }
 
 // Outputs
+output sqlServerId string = sqlserver.id
 output sqlServerDatabaseName string = sqlserverAdfMetastoreDbName

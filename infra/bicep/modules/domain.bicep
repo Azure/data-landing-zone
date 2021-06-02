@@ -1,5 +1,5 @@
 // This template is used as a module from the main.bicep template. 
-// The module contains a template to create network resources.
+// The module contains a template to create domain resources.
 targetScope = 'resourceGroup'
 
 // Parameters
@@ -41,7 +41,7 @@ module databricksDomain001 'services/databricks.bicep' = {
     databricksName: databricksDomain001Name
     vnetId: vnetId
     privateSubnetName: databricksDomain001PrivateSubnetName
-    publicSubnetName: databricksDomain001PrivateSubnetName
+    publicSubnetName: databricksDomain001PublicSubnetName
   }
 }
 

@@ -1,5 +1,5 @@
 // This template is used as a module from the main.bicep template. 
-// The module contains a template to create network resources.
+// The module contains a template to create metadata resources.
 targetScope = 'resourceGroup'
 
 // Parameters
@@ -58,8 +58,8 @@ module sqlServer001 'services/sql.bicep' = {
     subnetId: subnetId
     administratorUsername: administratorUsername
     administratorPassword: administratorPassword
-    sqlserverAdminGroupName: ''
-    sqlserverAdminGroupObjectID: ''
+    sqlserverAdminGroupName: sqlserverAdminGroupName
+    sqlserverAdminGroupObjectID: sqlserverAdminGroupObjectID
     sqlserverName: sqlServer001Name
     privateDnsZoneIdSqlServer: privateDnsZoneIdSqlServer
   }
@@ -75,8 +75,8 @@ module mySqlServer001 'services/mysql.bicep' = {
     mysqlserverName: mySqlServer001Name
     administratorUsername: administratorUsername
     administratorPassword: administratorPassword
-    mysqlserverAdminGroupName: ''
-    mysqlserverAdminGroupObjectID: ''
+    mysqlserverAdminGroupName: mysqlserverAdminGroupName
+    mysqlserverAdminGroupObjectID: mysqlserverAdminGroupObjectID
     privateDnsZoneIdMySqlServer: privateDnsZoneIdMySqlServer
   }
 }
@@ -124,3 +124,6 @@ resource mysqlserver001ConnectionStringSecretDeployment 'Microsoft.KeyVault/vaul
 }
 
 // Outputs
+output keyVault001Id string = keyVault001.outputs.keyvaultId
+output sqlServer001Id string = sqlServer001.outputs.sqlServerId
+output sqlServer001DatabaseName string = sqlServer001.outputs.sqlServerDatabaseName

@@ -443,4 +443,9 @@ module dataManagementZoneDataLandingZoneVnetPeering 'auxiliary/dataManagementZon
 }
 
 // Outputs
+output vnetId string = vnet.id
 output servicesSubnetId string = vnet.properties.subnets[0].id
+output databricksDomainPublicSubnetName string = databricksDomainPublicSubnetName
+output databricksDomainPrivateSubnetName string = databricksDomainPrivateSubnetName
+output databricksProductPublicSubnetName string = databricksProductPublicSubnetName
+output databricksProductPrivateSubnetName string = databricksProductPrivateSubnetName

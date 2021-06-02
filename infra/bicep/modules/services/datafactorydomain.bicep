@@ -167,7 +167,7 @@ resource datafactoryKeyVault001LinkedService 'Microsoft.DataFactory/factories/li
     description: 'Key Vault for storing secrets'
     parameters: {}
     typeProperties: {
-      baseUrl: 'https://${keyVault001Name}.vault.azure.net/'
+      baseUrl: 'https://${keyVault001Name}${environment().suffixes.keyvaultDns}/'
     }
   }
 }
@@ -196,7 +196,7 @@ resource datafactorySqlserver001LinkedService 'Microsoft.DataFactory/factories/l
     description: 'Sql Database for storing metadata'
     parameters: {}
     typeProperties: {
-      connectionString: 'Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=${sqlServer001Name}.database.windows.net;Initial Catalog=${sqlDatabase001Name}'
+      connectionString: 'Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=${sqlServer001Name}${environment().suffixes.sqlServerHostname};Initial Catalog=${sqlDatabase001Name}'
     }
   }
 }
@@ -225,7 +225,7 @@ resource datafactoryStorageRawLinkedService 'Microsoft.DataFactory/factories/lin
     description: 'Storage Account for raw data'
     parameters: {}
     typeProperties: {
-      url: 'https://${storageRawName}.dfs.core.windows.net'
+      url: 'https://${storageRawName}.dfs.${environment().suffixes.storage}'
     }
   }
 }
@@ -254,7 +254,7 @@ resource datafactoryStorageEnrichedCuratedLinkedService 'Microsoft.DataFactory/f
     description: 'Storage Account for raw data'
     parameters: {}
     typeProperties: {
-      url: 'https://${storageEnrichedCuratedName}.dfs.core.windows.net'
+      url: 'https://${storageEnrichedCuratedName}.dfs.${environment().suffixes.storage}'
     }
   }
 }

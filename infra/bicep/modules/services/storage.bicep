@@ -258,3 +258,7 @@ resource storagePrivateEndpointDfsARecord 'Microsoft.Network/privateEndpoints/pr
 }
 
 // Outputs
+output storageId string = storage.id
+output storageFileSystemIds array = [for fileSystemName in fileSystemNames: {
+  storageFileSystemId: resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', storageName, 'default', fileSystemName)
+}]

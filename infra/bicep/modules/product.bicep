@@ -1,5 +1,5 @@
 // This template is used as a module from the main.bicep template. 
-// The module contains a template to create network resources.
+// The module contains a template to create shared product resources.
 targetScope = 'resourceGroup'
 
 // Parameters
@@ -9,6 +9,8 @@ param tags object
 param administratorUsername string = 'SqlServerMainUser'
 @secure()
 param administratorPassword string
+param synapseSqlAdminGroupName string
+param synapseSqlAdminGroupObjectID string
 param synapseProduct001DefaultStorageAccountFileSystemId string
 param synapseProduct001ComputeSubnetId string
 param privateDnsZoneIdSynapseSql string
@@ -50,8 +52,8 @@ module synapseProduct001 'services/synapse.bicep' = {
     synapseName: synapseProduct001Name
     administratorUsername: administratorUsername
     administratorPassword: administratorPassword
-    synapseSqlAdminGroupName: ''
-    synapseSqlAdminGroupObjectID: ''
+    synapseSqlAdminGroupName: synapseSqlAdminGroupName
+    synapseSqlAdminGroupObjectID: synapseSqlAdminGroupObjectID
     synapseDefaultStorageAccountFileSystemId: synapseProduct001DefaultStorageAccountFileSystemId
     synapseComputeSubnetId: synapseProduct001ComputeSubnetId
     privateDnsZoneIdSynapseDev: privateDnsZoneIdSynapseDev
