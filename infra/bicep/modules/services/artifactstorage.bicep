@@ -68,8 +68,14 @@ resource artifactstorage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   }
 }
 
+resource artifactStorageBlobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-04-01' existing = {
+  parent: artifactstorage
+  name: 'default'
+}
+
 resource artifactstorageScriptsContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' = {
-  name: '${artifactstorage.name}/default/scripts'
+  parent: artifactStorageBlobServices
+  name: 'scripts'
   properties: {
     publicAccess: 'None'
     metadata: {}

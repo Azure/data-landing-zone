@@ -175,6 +175,9 @@ module integrationServices 'modules/integration.bicep' = {
     purviewId: purviewId
     purviewSelfHostedIntegrationRuntimeAuthKey: purviewSelfHostedIntegrationRuntimeAuthKey
     deploySelfHostedIntegrationRuntimes: deploySelfHostedIntegrationRuntimes
+    datafactoryIds: [
+      sharedDomainServices.outputs.datafactoryDomain001Id
+    ]
   }
 }
 

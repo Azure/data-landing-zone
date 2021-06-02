@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1.14562",
-      "templateHash": "7748019647503674456"
+      "templateHash": "16990729376912604252"
     }
   },
   "parameters": {
@@ -1345,6 +1345,11 @@
           },
           "deploySelfHostedIntegrationRuntimes": {
             "value": "[parameters('deploySelfHostedIntegrationRuntimes')]"
+          },
+          "datafactoryIds": {
+            "value": [
+              "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.datafactoryDomain001Id.value]"
+            ]
           }
         },
         "template": {
@@ -1354,7 +1359,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "1570357849738083722"
+              "templateHash": "9323232049299512751"
             }
           },
           "parameters": {
@@ -1392,6 +1397,9 @@
             },
             "deploySelfHostedIntegrationRuntimes": {
               "type": "bool"
+            },
+            "datafactoryIds": {
+              "type": "array"
             }
           },
           "functions": [],
@@ -1440,7 +1448,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "16903483836988735125"
+                      "templateHash": "15843624572245769268"
                     }
                   },
                   "parameters": {
@@ -1521,7 +1529,7 @@
                     {
                       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default/scripts', variables('artifactstorageNameCleaned'))]",
+                      "name": "[format('{0}/{1}/{2}', variables('artifactstorageNameCleaned'), 'default', 'scripts')]",
                       "properties": {
                         "publicAccess": "None",
                         "metadata": {}
@@ -1538,7 +1546,7 @@
                     },
                     "storageAccountContainerName": {
                       "type": "string",
-                      "value": "[format('{0}/default/scripts', variables('artifactstorageNameCleaned'))]"
+                      "value": "scripts"
                     }
                   }
                 }
@@ -1820,7 +1828,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "18169445722067139387"
+                      "templateHash": "4839165092845672216"
                     }
                   },
                   "parameters": {
@@ -1867,13 +1875,14 @@
                   },
                   "functions": [],
                   "variables": {
-                    "storageAccountName": "[last(split(parameters('storageAccountId'), '/'))]"
+                    "storageAccountName": "[last(split(parameters('storageAccountId'), '/'))]",
+                    "loadbalancerName": "[format('{0}-lb', parameters('vmssName'))]"
                   },
                   "resources": [
                     {
                       "type": "Microsoft.Network/loadBalancers",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}-lb', parameters('vmssName'))]",
+                      "name": "[variables('loadbalancerName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
                       "sku": {
@@ -1900,7 +1909,7 @@
                             "name": "[format('{0}-natpool', parameters('vmssName'))]",
                             "properties": {
                               "frontendIPConfiguration": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), 'frontendipconfiguration')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', variables('loadbalancerName'), 'frontendipconfiguration')]"
                               },
                               "protocol": "Tcp",
                               "frontendPortRangeStart": 50000,
@@ -1916,13 +1925,13 @@
                             "properties": {
                               "loadDistribution": "Default",
                               "backendAddressPool": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), format('{0}-backendaddresspool', parameters('vmssName')))]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadbalancerName'), format('{0}-backendaddresspool', parameters('vmssName')))]"
                               },
                               "frontendIPConfiguration": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), 'frontendipconfiguration')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', variables('loadbalancerName'), 'frontendipconfiguration')]"
                               },
                               "probe": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), format('{0}-probe', parameters('vmssName')))]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', variables('loadbalancerName'), format('{0}-probe', parameters('vmssName')))]"
                               },
                               "protocol": "Tcp",
                               "frontendPort": 80,
@@ -1998,12 +2007,12 @@
                                       "properties": {
                                         "loadBalancerBackendAddressPools": [
                                           {
-                                            "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), format('{0}-backendaddresspool', parameters('vmssName')))]"
+                                            "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadbalancerName'), format('{0}-backendaddresspool', parameters('vmssName')))]"
                                           }
                                         ],
                                         "loadBalancerInboundNatPools": [
                                           {
-                                            "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), format('{0}-natpool', parameters('vmssName')))]"
+                                            "id": "[resourceId('Microsoft.Network/loadBalancers/inboundNatPools', variables('loadbalancerName'), format('{0}-natpool', parameters('vmssName')))]"
                                           }
                                         ],
                                         "primary": true,
@@ -2045,7 +2054,7 @@
                                     ]
                                   },
                                   "protectedSettings": {
-                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 {0}', parameters('datafactoryIntegrationRuntimeAuthKey'))]",
+                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey {0}', parameters('datafactoryIntegrationRuntimeAuthKey'))]",
                                     "storageAccountName": "[variables('storageAccountName')]",
                                     "storageAccountKey": "[listkeys(parameters('storageAccountId'), '2021-02-01').keys[0].value]"
                                   }
@@ -2061,6 +2070,147 @@
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', 'artifactstorage001')]",
+                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
+              ]
+            },
+            {
+              "copy": {
+                "name": "shareDatafactoryIntegration001IntegrationRuntime001",
+                "count": "[length(parameters('datafactoryIds'))]"
+              },
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2019-10-01",
+              "name": "[format('shareDatafactoryIntegration001IntegrationRuntime001-{0}', copyIndex())]",
+              "subscriptionId": "[split(parameters('datafactoryIds')[copyIndex()], '/')[2]]",
+              "resourceGroup": "[split(parameters('datafactoryIds')[copyIndex()], '/')[4]]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "datafactorySourceId": {
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001'), '2019-10-01').outputs.datafactoryId.value]"
+                  },
+                  "datafactorySourceShirId": {
+                    "value": "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
+                  },
+                  "datafactoryDestinationId": {
+                    "value": "[parameters('datafactoryIds')[copyIndex()]]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.4.1.14562",
+                      "templateHash": "11145133456669834625"
+                    }
+                  },
+                  "parameters": {
+                    "datafactorySourceId": {
+                      "type": "string"
+                    },
+                    "datafactorySourceShirId": {
+                      "type": "string"
+                    },
+                    "datafactoryDestinationId": {
+                      "type": "string"
+                    }
+                  },
+                  "functions": [],
+                  "variables": {
+                    "datafactorySourceSubscriptionId": "[split(parameters('datafactorySourceId'), '/')[2]]",
+                    "datafactorySourceResourceGroup": "[split(parameters('datafactorySourceId'), '/')[4]]",
+                    "datafactorySourceShirName": "[last(split(parameters('datafactorySourceShirId'), '/'))]",
+                    "datafactoryDestinationName": "[last(split(parameters('datafactoryDestinationId'), '/'))]"
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.DataFactory/factories/integrationRuntimes",
+                      "apiVersion": "2018-06-01",
+                      "name": "[format('{0}/{1}', variables('datafactoryDestinationName'), variables('datafactorySourceShirName'))]",
+                      "properties": {
+                        "type": "SelfHosted",
+                        "description": "Data Landing Zone - Self-hosted Integration Runtime",
+                        "typeProperties": {
+                          "linkedInfo": {
+                            "authorizationType": "RBAC",
+                            "resourceId": "[parameters('datafactorySourceShirId')]"
+                          }
+                        }
+                      },
+                      "dependsOn": [
+                        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySourceSubscriptionId'), variables('datafactorySourceResourceGroup')), 'Microsoft.Resources/deployments', 'datafactoryDestinationRoleAssignment')]"
+                      ]
+                    },
+                    {
+                      "type": "Microsoft.Resources/deployments",
+                      "apiVersion": "2019-10-01",
+                      "name": "datafactoryDestinationRoleAssignment",
+                      "subscriptionId": "[variables('datafactorySourceSubscriptionId')]",
+                      "resourceGroup": "[variables('datafactorySourceResourceGroup')]",
+                      "properties": {
+                        "expressionEvaluationOptions": {
+                          "scope": "inner"
+                        },
+                        "mode": "Incremental",
+                        "parameters": {
+                          "datafactorySourceId": {
+                            "value": "[parameters('datafactorySourceId')]"
+                          },
+                          "datafactoryDestinationId": {
+                            "value": "[parameters('datafactoryDestinationId')]"
+                          }
+                        },
+                        "template": {
+                          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                          "contentVersion": "1.0.0.0",
+                          "metadata": {
+                            "_generator": {
+                              "name": "bicep",
+                              "version": "0.4.1.14562",
+                              "templateHash": "9193582345089322679"
+                            }
+                          },
+                          "parameters": {
+                            "datafactorySourceId": {
+                              "type": "string"
+                            },
+                            "datafactoryDestinationId": {
+                              "type": "string"
+                            }
+                          },
+                          "functions": [],
+                          "variables": {
+                            "datafactorySourceName": "[last(split(parameters('datafactorySourceId'), '/'))]",
+                            "datafactoryDestinationSubscriptionId": "[split(parameters('datafactoryDestinationId'), '/')[2]]",
+                            "datafactoryDestinationResourceGroup": "[split(parameters('datafactoryDestinationId'), '/')[4]]",
+                            "datafactoryDestinationName": "[last(split(parameters('datafactoryDestinationId'), '/'))]"
+                          },
+                          "resources": [
+                            {
+                              "type": "Microsoft.Authorization/roleAssignments",
+                              "apiVersion": "2020-04-01-preview",
+                              "scope": "[format('Microsoft.DataFactory/factories/{0}', variables('datafactorySourceName'))]",
+                              "name": "[guid(uniqueString(resourceId('Microsoft.DataFactory/factories', variables('datafactorySourceName')), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactoryDestinationSubscriptionId'), variables('datafactoryDestinationResourceGroup')), 'Microsoft.DataFactory/factories', variables('datafactoryDestinationName'))))]",
+                              "properties": {
+                                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                                "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactoryDestinationSubscriptionId'), variables('datafactoryDestinationResourceGroup')), 'Microsoft.DataFactory/factories', variables('datafactoryDestinationName')), '2018-06-01', 'full').identity.principalId]",
+                                "principalType": "ServicePrincipal"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001')]",
                 "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
               ]
             },
@@ -2119,7 +2269,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "18169445722067139387"
+                      "templateHash": "4839165092845672216"
                     }
                   },
                   "parameters": {
@@ -2166,13 +2316,14 @@
                   },
                   "functions": [],
                   "variables": {
-                    "storageAccountName": "[last(split(parameters('storageAccountId'), '/'))]"
+                    "storageAccountName": "[last(split(parameters('storageAccountId'), '/'))]",
+                    "loadbalancerName": "[format('{0}-lb', parameters('vmssName'))]"
                   },
                   "resources": [
                     {
                       "type": "Microsoft.Network/loadBalancers",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}-lb', parameters('vmssName'))]",
+                      "name": "[variables('loadbalancerName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
                       "sku": {
@@ -2199,7 +2350,7 @@
                             "name": "[format('{0}-natpool', parameters('vmssName'))]",
                             "properties": {
                               "frontendIPConfiguration": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), 'frontendipconfiguration')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', variables('loadbalancerName'), 'frontendipconfiguration')]"
                               },
                               "protocol": "Tcp",
                               "frontendPortRangeStart": 50000,
@@ -2215,13 +2366,13 @@
                             "properties": {
                               "loadDistribution": "Default",
                               "backendAddressPool": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), format('{0}-backendaddresspool', parameters('vmssName')))]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadbalancerName'), format('{0}-backendaddresspool', parameters('vmssName')))]"
                               },
                               "frontendIPConfiguration": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), 'frontendipconfiguration')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', variables('loadbalancerName'), 'frontendipconfiguration')]"
                               },
                               "probe": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), format('{0}-probe', parameters('vmssName')))]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', variables('loadbalancerName'), format('{0}-probe', parameters('vmssName')))]"
                               },
                               "protocol": "Tcp",
                               "frontendPort": 80,
@@ -2297,12 +2448,12 @@
                                       "properties": {
                                         "loadBalancerBackendAddressPools": [
                                           {
-                                            "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), format('{0}-backendaddresspool', parameters('vmssName')))]"
+                                            "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadbalancerName'), format('{0}-backendaddresspool', parameters('vmssName')))]"
                                           }
                                         ],
                                         "loadBalancerInboundNatPools": [
                                           {
-                                            "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), format('{0}-natpool', parameters('vmssName')))]"
+                                            "id": "[resourceId('Microsoft.Network/loadBalancers/inboundNatPools', variables('loadbalancerName'), format('{0}-natpool', parameters('vmssName')))]"
                                           }
                                         ],
                                         "primary": true,
@@ -2344,7 +2495,7 @@
                                     ]
                                   },
                                   "protectedSettings": {
-                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 {0}', parameters('datafactoryIntegrationRuntimeAuthKey'))]",
+                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey {0}', parameters('datafactoryIntegrationRuntimeAuthKey'))]",
                                     "storageAccountName": "[variables('storageAccountName')]",
                                     "storageAccountKey": "[listkeys(parameters('storageAccountId'), '2021-02-01').keys[0].value]"
                                   }
@@ -2377,7 +2528,8 @@
       },
       "dependsOn": [
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-integration', variables('name')))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices')]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices')]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices')]"
       ]
     },
     {
@@ -4711,7 +4863,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "16334049904142172431"
+              "templateHash": "8531356318416003367"
             }
           },
           "parameters": {
@@ -5675,7 +5827,13 @@
                 "[resourceId('Microsoft.Resources/deployments', 'datafactoryDomain001')]"
               ]
             }
-          ]
+          ],
+          "outputs": {
+            "datafactoryDomain001Id": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryDomain001'), '2019-10-01').outputs.datafactoryId.value]"
+            }
+          }
         }
       },
       "dependsOn": [

@@ -20,10 +20,11 @@ param datafactoryIntegrationRuntimeAuthKey string
 
 // Variables
 var storageAccountName = last(split(storageAccountId, '/'))
+var loadbalancerName = '${vmssName}-lb'
 
 // Resources
 resource loadbalancer001 'Microsoft.Network/loadBalancers@2020-11-01' = {
-  name: '${vmssName}-lb'
+  name: loadbalancerName
   location: location
   tags: tags
   sku: {
@@ -50,7 +51,7 @@ resource loadbalancer001 'Microsoft.Network/loadBalancers@2020-11-01' = {
         name: '${vmssName}-natpool'
         properties: {
           frontendIPConfiguration: {
-            id: resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', '${vmssName}-lb', 'frontendipconfiguration')
+            id: resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', loadbalancerName, 'frontendipconfiguration')
           }
           protocol: 'Tcp'
           frontendPortRangeStart: 50000
@@ -66,13 +67,13 @@ resource loadbalancer001 'Microsoft.Network/loadBalancers@2020-11-01' = {
         properties: {
           loadDistribution: 'Default'
           backendAddressPool: {
-            id: resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', '${vmssName}-lb', '${vmssName}-backendaddresspool')
+            id: resourceId('Microsoft.Network/loadBalancers/backendAddressPools', loadbalancerName, '${vmssName}-backendaddresspool')
           }
           frontendIPConfiguration: {
-            id: resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', '${vmssName}-lb', 'frontendipconfiguration')
+            id: resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', loadbalancerName, 'frontendipconfiguration')
           }
           probe: {
-            id: resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', '${vmssName}-lb', '${vmssName}-probe')
+            id: resourceId('Microsoft.Network/loadBalancers/probes', loadbalancerName, '${vmssName}-probe')
           }
           protocol: 'Tcp'
           frontendPort: 80
@@ -147,12 +148,12 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
                   properties: {
                     loadBalancerBackendAddressPools: [
                       {
-                        id: resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', '${vmssName}-lb', '${vmssName}-backendaddresspool')
+                        id: resourceId('Microsoft.Network/loadBalancers/backendAddressPools', loadbalancerName, '${vmssName}-backendaddresspool')
                       }
                     ]
                     loadBalancerInboundNatPools: [
                       {
-                        id: resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', '${vmssName}-lb', '${vmssName}-natpool')
+                        id: resourceId('Microsoft.Network/loadBalancers/inboundNatPools', loadbalancerName, '${vmssName}-natpool')
                       }
                     ]
                     primary: true
@@ -194,7 +195,7 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
                 ]
               }
               protectedSettings: {
-                commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 ${datafactoryIntegrationRuntimeAuthKey}'
+                commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey ${datafactoryIntegrationRuntimeAuthKey}'
                 storageAccountName: storageAccountName
                 storageAccountKey: listkeys(storageAccountId, '2021-02-01').keys[0].value
               }

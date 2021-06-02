@@ -15,6 +15,7 @@ param privateDnsZoneIdDataFactoryPortal string
 param purviewId string
 param purviewSelfHostedIntegrationRuntimeAuthKey string = ''
 param deploySelfHostedIntegrationRuntimes bool
+param datafactoryIds array
 
 // Variables
 var artifactstorage001Name = '${prefix}-artifact001'
@@ -75,6 +76,16 @@ module datafactory001SelfHostedIntegrationRuntime001 'services/selfHostedIntegra
     vmssSkuTier: 'Standard'
   }
 }
+
+module shareDatafactoryIntegration001IntegrationRuntime001 'auxiliary/shareSelfHostedIntegrationRuntime.bicep' = [ for (datafactoryId, i) in datafactoryIds: {
+  name: 'shareDatafactoryIntegration001IntegrationRuntime001-${i}'
+  scope: resourceGroup(split(datafactoryId, '/')[2], split(datafactoryId, '/')[4])
+  params: {
+    datafactorySourceId: datafactoryIntegration001.outputs.datafactoryId
+    datafactorySourceShirId: datafactoryIntegration001IntegrationRuntime001.id
+    datafactoryDestinationId: datafactoryId
+  }
+}]
 
 module purviewSelfHostedIntegrationRuntime001 'services/selfHostedIntegrationRuntime.bicep' = if (deploySelfHostedIntegrationRuntimes && purviewSelfHostedIntegrationRuntimeAuthKey != '') {
   name: 'purviewSelfHostedIntegrationRuntime001'
