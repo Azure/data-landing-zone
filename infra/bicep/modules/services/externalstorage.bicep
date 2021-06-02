@@ -1,24 +1,23 @@
-// This template is used as a module from the main.bicep template. 
-// The module contains a template to create network resources.
+// This template is used to create a storage account where the access key needs to be shared.
 targetScope = 'resourceGroup'
 
 // Parameters
 param location string
-param prefix string
 param tags object
 param subnetId string
+param storageName string
 param privateDnsZoneIdBlob string
-param numbering string
-
-// Variables
-var fileSytemNames = [
+param fileSytemNames array = [
   'data'
 ]
+
+// Variables
+var storageNameCleaned = replace(storageName, '-', '')
 var storageExternalPrivateEndpointNameBlob = '${storageExternal.name}-blob-private-endpoint'
 
 // Resources
 resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
-  name: replace('${prefix}-ext${numbering}', '-', '')
+  name: storageNameCleaned
   location: location
   tags: tags
   identity: {

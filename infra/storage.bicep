@@ -21,15 +21,9 @@ var dataProductFileSystemNames = [
   'dp001'
   'dp002'
 ]
-var storageRawPrivateEndpointNameBlob = '${storageRaw.name}-blob-private-endpoint'
-var storageRawPrivateEndpointNameDfs = '${storageRaw.name}-dfs-private-endpoint'
-var storageEnrichedCuratedPrivateEndpointNameBlob = '${storageEnrichedCurated.name}-blob-private-endpoint'
-var storageEnrichedCuratedPrivateEndpointNameDfs = '${storageEnrichedCurated.name}-dfs-private-endpoint'
-var storageWorkspacePrivateEndpointNameBlob = '${storageWorkspace.name}-blob-private-endpoint'
-var storageWorkspacePrivateEndpointNameDfs = '${storageWorkspace.name}-dfs-private-endpoint'
 
 // Resources
-module storageRaw 'storage/storage.bicep' = {
+module storageRaw 'datalake.bicep' = {
   name: 'storageRaw'
   scope: resourceGroup()
   params: {
@@ -44,7 +38,7 @@ module storageRaw 'storage/storage.bicep' = {
   }
 }
 
-module storageEnrichedCurated 'storage/storage.bicep' = {
+module storageEnrichedCurated 'datalake.bicep' = {
   name: 'storageEnrichedCurated'
   scope: resourceGroup()
   params: {
@@ -59,7 +53,7 @@ module storageEnrichedCurated 'storage/storage.bicep' = {
   }
 }
 
-module storageWorkspace 'storage/storage.bicep' = {
+module storageWorkspace 'datalake.bicep' = {
   name: 'storageWorkspace'
   scope: resourceGroup()
   params: {

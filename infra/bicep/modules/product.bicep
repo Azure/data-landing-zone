@@ -6,234 +6,66 @@ targetScope = 'resourceGroup'
 param location string
 param prefix string
 param tags object
+param administratorUsername string = 'SqlServerMainUser'
 @secure()
 param administratorPassword string
-param synapseSqlAdminGroupName string
-param synapseSqlAdminGroupObjectID string
-param synapseDefaultStorageAccountFileSystemId string
-param synapseComputeSubnetId string
-param synapsePrivateDnsZoneIdSql string
-param synapsePrivateDnsZoneIdDev string
-param databricksVnetId string
-param databricksPrivateSubnetName string
-param databricksPublicSubnetName string
+param synapseProduct001DefaultStorageAccountFileSystemId string
+param synapseProduct001ComputeSubnetId string
+param privateDnsZoneIdSynapseSql string
+param privateDnsZoneIdSynapseDev string
+param vnetId string
+param databricksProduct001PrivateSubnetName string
+param databricksProduct001PublicSubnetName string
 param subnetId string
 param purviewId string
 
 // Variables
-var synapseDefaultStorageAccountSubscriptionId = split(synapseDefaultStorageAccountFileSystemId, '/')[2]
-var synapseDefaultStorageAccountResourceGroupName = split(synapseDefaultStorageAccountFileSystemId, '/')[4]
-var synapseDefaultStorageAccountFileSystemName = split(synapseDefaultStorageAccountFileSystemId, '/')[-1]
-var synapseDefaultStorageAccountName = split(synapseDefaultStorageAccountFileSystemId, '/')[7]
-var synapsePrivateEndpointNameSql = '${synapse.name}-sql-private-endpoint'
-var synapsePrivateEndpointNameSqlOnDemand = '${synapse.name}-sqlondemand-private-endpoint'
-var synapsePrivateEndpointNameDev = '${synapse.name}-dev-private-endpoint'
+var synapseProduct001DefaultStorageAccountSubscriptionId = split(synapseProduct001DefaultStorageAccountFileSystemId, '/')[2]
+var synapseProduct001DefaultStorageAccountResourceGroupName = split(synapseProduct001DefaultStorageAccountFileSystemId, '/')[4]
+
+var databricksProduct001Name = '${prefix}-product-databricks001'
+var synapseProduct001Name = '${prefix}-product-synapse001'
 
 // Resources
-resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
-  name: '${prefix}-product-databricks'
-  location: location
-  tags: tags
-  sku: {
-    name: 'premium'
-  }
-  properties: {
-    managedResourceGroupId: '${prefix}-product-databricks'
-    parameters: {
-      customVirtualNetworkId: {
-        value: databricksVnetId
-      }
-      customPrivateSubnetName: {
-        value: databricksPrivateSubnetName
-      }
-      customPublicSubnetName: {
-        value: databricksPublicSubnetName
-      }
-      enableNoPublicIp: {
-        value: true
-      }
-      encryption: {
-        value: {
-          keySource: 'Default'
-        }
-      }
-      prepareEncryption: {
-        value: true
-      }
-      requireInfrastructureEncryption: {
-        value: false
-      }
-    }
-  }
-}
-
-resource synapse 'Microsoft.Synapse/workspaces@2021-03-01' = {
-  name: '${prefix}-product-synapse'
-  location: location
-  tags: tags
-  properties: {
-    defaultDataLakeStorage: {
-      accountUrl: 'https://${synapseDefaultStorageAccountName}.dfs.core.windows.net'
-      filesystem: synapseDefaultStorageAccountFileSystemName
-    }
-    managedResourceGroupName: '${prefix}-product-synapse'
-    managedVirtualNetwork: 'default'
-    managedVirtualNetworkSettings: {
-      allowedAadTenantIdsForLinking: []
-      linkedAccessCheckOnTargetResource: true
-      preventDataExfiltration: true
-    }
-    publicNetworkAccess: 'Disabled'
-    purviewConfiguration: {
-      purviewResourceId: purviewId
-    }
-    sqlAdministratorLogin: 'SqlServerMainUser'
-    sqlAdministratorLoginPassword: administratorPassword
-    virtualNetworkProfile: {
-      computeSubnetId: synapseComputeSubnetId
-    }
-  }
-}
-
-resource synapseManagedIdentitySqlControlSettings 'Microsoft.Synapse/workspaces/managedIdentitySqlControlSettings@2021-03-01' = {
-  name: '${synapse.name}/default'
-  properties: {
-    grantSqlControlToManagedIdentity: {
-      desiredState: 'Enabled'
-    }
-  }
-}
-
-resource synapseAadAdministrators 'Microsoft.Synapse/workspaces/administrators@2021-03-01' = {
-  name: '${synapse.name}/activeDirectory'
-  properties: {
-    administratorType: 'ActiveDirectory'
-    login: synapseSqlAdminGroupName
-    sid: synapseSqlAdminGroupObjectID
-    tenantId: subscription().tenantId
-  }
-}
-
-resource synapsePrivateEndpointSql 'Microsoft.Network/privateEndpoints@2020-11-01' = {
-  name: synapsePrivateEndpointNameSql
-  location: location
-  tags: tags
-  properties: {
-    manualPrivateLinkServiceConnections: []
-    privateLinkServiceConnections: [
-      {
-        name: synapsePrivateEndpointNameSql
-        properties: {
-          groupIds: [
-            'Sql'
-          ]
-          privateLinkServiceId: synapse.id
-          requestMessage: ''
-        }
-      }
-    ]
-    subnet: {
-      id: subnetId
-    }
-  }
-}
-
-resource synapsePrivateEndpointSqlARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
-  name: '${synapsePrivateEndpointSql.name}/aRecord'
-  properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: '${synapsePrivateEndpointSql.name}-arecord'
-        properties: {
-          privateDnsZoneId: synapsePrivateDnsZoneIdSql
-        }
-      }
-    ]
-  }
-}
-
-resource synapsePrivateEndpointSqlOnDemand 'Microsoft.Network/privateEndpoints@2020-11-01' = {
-  name: synapsePrivateEndpointNameSqlOnDemand
-  location: location
-  tags: tags
-  properties: {
-    manualPrivateLinkServiceConnections: []
-    privateLinkServiceConnections: [
-      {
-        name: synapsePrivateEndpointNameSqlOnDemand
-        properties: {
-          groupIds: [
-            'SqlOnDemand'
-          ]
-          privateLinkServiceId: synapse.id
-          requestMessage: ''
-        }
-      }
-    ]
-    subnet: {
-      id: subnetId
-    }
-  }
-}
-
-resource synapsePrivateEndpointSqlOnDemandARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
-  name: '${synapsePrivateEndpointSqlOnDemand.name}/aRecord'
-  properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: '${synapsePrivateEndpointSqlOnDemand.name}-arecord'
-        properties: {
-          privateDnsZoneId: synapsePrivateDnsZoneIdSql
-        }
-      }
-    ]
-  }
-}
-
-resource synapsePrivateEndpointDev 'Microsoft.Network/privateEndpoints@2020-11-01' = {
-  name: synapsePrivateEndpointNameDev
-  location: location
-  tags: tags
-  properties: {
-    manualPrivateLinkServiceConnections: []
-    privateLinkServiceConnections: [
-      {
-        name: synapsePrivateEndpointNameDev
-        properties: {
-          groupIds: [
-            'Dev'
-          ]
-          privateLinkServiceId: synapse.id
-          requestMessage: ''
-        }
-      }
-    ]
-    subnet: {
-      id: subnetId
-    }
-  }
-}
-
-resource synapsePrivateEndpointDevARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
-  name: '${synapsePrivateEndpointDev.name}/aRecord'
-  properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: '${synapsePrivateEndpointDev.name}-arecord'
-        properties: {
-          privateDnsZoneId: synapsePrivateDnsZoneIdDev
-        }
-      }
-    ]
-  }
-}
-
-module synapseStorageRoleAssignment 'product/synapseRoleAssignmentStorage.bicep' = {
-  name: 'synapseStorageRoleAssignment'
-  scope: resourceGroup(synapseDefaultStorageAccountSubscriptionId, synapseDefaultStorageAccountResourceGroupName)
+module databricksProduct001 'services/databricks.bicep' = {
+  name: 'databricksProduct001'
+  scope: resourceGroup()
   params: {
-    storageAccountFileSystemId: synapseDefaultStorageAccountFileSystemId
-    synapseId: synapse.id
+    location: location
+    tags: tags
+    databricksName: databricksProduct001Name
+    privateSubnetName: databricksProduct001PrivateSubnetName
+    publicSubnetName: databricksProduct001PublicSubnetName
+    vnetId: vnetId
+  }
+}
+
+module synapseProduct001 'services/synapse.bicep' = {
+  name: 'synapseProduct001'
+  scope: resourceGroup()
+  params: {
+    location: location
+    tags: tags
+    subnetId: subnetId
+    synapseName: synapseProduct001Name
+    administratorUsername: administratorUsername
+    administratorPassword: administratorPassword
+    synapseSqlAdminGroupName: ''
+    synapseSqlAdminGroupObjectID: ''
+    synapseDefaultStorageAccountFileSystemId: synapseProduct001DefaultStorageAccountFileSystemId
+    synapseComputeSubnetId: synapseProduct001ComputeSubnetId
+    privateDnsZoneIdSynapseDev: privateDnsZoneIdSynapseDev
+    privateDnsZoneIdSynapseSql: privateDnsZoneIdSynapseSql
+    purviewId: purviewId
+  }
+}
+
+module synapse001StorageRoleAssignment 'auxiliary/synapseRoleAssignmentStorage.bicep' = {
+  name: 'synapse001StorageRoleAssignment'
+  scope: resourceGroup(synapseProduct001DefaultStorageAccountSubscriptionId, synapseProduct001DefaultStorageAccountResourceGroupName)
+  params: {
+    storageAccountFileSystemId: synapseProduct001DefaultStorageAccountFileSystemId
+    synapseId: synapseProduct001.outputs.synapseId
   }
 }
 

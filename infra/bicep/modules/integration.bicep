@@ -9,187 +9,85 @@ param tags object
 @secure()
 param administratorPassword string
 param subnetId string
-param datafactoryPrivateDnsZoneIdDataFactory string
-param datafactoryPrivateDnsZoneIdPortal string
+param privateDnsZoneIdDataFactory string
+param privateDnsZoneIdDataFactoryPortal string
+param purviewId string
+param purviewSelfHostedIntegrationRuntimeAuthKey string = ''
 
 // Variables
-var vmss001Name = '${prefix}-shir001'
-var datafactoryPrivateEndpointNameDatafactory = '${datafactory.name}-datafactory-private-endpoint'
-var datafactoryPrivateEndpointNamePortal = '${datafactory.name}-portal-private-endpoint'
+var artifactstorage001Name = '${prefix}-artifact001'
+var datafactoryIntegration001Name = '${prefix}-integration-datafactory001'
+var shir001Name = '${prefix}-shir001'
 
 // Resources
-resource artifactstorage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
-  name: replace('${prefix}artifactstorage', '-', '')
-  location: location
-  tags: tags
-  identity: {
-    type: 'SystemAssigned'
-  }
-  sku: {
-    name: 'Standard_LRS'
-    tier: 'Standard'
-  }
-  kind: 'StorageV2'
-  properties: {
-    accessTier: 'Hot'
-    allowBlobPublicAccess: false
-    allowSharedKeyAccess: true
-    encryption: {
-      keySource: 'Microsoft.Storage'
-      requireInfrastructureEncryption: false
-      services: {
-        blob: {
-          enabled: true
-          keyType: 'Account'
-        }
-        file: {
-          enabled: true
-          keyType: 'Account'
-        }
-        queue: {
-          enabled: true
-          keyType: 'Service'
-        }
-        table: {
-          enabled: true
-          keyType: 'Service'
-        }
-      }
-    }
-    isHnsEnabled: false
-    isNfsV3Enabled: false
-    largeFileSharesState: 'Disabled'
-    minimumTlsVersion: 'TLS1_2'
-    networkAcls: {
-      bypass: 'AzureServices'
-      defaultAction: 'Allow'
-      ipRules: []
-      virtualNetworkRules: []
-      resourceAccessRules: []
-    }
-    routingPreference: {
-      routingChoice: 'MicrosoftRouting'
-      publishInternetEndpoints: false
-      publishMicrosoftEndpoints: false
-    }
-    supportsHttpsTrafficOnly: true
+module artifactstorage001 'services/artifactstorage.bicep' = {
+  name: 'artifactstorage001'
+  scope: resourceGroup()
+  params: {
+    location: location
+    tags: tags
+    subnetId: subnetId
+    artifactstorageName: artifactstorage001Name
   }
 }
 
-resource scriptsContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' = {
-  name: '${artifactstorage.name}/default/scripts'
-  properties: {
-    publicAccess: 'None'
-    metadata: {}
+module datafactoryIntegration001 'services/datafactoryintegration.bicep' = {
+  name: 'datafactoryIntegration001'
+  scope: resourceGroup()
+  params: {
+    location: location
+    tags: tags
+    subnetId: subnetId
+    datafactoryName: datafactoryIntegration001Name
+    privateDnsZoneIdDataFactory: privateDnsZoneIdDataFactory
+    privateDnsZoneIdDataFactoryPortal: privateDnsZoneIdDataFactoryPortal
+    purviewId: purviewId
   }
 }
 
-resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
-  name: '${prefix}-integration-datafactory'
-  location: location
-  tags: tags
-  properties: {
-    publicNetworkAccess: 'Disabled'
-  }
-}
-
-resource datafactoryIntegrationRuntime001 'Microsoft.DataFactory/factories/integrationRuntimes@2018-06-01' = {
-  name: '${datafactory.name}/dataLandingZoneSelfHostedIntegrationRuntime${vmss001Name}'
+resource datafactoryIntegration001IntegrationRuntime001 'Microsoft.DataFactory/factories/integrationRuntimes@2018-06-01' = {
+  name: '${datafactoryIntegration001Name}/dataLandingZoneSelfHostedIntegrationRuntime${shir001Name}'
+  dependsOn: [
+    datafactoryIntegration001
+  ]
   properties: {
     type: 'SelfHosted'
-    description: 'Data Landing Zone - Self Hosted Integration Runtime running on ${vmss001Name}'
+    description: 'Data Landing Zone - Self Hosted Integration Runtime running on ${shir001Name}'
   }
 }
 
-resource datafactoryPrivateEndpointDatafactory 'Microsoft.Network/privateEndpoints@2020-11-01' = {
-  name: datafactoryPrivateEndpointNameDatafactory
-  location: location
-  tags: tags
-  properties: {
-    manualPrivateLinkServiceConnections: []
-    privateLinkServiceConnections: [
-      {
-        name: datafactoryPrivateEndpointNameDatafactory
-        properties: {
-          groupIds: [
-            'dataFactory'
-          ]
-          privateLinkServiceId: datafactory.id
-          requestMessage: ''
-        }
-      }
-    ]
-    subnet: {
-      id: subnetId
-    }
-  }
-}
-
-resource datafactoryPrivateEndpointDatafactoryARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
-  name: '${datafactoryPrivateEndpointDatafactory.name}/aRecord'
-  properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: '${datafactoryPrivateEndpointDatafactory.name}-arecord'
-        properties: {
-          privateDnsZoneId: datafactoryPrivateDnsZoneIdDataFactory
-        }
-      }
-    ]
-  }
-}
-
-resource datafactoryPrivateEndpointPortal 'Microsoft.Network/privateEndpoints@2020-11-01' = {
-  name: datafactoryPrivateEndpointNamePortal
-  location: location
-  tags: tags
-  properties: {
-    manualPrivateLinkServiceConnections: []
-    privateLinkServiceConnections: [
-      {
-        name: datafactoryPrivateEndpointNamePortal
-        properties: {
-          groupIds: [
-            'portal'
-          ]
-          privateLinkServiceId: datafactory.id
-          requestMessage: ''
-        }
-      }
-    ]
-    subnet: {
-      id: subnetId
-    }
-  }
-}
-
-resource datafactoryPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
-  name: '${datafactoryPrivateEndpointPortal.name}/aRecord'
-  properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: '${datafactoryPrivateEndpointPortal.name}-arecord'
-        properties: {
-          privateDnsZoneId: datafactoryPrivateDnsZoneIdPortal
-        }
-      }
-    ]
-  }
-}
-
-module datafactorySelfHostedIntegrationRuntime001 'integration/shir.bicep' = {
-  name: 'datafactorySelfHostedIntegrationRuntime001'
+module datafactory001SelfHostedIntegrationRuntime001 'services/selfHostedIntegrationRuntime.bicep' = {
+  name: 'datafactory001SelfHostedIntegrationRuntime001'
   scope: resourceGroup()
   params: {
     administratorPassword: administratorPassword
-    datafactoryIntegrationRuntimeAuthKey: listAuthKeys(datafactoryIntegrationRuntime001.id, datafactoryIntegrationRuntime001.apiVersion).authKey1
+    datafactoryIntegrationRuntimeAuthKey: listAuthKeys(datafactoryIntegration001IntegrationRuntime001.id, datafactoryIntegration001IntegrationRuntime001.apiVersion).authKey1
     location: location
     prefix: prefix
-    storageAccountContainerName: scriptsContainer.name
-    storageAccountId: artifactstorage.id
+    storageAccountContainerName: artifactstorage001.outputs.storageAccountContainerName
+    storageAccountId: artifactstorage001.outputs.storageAccountId
     subnetId: subnetId
     tags: tags
-    vmssName: '${prefix}-shir001'
+    vmssName: shir001Name
+    vmssSkuCapacity: 1
+    vmssSkuName: 'Standard_DS2_v2'
+    vmssSkuTier: 'Standard'
+  }
+}
+
+module purviewSelfHostedIntegrationRuntime001 'services/selfHostedIntegrationRuntime.bicep' = if (purviewSelfHostedIntegrationRuntimeAuthKey != '') {
+  name: 'purviewSelfHostedIntegrationRuntime001'
+  scope: resourceGroup()
+  params: {
+    administratorPassword: administratorPassword
+    datafactoryIntegrationRuntimeAuthKey: purviewSelfHostedIntegrationRuntimeAuthKey
+    location: location
+    prefix: prefix
+    storageAccountContainerName: artifactstorage001.outputs.storageAccountContainerName
+    storageAccountId: artifactstorage001.outputs.storageAccountId
+    subnetId: subnetId
+    tags: tags
+    vmssName: shir001Name
     vmssSkuCapacity: 1
     vmssSkuName: 'Standard_DS2_v2'
     vmssSkuTier: 'Standard'

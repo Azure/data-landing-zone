@@ -13,19 +13,18 @@ param privateDnsZoneIdBlob string
 var fileSytemNames = [
   'data'
 ]
-var storageExternal001PrivateEndpointNameBlob = '${storageExternal001.name}-blob-private-endpoint'
 
 // Resources
-module storageExternal001 'exernalstorage/storage.bicep' = {
+module storageExternal001 'services/externalstorage.bicep' = {
   name: 'storageExternal001'
   scope: resourceGroup()
   params: {
     location: location
-    prefix: prefix
     tags: tags
     subnetId: subnetId
+    storageName: '${prefix}-ext001'
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
-    numbering: '001'
+    fileSytemNames: fileSytemNames
   }
 }
 

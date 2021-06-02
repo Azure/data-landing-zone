@@ -50,18 +50,55 @@ resource networkResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = 
 }
 
 module networkServices 'modules/network.bicep' = {
-  name: '${name}-network'
+  name: 'networkServices'
   scope: networkResourceGroup
   params: {
-    prefix: name
     location: location
+    prefix: name
     tags: tags
-    vnetAddressPrefix: vnetAddressPrefix
-    azureFirewallSubnetAddressPrefix: azureFirewallSubnetAddressPrefix
-    servicesSubnetAddressPrefix: servicesSubnetAddressPrefix
-    dnsServerAdresses: dnsServerAdresses
-    enableDnsAndFirewallDeployment: true
     firewallPrivateIp: firewallPrivateIp
+    dnsServerAdresses: dnsServerAdresses
+    vnetAddressPrefix: vnetAddressPrefix
+    servicesSubnetAddressPrefix: servicesSubnetAddressPrefix
+    databricksDomainPublicSubnetAddressPrefix: databricksDomainPublicSubnetAddressPrefix
+    databricksDomainPrivateSubnetAddressPrefix: databricksDomainPrivateSubnetAddressPrefix
+    databricksProductPublicSubnetAddressPrefix: databricksProductPublicSubnetAddressPrefix
+    databricksProductPrivateSubnetAddressPrefix: databricksProductPrivateSubnetAddressPrefix
+    powerBiGatewaySubnetAddressPrefix: powerBiGatewaySubnetAddressPrefix
+    dataDomain001SubnetAddressPrefix: dataDomain001SubnetAddressPrefix
+    dataDomain002SubnetAddressPrefix: dataDomain002SubnetAddressPrefix
+    dataProduct001SubnetAddressPrefix: dataProduct001SubnetAddressPrefix
+    dataProduct002SubnetAddressPrefix: dataProduct002SubnetAddressPrefix
+    dataManagementZoneVnetId: dataManagementZoneVnetId
   }
 }
+
+// Management resources
+resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-mgmt'
+  location: location
+  tags: tags
+  properties: {}
+}
+
+// Logging resources
+resource loggingResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-logging'
+  location: location
+  tags: tags
+  properties: {}
+}
+
+module loggingServices 'modules/logging.bicep' = {
+  name: 'loggingServices'
+  scope: loggingResourceGroup
+  params: {
+    location: location
+    prefix: name
+    tags: tags
+    subnetId: networkServices.outputs.servicesSubnetId
+    privateDnsZoneIdKeyVault: privateDnsZoneIdKeyVault
+  }
+}
+
 

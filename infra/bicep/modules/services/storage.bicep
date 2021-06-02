@@ -1,29 +1,23 @@
-// This template is used as a module from the main.bicep template. 
-// The module contains a template to create network resources.
+// This template is used to create a datalake.
 targetScope = 'resourceGroup'
 
 // Parameters
 param location string
-param prefix string
 param tags object
 param subnetId string
+param storageName string
 param privateDnsZoneIdDfs string
 param privateDnsZoneIdBlob string
 param fileSystemNames array
-@allowed([
-  'raw'
-  'encur'
-  'work'
-])
-param layer string
 
 // Variables
+var storageNameCleaned = replace(storageName, '-', '')
 var storagePrivateEndpointNameBlob = '${storage.name}-blob-private-endpoint'
 var storagePrivateEndpointNameDfs = '${storage.name}-dfs-private-endpoint'
 
 // Resources
 resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
-  name: replace('${prefix}-${layer}', '-', '')
+  name: storageNameCleaned
   location: location
   tags: tags
   identity: {

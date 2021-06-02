@@ -1,0 +1,308 @@
+// This template is used to create a Databricks workspace.
+targetScope = 'resourceGroup'
+
+// Parameters
+param location string
+param tags object
+param subnetId string
+param datafactoryName string
+param privateDnsZoneIdDataFactory string
+param privateDnsZoneIdDataFactoryPortal string
+
+param purviewId string
+param storageRawId string
+param storageEnrichedCuratedId string
+param databricks001Id string
+param databricks001WorkspaceUrl string
+param keyVault001Id string
+param sqlServer001Id string
+param sqlDatabase001Name string
+
+// Variables
+var storageRawName = last(split(storageRawId, '/'))
+var storageEnrichedCuratedName = last(split(storageEnrichedCuratedId, '/'))
+var databricks001Name = last(split(databricks001Id, '/'))
+var keyVault001Name = last(split(keyVault001Id, '/'))
+var sqlServer001Name = last(split(sqlServer001Id, '/'))
+var datafactoryDefaultManagedVnetIntegrationRuntimeName = 'AutoResolveIntegrationRuntime'
+var datafactoryPrivateEndpointNameDatafactory = '${datafactory.name}-datafactory-private-endpoint'
+var datafactoryPrivateEndpointNamePortal = '${datafactory.name}-portal-private-endpoint'
+
+// Resources
+resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
+  name: datafactoryName
+  location: location
+  tags: tags
+  properties: {
+    globalParameters: {}
+    publicNetworkAccess: 'Disabled'
+    purviewConfiguration: {
+      purviewResourceId: purviewId
+    }
+  }
+}
+
+resource datafactoryPrivateEndpointDatafactory 'Microsoft.Network/privateEndpoints@2020-11-01' = {
+  name: datafactoryPrivateEndpointNameDatafactory
+  location: location
+  tags: tags
+  properties: {
+    manualPrivateLinkServiceConnections: []
+    privateLinkServiceConnections: [
+      {
+        name: datafactoryPrivateEndpointNameDatafactory
+        properties: {
+          groupIds: [
+            'dataFactory'
+          ]
+          privateLinkServiceId: datafactory.id
+          requestMessage: ''
+        }
+      }
+    ]
+    subnet: {
+      id: subnetId
+    }
+  }
+}
+
+resource datafactoryPrivateEndpointDatafactoryARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+  parent: datafactoryPrivateEndpointDatafactory
+  name: 'aRecord'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: '${datafactoryPrivateEndpointDatafactory.name}-arecord'
+        properties: {
+          privateDnsZoneId: privateDnsZoneIdDataFactory
+        }
+      }
+    ]
+  }
+}
+
+resource datafactoryPrivateEndpointPortal 'Microsoft.Network/privateEndpoints@2020-11-01' = {
+  name: datafactoryPrivateEndpointNamePortal
+  location: location
+  tags: tags
+  properties: {
+    manualPrivateLinkServiceConnections: []
+    privateLinkServiceConnections: [
+      {
+        name: datafactoryPrivateEndpointNamePortal
+        properties: {
+          groupIds: [
+            'portal'
+          ]
+          privateLinkServiceId: datafactory.id
+          requestMessage: ''
+        }
+      }
+    ]
+    subnet: {
+      id: subnetId
+    }
+  }
+}
+
+resource datafactoryPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+  parent: datafactoryPrivateEndpointPortal
+  name: 'aRecord'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: '${datafactoryPrivateEndpointPortal.name}-arecord'
+        properties: {
+          privateDnsZoneId: privateDnsZoneIdDataFactoryPortal
+        }
+      }
+    ]
+  }
+}
+
+resource datafactoryManagedVirtualNetwork 'Microsoft.DataFactory/factories/managedVirtualNetworks@2018-06-01' = {
+  parent: datafactory
+  name: 'default'
+  properties: {}
+}
+
+resource datafactoryManagedIntegrationRuntime001 'Microsoft.DataFactory/factories/integrationRuntimes@2018-06-01' = {
+  parent: datafactory
+  name: datafactoryDefaultManagedVnetIntegrationRuntimeName
+  properties: {
+    type: 'Managed'
+    managedVirtualNetwork: {
+      type: 'ManagedVirtualNetworkReference'
+      referenceName: datafactoryManagedVirtualNetwork.name
+    }
+    typeProperties: {
+      computeProperties: {
+        location: 'AutoResolve'
+      }
+    }
+  }
+}
+
+resource datafactoryKeyVault001ManagedPrivateEndpoint 'Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints@2018-06-01' = {
+  parent: datafactoryManagedVirtualNetwork
+  name: replace(keyVault001Name, '-', '')
+  properties: {
+    fqdns: []
+    groupId: 'vault'
+    privateLinkResourceId: keyVault001Id
+  }
+}
+
+resource datafactoryKeyVault001LinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
+  parent: datafactory
+  name: replace(keyVault001Name, '-', '')
+  properties: {
+    type: 'AzureKeyVault'
+    annotations: []
+    connectVia: {
+      type: 'IntegrationRuntimeReference'
+      referenceName: datafactoryManagedIntegrationRuntime001.name
+      parameters: {}
+    }
+    description: 'Key Vault for storing secrets'
+    parameters: {}
+    typeProperties: {
+      baseUrl: 'https://${keyVault001Name}.vault.azure.net/'
+    }
+  }
+}
+
+resource datafactorySqlServer001ManagedPrivateEndpoint 'Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints@2018-06-01' = {
+  parent: datafactoryManagedVirtualNetwork
+  name: replace(sqlServer001Name, '-', '')
+  properties: {
+    fqdns: []
+    groupId: 'sqlServer'
+    privateLinkResourceId: sqlServer001Id
+  }
+}
+
+resource datafactorySqlserver001LinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
+  parent: datafactory
+  name: '${replace(sqlServer001Name, '-', '')}${replace(sqlDatabase001Name, '-', '')}'
+  properties: {
+    type: 'AzureSqlDatabase'
+    annotations: []
+    connectVia: {
+      type: 'IntegrationRuntimeReference'
+      referenceName: datafactoryManagedIntegrationRuntime001.name
+      parameters: {}
+    }
+    description: 'Sql Database for storing metadata'
+    parameters: {}
+    typeProperties: {
+      connectionString: 'Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=${sqlServer001Name}.database.windows.net;Initial Catalog=${sqlDatabase001Name}'
+    }
+  }
+}
+
+resource datafactoryStorageRawManagedPrivateEndpoint 'Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints@2018-06-01' = {
+  parent: datafactoryManagedVirtualNetwork
+  name: storageRawName
+  properties: {
+    fqdns: []
+    groupId: 'dfs'
+    privateLinkResourceId: storageRawId
+  }
+}
+
+resource datafactoryStorageRawLinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
+  parent: datafactory
+  name: storageRawName
+  properties: {
+    type: 'AzureBlobFS'
+    annotations: []
+    connectVia: {
+      type: 'IntegrationRuntimeReference'
+      referenceName: datafactoryManagedIntegrationRuntime001.name
+      parameters: {}
+    }
+    description: 'Storage Account for raw data'
+    parameters: {}
+    typeProperties: {
+      url: 'https://${storageRawName}.dfs.core.windows.net'
+    }
+  }
+}
+
+resource datafactoryStorageEnrichedCuratedManagedPrivateEndpoint 'Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints@2018-06-01' = {
+  parent: datafactoryManagedVirtualNetwork
+  name: storageEnrichedCuratedName
+  properties: {
+    fqdns: []
+    groupId: 'dfs'
+    privateLinkResourceId: storageEnrichedCuratedId
+  }
+}
+
+resource datafactoryStorageEnrichedCuratedLinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
+  parent: datafactory
+  name: storageEnrichedCuratedName
+  properties: {
+    type: 'AzureBlobFS'
+    annotations: []
+    connectVia: {
+      type: 'IntegrationRuntimeReference'
+      referenceName: datafactoryManagedIntegrationRuntime001.name
+      parameters: {}
+    }
+    description: 'Storage Account for raw data'
+    parameters: {}
+    typeProperties: {
+      url: 'https://${storageEnrichedCuratedName}.dfs.core.windows.net'
+    }
+  }
+}
+
+resource datafactoryDatabricksLinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
+  parent: datafactory
+  name: replace(databricks001Name, '-', '')
+  properties: {
+    type: 'AzureDatabricks'
+    annotations: []
+    connectVia: {
+      type: 'IntegrationRuntimeReference'
+      referenceName: datafactoryManagedIntegrationRuntime001.name
+      parameters: {}
+    }
+    description: 'Azure Databricks Compute for Data Engineering'
+    parameters: {
+      DatabricksClusterType: {
+        type: 'String'
+        defaultValue: 'Standard_DS3_v2'
+      }
+      DatabricksAutoscale: {
+        type: 'String'
+        defaultValue: '1:15'
+      }
+      DatabrickClusterVersion: {
+        type: 'String'
+        defaultValue: '7.3.x-scala2.12'
+      }
+    }
+    typeProperties: {
+      authentication: 'MSI'
+      domain: 'https://${databricks001WorkspaceUrl}'
+      newClusterCustomTags: {
+        costCenter: 'ABCDE-12345'
+      }
+      newClusterDriverNodeType: '@linkedService().DatabricksClusterType'
+      newClusterNodeType: '@linkedService().DatabricksClusterType'
+      newClusterNumOfWorker: '@linkedService().DatabricksAutoscale'
+      newClusterSparkEnvVars: {
+        PYSPARK_PYTHON: '/databricks/python3/bin/python3'
+      }
+      newClusterVersion: '@linkedService().DatabrickClusterVersion'
+      // policyId: ''  // Uncomment to set the default cluster policy ID for jobs running on the Databricks workspace
+      workspaceResourceId: databricks001Id
+    }
+  }
+}
+
+// Outputs
+output datafactoryId string = datafactory.id

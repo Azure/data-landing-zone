@@ -29,7 +29,6 @@ var databricksDomainPrivateSubnetName = 'DatabricksDomainSubnetPrivate'
 var databricksDomainPublicSubnetName = 'DatabricksDomainSubnetPublic'
 var databricksProductPrivateSubnetName = 'DatabricksProductSubnetPrivate'
 var databricksProductPublicSubnetName = 'DatabricksProductSubnetPublic'
-var databricksProductSubnetName = 'DatabricksProductSubnet'
 var powerBiGatewaySubnetName = 'PowerBIGatewaySubnet'
 var dataDomain001SubnetName = 'DataDomain001Subnet'
 var dataDomain002SubnetName = 'DataDomain002Subnet'
@@ -434,7 +433,7 @@ resource dataLandingZoneDataManagementZoneVnetPeering 'Microsoft.Network/virtual
   }
 }
 
-module dataManagementZoneDataLandingZoneVnetPeering 'network/dataManagementZoneVnetPeering.bicep' = {
+module dataManagementZoneDataLandingZoneVnetPeering 'auxiliary/dataManagementZoneVnetPeering.bicep' = {
   name: 'dataManagementZoneDataLandingZoneVnetPeering'
   scope: resourceGroup(dataManagementZoneVnetSubscriptionId, dataManagementZoneVnetResourceGroupName)
   params: {
@@ -444,3 +443,4 @@ module dataManagementZoneDataLandingZoneVnetPeering 'network/dataManagementZoneV
 }
 
 // Outputs
+output servicesSubnetId string = vnet.properties.subnets[0].id
