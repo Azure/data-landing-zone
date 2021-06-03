@@ -1,54 +1,54 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "mySqlServerName": {
-            "value": "dn001-mysqlserver001"
-        },
-        "mySqlDatabaseName": {
-            "value": "HiveMetastoreDB"
-        },
-        "mySqlSkuName": {
-            "value": "GP_Gen5_2"
-        },
-        "mySqlSkuTier": {
-            "value": "GeneralPurpose"
-        },
-        "mySqlSkuCapacity": {
-            "value": 2
-        },
-        "mySqlSkuSize": {
-            "value": 5120
-        },
-        "mySqlSkuFamily": {
-            "value": "Gen5"
-        },
-        "mySqlServerAdministratorLogin": {
-            "value": "ServerMainUser"
-        },
-        "mySqlServerAdministratorLoginPassword": {
-            "value": "<your-secure-password>"
-        },
-        "mySqlAdminGroupName": {
-            "value": ""
-        },
-        "mySqlAdminGroupObjectID": {
-            "value": ""
-        },
-        "keyVaultId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.KeyVault/vaults/dn001-keyvault002"
-        },
-        "subnetId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet/subnets/dn001-privatelink-subnet"
-        },
-        "privateDnsZoneId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com"
-        },
-        "tags": {
-            "value": {}
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "{regionName}"
+    },
+    "mySqlServerName": {
+      "value": "datalanding-mysqlserver001"
+    },
+    "mySqlDatabaseName": {
+      "value": "HiveMetastoreDB"
+    },
+    "mySqlSkuName": {
+      "value": "GP_Gen5_2"
+    },
+    "mySqlSkuTier": {
+      "value": "GeneralPurpose"
+    },
+    "mySqlSkuCapacity": {
+      "value": 2
+    },
+    "mySqlSkuSize": {
+      "value": 5120
+    },
+    "mySqlSkuFamily": {
+      "value": "Gen5"
+    },
+    "mySqlServerAdministratorLogin": {
+      "value": "ServerMainUser"
+    },
+    "mySqlServerAdministratorLoginPassword": {
+      "value": "<your-secure-password>"
+    },
+    "mySqlAdminGroupName": {
+      "value": ""
+    },
+    "mySqlAdminGroupObjectID": {
+      "value": ""
+    },
+    "keyVaultId": {
+      "value": "/subscriptions/{dataLandingZoneSubscriptionId}/resourceGroups/datalanding-metadata/providers/Microsoft.KeyVault/vaults/datalanding-keyvault002"
+    },
+    "subnetId": {
+      "value": "/subscriptions/{dataLandingZoneSubscriptionId}/resourceGroups/datalanding-network/providers/Microsoft.Network/virtualNetworks/datalanding-vnet/subnets/datalanding-privatelink-subnet"
+    },
+    "privateDnsZoneId": {
+      "value": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com"
+    },
+    "tags": {
+      "value": {}
     }
+  }
 }
