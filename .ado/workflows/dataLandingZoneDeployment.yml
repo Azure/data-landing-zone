@@ -76,6 +76,7 @@ stages:
               deploymentMode: "Validation"
               overrideParameters: >
                 -administratorPassword "$(password)"
+                -deploySelfHostedIntegrationRuntimes false
 
   - stage: Deployment
     displayName: 'Deployment of IaC templates'
@@ -156,7 +157,7 @@ stages:
           # Deploy Data Landing Zone
           - task: AzureResourceManagerTemplateDeployment@3
             name: data_landing_zone_deployment_002
-            displayName: Data Landing Zone - with SHIR
+            displayName: Data Landing Zone - w/ SHIR
             enabled: true
             continueOnError: false
             inputs:
@@ -171,12 +172,12 @@ stages:
               deploymentMode: "Incremental"
               overrideParameters: >
                 -administratorPassword "$(password)"
-                -deploySelfHostedIntegrationRuntimes false
+                -deploySelfHostedIntegrationRuntimes true
           
-          # Restart MySQL 001
+          # Restart MySQL Server 001
           - task: AzurePowerShell@4
-            name: mysql_001_restart
-            displayName: Restart MySQL 001
+            name: mysqlserver_001_restart
+            displayName: Restart MySQL Server 001
             enabled: true
             continueOnError: false
             inputs:
@@ -191,7 +192,7 @@ stages:
               failOnStandardError: false
               azurePowerShellVersion: 'latestVersion'
           
-          # # Setup Databricks 001 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
+          # # Setup Databricks 001 - Disabled, because automation is currently blocked.
           # - task: AzureCLI@2
           #   name: setup_databricks_001
           #   displayName: Setup Databricks 001
@@ -207,18 +208,18 @@ stages:
           #     failOnStandardError: false
           #     powerShellIgnoreLASTEXITCODE: false
           #     arguments: >
-          #       -DatabricksWorkspaceName $(databricksDetails001.databricksWorkspaceName.value)
-          #       -DatabricksWorkspaceId $(databricksDetails001.databricksWorkspaceId.value)
-          #       -DatabricksApiUrl $(databricksDetails001.databricksApiUrl.value)
-          #       -DatabricksSubscriptionId $(databricksDetails001.databricksSubscriptionId.value)
-          #       -DatabricksResourceGroupName $(databricksDetails001.databricksResourceGroupName.value)
-          #       -HiveKeyVaultId $(hivemetastoreDetails001.mySqlDatabaseKeyVaultId.value)
-          #       -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlConnectionStringSecretName.value)
-          #       -HiveUsernameSecretName $(hivemetastoreDetails001.mySqlUsernameSecretName.value)
-          #       -HivePasswordSecretName $(hivemetastoreDetails001.mySqlPasswordSecretName.value)
-          #       -LogAnalyticsKeyVaultId $(logAnalytics001Details.logAnalyticsKeyVaultId.value)
-          #       -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value)
-          #       -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value)
+          #       -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksDomain001Name.value)
+          #       -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksDomain001Id.value)
+          #       -DatabricksApiUrl $(dataLandingZoneDetails01.databricksDomain001ApiUrl.value)
+          #       -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksDomain001SubscriptionId.value)
+          #       -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksDomain001ResourceGroupName.value)
+          #       -HiveKeyVaultId $(dataLandingZoneDetails01.mySqlServer001KeyVaultid.value)
+          #       -HiveConnectionStringSecretName $(dataLandingZoneDetails01.mySqlServer001ConnectionStringSecretName.value)
+          #       -HiveUsernameSecretName $(dataLandingZoneDetails01.mySqlServer001UsernameSecretName.value)
+          #       -HivePasswordSecretName $(dataLandingZoneDetails01.mySqlServer001PasswordSecretName.value)
+          #       -LogAnalyticsKeyVaultId $(dataLandingZoneDetails01.logAnalyticsWorkspaceKeyVaultId.value)
+          #       -LogAnalyticsWorkspaceIdSecretName $(dataLandingZoneDetails01.logAnalyticsWorkspaceIdSecretName.value)
+          #       -LogAnalyticsWorkspaceKeySecretName $(dataLandingZoneDetails01.logAnalyticsWorkspaceKeySecretName.value)
           #       -HiveVersion '2.3.7'
           #       -HadoopVersion '2.7.4'
           
@@ -230,15 +231,13 @@ stages:
                 -UserPassword '{password}' \`
                 -ClientId '{clientId}' \`
                 -TenantId '{tenantId}' \`
-                
-                -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksWorkspaceName.value) \`
-                -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksWorkspaceId.value) \`
-                -DatabricksApiUrl $(dataLandingZoneDetails01.databricksApiUrl.value) \`
-                -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksSubscriptionId.value) \`
-                -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksResourceGroupName.value) \`
-
+                -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksDomain001Name.value) \`
+                -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksDomain001Id.value) \`
+                -DatabricksApiUrl $(dataLandingZoneDetails01.databricksDomain001ApiUrl.value) \`
+                -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksDomain001SubscriptionId.value) \`
+                -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksDomain001ResourceGroupName.value) \`
                 -HiveKeyVaultId $(dataLandingZoneDetails01.mySqlServer001KeyVaultid.value) \`
-                -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlServer001ConnectionStringSecretName.value) \`
+                -HiveConnectionStringSecretName $(dataLandingZoneDetails01.mySqlServer001ConnectionStringSecretName.value) \`
                 -HiveUsernameSecretName $(dataLandingZoneDetails01.mySqlServer001UsernameSecretName.value) \`
                 -HivePasswordSecretName $(dataLandingZoneDetails01.mySqlServer001PasswordSecretName.value) \`
                 -LogAnalyticsKeyVaultId $(dataLandingZoneDetails01.logAnalyticsWorkspaceKeyVaultId.value) \`
@@ -251,7 +250,7 @@ stages:
             displayName: Setup Databricks 001 - Manual Step - Guidance
           
           
-          # # Setup databricks 002 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
+          # # Setup databricks 002 - Disabled, because automation is currently blocked.
           # - task: AzureCLI@2
           #   name: setup_databricks_002
           #   displayName: Setup databricks 002
@@ -267,18 +266,18 @@ stages:
           #     failOnStandardError: false
           #     powerShellIgnoreLASTEXITCODE: false
           #     arguments: >
-          #       -DatabricksWorkspaceName $(databricksDetails002.databricksWorkspaceName.value)
-          #       -DatabricksWorkspaceId $(databricksDetails002.databricksWorkspaceId.value)
-          #       -DatabricksApiUrl $(databricksDetails002.databricksApiUrl.value)
-          #       -DatabricksSubscriptionId $(databricksDetails002.databricksSubscriptionId.value)
-          #       -DatabricksResourceGroupName $(databricksDetails002.databricksResourceGroupName.value)
-          #       -HiveKeyVaultId $(hivemetastoreDetails001.mySqlDatabaseKeyVaultId.value)
-          #       -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlConnectionStringSecretName.value)
-          #       -HiveUsernameSecretName $(hivemetastoreDetails001.mySqlUsernameSecretName.value)
-          #       -HivePasswordSecretName $(hivemetastoreDetails001.mySqlPasswordSecretName.value)
-          #       -LogAnalyticsKeyVaultId $(logAnalytics001Details.logAnalyticsKeyVaultId.value)
-          #       -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value)
-          #       -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value)
+          #       -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksProduct001Name.value)
+          #       -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksProduct001Id.value)
+          #       -DatabricksApiUrl $(dataLandingZoneDetails01.databricksProduct001ApiUrl.value)
+          #       -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksProduct001SubscriptionId.value)
+          #       -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksProduct001ResourceGroupName.value)
+          #       -HiveKeyVaultId $(dataLandingZoneDetails01.mySqlServer001KeyVaultid.value)
+          #       -HiveConnectionStringSecretName $(dataLandingZoneDetails01.mySqlServer001ConnectionStringSecretName.value)
+          #       -HiveUsernameSecretName $(dataLandingZoneDetails01.mySqlServer001UsernameSecretName.value)
+          #       -HivePasswordSecretName $(dataLandingZoneDetails01.mySqlServer001PasswordSecretName.value)
+          #       -LogAnalyticsKeyVaultId $(dataLandingZoneDetails01.logAnalyticsWorkspaceKeyVaultId.value)
+          #       -LogAnalyticsWorkspaceIdSecretName $(dataLandingZoneDetails01.logAnalyticsWorkspaceIdSecretName.value)
+          #       -LogAnalyticsWorkspaceKeySecretName $(dataLandingZoneDetails01.logAnalyticsWorkspaceKeySecretName.value)
           #       -HiveVersion '2.3.7'
           #       -HadoopVersion '2.7.4'
           
@@ -290,18 +289,18 @@ stages:
                 -UserPassword '{password}' \`
                 -ClientId '{clientId}' \`
                 -TenantId '{tenantId}' \`
-                -DatabricksWorkspaceName $(databricksDetails002.databricksWorkspaceName.value) \`
-                -DatabricksWorkspaceId $(databricksDetails002.databricksWorkspaceId.value) \`
-                -DatabricksApiUrl $(databricksDetails002.databricksApiUrl.value) \`
-                -DatabricksSubscriptionId $(databricksDetails002.databricksSubscriptionId.value) \`
-                -DatabricksResourceGroupName $(databricksDetails002.databricksResourceGroupName.value) \`
-                -HiveKeyVaultId $(hivemetastoreDetails001.mySqlDatabaseKeyVaultId.value) \`
-                -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlConnectionStringSecretName.value) \`
-                -HiveUsernameSecretName $(hivemetastoreDetails001.mySqlUsernameSecretName.value) \`
-                -HivePasswordSecretName $(hivemetastoreDetails001.mySqlPasswordSecretName.value) \`
-                -LogAnalyticsKeyVaultId $(logAnalytics001Details.logAnalyticsKeyVaultId.value) \`
-                -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value) \`
-                -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value) \`
+                -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksProduct001Name.value) \`
+                -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksProduct001Id.value) \`
+                -DatabricksApiUrl $(dataLandingZoneDetails01.databricksProduct001ApiUrl.value) \`
+                -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksProduct001SubscriptionId.value) \`
+                -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksProduct001ResourceGroupName.value) \`
+                -HiveKeyVaultId $(dataLandingZoneDetails01.mySqlServer001KeyVaultid.value) \`
+                -HiveConnectionStringSecretName $(dataLandingZoneDetails01.mySqlServer001ConnectionStringSecretName.value) \`
+                -HiveUsernameSecretName $(dataLandingZoneDetails01.mySqlServer001UsernameSecretName.value) \`
+                -HivePasswordSecretName $(dataLandingZoneDetails01.mySqlServer001PasswordSecretName.value) \`
+                -LogAnalyticsKeyVaultId $(dataLandingZoneDetails01.logAnalyticsWorkspaceKeyVaultId.value) \`
+                -LogAnalyticsWorkspaceIdSecretName $(dataLandingZoneDetails01.logAnalyticsWorkspaceIdSecretName.value) \`
+                -LogAnalyticsWorkspaceKeySecretName $(dataLandingZoneDetails01.logAnalyticsWorkspaceKeySecretName.value) \`
                 -HiveVersion '2.3.7' \`
                 -HadoopVersion '2.7.4'
               "
