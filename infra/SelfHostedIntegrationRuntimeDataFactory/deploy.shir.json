@@ -283,7 +283,7 @@
                                         ]
                                     },
                                     "protectedSettings": {
-                                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 ', listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('dataFactorySelfHostedIntegrationRuntimeName')), '2018-06-01').authKey1)]",
+                                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey ', listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('dataFactorySelfHostedIntegrationRuntimeName')), '2018-06-01').authKey1)]",
                                         "storageAccountName": "[variables('storageAccountName')]",
                                         "storageAccountKey": "[listkeys(variables('storageAccountId'), '2020-08-01-preview').keys[0].value]"
                                     }

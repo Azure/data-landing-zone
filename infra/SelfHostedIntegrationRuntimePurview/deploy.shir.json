@@ -270,7 +270,7 @@
                                         ]
                                     },
                                     "protectedSettings": {
-                                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 \"', variables('shirAuthKey'), '\"')]",
+                                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey \"', variables('shirAuthKey'), '\"')]",
                                         "storageAccountName": "[variables('storageAccountName')]",
                                         "storageAccountKey": "[listkeys(variables('storageAccountId'), '2020-08-01-preview').keys[0].value]"
                                     }

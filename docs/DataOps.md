@@ -93,11 +93,11 @@ The data hub is at the heart of the data mesh architecture and it constitutes of
 |Domain Ops|In charge of Data Domain deployment and updates| One team per Data Domain |
 |Data Product Team|In charge of Data Products deployment and updates| One team per Data Product |
 
-# Step by Step Node Deployment Process
+## Step by Step Node Deployment Process
 
 This deployment process is for the on-boarding of a new Data Node to a Data Mesh. It assumes that the Data Platform Hub has been deployed and is already operational ready for Nodes to be deployed and connected to it.
 
-### Cloud Environment provisioning:
+### Cloud Environment provisioning
 
 Refer to the diagram for visual representation of the steps
 
@@ -125,7 +125,7 @@ Self-provisioning on-demand is achieved via REST APIs. Applications such as Logi
 
 ![Image](img/WholeProcess.png)
 
-# Appendix
+## Appendix
 
 ### RACI Chart
 

@@ -2,12 +2,11 @@
 param (
 	[Parameter(Mandatory = $true)]
 	[ValidateNotNullOrEmpty()]
-	[string]
+	[String]
 	$gatewayKey,
 
-	[Parameter(Mandatory = $true)]
-	[ValidateNotNullOrEmpty()]
-	[string]
+	[Parameter(DontShow)]
+	[String]
 	$gatewayUri = "https://go.microsoft.com/fwlink/?linkid=839822"
 )
 
@@ -122,7 +121,6 @@ function Get-InstalledFilePath() {
 		New-Error "Get-InstalledFilePath: Cannot find installed File Path"
 	}
 	Trace-Log "Gateway installation file: $filePath"
-
 	return $filePath
 }
 
