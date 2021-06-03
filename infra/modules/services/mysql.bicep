@@ -119,4 +119,5 @@ resource mysqlserverPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/p
 }
 
 // Outputs
+output mySqlServerId string = mysqlserver.id
 output mySqlServerDatabaseName string = mySqlServerDatabaseName

@@ -331,5 +331,16 @@ resource dataProduct001ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01
 }
 
 // Outputs
-output artifactstorage001Id string = integrationServices.outputs.artifactstorage001Id
+output artifactstorage001ResourceGroupName string = split(integrationServices.outputs.artifactstorage001Id, '/')[4]
+output artifactstorage001Name string = last(split(integrationServices.outputs.artifactstorage001Id, '/'))
 output artifactstorage001ContainerName string = integrationServices.outputs.artifactstorage001ContainerName
+output mySqlServer001SubscriptionId string = split(metadataServices.outputs.mySqlServer001Id, '/')[2]
+output mySqlServer001ResourceGroupName string = split(metadataServices.outputs.mySqlServer001Id, '/')[4]
+output mySqlServer001Name string = last(split(metadataServices.outputs.mySqlServer001Id, '/'))
+output mySqlServer001KeyVaultid string = metadataServices.outputs.keyVault001Id
+output mySqlServer001UsernameSecretName string = metadataServices.outputs.mySqlServer001UsernameSecretName
+output mySqlServer001PasswordSecretName string = metadataServices.outputs.mySqlServer001PasswordSecretName
+output mySqlServer001ConnectionStringSecretName string = metadataServices.outputs.mySqlServer001ConnectionStringSecretName
+output logAnalyticsWorkspaceKeyVaultId string = loggingServices.outputs.logAnalyticsWorkspaceKeyVaultId
+output logAnalyticsWorkspaceIdSecretName string = loggingServices.outputs.logAnalyticsWorkspaceIdSecretName
+output logAnalyticsWorkspaceKeySecretName string = loggingServices.outputs.logAnalyticsWorkspaceKeySecretName

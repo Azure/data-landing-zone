@@ -23,6 +23,9 @@ var keyVault001Name = '${prefix}-vault001'
 var keyVault002Name = '${prefix}-vault002'
 var sqlServer001Name = '${prefix}-sqlserver001'
 var mySqlServer001Name = '${prefix}-mysqlserver001'
+var mySqlServer001UsernameSecretName = '${mySqlServer001Name}Username'
+var mySqlServer001PasswordSecretName = '${mySqlServer001Name}Password'
+var mySqlServer001ConnectionStringSecretName = '${mySqlServer001Name}ConnectionString'
 
 // Resources
 module keyVault001 'services/keyvault.bicep' = {
@@ -82,7 +85,7 @@ module mySqlServer001 'services/mysql.bicep' = {
 }
 
 resource mysqlserver001UsernameSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault002Name}/${mySqlServer001Name}Username'
+  name: '${keyVault002Name}/${mySqlServer001UsernameSecretName}'
   dependsOn: [
     keyVault002
   ]
@@ -96,7 +99,7 @@ resource mysqlserver001UsernameSecretDeployment 'Microsoft.KeyVault/vaults/secre
 }
 
 resource mysqlserver001PasswordSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault002Name}/${mySqlServer001Name}Password'
+  name: '${keyVault002Name}/${mySqlServer001PasswordSecretName}'
   dependsOn: [
     keyVault002
   ]
@@ -110,7 +113,7 @@ resource mysqlserver001PasswordSecretDeployment 'Microsoft.KeyVault/vaults/secre
 }
 
 resource mysqlserver001ConnectionStringSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault002Name}/${mySqlServer001Name}ConnectionString'
+  name: '${keyVault002Name}/${mySqlServer001ConnectionStringSecretName}'
   dependsOn: [
     keyVault002
   ]
@@ -127,3 +130,7 @@ resource mysqlserver001ConnectionStringSecretDeployment 'Microsoft.KeyVault/vaul
 output keyVault001Id string = keyVault001.outputs.keyvaultId
 output sqlServer001Id string = sqlServer001.outputs.sqlServerId
 output sqlServer001DatabaseName string = sqlServer001.outputs.sqlServerDatabaseName
+output mySqlServer001Id string = mySqlServer001.outputs.mySqlServerId
+output mySqlServer001UsernameSecretName string = mySqlServer001UsernameSecretName
+output mySqlServer001PasswordSecretName string = mySqlServer001PasswordSecretName
+output mySqlServer001ConnectionStringSecretName string = mySqlServer001ConnectionStringSecretName 

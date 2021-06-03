@@ -12,6 +12,8 @@ param privateDnsZoneIdKeyVault string
 // Variables
 var keyVault001Name = '${prefix}-vault003'
 var logAnalytics001Name = '${prefix}-la001'
+var logAnalyticsWorkspaceIdSecretName = 'logAnalyticsWorkspaceId'
+var logAnalyticsWorkspaceKeySecretName = 'logAnalyticsWorkspaceKey'
 
 // Resources
 module keyVault001 'services/keyvault.bicep' = {
@@ -37,7 +39,7 @@ module logAnalytics001 'services/loganalytics.bicep' = {
 }
 
 resource logAnalytics001IdSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault001Name}/logAnalyticsWorkspaceId'
+  name: '${keyVault001Name}/${logAnalyticsWorkspaceIdSecretName}'
   dependsOn: [
     keyVault001
     logAnalytics001
@@ -52,7 +54,7 @@ resource logAnalytics001IdSecretDeployment 'Microsoft.KeyVault/vaults/secrets@20
 }
 
 resource logAnalytics001KeySecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault001Name}/logAnalyticsWorkspaceKey'
+  name: '${keyVault001Name}/${logAnalyticsWorkspaceKeySecretName}'
   dependsOn: [
     keyVault001
     logAnalytics001
@@ -67,3 +69,6 @@ resource logAnalytics001KeySecretDeployment 'Microsoft.KeyVault/vaults/secrets@2
 }
 
 // Outputs
+output logAnalyticsWorkspaceKeyVaultId string = keyVault001.outputs.keyvaultId
+output logAnalyticsWorkspaceIdSecretName string = logAnalyticsWorkspaceIdSecretName
+output logAnalyticsWorkspaceKeySecretName string = logAnalyticsWorkspaceKeySecretName

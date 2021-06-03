@@ -1,0 +1,309 @@
+name: Data Landing Zone Deployment
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - infra/*
+      - code/*
+      - .ado/workflows/dataLandingZoneDeployment.yml
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - infra/*
+      - code/*
+      - .ado/workflows/dataLandingZoneDeployment.yml
+
+variables:
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'data-landing-zone-001-service-connection' # Update to '{resourceManagerConnectionName}'
+  AZURE_SUBSCRIPTION_ID: '2f68ca09-59d9-4ab5-ad11-c54872bfa28d'                      # Update to '{dataLandingZoneSubscriptionId}'
+  AZURE_LOCATION: 'North Europe'                                                     # Update to '{regionName}'
+
+stages:
+  - stage: Validation
+    displayName: 'Validation of IaC templates'
+    jobs:
+      - job: Validation
+        displayName: 'Validation of IaC templates'
+        continueOnError: false
+        pool:
+          vmImage: 'ubuntu-latest'
+        
+        steps:
+          # Checkout code
+          - checkout: self
+            name: checkout_repository
+            displayName: 'Checkout repository'
+            submodules: true
+            lfs: false
+            clean: true
+            continueOnError: false
+            enabled: true
+
+          # Generate Password
+          - task: PowerShell@2
+            name: generate_password_001
+            displayName: Generate Password
+            enabled: true
+            continueOnError: false
+            inputs:
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
+              errorActionPreference: 'stop'
+              failOnStderr: false
+              ignoreLASTEXITCODE: false
+              pwsh: true
+
+          # Deploy Data Landing Zone - validation
+          - task: AzureResourceManagerTemplateDeployment@3
+            name: data_landing_zone_validation
+            displayName: Data Landing Zone - validation
+            enabled: true
+            continueOnError: false
+            inputs:
+              deploymentScope: "Subscription"
+              azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+              subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+              location: ${{ variables.AZURE_LOCATION }}
+              templateLocation: "Linked artifact"
+              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
+              csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
+              deploymentMode: "Validation"
+              overrideParameters: >
+                -administratorPassword "$(password)"
+
+  - stage: Deployment
+    displayName: 'Deployment of IaC templates'
+    dependsOn: Validation
+    # condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
+    jobs:
+      - job: Deployment
+        displayName: 'Deployment of IaC templates'
+        continueOnError: false
+        pool:
+          vmImage: 'ubuntu-latest'
+        
+        steps:
+          # Checkout code
+          - checkout: self
+            name: checkout_repository
+            displayName: 'Checkout repository'
+            submodules: true
+            lfs: false
+            clean: true
+            continueOnError: false
+            enabled: true
+
+          # Generate Password
+          - task: PowerShell@2
+            name: generate_password_001
+            displayName: Generate Password
+            enabled: true
+            continueOnError: false
+            inputs:
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/code/GeneratePassword.ps1'
+              errorActionPreference: 'stop'
+              failOnStderr: false
+              ignoreLASTEXITCODE: false
+              pwsh: true
+
+          # Deploy Data Landing Zone
+          - task: AzureResourceManagerTemplateDeployment@3
+            name: data_landing_zone_deployment_001
+            displayName: Data Landing Zone - w/o SHIR
+            enabled: true
+            continueOnError: false
+            inputs:
+              deploymentScope: "Subscription"
+              azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+              subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+              location: ${{ variables.AZURE_LOCATION }}
+              templateLocation: "Linked artifact"
+              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
+              csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
+              deploymentOutputs: 'dataLandingZoneDetails01'
+              deploymentMode: "Incremental"
+              overrideParameters: >
+                -administratorPassword "$(password)"
+                -deploySelfHostedIntegrationRuntimes false
+          
+          # Upload File to Artifact Storage Account
+          - task: AzurePowerShell@4
+            name: upload_file_001
+            displayName: Upload File to Artifact Storage Account
+            enabled: true
+            continueOnError: false
+            inputs:
+              azureSubscription: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+              scriptType: 'filePath'
+              scriptPath: '$(System.DefaultWorkingDirectory)/code/UploadBlob.ps1'
+              scriptArguments:
+                -ResourceGroupName $(dataLandingZoneDetails01.artifactstorage001ResourceGroupName.value)
+                -StorageAccountName $(dataLandingZoneDetails01.artifactstorage001Name.value)
+                -StorageAccountContainerName $(dataLandingZoneDetails01.artifactstorage001ContainerName.value)
+                -File "$(System.DefaultWorkingDirectory)/code/installSHIRGateway.ps1"
+                -Blob "installSHIRGateway.ps1"
+              errorActionPreference: 'stop'
+              failOnStandardError: false
+              azurePowerShellVersion: 'latestVersion'
+          
+          # Deploy Data Landing Zone
+          - task: AzureResourceManagerTemplateDeployment@3
+            name: data_landing_zone_deployment_002
+            displayName: Data Landing Zone - with SHIR
+            enabled: true
+            continueOnError: false
+            inputs:
+              deploymentScope: "Subscription"
+              azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+              subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+              location: ${{ variables.AZURE_LOCATION }}
+              templateLocation: "Linked artifact"
+              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
+              csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
+              deploymentOutputs: 'dataLandingZoneDetails01'
+              deploymentMode: "Incremental"
+              overrideParameters: >
+                -administratorPassword "$(password)"
+                -deploySelfHostedIntegrationRuntimes false
+          
+          # Restart MySQL 001
+          - task: AzurePowerShell@4
+            name: mysql_001_restart
+            displayName: Restart MySQL 001
+            enabled: true
+            continueOnError: false
+            inputs:
+              azureSubscription: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+              scriptType: 'filePath'
+              scriptPath: '$(System.DefaultWorkingDirectory)/code/UploadBlob.ps1'
+              scriptArguments:
+                -SubscriptionId $(dataLandingZoneDetails01.mySqlServer001SubscriptionId.value)
+                -ResourceGroupName $(dataLandingZoneDetails01.mySqlServer001ResourceGroupName.value)
+                -MySqlServerName $(dataLandingZoneDetails01.mySqlServer001Name.value)
+              errorActionPreference: 'stop'
+              failOnStandardError: false
+              azurePowerShellVersion: 'latestVersion'
+          
+          # # Setup Databricks 001 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
+          # - task: AzureCLI@2
+          #   name: setup_databricks_001
+          #   displayName: Setup Databricks 001
+          #   enabled: true
+          #   continueOnError: false
+          #   inputs:
+          #     azureSubscription: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+          #     scriptType: pscore
+          #     scriptLocation: 'scriptPath'
+          #     scriptPath: '$(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1'
+          #     powerShellErrorActionPreference: 'stop'
+          #     addSpnToEnvironment: true
+          #     failOnStandardError: false
+          #     powerShellIgnoreLASTEXITCODE: false
+          #     arguments: >
+          #       -DatabricksWorkspaceName $(databricksDetails001.databricksWorkspaceName.value)
+          #       -DatabricksWorkspaceId $(databricksDetails001.databricksWorkspaceId.value)
+          #       -DatabricksApiUrl $(databricksDetails001.databricksApiUrl.value)
+          #       -DatabricksSubscriptionId $(databricksDetails001.databricksSubscriptionId.value)
+          #       -DatabricksResourceGroupName $(databricksDetails001.databricksResourceGroupName.value)
+          #       -HiveKeyVaultId $(hivemetastoreDetails001.mySqlDatabaseKeyVaultId.value)
+          #       -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlConnectionStringSecretName.value)
+          #       -HiveUsernameSecretName $(hivemetastoreDetails001.mySqlUsernameSecretName.value)
+          #       -HivePasswordSecretName $(hivemetastoreDetails001.mySqlPasswordSecretName.value)
+          #       -LogAnalyticsKeyVaultId $(logAnalytics001Details.logAnalyticsKeyVaultId.value)
+          #       -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value)
+          #       -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value)
+          #       -HiveVersion '2.3.7'
+          #       -HadoopVersion '2.7.4'
+          
+          # Setup Databricks 001 - Manual Step - Guidance
+          - bash: |
+              echo "Please run the following Powershell command to setup Databricks Workspace 001:
+              ./code/SetupDatabricksManually.ps1 \`
+                -UserEmail '{userEmail}' \`
+                -UserPassword '{password}' \`
+                -ClientId '{clientId}' \`
+                -TenantId '{tenantId}' \`
+                
+                -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksWorkspaceName.value) \`
+                -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksWorkspaceId.value) \`
+                -DatabricksApiUrl $(dataLandingZoneDetails01.databricksApiUrl.value) \`
+                -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksSubscriptionId.value) \`
+                -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksResourceGroupName.value) \`
+
+                -HiveKeyVaultId $(dataLandingZoneDetails01.mySqlServer001KeyVaultid.value) \`
+                -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlServer001ConnectionStringSecretName.value) \`
+                -HiveUsernameSecretName $(dataLandingZoneDetails01.mySqlServer001UsernameSecretName.value) \`
+                -HivePasswordSecretName $(dataLandingZoneDetails01.mySqlServer001PasswordSecretName.value) \`
+                -LogAnalyticsKeyVaultId $(dataLandingZoneDetails01.logAnalyticsWorkspaceKeyVaultId.value) \`
+                -LogAnalyticsWorkspaceIdSecretName $(dataLandingZoneDetails01.logAnalyticsWorkspaceIdSecretName.value) \`
+                -LogAnalyticsWorkspaceKeySecretName $(dataLandingZoneDetails01.logAnalyticsWorkspaceKeySecretName.value) \`
+                -HiveVersion '2.3.7' \`
+                -HadoopVersion '2.7.4'
+              "
+            name: setup_databricks_001_manual
+            displayName: Setup Databricks 001 - Manual Step - Guidance
+          
+          
+          # # Setup databricks 002 - Disabled, because automation is currently blocked. We are tracking this actively and add this very soon
+          # - task: AzureCLI@2
+          #   name: setup_databricks_002
+          #   displayName: Setup databricks 002
+          #   enabled: true
+          #   continueOnError: false
+          #   inputs:
+          #     azureSubscription: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+          #     scriptType: pscore
+          #     scriptLocation: 'scriptPath'
+          #     scriptPath: '$(System.DefaultWorkingDirectory)/code/SetupDatabricks.ps1'
+          #     powerShellErrorActionPreference: 'stop'
+          #     addSpnToEnvironment: true
+          #     failOnStandardError: false
+          #     powerShellIgnoreLASTEXITCODE: false
+          #     arguments: >
+          #       -DatabricksWorkspaceName $(databricksDetails002.databricksWorkspaceName.value)
+          #       -DatabricksWorkspaceId $(databricksDetails002.databricksWorkspaceId.value)
+          #       -DatabricksApiUrl $(databricksDetails002.databricksApiUrl.value)
+          #       -DatabricksSubscriptionId $(databricksDetails002.databricksSubscriptionId.value)
+          #       -DatabricksResourceGroupName $(databricksDetails002.databricksResourceGroupName.value)
+          #       -HiveKeyVaultId $(hivemetastoreDetails001.mySqlDatabaseKeyVaultId.value)
+          #       -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlConnectionStringSecretName.value)
+          #       -HiveUsernameSecretName $(hivemetastoreDetails001.mySqlUsernameSecretName.value)
+          #       -HivePasswordSecretName $(hivemetastoreDetails001.mySqlPasswordSecretName.value)
+          #       -LogAnalyticsKeyVaultId $(logAnalytics001Details.logAnalyticsKeyVaultId.value)
+          #       -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value)
+          #       -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value)
+          #       -HiveVersion '2.3.7'
+          #       -HadoopVersion '2.7.4'
+          
+          # Setup Databricks 002 - Manual Step - Guidance
+          - bash: |
+              echo "Please run the following Powershell command to setup Databricks Workspace 002:
+              ./code/SetupDatabricksManually.ps1 \`
+                -UserEmail '{userEmail}' \`
+                -UserPassword '{password}' \`
+                -ClientId '{clientId}' \`
+                -TenantId '{tenantId}' \`
+                -DatabricksWorkspaceName $(databricksDetails002.databricksWorkspaceName.value) \`
+                -DatabricksWorkspaceId $(databricksDetails002.databricksWorkspaceId.value) \`
+                -DatabricksApiUrl $(databricksDetails002.databricksApiUrl.value) \`
+                -DatabricksSubscriptionId $(databricksDetails002.databricksSubscriptionId.value) \`
+                -DatabricksResourceGroupName $(databricksDetails002.databricksResourceGroupName.value) \`
+                -HiveKeyVaultId $(hivemetastoreDetails001.mySqlDatabaseKeyVaultId.value) \`
+                -HiveConnectionStringSecretName $(hivemetastoreDetails001.mySqlConnectionStringSecretName.value) \`
+                -HiveUsernameSecretName $(hivemetastoreDetails001.mySqlUsernameSecretName.value) \`
+                -HivePasswordSecretName $(hivemetastoreDetails001.mySqlPasswordSecretName.value) \`
+                -LogAnalyticsKeyVaultId $(logAnalytics001Details.logAnalyticsKeyVaultId.value) \`
+                -LogAnalyticsWorkspaceIdSecretName $(logAnalytics001Details.logAnalyticsWorkspaceIdSecretName.value) \`
+                -LogAnalyticsWorkspaceKeySecretName $(logAnalytics001Details.logAnalyticsWorkspaceKeySecretName.value) \`
+                -HiveVersion '2.3.7' \`
+                -HadoopVersion '2.7.4'
+              "
+            name: setup_databricks_002_manual
+            displayName: Setup Databricks 002 - Manual Step - Guidance
