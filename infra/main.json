@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1.14562",
-      "templateHash": "17625286930550829357"
+      "templateHash": "14172215793077600975"
     }
   },
   "parameters": {
@@ -1428,7 +1428,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "12478371468437149250"
+              "templateHash": "14245160320291665748"
             }
           },
           "parameters": {
@@ -2176,7 +2176,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "11145133456669834625"
+                      "templateHash": "10374901792138276939"
                     }
                   },
                   "parameters": {
@@ -2273,6 +2273,50 @@
                               }
                             }
                           ]
+                        }
+                      }
+                    },
+                    {
+                      "copy": {
+                        "name": "deploymentDelay",
+                        "count": "[length(range(0, 5))]"
+                      },
+                      "type": "Microsoft.Resources/deployments",
+                      "apiVersion": "2019-10-01",
+                      "name": "[format('delay-{0}', range(0, 5)[copyIndex()])]",
+                      "properties": {
+                        "expressionEvaluationOptions": {
+                          "scope": "inner"
+                        },
+                        "mode": "Incremental",
+                        "parameters": {
+                          "deploymentDelayIndex": {
+                            "value": "[range(0, 5)[copyIndex()]]"
+                          }
+                        },
+                        "template": {
+                          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                          "contentVersion": "1.0.0.0",
+                          "metadata": {
+                            "_generator": {
+                              "name": "bicep",
+                              "version": "0.4.1.14562",
+                              "templateHash": "17161936924798786026"
+                            }
+                          },
+                          "parameters": {
+                            "deploymentDelayIndex": {
+                              "type": "int"
+                            }
+                          },
+                          "functions": [],
+                          "resources": [],
+                          "outputs": {
+                            "deploymentDelayIndex": {
+                              "type": "int",
+                              "value": "[parameters('deploymentDelayIndex')]"
+                            }
+                          }
                         }
                       }
                     }

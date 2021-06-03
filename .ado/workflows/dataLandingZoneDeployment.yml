@@ -183,7 +183,7 @@ stages:
             inputs:
               azureSubscription: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
               scriptType: 'filePath'
-              scriptPath: '$(System.DefaultWorkingDirectory)/code/UploadBlob.ps1'
+              scriptPath: '$(System.DefaultWorkingDirectory)/code/RestartMySqlServer.ps1'
               scriptArguments:
                 -SubscriptionId $(dataLandingZoneDetails01.mySqlServer001SubscriptionId.value)
                 -ResourceGroupName $(dataLandingZoneDetails01.mySqlServer001ResourceGroupName.value)
