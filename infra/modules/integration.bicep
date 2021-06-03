@@ -1,4 +1,4 @@
-// This template is used as a module from the main.bicep template. 
+// This template is used as a module from the main.bicep template.
 // The module contains a template to create integration resources.
 targetScope = 'resourceGroup'
 
