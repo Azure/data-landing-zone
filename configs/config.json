@@ -127,6 +127,14 @@
         }
     },
     {
+        "filePath": "infra/ResourceGroups/params.resourceGroups001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.dataNodeName.value": "${DataLandingZoneName}"
+        }
+    },
+    {
         "filePath": "infra/SelfHostedIntegrationRuntimeDataFactory/params.shir001.json",
         "fileType": "json",
         "parameters": {
