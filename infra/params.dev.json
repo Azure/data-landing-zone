@@ -56,7 +56,7 @@
             ]
         },
         "administratorPassword": {
-            "value": "Qwertz12345!"
+            "value": "<your-secure-password>"
         },
         "purviewId": {
             "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/synapse-rg/providers/Microsoft.Purview/accounts/marvtest"
