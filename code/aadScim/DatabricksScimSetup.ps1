@@ -42,18 +42,18 @@ param (
 )
 
 # Import Helper Functions
-Write-Host "Importing Helper Functions"
+Write-Output "Importing Helper Functions"
 . "$PSScriptRoot\Helper.ps1"
 
 # Authentication and get AAD Token
-Write-Host "Logging in and getting AAD Token"
+Write-Output "Logging in and getting AAD Token"
 Get-AadToken `
     -TenantId $TenantId `
     -ClientId $ClientId `
     -ClientSecret $ClientSecret
 
 # Setup SCIM Enterprise Application
-Write-Host "Setting up SCIM Enterprise Application"
+Write-Output "Setting up SCIM Enterprise Application"
 New-ScimSetup `
     -DatabricksWorkspaceName $DatabricksWorkspaceName `
     -DatabricksInstanceName $DatabricksInstanceName `
@@ -62,4 +62,4 @@ New-ScimSetup `
     -GroupIdList $GroupIdList
 
 # Completed Setup
-Write-Host "Completed Setup"
+Write-Output "Completed Setup"

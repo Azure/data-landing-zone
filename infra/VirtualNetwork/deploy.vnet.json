@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -47,6 +46,13 @@
             "metadata": {
                 "description": "Specifies the private IP of the Firewall."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -57,13 +63,15 @@
         "dataNodeName": "[parameters('dataNodeName')]",
         "deployDatabricksNsg": "[parameters('deployDatabricksNsg')]",
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
-        "firewallPrivateIp": "[parameters('firewallPrivateIp')]"
+        "firewallPrivateIp": "[parameters('firewallPrivateIp')]",
+        "tags": "[parameters('tags')]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/routeTables",
             "apiVersion": "2020-05-01",
             "name": "[concat(variables('dataNodeName'), '-routetable')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "properties": {
                 "routes": [
@@ -80,9 +88,10 @@
             }
         },
         {
-            "name": "[concat(variables('dataNodeName'), '-nsg')]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-05-01",
+            "name": "[concat(variables('dataNodeName'), '-nsg')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
@@ -109,9 +118,10 @@
         },
         {
             "condition": "[variables('deployDatabricksNsg')]",
-            "name": "[concat(variables('dataNodeName'), '-databricks-nsg')]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-05-01",
+            "name": "[concat(variables('dataNodeName'), '-databricks-nsg')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
@@ -227,9 +237,10 @@
             }
         },
         {
-            "name": "[variables('vnetName')]",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-05-01",
+            "name": "[variables('vnetName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataNodeName'), '-nsg'))]",

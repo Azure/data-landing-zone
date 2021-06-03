@@ -1,5 +1,5 @@
-$Global:accessToken = $null
-$Global:accessTokenExpiry = $null
+$accessToken = $null
+$accessTokenExpiry = $null
 
 function Get-AadToken {
     <#
@@ -79,10 +79,7 @@ function Get-AadToken {
         $response = Invoke-RestMethod @parameters
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to get AAD Token failed"
         throw "REST API call failed"
     }
 
@@ -124,13 +121,12 @@ function Assert-Authentication {
 
     # Check authentication
     Write-Verbose "Checking authentication"
-    if ([string]::IsNullOrEmpty($Global:accessToken) -or [string]::IsNullOrEmpty($Global:accessTokenExpiry)) {
+    if ([string]::IsNullOrEmpty($accessToken) -or [string]::IsNullOrEmpty($accessTokenExpiry)) {
         # Not authenticated
         Write-Verbose "Please authenticate before invoking Microsoft Graph REST APIs"
         throw "Not authenticated"
-        
     }
-    elseif (($Global:accessTokenExpiry - $unixTime) -le 600) {
+    elseif (($accessTokenExpiry - $unixTime) -le 600) {
         # Access token expired
         Write-Verbose "Microsoft Access token expired"
         throw "Microsoft Access token expired"
@@ -209,10 +205,7 @@ function New-DatabricksEnterpriseApplication {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to register Databricks Enterprise Application failed"
         throw "REST API call failed"
     }
 
@@ -220,9 +213,9 @@ function New-DatabricksEnterpriseApplication {
     Write-Verbose "Checking response"
     $objectId = $response.servicePrincipal.objectId
     Write-Verbose "SP ID: ${objectId}"
-    if (!$objectId) { 
-        Write-Verbose "Instantiation service principal object id is null" 
-        throw "Instantiation service principal object id is null" 
+    if (!$objectId) {
+        Write-Verbose "Instantiation service principal object id is null"
+        throw "Instantiation service principal object id is null"
     }
     return $objectId
 }
@@ -269,7 +262,7 @@ function Get-SynchronisationTemplate {
         'Content-Type'  = 'application/json'
         'Authorization' = "Bearer ${Global:accessToken}"
     }
-    
+
     # Define parameters for REST method
     Write-Verbose "Defining parameters for pscore method"
     $parameters = @{
@@ -286,10 +279,7 @@ function Get-SynchronisationTemplate {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to get synchronisation template failed"
         throw "REST API call failed"
     }
     return $response
@@ -361,10 +351,7 @@ function New-SynchronisationJob {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to create new synchronisation job failed"
         throw "REST API call failed"
     }
 
@@ -372,20 +359,20 @@ function New-SynchronisationJob {
     Write-Verbose "Checking response"
     $jobId = $response.id
     if (!$jobId) {
-        Write-Verbose "Synchronisation job id is null" 
-        throw "Synchronisation job id is null" 
+        Write-Verbose "Synchronisation job id is null"
+        throw "Synchronisation job id is null"
     }
     return $jobId
 }
 
 
-function Test-Connection {
+function Test-DatabricksConnection {
     <#
     .SYNOPSIS
         Test the connection between the Databricks workspace and the application.
 
     .DESCRIPTION
-        Test-Connection tests whether the connection between Databricks and the enterprise application can
+        Test-DatabricksConnection tests whether the connection between Databricks and the enterprise application can
         be successfully established with the provided parameters.
 
     .PARAMETER ObjectId
@@ -404,7 +391,7 @@ function Test-Connection {
         Function expects a Databricks PAT token from the workspace.
 
     .EXAMPLE
-        Test-Connection -ObjectId '<your-service-principal-object-id>' -JobId '<your-synchronisation-job-id>' -DatabricksInstanceName '<your-databricks-instance-name>' -DatabricksPatToken '<your-databricks-pat-token>'
+        Test-DatabricksConnection -ObjectId '<your-service-principal-object-id>' -JobId '<your-synchronisation-job-id>' -DatabricksInstanceName '<your-databricks-instance-name>' -DatabricksPatToken '<your-databricks-pat-token>'
 
     .NOTES
         Author:  Marvin Buss
@@ -481,10 +468,7 @@ function Test-Connection {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to test connection failed"
         throw "REST API call failed"
     }
     return $response
@@ -601,10 +585,7 @@ function Save-ProvisioningCredentials {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to save provisioning credentials failed"
         throw "REST API call failed"
     }
     return $response
@@ -628,7 +609,7 @@ function New-GroupAssignment {
         Function expects a group object id which is granted access to the Databricks workspace via SCIM.
 
     .EXAMPLE
-        Test-Connection -ObjectId '<your-service-principal-object-id>' -GroupId '<your-group-id>'
+        New-GroupAssignment -ObjectId '<your-service-principal-object-id>' -GroupId '<your-group-id>'
 
     .NOTES
         Author:  Marvin Buss
@@ -686,10 +667,7 @@ function New-GroupAssignment {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to create new group assignment failed"
         throw "REST API call failed"
     }
     return $response
@@ -762,10 +740,7 @@ function Start-SynchronisationJob {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to start synchronisation job failed"
         throw "REST API call failed"
     }
     return $response
@@ -778,7 +753,7 @@ function Get-ProvisioningAuditLogs {
         Monitors the provisioning job status.
 
     .DESCRIPTION
-        Get-ProvisioningAuditLogs can be used to track the progress of the current provisioning job 
+        Get-ProvisioningAuditLogs can be used to track the progress of the current provisioning job
         cycle as well as statistics to date such as the number of users and groups that have been
         created in the Databricks workspace.
 
@@ -840,10 +815,7 @@ function Get-ProvisioningAuditLogs {
         Write-Verbose "Response: ${response}"
     }
     catch {
-        Write-Host -ForegroundColor:Red $_
-        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
-        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
-        Write-Host -ForegroundColor:Red $_.Exception.Message
+        Write-Error "REST API to get provisioning logs failed"
         throw "REST API call failed"
     }
     return $response
@@ -883,6 +855,7 @@ function New-ScimSetup {
         GitHub:  @marvinbuss
     #>
     [CmdletBinding()]
+    [OutputType("System.Object[]")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -917,7 +890,7 @@ function New-ScimSetup {
     Write-Verbose "Instantiating Databricks Enterprise Application"
     $objectId = New-DatabricksEnterpriseApplication `
         -DatabricksWorkspaceName $databricksWorkspaceName
-    
+
     # Sleep for 5 Seconds
     Write-Verbose "Sleeping for 5 seconds"
     Start-Sleep -Seconds 5
@@ -926,20 +899,20 @@ function New-ScimSetup {
     Write-Verbose "Getting Synchronization Template"
     Get-SynchronisationTemplate `
         -ObjectId $objectId
-    
+
     # Create Synchronization Job
     Write-Verbose "Creating Synchronization Job"
     $jobId = New-SynchronisationJob `
         -ObjectId $objectId
-    
+
     # Test Connection to Databricks Workspace
     Write-Verbose "Testing Connection to Databricks Workspace"
-    Test-Connection `
+    Test-DatabricksConnection `
         -ObjectId $objectId `
         -JobId $jobId `
         -DatabricksInstanceName $DatabricksInstanceName `
         -DatabricksPatToken $DatabricksPatToken
-    
+
     # Save Provisioning Credentials for Enterprise Application
     Write-Verbose "Saving Provisioning Credentials for Enterprise Application"
     Save-ProvisioningCredentials `
@@ -947,7 +920,7 @@ function New-ScimSetup {
         -DatabricksInstanceName $DatabricksInstanceName `
         -DatabricksPatToken $DatabricksPatToken `
         -NotificationEmail $NotificationEmail
-    
+
     # Add Group Assignment
     Write-Verbose "Adding Group Assignment"
     foreach ($groupId in $GroupIdList) {
@@ -955,21 +928,21 @@ function New-ScimSetup {
             -ObjectId $objectId `
             -GroupId $groupId
     }
-    
+
     # Start Synchronisation Job
     Write-Verbose "Starting Synchronisation Job"
     Start-SynchronisationJob `
         -ObjectId $objectId `
         -JobId $jobId
-    
+
     # Get Provisioning Logs
-    Write-Host "Getting Provisioning Logs"
+    Write-Output "Getting Provisioning Logs"
     $provisioningLogs = Get-ProvisioningAuditLogs `
         -ObjectId $objectId `
         -JobId $jobId
-    
-    Write-Host "Provisioning Logs: ${provisioningLogs}"
-    
+
+    Write-Output "Provisioning Logs: ${provisioningLogs}"
+
     return $objectId, $jobId
 }
 
@@ -1001,6 +974,7 @@ function New-GroupListAssignment {
         GitHub:  @marvinbuss
     #>
     [CmdletBinding()]
+    [OutputType("System.Object[]")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -1020,7 +994,7 @@ function New-GroupListAssignment {
     # Validate authentication
     Write-Verbose "Validating authentication"
     Assert-Authentication
-    
+
     # Add Group Assignment
     Write-Verbose "Adding Group Assignment"
     foreach ($groupId in $GroupIdList) {
@@ -1028,12 +1002,12 @@ function New-GroupListAssignment {
             -ObjectId $ObjectId `
             -GroupId $groupId
     }
-    
+
     # Start Synchronisation Job
     Write-Verbose "Starting Synchronisation Job"
     Start-SynchronisationJob `
         -ObjectId $objectId `
         -JobId $jobId
-    
+
     return $objectId, $jobId
 }

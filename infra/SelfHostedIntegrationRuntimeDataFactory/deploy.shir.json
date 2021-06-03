@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -34,6 +33,7 @@
         "vmssSkuCapacity": {
             "type": "int",
             "minValue": 0,
+            "maxValue": 4,
             "defaultValue": 1,
             "metadata": {
                 "description": "Specifies the SKU capacity of the virtual machine scale set."
@@ -74,6 +74,13 @@
             "metadata": {
                 "description": "Specifies the name of the storage account container name where the powershell script is stored."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -91,13 +98,15 @@
         "storageAccountId": "[parameters('storageAccountId')]",
         "storageAccountName": "[last(split(variables('storageAccountId'), '/'))]",
         "storageAccountContainerName": "[parameters('storageAccountContainerName')]",
-        "subnetId": "[parameters('subnetId')]"
+        "subnetId": "[parameters('subnetId')]",
+        "tags": "[parameters('tags')]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/loadBalancers",
             "apiVersion": "2020-05-01",
             "name": "[concat(variables('vmssName'), '-lb')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "Basic"
@@ -173,6 +182,7 @@
             "type": "Microsoft.Compute/virtualMachineScaleSets",
             "apiVersion": "2019-07-01",
             "name": "[variables('vmssName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]",
@@ -273,7 +283,7 @@
                                         ]
                                     },
                                     "protectedSettings": {
-                                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 ', listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('dataFactorySelfHostedIntegrationRuntimeName')), '2018-06-01').authKey1)]",
+                                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey ', listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('dataFactorySelfHostedIntegrationRuntimeName')), '2018-06-01').authKey1)]",
                                         "storageAccountName": "[variables('storageAccountName')]",
                                         "storageAccountKey": "[listkeys(variables('storageAccountId'), '2020-08-01-preview').keys[0].value]"
                                     }
@@ -291,7 +301,7 @@
             "properties": {
                 "additionalProperties": {},
                 "type": "SelfHosted",
-                "description": "Data Hub - Self Hosted Integration Runtime"
+                "description": "Data Node - Self Hosted Integration Runtime"
             }
         }
     ],

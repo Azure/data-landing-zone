@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -50,6 +49,13 @@
             "metadata": {
                 "description": "Specifies the resource ID of the private dns zone that is used for DBFS."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "variables": {
@@ -64,6 +70,7 @@
         "privateDnsZoneIdBlob": "[parameters('privateDnsZoneIdBlob')]",
         "privateDnsZoneIdDatabricks": "[parameters('privateDnsZoneIdDatabricks')]",
         "privateDnsZoneNameDatabricks": "[last(split(variables('privateDnsZoneIdDatabricks'), '/'))]",
+        "tags": "[parameters('tags')]",
         "privateEndpointNameUser": "[concat(variables('databricksName'), '-user-private-endpoint')]",
         "privateEndpointNameData": "[concat(variables('databricksName'), '-data-private-endpoint')]",
         "privateEndpointNameDbfs": "[concat(variables('databricksName'), '-dbfs-private-endpoint')]"
@@ -73,6 +80,7 @@
             "type": "Microsoft.Databricks/workspaces",
             "apiVersion": "2018-04-01",
             "name": "[variables('databricksName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "premium"

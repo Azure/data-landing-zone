@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -74,8 +73,9 @@
         },
         "sqlDatabaseReadReplicaCount": {
             "type": "int",
-            "defaultValue": 0,
             "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
             "metadata": {
                 "description": "Specifies the number of readonly secondary replicas associated with the database."
             }
@@ -101,8 +101,9 @@
         },
         "sqlDatabaseAutoPauseDelay": {
             "type": "int",
-            "defaultValue": -1,
             "minValue": -1,
+            "maxValue": 10080,
+            "defaultValue": -1,
             "metadata": {
                 "description": "Specifies the time in minutes after which database is automatically paused (only applies to serverless tier)."
             }
@@ -111,6 +112,13 @@
             "type": "string",
             "metadata": {
                 "description": "Specifies the resource id of the key vault to store the storage access key."
+            }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
             }
         }
     },
@@ -133,19 +141,17 @@
         "sqlDatabaseAutoPauseDelay": "[parameters('sqlDatabaseAutoPauseDelay')]",
         "keyVaultId": "[parameters('keyVaultId')]",
         "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]",
+        "tags": "[parameters('tags')]",
         "connectionStringSecretName": "[concat(variables('sqlDatabaseName'), 'ConnectionString')]",
         "usernameSecretName": "[concat(variables('sqlDatabaseName'), 'Username')]",
-        "passwordSecretName": "[concat(variables('sqlDatabaseName'), 'Password')]",
-        "storageContainerId": "",
-        "storageAccountName": "",
-        "storageAccountContainerName": "",
-        "storageAccountKey": ""
+        "passwordSecretName": "[concat(variables('sqlDatabaseName'), 'Password')]"
     },
     "resources": [
         {
-            "apiVersion": "2019-06-01-preview",
             "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2020-08-01-preview",
             "name": "[concat(variables('sqlServerName'), '/', variables('sqlDatabaseName'))]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "[variables('sqlDatabaseSkuName')]",
@@ -164,24 +170,6 @@
                 "storageAccountType": "[variables('sqlDatabaseStorageAccountType')]",
                 "minCapacity": "[variables('sqlDatabaseMinCapacity')]"
             }
-            // "resources": [
-            //     {
-            //         "type": "extensions",
-            //         "apiVersion": "2014-04-01",
-            //         "name": "Import",
-            //         "dependsOn": [
-            //             "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServerName'), variables('sqlDatabaseName'))]"
-            //         ],
-            //         "properties": {
-            //             "storageKeyType": "StorageAccessKey",
-            //             "storageKey": "[variables('storageAccountKey')]",
-            //             "storageUri": "[concat('https://', variables('storageAccountName'), '.blob.core.windows.net/', variables('storageAccountContainerName'), '/installSHIRGateway.ps1')]",
-            //             "administratorLogin": "[reference(resourceId('Microsoft.Sql/servers', variables('sqlServerName')), '2019-06-01-preview').administratorLogin]",
-            //             "administratorLoginPassword": "[variables('sqlServerAdministratorLoginPassword')]",
-            //             "operationMode": "Import"
-            //         }
-            //     }
-            // ]
         },
         {
             "name": "SqlDbSecretDeployment",

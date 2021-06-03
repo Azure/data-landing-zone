@@ -62,7 +62,7 @@ EOF
 
 echo "Copying Spark Monitoring jars"
 for i in "${JAR_FILES[@]}"; do
-    cp -f $i /mnt/driver-daemon/jars
+    cp -f "$i" /mnt/driver-daemon/jars
     echo "   Copying $i"
 done
 echo "Copied Spark Monitoring jars successfully"
@@ -81,15 +81,15 @@ for log4jDirectory in "${log4jDirectories[@]}"
 do
 
 LOG4J_CONFIG_FILE="$SPARK_HOME/dbconf/log4j/$log4jDirectory/log4j.properties"
-echo "BEGIN: Updating $LOG4J_CONFIG_FILE with Log Analytics appender"
-sed -i 's/log4j.rootCategory=.*/&, logAnalyticsAppender/g' ${LOG4J_CONFIG_FILE}
-tee -a ${LOG4J_CONFIG_FILE} << EOF
+echo "BEGIN: Updating ${LOG4J_CONFIG_FILE} with Log Analytics appender"
+sed -i 's/log4j.rootCategory=.*/&, logAnalyticsAppender/g' "${LOG4J_CONFIG_FILE}"
+tee -a "${LOG4J_CONFIG_FILE}" << EOF
 # logAnalytics
 log4j.appender.logAnalyticsAppender=com.microsoft.pnp.logging.loganalytics.LogAnalyticsAppender
 log4j.appender.logAnalyticsAppender.filter.spark=com.microsoft.pnp.logging.SparkPropertyEnricher
 EOF
 
-echo "END: Updating $LOG4J_CONFIG_FILE with Log Analytics appender"
+echo "END: Updating ${LOG4J_CONFIG_FILE} with Log Analytics appender"
 
 done
 

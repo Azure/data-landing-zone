@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -88,6 +87,13 @@
             "metadata": {
                 "description": "Specifies the ID of the private dns zone for dev."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -108,6 +114,7 @@
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneIdSql": "[parameters('privateDnsZoneIdSql')]",
         "privateDnsZoneIdDev": "[parameters('privateDnsZoneIdDev')]",
+        "tags": "[parameters('tags')]",
         "privateEndpointNameSql": "[concat(variables('synapseWorkspaceName'), '-sql-private-endpoint')]",
         "privateEndpointNameSqlOnDemand": "[concat(variables('synapseWorkspaceName'), '-sqlondemand-private-endpoint')]",
         "privateEndpointNameDev": "[concat(variables('synapseWorkspaceName'), '-dev-private-endpoint')]"
@@ -117,6 +124,7 @@
             "type": "Microsoft.Synapse/workspaces",
             "apiVersion": "2019-06-01-preview",
             "name": "[variables('synapseWorkspaceName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "identity": {
                 "type": "SystemAssigned"
@@ -202,7 +210,8 @@
                             "scope": "[format('Microsoft.Storage/storageAccounts/{0}/blobServices/default/containers/{1}', variables('synapseDefaultStorageAccountName'), variables('synapseDefaultStorageAccountFileSystem'))]",
                             "properties": {
                                 "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
-                                "principalId": "[reference(resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName')), '2019-06-01-preview', 'Full').identity.principalId]"
+                                "principalId": "[reference(resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName')), '2019-06-01-preview', 'Full').identity.principalId]",
+                                "principalType": "ServicePrincipal"
                             }
                         }
                     ],
@@ -216,6 +225,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointNameSql')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName'))]"
             ],
@@ -262,6 +272,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointNameSqlOnDemand')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName'))]"
             ],
@@ -308,6 +319,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointNameDev')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName'))]"
             ],

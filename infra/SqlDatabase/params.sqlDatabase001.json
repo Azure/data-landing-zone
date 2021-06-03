@@ -46,6 +46,9 @@
         },
         "keyVaultId": {
             "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-metadata/providers/Microsoft.KeyVault/vaults/dn001-keyvault001"
+        },
+        "tags": {
+            "value": {}
         }
     }
 }

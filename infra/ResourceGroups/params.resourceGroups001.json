@@ -5,11 +5,8 @@
         "location": {
             "value": "northeurope"
         },
-        "logAnalyticsWorkspaceName": {
-            "value": "dn001-la001"
-        },
-        "keyVaultId": {
-            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-logging/providers/Microsoft.KeyVault/vaults/dn001-keyvault003"
+        "dataNodeName": {
+            "value": "dn001"
         },
         "tags": {
             "value": {}
