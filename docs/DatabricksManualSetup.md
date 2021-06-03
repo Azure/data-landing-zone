@@ -4,7 +4,7 @@
 
 Due to the following service limitations, Databricks needs to be setup manually:
 
-* Creating a Key Vault backed Databricks secret scope is not possible via Service Principle. The issue can be tracked [here](https://github.com/databricks/databricks-cli/issues/338).
+- Creating a Key Vault backed Databricks secret scope is not possible via Service Principle. The issue can be tracked [here](https://github.com/databricks/databricks-cli/issues/338).
 
 ## Manual Databricks configuration
 
@@ -32,7 +32,7 @@ After deploying the Data Landing Zone successfully, execute the following steps:
 
 1. Go to the workflow execution logs and look for a step called **Setup Databricks 00X - Manual Step - Guidance**. Click on that step and look into the logs. In the logs you will find the following comment:
 
-```Powershell
+```powershell
 # Please run the following Powershell command to setup Databricks Workspace 00X
 
 ./code/SetupDatabricksManually.ps1 `
