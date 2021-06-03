@@ -47,3 +47,4 @@ resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
 // Outputs
 output databricksId string = databricks.id
 output databricksWorkspaceUrl string = databricks.properties.workspaceUrl
+output databricksApiUrl string = 'https://${location}.azuredatabricks.net'

@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "environment": {
-            "value": "dev"
+            "value": "prod"
         },
         "prefix": {
             "value": "dn001"

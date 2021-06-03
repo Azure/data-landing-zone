@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1.14562",
-      "templateHash": "1667030353629627547"
+      "templateHash": "14844547447140616137"
     }
   },
   "parameters": {
@@ -1020,7 +1020,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "12681212996502001786"
+              "templateHash": "7959971333915186379"
             }
           },
           "parameters": {
@@ -1043,13 +1043,15 @@
           "functions": [],
           "variables": {
             "keyVault001Name": "[format('{0}-vault003', parameters('prefix'))]",
-            "logAnalytics001Name": "[format('{0}-la001', parameters('prefix'))]"
+            "logAnalytics001Name": "[format('{0}-la001', parameters('prefix'))]",
+            "logAnalyticsWorkspaceIdSecretName": "logAnalyticsWorkspaceId",
+            "logAnalyticsWorkspaceKeySecretName": "logAnalyticsWorkspaceKey"
           },
           "resources": [
             {
               "type": "Microsoft.KeyVault/vaults/secrets",
               "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/logAnalyticsWorkspaceId', variables('keyVault001Name'))]",
+              "name": "[format('{0}/{1}', variables('keyVault001Name'), variables('logAnalyticsWorkspaceIdSecretName'))]",
               "properties": {
                 "attributes": {
                   "enabled": true
@@ -1065,7 +1067,7 @@
             {
               "type": "Microsoft.KeyVault/vaults/secrets",
               "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/logAnalyticsWorkspaceKey', variables('keyVault001Name'))]",
+              "name": "[format('{0}/{1}', variables('keyVault001Name'), variables('logAnalyticsWorkspaceKeySecretName'))]",
               "properties": {
                 "attributes": {
                   "enabled": true
@@ -1294,7 +1296,21 @@
                 }
               }
             }
-          ]
+          ],
+          "outputs": {
+            "logAnalyticsWorkspaceKeyVaultId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'keyVault001'), '2019-10-01').outputs.keyvaultId.value]"
+            },
+            "logAnalyticsWorkspaceIdSecretName": {
+              "type": "string",
+              "value": "[variables('logAnalyticsWorkspaceIdSecretName')]"
+            },
+            "logAnalyticsWorkspaceKeySecretName": {
+              "type": "string",
+              "value": "[variables('logAnalyticsWorkspaceKeySecretName')]"
+            }
+          }
         }
       },
       "dependsOn": [
@@ -3958,7 +3974,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "16346241682600251319"
+              "templateHash": "13917159333902148731"
             }
           },
           "parameters": {
@@ -4008,13 +4024,16 @@
             "keyVault001Name": "[format('{0}-vault001', parameters('prefix'))]",
             "keyVault002Name": "[format('{0}-vault002', parameters('prefix'))]",
             "sqlServer001Name": "[format('{0}-sqlserver001', parameters('prefix'))]",
-            "mySqlServer001Name": "[format('{0}-mysqlserver001', parameters('prefix'))]"
+            "mySqlServer001Name": "[format('{0}-mysqlserver001', parameters('prefix'))]",
+            "mySqlServer001UsernameSecretName": "[format('{0}Username', variables('mySqlServer001Name'))]",
+            "mySqlServer001PasswordSecretName": "[format('{0}Password', variables('mySqlServer001Name'))]",
+            "mySqlServer001ConnectionStringSecretName": "[format('{0}ConnectionString', variables('mySqlServer001Name'))]"
           },
           "resources": [
             {
               "type": "Microsoft.KeyVault/vaults/secrets",
               "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/{1}Username', variables('keyVault002Name'), variables('mySqlServer001Name'))]",
+              "name": "[format('{0}/{1}', variables('keyVault002Name'), variables('mySqlServer001UsernameSecretName'))]",
               "properties": {
                 "attributes": {
                   "enabled": true
@@ -4029,7 +4048,7 @@
             {
               "type": "Microsoft.KeyVault/vaults/secrets",
               "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/{1}Password', variables('keyVault002Name'), variables('mySqlServer001Name'))]",
+              "name": "[format('{0}/{1}', variables('keyVault002Name'), variables('mySqlServer001PasswordSecretName'))]",
               "properties": {
                 "attributes": {
                   "enabled": true
@@ -4044,7 +4063,7 @@
             {
               "type": "Microsoft.KeyVault/vaults/secrets",
               "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/{1}ConnectionString', variables('keyVault002Name'), variables('mySqlServer001Name'))]",
+              "name": "[format('{0}/{1}', variables('keyVault002Name'), variables('mySqlServer001ConnectionStringSecretName'))]",
               "properties": {
                 "attributes": {
                   "enabled": true
@@ -4601,7 +4620,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "1988394650481673131"
+                      "templateHash": "8327631663795669090"
                     }
                   },
                   "parameters": {
@@ -4760,6 +4779,10 @@
                     }
                   ],
                   "outputs": {
+                    "mySqlServerId": {
+                      "type": "string",
+                      "value": "[resourceId('Microsoft.DBForMySQL/servers', parameters('mysqlserverName'))]"
+                    },
                     "mySqlServerDatabaseName": {
                       "type": "string",
                       "value": "[variables('mySqlServerDatabaseName')]"
@@ -4781,6 +4804,22 @@
             "sqlServer001DatabaseName": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Resources/deployments', 'sqlserver001'), '2019-10-01').outputs.sqlServerDatabaseName.value]"
+            },
+            "mySqlServer001Id": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'mysqlserver001'), '2019-10-01').outputs.mySqlServerId.value]"
+            },
+            "mySqlServer001UsernameSecretName": {
+              "type": "string",
+              "value": "[variables('mySqlServer001UsernameSecretName')]"
+            },
+            "mySqlServer001PasswordSecretName": {
+              "type": "string",
+              "value": "[variables('mySqlServer001PasswordSecretName')]"
+            },
+            "mySqlServer001ConnectionStringSecretName": {
+              "type": "string",
+              "value": "[variables('mySqlServer001ConnectionStringSecretName')]"
             }
           }
         }
@@ -4863,7 +4902,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "8531356318416003367"
+              "templateHash": "1405675899852748818"
             }
           },
           "parameters": {
@@ -4969,7 +5008,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "10025836831328081020"
+                      "templateHash": "15600877305649937658"
                     }
                   },
                   "parameters": {
@@ -5036,6 +5075,10 @@
                     "databricksWorkspaceUrl": {
                       "type": "string",
                       "value": "[reference(resourceId('Microsoft.Databricks/workspaces', parameters('databricksName'))).workspaceUrl]"
+                    },
+                    "databricksApiUrl": {
+                      "type": "string",
+                      "value": "[format('https://{0}.azuredatabricks.net', parameters('location'))]"
                     }
                   }
                 }
@@ -5832,6 +5875,14 @@
             "datafactoryDomain001Id": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryDomain001'), '2019-10-01').outputs.datafactoryId.value]"
+            },
+            "databricksDomain001Id": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksDomain001'), '2019-10-01').outputs.databricksId.value]"
+            },
+            "databricksDomain001ApiUrl": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksDomain001'), '2019-10-01').outputs.databricksApiUrl.value]"
             }
           }
         }
@@ -5910,7 +5961,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "16580712287606723116"
+              "templateHash": "17180381478031883609"
             }
           },
           "parameters": {
@@ -6008,7 +6059,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "10025836831328081020"
+                      "templateHash": "15600877305649937658"
                     }
                   },
                   "parameters": {
@@ -6075,6 +6126,10 @@
                     "databricksWorkspaceUrl": {
                       "type": "string",
                       "value": "[reference(resourceId('Microsoft.Databricks/workspaces', parameters('databricksName'))).workspaceUrl]"
+                    },
+                    "databricksApiUrl": {
+                      "type": "string",
+                      "value": "[format('https://{0}.azuredatabricks.net', parameters('location'))]"
                     }
                   }
                 }
@@ -6512,7 +6567,17 @@
                 "[resourceId('Microsoft.Resources/deployments', 'synapseProduct001')]"
               ]
             }
-          ]
+          ],
+          "outputs": {
+            "databricksProduct001Id": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksProduct001'), '2019-10-01').outputs.databricksId.value]"
+            },
+            "databricksProduct001ApiUrl": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksProduct001'), '2019-10-01').outputs.databricksApiUrl.value]"
+            }
+          }
         }
       },
       "dependsOn": [
@@ -6523,13 +6588,97 @@
     }
   ],
   "outputs": {
-    "artifactstorage001Id": {
+    "artifactstorage001ResourceGroupName": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-integration', variables('name'))), 'Microsoft.Resources/deployments', 'integrationServices'), '2019-10-01').outputs.artifactstorage001Id.value]"
+      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-integration', variables('name'))), 'Microsoft.Resources/deployments', 'integrationServices'), '2019-10-01').outputs.artifactstorage001Id.value, '/')[4]]"
+    },
+    "artifactstorage001Name": {
+      "type": "string",
+      "value": "[last(split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-integration', variables('name'))), 'Microsoft.Resources/deployments', 'integrationServices'), '2019-10-01').outputs.artifactstorage001Id.value, '/'))]"
     },
     "artifactstorage001ContainerName": {
       "type": "string",
       "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-integration', variables('name'))), 'Microsoft.Resources/deployments', 'integrationServices'), '2019-10-01').outputs.artifactstorage001ContainerName.value]"
+    },
+    "mySqlServer001SubscriptionId": {
+      "type": "string",
+      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2019-10-01').outputs.mySqlServer001Id.value, '/')[2]]"
+    },
+    "mySqlServer001ResourceGroupName": {
+      "type": "string",
+      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2019-10-01').outputs.mySqlServer001Id.value, '/')[4]]"
+    },
+    "mySqlServer001Name": {
+      "type": "string",
+      "value": "[last(split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2019-10-01').outputs.mySqlServer001Id.value, '/'))]"
+    },
+    "mySqlServer001KeyVaultid": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2019-10-01').outputs.keyVault001Id.value]"
+    },
+    "mySqlServer001UsernameSecretName": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2019-10-01').outputs.mySqlServer001UsernameSecretName.value]"
+    },
+    "mySqlServer001PasswordSecretName": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2019-10-01').outputs.mySqlServer001PasswordSecretName.value]"
+    },
+    "mySqlServer001ConnectionStringSecretName": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices'), '2019-10-01').outputs.mySqlServer001ConnectionStringSecretName.value]"
+    },
+    "logAnalyticsWorkspaceKeyVaultId": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-logging', variables('name'))), 'Microsoft.Resources/deployments', 'loggingServices'), '2019-10-01').outputs.logAnalyticsWorkspaceKeyVaultId.value]"
+    },
+    "logAnalyticsWorkspaceIdSecretName": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-logging', variables('name'))), 'Microsoft.Resources/deployments', 'loggingServices'), '2019-10-01').outputs.logAnalyticsWorkspaceIdSecretName.value]"
+    },
+    "logAnalyticsWorkspaceKeySecretName": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-logging', variables('name'))), 'Microsoft.Resources/deployments', 'loggingServices'), '2019-10-01').outputs.logAnalyticsWorkspaceKeySecretName.value]"
+    },
+    "databricksDomain001ApiUrl": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.databricksDomain001ApiUrl.value]"
+    },
+    "databricksDomain001Id": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.databricksDomain001Id.value]"
+    },
+    "databricksDomain001SubscriptionId": {
+      "type": "string",
+      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.databricksDomain001Id.value, '/')[2]]"
+    },
+    "databricksDomain001ResourceGroupName": {
+      "type": "string",
+      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.databricksDomain001Id.value, '/')[4]]"
+    },
+    "databricksDomain001Name": {
+      "type": "string",
+      "value": "[last(split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.databricksDomain001Id.value, '/'))]"
+    },
+    "databricksProduct001ApiUrl": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-product', variables('name'))), 'Microsoft.Resources/deployments', 'sharedProductServices'), '2019-10-01').outputs.databricksProduct001ApiUrl.value]"
+    },
+    "databricksProduct001Id": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-product', variables('name'))), 'Microsoft.Resources/deployments', 'sharedProductServices'), '2019-10-01').outputs.databricksProduct001Id.value]"
+    },
+    "databricksProduct001SubscriptionId": {
+      "type": "string",
+      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-product', variables('name'))), 'Microsoft.Resources/deployments', 'sharedProductServices'), '2019-10-01').outputs.databricksProduct001Id.value, '/')[2]]"
+    },
+    "databricksProduct001ResourceGroupName": {
+      "type": "string",
+      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-product', variables('name'))), 'Microsoft.Resources/deployments', 'sharedProductServices'), '2019-10-01').outputs.databricksProduct001Id.value, '/')[4]]"
+    },
+    "databricksProduct001Name": {
+      "type": "string",
+      "value": "[last(split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-product', variables('name'))), 'Microsoft.Resources/deployments', 'sharedProductServices'), '2019-10-01').outputs.databricksProduct001Id.value, '/'))]"
     }
   }
 }

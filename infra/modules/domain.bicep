@@ -107,3 +107,5 @@ module datafactory001DatabricksRoleAssignment 'auxiliary/dataFactoryRoleAssignme
 
 // Outputs
 output datafactoryDomain001Id string = datafactoryDomain001.outputs.datafactoryId
+output databricksDomain001Id string = databricksDomain001.outputs.databricksId
+output databricksDomain001ApiUrl string = databricksDomain001.outputs.databricksApiUrl

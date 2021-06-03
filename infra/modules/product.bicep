@@ -72,3 +72,5 @@ module synapse001StorageRoleAssignment 'auxiliary/synapseRoleAssignmentStorage.b
 }
 
 // Outputs
+output databricksProduct001Id string = databricksProduct001.outputs.databricksId
+output databricksProduct001ApiUrl string = databricksProduct001.outputs.databricksApiUrl
