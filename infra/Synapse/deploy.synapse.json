@@ -210,7 +210,8 @@
                             "scope": "[format('Microsoft.Storage/storageAccounts/{0}/blobServices/default/containers/{1}', variables('synapseDefaultStorageAccountName'), variables('synapseDefaultStorageAccountFileSystem'))]",
                             "properties": {
                                 "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
-                                "principalId": "[reference(resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName')), '2019-06-01-preview', 'Full').identity.principalId]"
+                                "principalId": "[reference(resourceId('Microsoft.Synapse/workspaces', variables('synapseWorkspaceName')), '2019-06-01-preview', 'Full').identity.principalId]",
+                                "principalType": "ServicePrincipal"
                             }
                         }
                     ],

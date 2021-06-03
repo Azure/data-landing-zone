@@ -13,6 +13,7 @@
        'PSAvoidGlobalVars'
        'PSAvoidUsingPlainTextForPassword'
        'PSAvoidUsingConvertToSecureStringWithPlainText'
+       'PSPossibleIncorrectUsageOfAssignmentOperator'
     )
     #IncludeRules = @( )
 }
