@@ -77,7 +77,7 @@ module datafactory001SelfHostedIntegrationRuntime001 'services/selfHostedIntegra
   }
 }
 
-module shareDatafactoryIntegration001IntegrationRuntime001 'auxiliary/shareSelfHostedIntegrationRuntime.bicep' = [ for (datafactoryId, i) in datafactoryIds: {
+module shareDatafactoryIntegration001IntegrationRuntime001 'auxiliary/shareSelfHostedIntegrationRuntime.bicep' = [ for (datafactoryId, i) in datafactoryIds: if (deploySelfHostedIntegrationRuntimes) {
   name: 'shareDatafactoryIntegration001IntegrationRuntime001-${i}'
   scope: resourceGroup(split(datafactoryId, '/')[2], split(datafactoryId, '/')[4])
   params: {

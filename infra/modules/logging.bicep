@@ -12,8 +12,6 @@ param privateDnsZoneIdKeyVault string
 // Variables
 var keyVault001Name = '${prefix}-vault003'
 var logAnalytics001Name = '${prefix}-la001'
-var logAnalyticsWorkspaceIdSecretName = 'logAnalyticsWorkspaceId'
-var logAnalyticsWorkspaceKeySecretName = 'logAnalyticsWorkspaceKey'
 
 // Resources
 module keyVault001 'services/keyvault.bicep' = {
@@ -38,37 +36,16 @@ module logAnalytics001 'services/loganalytics.bicep' = {
   }
 }
 
-resource logAnalytics001IdSecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault001Name}/${logAnalyticsWorkspaceIdSecretName}'
-  dependsOn: [
-    keyVault001
-    logAnalytics001
-  ]
-  properties: {
-    attributes: {
-      enabled: true
-    }
-    contentType: 'text/plain'
-    value: logAnalytics001.outputs.logAnalyticsWorkspaceCustomerId
-  }
-}
-
-resource logAnalytics001KeySecretDeployment 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
-  name: '${keyVault001Name}/${logAnalyticsWorkspaceKeySecretName}'
-  dependsOn: [
-    keyVault001
-    logAnalytics001
-  ]
-  properties: {
-    attributes: {
-      enabled: true
-    }
-    contentType: 'text/plain'
-    value: listkeys(resourceId('Microsoft.OperationalInsights/workspaces', logAnalytics001Name), '2020-10-01').primarySharedKey
+module logAnalytics001SecretDeployment 'auxiliary/logAnalyticsSecretDeployment.bicep' = {
+  name: 'logAnalytics001SecretDeployment'
+  scope: resourceGroup()
+  params: {
+    keyVaultId: keyVault001.outputs.keyvaultId
+    logAnalyticsId: logAnalytics001.outputs.logAnalyticsWorkspaceId
   }
 }
 
 // Outputs
-output logAnalyticsWorkspaceKeyVaultId string = keyVault001.outputs.keyvaultId
-output logAnalyticsWorkspaceIdSecretName string = logAnalyticsWorkspaceIdSecretName
-output logAnalyticsWorkspaceKeySecretName string = logAnalyticsWorkspaceKeySecretName
+output logAnalytics001WorkspaceKeyVaultId string = keyVault001.outputs.keyvaultId
+output logAnalytics001WorkspaceIdSecretName string = logAnalytics001SecretDeployment.outputs.logAnalyticsWorkspaceIdSecretName
+output logAnalytics001WorkspaceKeySecretName string = logAnalytics001SecretDeployment.outputs.logAnalyticsWorkspaceKeySecretName

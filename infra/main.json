@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1.14562",
-      "templateHash": "14844547447140616137"
+      "templateHash": "17625286930550829357"
     }
   },
   "parameters": {
@@ -1020,7 +1020,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "7959971333915186379"
+              "templateHash": "116193821964057760"
             }
           },
           "parameters": {
@@ -1043,43 +1043,9 @@
           "functions": [],
           "variables": {
             "keyVault001Name": "[format('{0}-vault003', parameters('prefix'))]",
-            "logAnalytics001Name": "[format('{0}-la001', parameters('prefix'))]",
-            "logAnalyticsWorkspaceIdSecretName": "logAnalyticsWorkspaceId",
-            "logAnalyticsWorkspaceKeySecretName": "logAnalyticsWorkspaceKey"
+            "logAnalytics001Name": "[format('{0}-la001', parameters('prefix'))]"
           },
           "resources": [
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/{1}', variables('keyVault001Name'), variables('logAnalyticsWorkspaceIdSecretName'))]",
-              "properties": {
-                "attributes": {
-                  "enabled": true
-                },
-                "contentType": "text/plain",
-                "value": "[reference(resourceId('Microsoft.Resources/deployments', 'logAnalytics001'), '2019-10-01').outputs.logAnalyticsWorkspaceCustomerId.value]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'keyVault001')]",
-                "[resourceId('Microsoft.Resources/deployments', 'logAnalytics001')]"
-              ]
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2021-04-01-preview",
-              "name": "[format('{0}/{1}', variables('keyVault001Name'), variables('logAnalyticsWorkspaceKeySecretName'))]",
-              "properties": {
-                "attributes": {
-                  "enabled": true
-                },
-                "contentType": "text/plain",
-                "value": "[listkeys(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalytics001Name')), '2020-10-01').primarySharedKey]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'keyVault001')]",
-                "[resourceId('Microsoft.Resources/deployments', 'logAnalytics001')]"
-              ]
-            },
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2019-10-01",
@@ -1254,7 +1220,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "15911499764289670026"
+                      "templateHash": "17013175284266139483"
                     }
                   },
                   "parameters": {
@@ -1288,27 +1254,114 @@
                     }
                   ],
                   "outputs": {
-                    "logAnalyticsWorkspaceCustomerId": {
+                    "logAnalyticsWorkspaceId": {
                       "type": "string",
-                      "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnanalyticsName'))).customerId]"
+                      "value": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnanalyticsName'))]"
                     }
                   }
                 }
               }
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2019-10-01",
+              "name": "logAnalytics001SecretDeployment",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "keyVaultId": {
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'keyVault001'), '2019-10-01').outputs.keyvaultId.value]"
+                  },
+                  "logAnalyticsId": {
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'logAnalytics001'), '2019-10-01').outputs.logAnalyticsWorkspaceId.value]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.4.1.14562",
+                      "templateHash": "5345854801863008694"
+                    }
+                  },
+                  "parameters": {
+                    "keyVaultId": {
+                      "type": "string"
+                    },
+                    "logAnalyticsId": {
+                      "type": "string"
+                    }
+                  },
+                  "functions": [],
+                  "variables": {
+                    "keyVaultName": "[last(split(parameters('keyVaultId'), '/'))]",
+                    "logAnalyticsSubscriptionId": "[split(parameters('logAnalyticsId'), '/')[2]]",
+                    "logAnalyticsResourceGroupName": "[split(parameters('logAnalyticsId'), '/')[4]]",
+                    "logAnalyticsName": "[last(split(parameters('logAnalyticsId'), '/'))]",
+                    "logAnalyticsWorkspaceIdSecretName": "[format('{0}Id', variables('logAnalyticsName'))]",
+                    "logAnalyticsWorkspaceKeySecretName": "[format('{0}Key', variables('logAnalyticsName'))]"
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.KeyVault/vaults/secrets",
+                      "apiVersion": "2021-04-01-preview",
+                      "name": "[format('{0}/{1}', variables('keyVaultName'), variables('logAnalyticsWorkspaceIdSecretName'))]",
+                      "properties": {
+                        "attributes": {
+                          "enabled": true
+                        },
+                        "contentType": "text/plain",
+                        "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('logAnalyticsSubscriptionId'), variables('logAnalyticsResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName')), '2020-10-01').customerId]"
+                      }
+                    },
+                    {
+                      "type": "Microsoft.KeyVault/vaults/secrets",
+                      "apiVersion": "2021-04-01-preview",
+                      "name": "[format('{0}/{1}', variables('keyVaultName'), variables('logAnalyticsWorkspaceKeySecretName'))]",
+                      "properties": {
+                        "attributes": {
+                          "enabled": true
+                        },
+                        "contentType": "text/plain",
+                        "value": "[listkeys(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('logAnalyticsSubscriptionId'), variables('logAnalyticsResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName')), '2020-10-01').primarySharedKey]"
+                      }
+                    }
+                  ],
+                  "outputs": {
+                    "logAnalyticsWorkspaceIdSecretName": {
+                      "type": "string",
+                      "value": "[variables('logAnalyticsWorkspaceIdSecretName')]"
+                    },
+                    "logAnalyticsWorkspaceKeySecretName": {
+                      "type": "string",
+                      "value": "[variables('logAnalyticsWorkspaceKeySecretName')]"
+                    }
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'keyVault001')]",
+                "[resourceId('Microsoft.Resources/deployments', 'logAnalytics001')]"
+              ]
             }
           ],
           "outputs": {
-            "logAnalyticsWorkspaceKeyVaultId": {
+            "logAnalytics001WorkspaceKeyVaultId": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Resources/deployments', 'keyVault001'), '2019-10-01').outputs.keyvaultId.value]"
             },
-            "logAnalyticsWorkspaceIdSecretName": {
+            "logAnalytics001WorkspaceIdSecretName": {
               "type": "string",
-              "value": "[variables('logAnalyticsWorkspaceIdSecretName')]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'logAnalytics001SecretDeployment'), '2019-10-01').outputs.logAnalyticsWorkspaceIdSecretName.value]"
             },
-            "logAnalyticsWorkspaceKeySecretName": {
+            "logAnalytics001WorkspaceKeySecretName": {
               "type": "string",
-              "value": "[variables('logAnalyticsWorkspaceKeySecretName')]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'logAnalytics001SecretDeployment'), '2019-10-01').outputs.logAnalyticsWorkspaceKeySecretName.value]"
             }
           }
         }
@@ -1375,7 +1428,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "9323232049299512751"
+              "templateHash": "12478371468437149250"
             }
           },
           "parameters": {
@@ -2090,6 +2143,7 @@
               ]
             },
             {
+              "condition": "[parameters('deploySelfHostedIntegrationRuntimes')]",
               "copy": {
                 "name": "shareDatafactoryIntegration001IntegrationRuntime001",
                 "count": "[length(parameters('datafactoryIds'))]"
@@ -6630,15 +6684,15 @@
     },
     "logAnalyticsWorkspaceKeyVaultId": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-logging', variables('name'))), 'Microsoft.Resources/deployments', 'loggingServices'), '2019-10-01').outputs.logAnalyticsWorkspaceKeyVaultId.value]"
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-logging', variables('name'))), 'Microsoft.Resources/deployments', 'loggingServices'), '2019-10-01').outputs.logAnalytics001WorkspaceKeyVaultId.value]"
     },
     "logAnalyticsWorkspaceIdSecretName": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-logging', variables('name'))), 'Microsoft.Resources/deployments', 'loggingServices'), '2019-10-01').outputs.logAnalyticsWorkspaceIdSecretName.value]"
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-logging', variables('name'))), 'Microsoft.Resources/deployments', 'loggingServices'), '2019-10-01').outputs.logAnalytics001WorkspaceIdSecretName.value]"
     },
     "logAnalyticsWorkspaceKeySecretName": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-logging', variables('name'))), 'Microsoft.Resources/deployments', 'loggingServices'), '2019-10-01').outputs.logAnalyticsWorkspaceKeySecretName.value]"
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-logging', variables('name'))), 'Microsoft.Resources/deployments', 'loggingServices'), '2019-10-01').outputs.logAnalytics001WorkspaceKeySecretName.value]"
     },
     "databricksDomain001ApiUrl": {
       "type": "string",
