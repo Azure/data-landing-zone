@@ -192,14 +192,14 @@ $Password = New-Password -Template "lusdA16dlu" | ConvertFrom-SecureString -AsPl
 if ($GitHub) {
     # Mask password
     Write-Output "Masking password"
-    Write-Output "::add-mask::$Password"
+    Write-Host "::add-mask::$Password"
 
     # Set output
     Write-Output "Setting output"
-    Write-Output "::set-output name=password::$Password"
+    Write-Host "::set-output name=password::$Password"
 }
 else {
     # Set output
     Write-Output "Setting output"
-    Write-Output "##vso[task.setvariable variable=password;issecret=true;isoutput=true;]$Password"
+    Write-Host "##vso[task.setvariable variable=password;issecret=true;isoutput=true;]$Password"
 }
