@@ -1,7 +1,7 @@
 # Define script arguments
 [CmdletBinding()]
 param (
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [Switch]
     $GitHub
 )
@@ -177,9 +177,9 @@ function New-Password {
                             $char
                         }
                     }
-                ))
+                )
+            )
         }
-    
         return $securePassword
     }
 }
