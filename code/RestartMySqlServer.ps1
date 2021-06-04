@@ -18,7 +18,7 @@ param (
 )
 
 # Install Required Module
-Write-Host "Installing Required Module"
+Write-Output "Installing Required Module"
 Set-PSRepository `
     -Name PSGallery `
     -InstallationPolicy Trusted
@@ -28,7 +28,7 @@ Install-Module `
     -Force
 
 # Restart MySql Server
-Write-Host "Restarting MySql Server"
+Write-Output "Restarting MySql Server"
 Restart-AzMySqlServer `
     -SubscriptionId $SubscriptionId `
     -ResourceGroupName $ResourceGroupName `

@@ -276,20 +276,20 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 | location | Specifies the location for all resources. | `northeurope` |
 | environment | Specifies the environment of the deployment. | `dev`, `test` or `prod` |
 | prefix | Specifies the prefix for all resources created in this deployment. | `prefi` |
-| vnetAddressPrefix |  | `` |
-| servicesSubnetAddressPrefix |  | `` |
-| databricksDomainPublicSubnetAddressPrefix |  | `` |
-| databricksDomainPrivateSubnetAddressPrefix |  | `` |
-| databricksProductPublicSubnetAddressPrefix |  | `` |
-| databricksProductPrivateSubnetAddressPrefix |  | `` |
-| powerBiGatewaySubnetAddressPrefix |  | `` |
-| dataDomain001SubnetAddressPrefix |  | `` |
-| dataDomain002SubnetAddressPrefix |  | `` |
-| dataProduct001SubnetAddressPrefix |  | `` |
-| dataProduct002SubnetAddressPrefix |  | `` |
-| dataManagementZoneVnetId |  | `` |
-| firewallPrivateIp |  | `` |
-| dnsServerAdresses |  | `` |
+| vnetAddressPrefix | Specifies the address space of the vnet of the data landing zone. | `10.1.0.0/16` |
+| servicesSubnetAddressPrefix | Specifies the address space of the subnet that is used for general services of the data landing zone. | `10.1.0.0/24` |
+| databricksDomainPublicSubnetAddressPrefix | Specifies the address space of the public subnet that is used for the shared domain databricks workspace. | `10.1.1.0/24` |
+| databricksDomainPrivateSubnetAddressPrefix | Specifies the address space of the private subnet that is used for the shared domain databricks workspace. | `10.1.2.0/24` |
+| databricksProductPublicSubnetAddressPrefix | Specifies the address space of the public subnet that is used for the shared product databricks workspace. | `10.1.3.0/24` |
+| databricksProductPrivateSubnetAddressPrefix | Specifies the address space of the private subnet that is used for the shared product databricks workspace. | `10.1.4.0/24` |
+| powerBiGatewaySubnetAddressPrefix | Specifies the address space of the subnet that is used for the power bi gateway. | `10.1.5.0/24` |
+| dataDomain001SubnetAddressPrefix | Specifies the address space of the subnet that is used for data domain 001. | `10.1.6.0/24` |
+| dataDomain002SubnetAddressPrefix | Specifies the address space of the subnet that is used for data domain 002. | `10.1.7.0/24` |
+| dataProduct001SubnetAddressPrefix | Specifies the address space of the subnet that is used for data product 001. | `10.1.8.0/24` |
+| dataProduct002SubnetAddressPrefix | Specifies the address space of the subnet that is used for data product 002. | `10.1.9.0/24` |
+| dataManagementZoneVnetId | Specifies the resource Id of the vnet in the data management zone. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/virtualNetworks/{vnet-name}` |
+| firewallPrivateIp | Specifies the private IP address of the central firewall. | `10.0.0.4` |
+| dnsServerAdresses | Specifies the private IP addresses of the dns servers. | `[ 10.0.0.4 ]` |
 | administratorPassword | Specifies the administrator password of the sql servers. Will be automatically set in the workflow. **Leave this value as is.** | `<your-secure-password>` |
 | purviewId | Specifies the resource ID of the central purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Purview/accounts/{purview-name}` |
 | purviewSelfHostedIntegrationRuntimeAuthKey | Specifies the Auth Key for the Self-hosted integration runtime of Purview. | `<your-purview-shir-auth-key>` |

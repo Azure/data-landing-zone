@@ -5,13 +5,12 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1.14562",
-      "templateHash": "14172215793077600975"
+      "templateHash": "2252046014931277291"
     }
   },
   "parameters": {
     "location": {
       "type": "string",
-      "defaultValue": "northeurope",
       "metadata": {
         "description": "Specifies the location for all resources."
       }
