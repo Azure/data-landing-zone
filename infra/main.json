@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1.14562",
-      "templateHash": "83739565790284757"
+      "templateHash": "2332673650665843517"
     }
   },
   "parameters": {
@@ -1427,7 +1427,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "1926579099814746252"
+              "templateHash": "4875654523256758434"
             }
           },
           "parameters": {
@@ -2175,7 +2175,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "6261254236303091225"
+                      "templateHash": "12970324896008139444"
                     }
                   },
                   "parameters": {
@@ -2279,7 +2279,9 @@
                     {
                       "copy": {
                         "name": "deploymentDelay",
-                        "count": "[length(range(0, 10))]"
+                        "count": "[length(range(0, 10))]",
+                        "mode": "serial",
+                        "batchSize": 1
                       },
                       "type": "Microsoft.Resources/deployments",
                       "apiVersion": "2019-10-01",
