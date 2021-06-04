@@ -222,61 +222,88 @@ If you want to use Azure Pipelines for deploying the resources, you need to crea
 
 More information can be found [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal).
 
-### 4. Parameter Update Process
+### 4. Parameter Updates
 
 > **Note:** This section applies for both **Azure DevOps** and **GitHub** deployments
 
-In order to deploy the ARM templates in this repository to the desired Azure subscription, you will need to modify some parameters in the forked repository, which will be used for updating the files which will be used during the deployment. Therefor, **this step should not be skipped for neither Azure DevOps/GitHub options**. As updating each parameter file manually is a time-consuming and potentially error-prone process, we have simplified the task with a GitHub Action workflow. You can update your deployment parameters by completing three steps:
+In order to deploy the Infrastructure as Code (IaC) templates to the desired Azure subscription, you will need to modify some parameters in the forked repository. Therefore, **this step should not be skipped for neither Azure DevOps/GitHub options**. There are two files that require updates:
 
-  1. Configure the `updateParameters` workflow
-  1. Execute the `updateParameters` workflow
-  1. Configure the deployment pipeline
-  1. Merge these changes back to the `main` branch of your repo
+- `.github/workflows/dataLandingZoneDeployment.yml` for GitHub Actions,
+- `.ado/workflows/dataLandingZoneDeployment.yml` for Azure DevOps and
+- `infra/params.dev.json`.
 
-#### Configure the `updateParameters` workflow
+Update these files in a seperate branch and then merge via Pull Request to trigger the initial deployment.
 
-> **Note:** There is only one 'updateParameters.yml', which can be found under the '.github' folder and this one will be used also for setting up the Azure DevOps Deployment
+#### Configure `dataDomainDeployment.yml`
 
-To begin, please open the [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml). In this file you need to update the environment variables. Just click on [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml) and edit the following section:
+##### For GitHub Actions
+
+To begin, please open the [.github/workflows/dataLandingZoneDeployment.yml](/.github/workflows/dataLandingZoneDeployment.yml). In this file you need to update the environment variables section. Just click on [.github/workflows/dataLandingZoneDeployment.yml](/.github/workflows/dataLandingZoneDeployment.yml) and edit the following section:
 
 ```yaml
 env:
-  GLOBAL_DNS_RESOURCE_GROUP_ID: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}'
-  DATA_LANDING_ZONE_SUBSCRIPTION_ID: '{dataLandingZoneSubscriptionId}'
-  DATA_LANDING_ZONE_NAME: '{dataLandingZoneName}' # Choose max. 11 characters. They will be used as a prefix for all services. If not unique, deployment can fail for some services.
-  LOCATION: '{regionName}'                        # Specifies the region for all services (e.g. 'northeurope', 'eastus', etc.)
-  HUB_VNET_ID: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}'
-  PURVIEW_ID: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{purviewName}'
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '{resourceManagerConnectionName}'
+  AZURE_SUBSCRIPTION_ID: "2150d511-458f-43b9-8691-6819ba2e6c7b" # Update to '{dataLandingZoneSubscriptionId}'
+  AZURE_LOCATION: "northeurope"                                 # Update to '{regionName}'
+```
+
+Further details about these parameters are provided in a table below.
+
+##### For Azure DevOps
+
+To begin, please open the [.ado/workflows/dataLandingZoneDeployment.yml](/.ado/workflows/dataLandingZoneDeployment.yml). In this file you need to update the variables section. Just click on [.ado/workflows/dataLandingZoneDeployment.yml](/.ado/workflows/dataLandingZoneDeployment.yml) and edit the following section:
+
+```yaml
+variables:
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: "data-landing-zone-001-service-connection" # Update to '{resourceManagerConnectionName}'
+  AZURE_SUBSCRIPTION_ID: "2150d511-458f-43b9-8691-6819ba2e6c7b"                      # Update to '{dataLandingZoneSubscriptionId}'
+  AZURE_LOCATION: "North Europe"                                                     # Update to '{regionName}'
 ```
 
 The following table explains each of the parameters:
 
 | Parameter                                | Description  | Sample value |
 |:-----------------------------------------|:-------------|:-------------|
-| **GLOBAL_DNS_RESOURCE_GROUP_ID**             | Specifies the global DNS resource group resource ID which gets deployed with the [Data Management Landing Zone](https://github.com/Azure/data-management-zone) | <div style="width: 36ch">`/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/my-resource-group`</div> |
-| **DATA_LANDING_ZONE_SUBSCRIPTION_ID**             | Specifies the subscription ID of the Data Landing Zone where all the resources will be deployed | <div style="width: 36ch">`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`</div> |
-| **DATA_LANDING_ZONE_NAME**                   | Specifies the name of your Data Landing Zone. The value should consist of alphanumeric characters (A-Z, a-z, 0-9) and should not contain any special characters like `-`, `_`, `.`, etc. Special characters will be removed in the renaming process. | `mynode01` |
-| **LOCATION**                                 | Specifies the region where you want the resources to be deployed. Please check [Supported Regions](#supported-regions) | `northeurope` |
-| **AZURE_RESOURCE_MANAGER_CONNECTION_NAME**   | Specifies the resource manager connection name in Azure DevOps. You can leave the default value if you want to use GitHub Actions for your deployment. More details on how to create the resource manager connection in Azure DevOps can be found in step 4. b) or [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal). | `my-connection-name` |
-| **PURVIEW_ID**                               | Specifies the resource ID of the Purview account to which the Synapse workspaces and Data Factories should connect to share data lineage and other metadata. In case you do not have a Purview account deployed at this stage, leave it empty string. | <div style="width: 36ch">`/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/my-governance-rg/providers/Microsoft.Purview/accounts/my-purview`</div> |
-| **HUB_VNET_ID**                              | Specifies the resource ID of the vnet to which the landing zone vnet should be peered. You can leave the default value if you have not deployed the Management Landing Zone or another Data Landing Zone. We are recommending a mesh network design for the overall data platform, which is why you might have to add additional peering deployments to your forked repository over time (two-way process). | <div style="width: 36ch">`/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/my-network-rg/providers/Microsoft.Network/virtualNetworks/my-vnet`</div> |
+| **AZURE_SUBSCRIPTION_ID**             | Specifies the subscription ID of the Data Management Zone where all the resources will be deployed | <div style="width: 36ch">`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`</div> |
+| **AZURE_LOCATION**                                 | Specifies the region where you want the resources to be deployed. Please check [Supported Regions](#supported-regions)  | `northeurope` |
+| **AZURE_RESOURCE_MANAGER _CONNECTION_NAME**   | Specifies the resource manager connection name in Azure DevOps. You can leave the default value if you want to use GitHub Actions for your deployment. More details on how to create the resource manager connection in Azure DevOps can be found in step 4. b) or [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal). | `my-connection-name` |
 
-#### Execute the `updateParameters` workflow
+#### Configure `params.dev.json`
 
-After updating the values, please commit the updated version to the `main` branch of your repository. This will kick off a GitHub Action workflow, which will appear under the **Actions** tab of the main page of the repository. The `Update Parameter Files` workflow will update all parameters in your repository according to a pre-defined naming convention.
+To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In this file you need to update the variable values. Just click on [infra/params.dev.json](/infra/params.dev.json) and edit the values. An explanation of the values is given in the table below:
 
-#### Configure the deployment pipeline
-
-The workflow above will make changes to all of the ARM config files. These changes will be stored in a new branch. Once the process has finished, it will open a new pull request in your repository where you can review the changes made by the workflow. The pull request will also provide the values you need to use to configure the deployment pipeline. Please follow the instructions in the pull request to complete the parameter update process.
-
-If you are using GitHub Actions for your deployment, you will need to modify the `.github/workflows/dataHubDeployment.yml` file. If you are using Azure Pipelines, you only need to modify the `.ado/workflows/dataHubDeployment.yml` file.  **You only need to modify one of these files. You do not need to modify both of them.**
-
-> **Note:** We are not renaming the environment variables in the workflow files because this could lead to an infinite loop of workflow runs being started.
-
-#### Merge these changes back to the `main` branch of your repo
-
-After following the instructions in the pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository.
+| Parameter                                | Description  | Sample value |
+|:-----------------------------------------|:-------------|:-------------|
+| location | Specifies the location for all resources. | `northeurope` |
+| environment | Specifies the environment of the deployment. | `dev`, `test` or `prod` |
+| prefix | Specifies the prefix for all resources created in this deployment. | `prefi` |
+| vnetAddressPrefix |  | `` |
+| servicesSubnetAddressPrefix |  | `` |
+| databricksDomainPublicSubnetAddressPrefix |  | `` |
+| databricksDomainPrivateSubnetAddressPrefix |  | `` |
+| databricksProductPublicSubnetAddressPrefix |  | `` |
+| databricksProductPrivateSubnetAddressPrefix |  | `` |
+| powerBiGatewaySubnetAddressPrefix |  | `` |
+| dataDomain001SubnetAddressPrefix |  | `` |
+| dataDomain002SubnetAddressPrefix |  | `` |
+| dataProduct001SubnetAddressPrefix |  | `` |
+| dataProduct002SubnetAddressPrefix |  | `` |
+| dataManagementZoneVnetId |  | `` |
+| firewallPrivateIp |  | `` |
+| dnsServerAdresses |  | `` |
+| administratorPassword | Specifies the administrator password of the sql servers. Will be automatically set in the workflow. **Leave this value as is.** | `<your-secure-password>` |
+| purviewId | Specifies the resource ID of the central purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Purview/accounts/{purview-name}` |
+| purviewSelfHostedIntegrationRuntimeAuthKey | Specifies the Auth Key for the Self-hosted integration runtime of Purview. | `<your-purview-shir-auth-key>` |
+| deploySelfHostedIntegrationRuntimes | Specifies whether the self-hosted integration runtimes should be installed. This only works, if the pwsh script was uploded and is available. | `true` or `false` |
+| privateDnsZoneIdKeyVault | Specifies the resource ID of the private DNS zone for KeyVault. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net` |
+| privateDnsZoneIdDataFactory | Specifies the resource ID of the private DNS zone for Data Factory. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net` |
+| privateDnsZoneIdDataFactoryPortal | Specifies the resource ID of the private DNS zone for Data Factory Portal. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com` |
+| privateDnsZoneIdBlob | Specifies the resource ID of the private DNS zone for Blob Storage. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net` |
+| privateDnsZoneIdDfs | Specifies the resource ID of the private DNS zone for Datalake Storage. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net` |
+| privateDnsZoneIdSqlServer | Specifies the resource ID of the private DNS zone for Sql Server. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net` |
+| privateDnsZoneIdMySqlServer | Specifies the resource ID of the private DNS zone for MySql Server. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com` |
+| privateDnsZoneIdEventhubNamespace |  | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net` |
+| privateDnsZoneIdSynapseDev | Specifies the resource ID of the private DNS zone for Synapse Dev. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net` |
+| privateDnsZoneIdSynapseSql | Specifies the resource ID of the private DNS zone for Synapse Sql. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net` |
 
 ### 5. (not applicable for GH Actions) Reference pipeline from GitHub repository in Azure Pipelines
 
@@ -318,7 +345,11 @@ As a last step, you need to create an Azure Pipeline in your project based on th
 
 1. Click on **Continue** and then on **Run**.
 
-### 6. Follow the workflow deployment
+### 6. Merge these changes back to the `main` branch of your repo
+
+After following the instructions and updating the parameters and variables in your repository in a separate branch and opening the pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository. By doing this, you trigger the deployment workflow.
+
+### 7. Follow the workflow deployment
 
 **Congratulations!** You have successfully executed all steps to deploy the template into your environment through GitHub Actions or Azure DevOps.
 
@@ -332,12 +363,11 @@ If you are using Azure Pipelines, you can navigate to the pipeline that you have
 
 | File/folder                   | Description                                |
 | ----------------------------- | ------------------------------------------ |
-| `.ado/workflows`              | Folder for ADO workflows. The `dataDomainDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
-| `.github/workflows`           | Folder for GitHub workflows. The `updateParameters.yml` workflow is used for the parameter update process, while the `dataDomainDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
+| `.ado/workflows`              | Folder for ADO workflows. The `dataLandingZoneDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
+| `.github/workflows`           | Folder for GitHub workflows. The `dataLandingZoneDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
 | `code`                        | Sample password generation script that will be run in the deployment workflow for resources that require a password during the deployment. |
-| `configs`                     | Folder containing a script and configuration file that is used for the parameter update process. |
 | `docs`                        | Resources for this README.                 |
-| `infra`                       | Folder containing all the ARM templates for each of the resources that will be deployed (`deploy.{resource}.json`) together with their parameter files (`params.{resource}.json`). |
+| `infra`                       | Folder containing all the ARM and Bicep templates for each of the resources that will be deployed. |
 | `CODE_OF_CONDUCT.md`          | Microsoft Open Source Code of Conduct.     |
 | `LICENSE`                     | The license for the sample.                |
 | `README.md`                   | This README file.                          |
