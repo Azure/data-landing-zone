@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1.14562",
-      "templateHash": "2252046014931277291"
+      "templateHash": "83739565790284757"
     }
   },
   "parameters": {
@@ -1427,7 +1427,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "14245160320291665748"
+              "templateHash": "1926579099814746252"
             }
           },
           "parameters": {
@@ -2175,7 +2175,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1.14562",
-                      "templateHash": "10374901792138276939"
+                      "templateHash": "6261254236303091225"
                     }
                   },
                   "parameters": {
@@ -2212,7 +2212,8 @@
                         }
                       },
                       "dependsOn": [
-                        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySourceSubscriptionId'), variables('datafactorySourceResourceGroup')), 'Microsoft.Resources/deployments', 'datafactoryDestinationRoleAssignment')]"
+                        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySourceSubscriptionId'), variables('datafactorySourceResourceGroup')), 'Microsoft.Resources/deployments', 'datafactoryDestinationRoleAssignment')]",
+                        "deploymentDelay"
                       ]
                     },
                     {
@@ -2278,11 +2279,11 @@
                     {
                       "copy": {
                         "name": "deploymentDelay",
-                        "count": "[length(range(0, 5))]"
+                        "count": "[length(range(0, 10))]"
                       },
                       "type": "Microsoft.Resources/deployments",
                       "apiVersion": "2019-10-01",
-                      "name": "[format('delay-{0}', range(0, 5)[copyIndex()])]",
+                      "name": "[format('delay-{0}', range(0, 10)[copyIndex()])]",
                       "properties": {
                         "expressionEvaluationOptions": {
                           "scope": "inner"
@@ -2290,7 +2291,7 @@
                         "mode": "Incremental",
                         "parameters": {
                           "deploymentDelayIndex": {
-                            "value": "[range(0, 5)[copyIndex()]]"
+                            "value": "[range(0, 10)[copyIndex()]]"
                           }
                         },
                         "template": {
