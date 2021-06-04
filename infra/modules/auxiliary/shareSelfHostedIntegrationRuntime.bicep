@@ -26,7 +26,7 @@ resource datafactoryDestination 'Microsoft.DataFactory/factories@2018-06-01' exi
   name: datafactoryDestinationName
 }
 
-module deploymentDelay 'delay.bicep' = [for i in range(0,5): {
+module deploymentDelay 'delay.bicep' = [for i in range(0,10): {
   name: 'delay-${i}'
   scope: resourceGroup()
   params: {
@@ -39,6 +39,7 @@ resource datafactorySelfHostedIntegrationRuntime 'Microsoft.DataFactory/factorie
   name: datafactorySourceShirName
   dependsOn: [
     datafactoryDestinationRoleAssignment
+    deploymentDelay
   ]
   properties: {
     type: 'SelfHosted'
