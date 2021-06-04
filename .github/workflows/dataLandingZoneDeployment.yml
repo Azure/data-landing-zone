@@ -1,0 +1,255 @@
+name: Data Landing Zone Deployment
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "infra/**"
+      - "code/**"
+      - ".github/workflows/dataLandingZoneDeployment.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "infra/**"
+      - "code/**"
+      - ".github/workflows/dataLandingZoneDeployment.yml"
+
+env:
+  AZURE_SUBSCRIPTION_ID: "2150d511-458f-43b9-8691-6819ba2e6c7b" # Update to '{dataLandingZoneSubscriptionId}'
+  AZURE_LOCATION: "northeurope"                                 # Update to '{regionName}'
+
+jobs:
+  validation:
+    name: "Validation of IaC templates"
+    runs-on: ubuntu-latest
+    continue-on-error: false
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check Out Repository
+        id: checkout_repository
+        uses: actions/checkout@v2
+
+      # Login to Azure
+      - name: Azure Login
+        id: azure_login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      # Generate Password
+      - name: Generate Password
+        id: generate_password_001
+        run: |
+          echo "Generating Password"
+          pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
+
+      # Deploy Data Landing Zone - validation
+      - name: Deploy Data Landing Zone - validation
+        id: data_management_zone_validation
+        uses: azure/arm-deploy@v1
+        with:
+          scope: subscription
+          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          region: ${{ env.AZURE_LOCATION }}
+          template: ${{ github.workspace }}/infra/main.json
+          parameters: ${{ github.workspace }}/infra/params.dev.json administratorPassword="${{ steps.generate_password_001.outputs.password }}" deploySelfHostedIntegrationRuntimes=false
+          deploymentMode: Validate
+        continue-on-error: true
+
+      # Log out from Azure
+      - name: Log out from Azure
+        id: azure_logout
+        uses: azure/cli@v1
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az logout
+
+  deployment:
+    name: "Deployment of IaC templates"
+    needs: [validation]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    continue-on-error: false
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check Out Repository
+        id: checkout_repository
+        uses: actions/checkout@v2
+
+      # Login to Azure
+      - name: Azure Login
+        id: azure_login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      # Generate Password
+      - name: Generate Password
+        id: generate_password_001
+        run: |
+          echo "Generating Password"
+          pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
+
+      # Deploy Data Landing Zone
+      - name: Deploy Data Landing Zone - w/o SHIR
+        id: data_management_zone_deployment001
+        uses: azure/arm-deploy@v1
+        with:
+          scope: subscription
+          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          region: ${{ env.AZURE_LOCATION }}
+          template: ${{ github.workspace }}/infra/main.json
+          parameters: ${{ github.workspace }}/infra/params.dev.json administratorPassword="${{ steps.generate_password_001.outputs.password }}" deploySelfHostedIntegrationRuntimes=false
+          deploymentMode: Incremental
+        continue-on-error: true
+
+      # # Upload file to Storage Account 001
+      # - name: Upload file to Storage Account 001
+      #   id: upload_file_001
+      #   uses: azure/powershell@v1
+      #   with:
+      #     azPSVersion: latest
+      #     inlineScript: |
+      #       & "${{ github.workspace }}/code/UploadBlob.ps1" `
+      #         -ResourceGroupName "${{ steps.data_management_zone_deployment001.outputs.artifactstorage001ResourceGroupName }}" `
+      #         -StorageAccountName "${{ steps.data_management_zone_deployment001.outputs.artifactstorage001Name }}" `
+      #         -StorageAccountContainerName "${{ steps.data_management_zone_deployment001.outputs.artifactstorage001ContainerName }}" `
+      #         -File "${{ github.workspace }}/infra/SelfHostedIntegrationRuntimeDataFactory/installSHIRGateway.ps1" `
+      #         -Blob "installSHIRGateway.ps1"
+
+      # # Deploy Data Landing Zone
+      # - name: Deploy Data Landing Zone - w/ SHIR
+      #   id: data_management_zone_deployment002
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     scope: subscription
+      #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+      #     region: ${{ env.AZURE_LOCATION }}
+      #     template: ${{ github.workspace }}/infra/main.json
+      #     parameters: ${{ github.workspace }}/infra/params.dev.json administratorPassword="${{ steps.generate_password_001.outputs.password }}" deploySelfHostedIntegrationRuntimes=true
+      #     deploymentMode: Incremental
+
+      # # Restart MySql Server 001
+      # - name: Restart MySql Server 001
+      #   id: mysqlserver_001_restart
+      #   uses: azure/powershell@v1
+      #   with:
+      #     azPSVersion: latest
+      #     inlineScript: |
+      #       & "${{ github.workspace }}/code/RestartMySqlServer.ps1" `
+      #         -SubscriptionId "${{ steps.data_management_zone_deployment001.outputs.mySqlServer001SubscriptionId }}" `
+      #         -ResourceGroupName "${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ResourceGroupName }}" `
+      #         -MySqlServerName "${{ steps.data_management_zone_deployment001.outputs.mySqlServer001Name }}"
+
+      # # Setup databricks 001 - Disabled, because automation is currently blocked.
+      # - name: Setup Databricks 001
+      #   id: setup_databricks_001
+      #   uses: azure/powershell@v1
+      #   with:
+      #     azPSVersion: latest
+      #     inlineScript: |
+      #       Write-Host "Setting Up Databricks Workspace 001"
+      #       & "${{ github.workspace }}/code/SetupDatabricks.ps1" `
+      #         -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001Name }}' `
+      #         -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001Id }}' `
+      #         -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001ApiUrl }}' `
+      #         -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001SubscriptionId }}' `
+      #         -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001ResourceGroupName }}' `
+      #         -HiveKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' `
+      #         -HiveConnectionStringSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' `
+      #         -HiveUsernameSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' `
+      #         -HivePasswordSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' `
+      #         -LogAnalyticsKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' `
+      #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' `
+      #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' `
+      #         -HiveVersion '2.3.7' `
+      #         -HadoopVersion '2.7.4' `
+
+      # # Setup Databricks 001 - Manual Step - Guidance
+      # - name: Setup Databricks 001 - Manual Step - Guidance
+      #   id: setup_databricks_001_manual
+      #   run: |
+      #     echo "Please run the following Powershell command to setup Databricks Workspace 001:
+      #     ./code/SetupDatabricksManually.ps1 \`
+      #       -UserEmail '{userEmail}' \`
+      #       -UserPassword '{password}' \`
+      #       -ClientId '{clientId}' \`
+      #       -TenantId '{tenantId}' \`
+      #       -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001Name }}' \`
+      #       -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001Id }}' \`
+      #       -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001ApiUrl }}' \`
+      #       -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001SubscriptionId }}' \`
+      #       -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001ResourceGroupName }}' \`
+      #       -HiveKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' \`
+      #       -HiveConnectionStringSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' \`
+      #       -HiveUsernameSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' \`
+      #       -HivePasswordSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' \`
+      #       -LogAnalyticsKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' \`
+      #       -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
+      #       -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
+      #       -HiveVersion '2.3.7' \`
+      #       -HadoopVersion '2.7.4'
+      #     "
+
+      # # Setup databricks 002 - Disabled, because automation is currently blocked.
+      # - name: Setup Databricks 002
+      #   id: setup_databricks_002
+      #   uses: azure/powershell@v1
+      #   with:
+      #     azPSVersion: latest
+      #     inlineScript: |
+      #       Write-Host "Setting Up Databricks Workspace 002"
+      #       & "${{ github.workspace }}/code/SetupDatabricks.ps1" `
+      #         -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001Name }}' `
+      #         -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001Id }}' `
+      #         -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001ApiUrl }}' `
+      #         -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001SubscriptionId }}' `
+      #         -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001ResourceGroupName }}' `
+      #         -HiveKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' `
+      #         -HiveConnectionStringSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' `
+      #         -HiveUsernameSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' `
+      #         -HivePasswordSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' `
+      #         -LogAnalyticsKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' `
+      #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' `
+      #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' `
+      #         -HiveVersion '2.3.7' `
+      #         -HadoopVersion '2.7.4' `
+
+      # # Setup Databricks 002 - Manual Step - Guidance
+      # - name: Setup Databricks 002 - Manual Step - Guidance
+      #   id: setup_databricks_002_manual
+      #   run: |
+      #     echo "Please run the following Powershell command to setup Databricks Workspace 002:
+      #     ./code/SetupDatabricksManually.ps1 \`
+      #       -UserEmail '{userEmail}' \`
+      #       -UserPassword '{password}' \`
+      #       -ClientId '{clientId}' \`
+      #       -TenantId '{tenantId}' \`
+      #       -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001Name }}' \`
+      #       -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001Id }}' \`
+      #       -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001ApiUrl }}' \`
+      #       -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001SubscriptionId }}' \`
+      #       -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001ResourceGroupName }}' \`
+      #       -HiveKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' \`
+      #       -HiveConnectionStringSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' \`
+      #       -HiveUsernameSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' \`
+      #       -HivePasswordSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' \`
+      #       -LogAnalyticsKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' \`
+      #       -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
+      #       -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
+      #       -HiveVersion '2.3.7' \`
+      #       -HadoopVersion '2.7.4'
+      #     "
+
+      # Log out from Azure
+      - name: Log out from Azure
+        id: azure_logout
+        uses: azure/cli@v1
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az logout
