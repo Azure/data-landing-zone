@@ -6,6 +6,12 @@ param location string
 param tags object
 param subnetId string
 param eventhubnamespaceName string
+@minValue(1)
+@maxValue(20)
+param eventhubnamespaceMinThroughput int = 1
+@minValue(1)
+@maxValue(20)
+param eventhubnamespaceMaxThroughput int = 2
 param privateDnsZoneIdEventhubNamespace string
 
 // Variables
@@ -22,12 +28,12 @@ resource eventhubNamespace 'Microsoft.EventHub/namespaces@2021-01-01-preview' = 
   sku: {
     name: 'Standard'
     tier: 'Standard'
-    capacity: 1
+    capacity: eventhubnamespaceMinThroughput
   }
   properties: {
     isAutoInflateEnabled: true
     kafkaEnabled: true
-    maximumThroughputUnits: 1
+    maximumThroughputUnits: eventhubnamespaceMaxThroughput
     zoneRedundant: true
   }
 }

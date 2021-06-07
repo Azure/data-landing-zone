@@ -54,6 +54,8 @@ module eventhubNamespaceDomain001 'services/eventhubnamespace.bicep' = {
     subnetId: subnetId
     eventhubnamespaceName: eventhubNamespaceDomain001Name
     privateDnsZoneIdEventhubNamespace: privateDnsZoneIdEventhubNamespace
+    eventhubnamespaceMinThroughput: 1
+    eventhubnamespaceMaxThroughput: 1
   }
 }
 
