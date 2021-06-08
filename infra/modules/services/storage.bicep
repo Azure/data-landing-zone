@@ -75,7 +75,8 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
 }
 
 resource storageManagementPolicies 'Microsoft.Storage/storageAccounts/managementPolicies@2021-02-01' = {
-  name: '${storage.name}/default'
+  parent: storage
+  name: 'default'
   properties: {
     policy: {
       rules: [
@@ -137,7 +138,8 @@ resource storageManagementPolicies 'Microsoft.Storage/storageAccounts/management
 }
 
 resource storageBlobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-02-01' = {
-  name: '${storage.name}/default'
+  parent: storage
+  name: 'default'
   properties: {
     containerDeleteRetentionPolicy: {
       enabled: true
@@ -173,7 +175,8 @@ resource storageBlobServices 'Microsoft.Storage/storageAccounts/blobServices@202
 }
 
 resource storageFileSystems 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' = [for fileSystemName in fileSystemNames: {
-  name: '${storage.name}/default/${fileSystemName}'
+  parent: storageBlobServices
+  name: fileSystemName
   properties: {
     publicAccess: 'None'
     metadata: {}
@@ -205,7 +208,8 @@ resource storagePrivateEndpointBlob 'Microsoft.Network/privateEndpoints@2020-11-
 }
 
 resource storagePrivateEndpointBlobARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
-  name: '${storagePrivateEndpointBlob.name}/aRecord'
+  parent: storagePrivateEndpointBlob
+  name: 'aRecord'
   properties: {
     privateDnsZoneConfigs: [
       {
@@ -243,7 +247,8 @@ resource storagePrivateEndpointDfs 'Microsoft.Network/privateEndpoints@2020-11-0
 }
 
 resource storagePrivateEndpointDfsARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
-  name: '${storagePrivateEndpointDfs.name}/aRecord'
+  parent: storagePrivateEndpointDfs
+  name: 'aRecord'
   properties: {
     privateDnsZoneConfigs: [
       {

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "18379855957558704025"
+      "templateHash": "267738575354250450"
     }
   },
   "parameters": {
@@ -2685,7 +2685,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "14516781590667655687"
+              "templateHash": "8678686186083360794"
             }
           },
           "parameters": {
@@ -2761,7 +2761,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "4376546064998481634"
+                      "templateHash": "10139213334935749900"
                     }
                   },
                   "parameters": {
@@ -2851,7 +2851,7 @@
                     {
                       "type": "Microsoft.Storage/storageAccounts/managementPolicies",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default', variables('storageNameCleaned'))]",
+                      "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "policy": {
                           "rules": [
@@ -2895,7 +2895,7 @@
                     {
                       "type": "Microsoft.Storage/storageAccounts/blobServices",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default', variables('storageNameCleaned'))]",
+                      "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "containerDeleteRetentionPolicy": {
                           "enabled": true,
@@ -2916,13 +2916,14 @@
                       },
                       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default/{1}', variables('storageNameCleaned'), parameters('fileSystemNames')[copyIndex()])]",
+                      "name": "[format('{0}/{1}/{2}', variables('storageNameCleaned'), 'default', parameters('fileSystemNames')[copyIndex()])]",
                       "properties": {
                         "publicAccess": "None",
                         "metadata": {}
                       },
                       "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageNameCleaned'))]"
+                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageNameCleaned'))]",
+                        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageNameCleaned'), 'default')]"
                       ]
                     },
                     {
@@ -2956,7 +2957,7 @@
                     {
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/aRecord', variables('storagePrivateEndpointNameBlob'))]",
+                      "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameBlob'), 'aRecord')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -3002,7 +3003,7 @@
                     {
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/aRecord', variables('storagePrivateEndpointNameDfs'))]",
+                      "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameDfs'), 'aRecord')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -3075,7 +3076,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "4376546064998481634"
+                      "templateHash": "10139213334935749900"
                     }
                   },
                   "parameters": {
@@ -3165,7 +3166,7 @@
                     {
                       "type": "Microsoft.Storage/storageAccounts/managementPolicies",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default', variables('storageNameCleaned'))]",
+                      "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "policy": {
                           "rules": [
@@ -3209,7 +3210,7 @@
                     {
                       "type": "Microsoft.Storage/storageAccounts/blobServices",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default', variables('storageNameCleaned'))]",
+                      "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "containerDeleteRetentionPolicy": {
                           "enabled": true,
@@ -3230,13 +3231,14 @@
                       },
                       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default/{1}', variables('storageNameCleaned'), parameters('fileSystemNames')[copyIndex()])]",
+                      "name": "[format('{0}/{1}/{2}', variables('storageNameCleaned'), 'default', parameters('fileSystemNames')[copyIndex()])]",
                       "properties": {
                         "publicAccess": "None",
                         "metadata": {}
                       },
                       "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageNameCleaned'))]"
+                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageNameCleaned'))]",
+                        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageNameCleaned'), 'default')]"
                       ]
                     },
                     {
@@ -3270,7 +3272,7 @@
                     {
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/aRecord', variables('storagePrivateEndpointNameBlob'))]",
+                      "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameBlob'), 'aRecord')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -3316,7 +3318,7 @@
                     {
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/aRecord', variables('storagePrivateEndpointNameDfs'))]",
+                      "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameDfs'), 'aRecord')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -3389,7 +3391,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "4376546064998481634"
+                      "templateHash": "10139213334935749900"
                     }
                   },
                   "parameters": {
@@ -3479,7 +3481,7 @@
                     {
                       "type": "Microsoft.Storage/storageAccounts/managementPolicies",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default', variables('storageNameCleaned'))]",
+                      "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "policy": {
                           "rules": [
@@ -3523,7 +3525,7 @@
                     {
                       "type": "Microsoft.Storage/storageAccounts/blobServices",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default', variables('storageNameCleaned'))]",
+                      "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "containerDeleteRetentionPolicy": {
                           "enabled": true,
@@ -3544,13 +3546,14 @@
                       },
                       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default/{1}', variables('storageNameCleaned'), parameters('fileSystemNames')[copyIndex()])]",
+                      "name": "[format('{0}/{1}/{2}', variables('storageNameCleaned'), 'default', parameters('fileSystemNames')[copyIndex()])]",
                       "properties": {
                         "publicAccess": "None",
                         "metadata": {}
                       },
                       "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageNameCleaned'))]"
+                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageNameCleaned'))]",
+                        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageNameCleaned'), 'default')]"
                       ]
                     },
                     {
@@ -3584,7 +3587,7 @@
                     {
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/aRecord', variables('storagePrivateEndpointNameBlob'))]",
+                      "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameBlob'), 'aRecord')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -3630,7 +3633,7 @@
                     {
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/aRecord', variables('storagePrivateEndpointNameDfs'))]",
+                      "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameDfs'), 'aRecord')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -3732,7 +3735,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "6127343682846342690"
+              "templateHash": "6637703272143439723"
             }
           },
           "parameters": {
@@ -3795,7 +3798,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "5282415068867054693"
+                      "templateHash": "12425647697164167132"
                     }
                   },
                   "parameters": {
@@ -3884,7 +3887,7 @@
                     {
                       "type": "Microsoft.Storage/storageAccounts/managementPolicies",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default', variables('storageNameCleaned'))]",
+                      "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "policy": {
                           "rules": [
@@ -3928,7 +3931,7 @@
                     {
                       "type": "Microsoft.Storage/storageAccounts/blobServices",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default', variables('storageNameCleaned'))]",
+                      "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "containerDeleteRetentionPolicy": {
                           "enabled": true,
@@ -3949,13 +3952,14 @@
                       },
                       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
                       "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/default/{1}', variables('storageNameCleaned'), parameters('fileSytemNames')[copyIndex()])]",
+                      "name": "[format('{0}/{1}/{2}', variables('storageNameCleaned'), 'default', parameters('fileSytemNames')[copyIndex()])]",
                       "properties": {
                         "publicAccess": "None",
                         "metadata": {}
                       },
                       "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageNameCleaned'))]"
+                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageNameCleaned'))]",
+                        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageNameCleaned'), 'default')]"
                       ]
                     },
                     {
@@ -3989,7 +3993,7 @@
                     {
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/aRecord', variables('storageExternalPrivateEndpointNameBlob'))]",
+                      "name": "[format('{0}/{1}', variables('storageExternalPrivateEndpointNameBlob'), 'aRecord')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
