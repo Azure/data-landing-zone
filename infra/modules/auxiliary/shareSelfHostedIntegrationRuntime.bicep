@@ -29,6 +29,9 @@ resource datafactoryDestination 'Microsoft.DataFactory/factories@2018-06-01' exi
 @batchSize(1)
 module deploymentDelay 'delay.bicep' = [for i in range(0,10): {
   name: 'delay-${i}'
+  dependsOn: [
+    datafactoryDestinationRoleAssignment
+  ]
   scope: resourceGroup()
   params: {
     deploymentDelayIndex: i

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "267738575354250450"
+      "templateHash": "17367940565467328033"
     }
   },
   "parameters": {
@@ -1427,7 +1427,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "10772512263664879962"
+              "templateHash": "17121109301675207845"
             }
           },
           "parameters": {
@@ -2175,7 +2175,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "9923616212331368410"
+                      "templateHash": "14925736167344227456"
                     }
                   },
                   "parameters": {
@@ -2320,7 +2320,10 @@
                             }
                           }
                         }
-                      }
+                      },
+                      "dependsOn": [
+                        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySourceSubscriptionId'), variables('datafactorySourceResourceGroup')), 'Microsoft.Resources/deployments', 'datafactoryDestinationRoleAssignment')]"
+                      ]
                     }
                   ]
                 }
@@ -5006,7 +5009,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "11936148881489225990"
+              "templateHash": "5945070526752175754"
             }
           },
           "parameters": {
@@ -5395,7 +5398,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "11093278179813269263"
+                      "templateHash": "12172814063001948017"
                     }
                   },
                   "parameters": {
@@ -5627,6 +5630,7 @@
                       },
                       "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', parameters('datafactoryName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints', parameters('datafactoryName'), 'default', replace(variables('keyVault001Name'), '-', ''))]",
                         "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', parameters('datafactoryName'), variables('datafactoryDefaultManagedVnetIntegrationRuntimeName'))]"
                       ]
                     },
@@ -5664,7 +5668,8 @@
                       },
                       "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', parameters('datafactoryName'))]",
-                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', parameters('datafactoryName'), variables('datafactoryDefaultManagedVnetIntegrationRuntimeName'))]"
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', parameters('datafactoryName'), variables('datafactoryDefaultManagedVnetIntegrationRuntimeName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints', parameters('datafactoryName'), 'default', replace(variables('sqlServer001Name'), '-', ''))]"
                       ]
                     },
                     {
@@ -5701,7 +5706,8 @@
                       },
                       "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', parameters('datafactoryName'))]",
-                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', parameters('datafactoryName'), variables('datafactoryDefaultManagedVnetIntegrationRuntimeName'))]"
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', parameters('datafactoryName'), variables('datafactoryDefaultManagedVnetIntegrationRuntimeName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints', parameters('datafactoryName'), 'default', variables('storageRawName'))]"
                       ]
                     },
                     {
@@ -5738,7 +5744,8 @@
                       },
                       "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', parameters('datafactoryName'))]",
-                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', parameters('datafactoryName'), variables('datafactoryDefaultManagedVnetIntegrationRuntimeName'))]"
+                        "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', parameters('datafactoryName'), variables('datafactoryDefaultManagedVnetIntegrationRuntimeName'))]",
+                        "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints', parameters('datafactoryName'), 'default', variables('storageEnrichedCuratedName'))]"
                       ]
                     },
                     {
