@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "13256408906047932237"
+      "templateHash": "8829024278280913720"
     }
   },
   "parameters": {
@@ -1427,7 +1427,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "771281531866880678"
+              "templateHash": "6337363778884280211"
             }
           },
           "parameters": {
@@ -1896,7 +1896,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "6299821959932930446"
+                      "templateHash": "5698397447156348935"
                     }
                   },
                   "parameters": {
@@ -2122,7 +2122,7 @@
                                     ]
                                   },
                                   "protectedSettings": {
-                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey {0}', parameters('datafactoryIntegrationRuntimeAuthKey'))]",
+                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey \"{0}\"', parameters('datafactoryIntegrationRuntimeAuthKey'))]",
                                     "storageAccountName": "[variables('storageAccountName')]",
                                     "storageAccountKey": "[listkeys(parameters('storageAccountId'), '2021-02-01').keys[0].value]"
                                   }
@@ -2389,7 +2389,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "6299821959932930446"
+                      "templateHash": "5698397447156348935"
                     }
                   },
                   "parameters": {
@@ -2615,7 +2615,7 @@
                                     ]
                                   },
                                   "protectedSettings": {
-                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey {0}', parameters('datafactoryIntegrationRuntimeAuthKey'))]",
+                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey \"{0}\"', parameters('datafactoryIntegrationRuntimeAuthKey'))]",
                                     "storageAccountName": "[variables('storageAccountName')]",
                                     "storageAccountKey": "[listkeys(parameters('storageAccountId'), '2021-02-01').keys[0].value]"
                                   }
