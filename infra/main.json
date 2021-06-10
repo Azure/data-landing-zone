@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "17367940565467328033"
+      "templateHash": "13256408906047932237"
     }
   },
   "parameters": {
@@ -1427,7 +1427,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "17121109301675207845"
+              "templateHash": "771281531866880678"
             }
           },
           "parameters": {
@@ -2329,6 +2329,7 @@
                 }
               },
               "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'datafactory001SelfHostedIntegrationRuntime001')]",
                 "[resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001')]",
                 "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
               ]
