@@ -77,15 +77,15 @@ module datafactory001SelfHostedIntegrationRuntime001 'services/selfHostedIntegra
   }
 }
 
-module shareDatafactoryIntegration001IntegrationRuntime001 'auxiliary/shareSelfHostedIntegrationRuntime.bicep' = [ for (datafactoryId, i) in datafactoryIds: if (deploySelfHostedIntegrationRuntimes) {
-  name: 'shareDatafactoryIntegration001IntegrationRuntime001-${i}'
-  scope: resourceGroup(split(datafactoryId, '/')[2], split(datafactoryId, '/')[4])
-  params: {
-    datafactorySourceId: datafactoryIntegration001.outputs.datafactoryId
-    datafactorySourceShirId: datafactoryIntegration001IntegrationRuntime001.id
-    datafactoryDestinationId: datafactoryId
-  }
-}]
+// module shareDatafactoryIntegration001IntegrationRuntime001 'auxiliary/shareSelfHostedIntegrationRuntime.bicep' = [ for (datafactoryId, i) in datafactoryIds: if (deploySelfHostedIntegrationRuntimes) {
+//   name: 'shareDatafactoryIntegration001IntegrationRuntime001-${i}'
+//   scope: resourceGroup(split(datafactoryId, '/')[2], split(datafactoryId, '/')[4])
+//   params: {
+//     datafactorySourceId: datafactoryIntegration001.outputs.datafactoryId
+//     datafactorySourceShirId: datafactoryIntegration001IntegrationRuntime001.id
+//     datafactoryDestinationId: datafactoryId
+//   }
+// }]
 
 module purviewSelfHostedIntegrationRuntime001 'services/selfHostedIntegrationRuntime.bicep' = if (deploySelfHostedIntegrationRuntimes && purviewSelfHostedIntegrationRuntimeAuthKey != '') {
   name: 'purviewSelfHostedIntegrationRuntime001'
