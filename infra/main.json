@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "267738575354250450"
+      "templateHash": "4857476430226026637"
     }
   },
   "parameters": {
@@ -1427,7 +1427,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "10772512263664879962"
+              "templateHash": "7855586698391639909"
             }
           },
           "parameters": {
@@ -2138,195 +2138,6 @@
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', 'artifactstorage001')]",
-                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
-              ]
-            },
-            {
-              "condition": "[parameters('deploySelfHostedIntegrationRuntimes')]",
-              "copy": {
-                "name": "shareDatafactoryIntegration001IntegrationRuntime001",
-                "count": "[length(parameters('datafactoryIds'))]"
-              },
-              "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2019-10-01",
-              "name": "[format('shareDatafactoryIntegration001IntegrationRuntime001-{0}', copyIndex())]",
-              "subscriptionId": "[split(parameters('datafactoryIds')[copyIndex()], '/')[2]]",
-              "resourceGroup": "[split(parameters('datafactoryIds')[copyIndex()], '/')[4]]",
-              "properties": {
-                "expressionEvaluationOptions": {
-                  "scope": "inner"
-                },
-                "mode": "Incremental",
-                "parameters": {
-                  "datafactorySourceId": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001'), '2019-10-01').outputs.datafactoryId.value]"
-                  },
-                  "datafactorySourceShirId": {
-                    "value": "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
-                  },
-                  "datafactoryDestinationId": {
-                    "value": "[parameters('datafactoryIds')[copyIndex()]]"
-                  }
-                },
-                "template": {
-                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                  "contentVersion": "1.0.0.0",
-                  "metadata": {
-                    "_generator": {
-                      "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "9923616212331368410"
-                    }
-                  },
-                  "parameters": {
-                    "datafactorySourceId": {
-                      "type": "string"
-                    },
-                    "datafactorySourceShirId": {
-                      "type": "string"
-                    },
-                    "datafactoryDestinationId": {
-                      "type": "string"
-                    }
-                  },
-                  "functions": [],
-                  "variables": {
-                    "datafactorySourceSubscriptionId": "[split(parameters('datafactorySourceId'), '/')[2]]",
-                    "datafactorySourceResourceGroup": "[split(parameters('datafactorySourceId'), '/')[4]]",
-                    "datafactorySourceShirName": "[last(split(parameters('datafactorySourceShirId'), '/'))]",
-                    "datafactoryDestinationName": "[last(split(parameters('datafactoryDestinationId'), '/'))]"
-                  },
-                  "resources": [
-                    {
-                      "type": "Microsoft.DataFactory/factories/integrationRuntimes",
-                      "apiVersion": "2018-06-01",
-                      "name": "[format('{0}/{1}', variables('datafactoryDestinationName'), variables('datafactorySourceShirName'))]",
-                      "properties": {
-                        "type": "SelfHosted",
-                        "description": "Data Landing Zone - Self-hosted Integration Runtime",
-                        "typeProperties": {
-                          "linkedInfo": {
-                            "authorizationType": "RBAC",
-                            "resourceId": "[parameters('datafactorySourceShirId')]"
-                          }
-                        }
-                      },
-                      "dependsOn": [
-                        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactorySourceSubscriptionId'), variables('datafactorySourceResourceGroup')), 'Microsoft.Resources/deployments', 'datafactoryDestinationRoleAssignment')]",
-                        "deploymentDelay"
-                      ]
-                    },
-                    {
-                      "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2019-10-01",
-                      "name": "datafactoryDestinationRoleAssignment",
-                      "subscriptionId": "[variables('datafactorySourceSubscriptionId')]",
-                      "resourceGroup": "[variables('datafactorySourceResourceGroup')]",
-                      "properties": {
-                        "expressionEvaluationOptions": {
-                          "scope": "inner"
-                        },
-                        "mode": "Incremental",
-                        "parameters": {
-                          "datafactorySourceId": {
-                            "value": "[parameters('datafactorySourceId')]"
-                          },
-                          "datafactoryDestinationId": {
-                            "value": "[parameters('datafactoryDestinationId')]"
-                          }
-                        },
-                        "template": {
-                          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                          "contentVersion": "1.0.0.0",
-                          "metadata": {
-                            "_generator": {
-                              "name": "bicep",
-                              "version": "0.4.63.48766",
-                              "templateHash": "3528229249629528423"
-                            }
-                          },
-                          "parameters": {
-                            "datafactorySourceId": {
-                              "type": "string"
-                            },
-                            "datafactoryDestinationId": {
-                              "type": "string"
-                            }
-                          },
-                          "functions": [],
-                          "variables": {
-                            "datafactorySourceName": "[last(split(parameters('datafactorySourceId'), '/'))]",
-                            "datafactoryDestinationSubscriptionId": "[split(parameters('datafactoryDestinationId'), '/')[2]]",
-                            "datafactoryDestinationResourceGroup": "[split(parameters('datafactoryDestinationId'), '/')[4]]",
-                            "datafactoryDestinationName": "[last(split(parameters('datafactoryDestinationId'), '/'))]"
-                          },
-                          "resources": [
-                            {
-                              "type": "Microsoft.Authorization/roleAssignments",
-                              "apiVersion": "2020-04-01-preview",
-                              "scope": "[format('Microsoft.DataFactory/factories/{0}', variables('datafactorySourceName'))]",
-                              "name": "[guid(uniqueString(resourceId('Microsoft.DataFactory/factories', variables('datafactorySourceName')), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactoryDestinationSubscriptionId'), variables('datafactoryDestinationResourceGroup')), 'Microsoft.DataFactory/factories', variables('datafactoryDestinationName'))))]",
-                              "properties": {
-                                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
-                                "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('datafactoryDestinationSubscriptionId'), variables('datafactoryDestinationResourceGroup')), 'Microsoft.DataFactory/factories', variables('datafactoryDestinationName')), '2018-06-01', 'full').identity.principalId]",
-                                "principalType": "ServicePrincipal"
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    {
-                      "copy": {
-                        "name": "deploymentDelay",
-                        "count": "[length(range(0, 10))]",
-                        "mode": "serial",
-                        "batchSize": 1
-                      },
-                      "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2019-10-01",
-                      "name": "[format('delay-{0}', range(0, 10)[copyIndex()])]",
-                      "properties": {
-                        "expressionEvaluationOptions": {
-                          "scope": "inner"
-                        },
-                        "mode": "Incremental",
-                        "parameters": {
-                          "deploymentDelayIndex": {
-                            "value": "[range(0, 10)[copyIndex()]]"
-                          }
-                        },
-                        "template": {
-                          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                          "contentVersion": "1.0.0.0",
-                          "metadata": {
-                            "_generator": {
-                              "name": "bicep",
-                              "version": "0.4.63.48766",
-                              "templateHash": "6766662091545209608"
-                            }
-                          },
-                          "parameters": {
-                            "deploymentDelayIndex": {
-                              "type": "int"
-                            }
-                          },
-                          "functions": [],
-                          "resources": [],
-                          "outputs": {
-                            "deploymentDelayIndex": {
-                              "type": "int",
-                              "value": "[parameters('deploymentDelayIndex')]"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001')]",
                 "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
               ]
             },
