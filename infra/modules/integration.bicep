@@ -18,7 +18,7 @@ param deploySelfHostedIntegrationRuntimes bool
 param datafactoryIds array
 
 // Variables
-var artifactstorage001Name = '${prefix}-artifact001'
+var artifactstorage001Name = '${prefix}-artfct001'
 var datafactoryIntegration001Name = '${prefix}-integration-datafactory001'
 var shir001Name = '${prefix}-shir001'
 
@@ -48,7 +48,7 @@ module datafactoryIntegration001 'services/datafactoryintegration.bicep' = {
 }
 
 resource datafactoryIntegration001IntegrationRuntime001 'Microsoft.DataFactory/factories/integrationRuntimes@2018-06-01' = {
-  name: '${datafactoryIntegration001Name}/dataLandingZoneSelfHostedIntegrationRuntime-${shir001Name}'
+  name: '${datafactoryIntegration001Name}/dataLandingZoneShir-${shir001Name}'
   dependsOn: [
     datafactoryIntegration001
   ]
