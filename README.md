@@ -274,7 +274,7 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 | Parameter                                | Description  | Sample value |
 |:-----------------------------------------|:-------------|:-------------|
 | location | Specifies the location for all resources. | `northeurope` |
-| environment | Specifies the environment of the deployment. | `dev`, `test` or `prod` |
+| environment | Specifies the environment of the deployment. | `dev`, `tst` or `prd` |
 | prefix | Specifies the prefix for all resources created in this deployment. | `prefi` |
 | vnetAddressPrefix | Specifies the address space of the vnet of the data landing zone. | `10.1.0.0/16` |
 | servicesSubnetAddressPrefix | Specifies the address space of the subnet that is used for general services of the data landing zone. | `10.1.0.0/24` |

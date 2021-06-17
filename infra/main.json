@@ -23,8 +23,8 @@
       },
       "allowedValues": [
         "dev",
-        "test",
-        "prod"
+        "tst",
+        "prd"
       ]
     },
     "prefix": {
@@ -32,7 +32,7 @@
       "metadata": {
         "description": "Specifies the prefix for all resources created in this deployment."
       },
-      "maxLength": 5,
+      "maxLength": 10,
       "minLength": 2
     },
     "vnetAddressPrefix": {
@@ -1472,7 +1472,7 @@
           },
           "functions": [],
           "variables": {
-            "artifactstorage001Name": "[format('{0}-artifact001', parameters('prefix'))]",
+            "artifactstorage001Name": "[format('{0}-artfct001', parameters('prefix'))]",
             "datafactoryIntegration001Name": "[format('{0}-integration-datafactory001', parameters('prefix'))]",
             "shir001Name": "[format('{0}-shir001', parameters('prefix'))]"
           },
@@ -1480,7 +1480,7 @@
             {
               "type": "Microsoft.DataFactory/factories/integrationRuntimes",
               "apiVersion": "2018-06-01",
-              "name": "[format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name'))]",
+              "name": "[format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name'))]",
               "properties": {
                 "type": "SelfHosted",
                 "description": "[format('Data Landing Zone - Self Hosted Integration Runtime running on {0}', variables('shir001Name'))]"
@@ -1868,7 +1868,7 @@
                     "value": "[parameters('administratorPassword')]"
                   },
                   "datafactoryIntegrationRuntimeAuthKey": {
-                    "value": "[listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1]), '2018-06-01').authKey1]"
+                    "value": "[listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1]), '2018-06-01').authKey1]"
                   },
                   "storageAccountContainerName": {
                     "value": "[reference(resourceId('Microsoft.Resources/deployments', 'artifactstorage001'), '2019-10-01').outputs.storageAccountContainerName.value]"
@@ -2138,7 +2138,7 @@
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', 'artifactstorage001')]",
-                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
+                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
               ]
             },
             {
@@ -2162,7 +2162,7 @@
                     "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001'), '2019-10-01').outputs.datafactoryId.value]"
                   },
                   "datafactorySourceShirId": {
-                    "value": "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
+                    "value": "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
                   },
                   "datafactoryDestinationId": {
                     "value": "[parameters('datafactoryIds')[copyIndex()]]"
@@ -2331,7 +2331,7 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', 'datafactory001SelfHostedIntegrationRuntime001')]",
                 "[resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001')]",
-                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneSelfHostedIntegrationRuntime-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
+                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
               ]
             },
             {
