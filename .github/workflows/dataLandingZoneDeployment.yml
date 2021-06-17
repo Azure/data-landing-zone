@@ -94,7 +94,7 @@ jobs:
           echo "Generating Password"
           pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
 
-      # Deploy Data Landing Zone
+      # Deploy Data Landing Zone - w/o SHIR
       - name: Deploy Data Landing Zone - w/o SHIR
         id: data_management_zone_deployment001
         uses: azure/arm-deploy@v1
@@ -121,7 +121,7 @@ jobs:
       #         -File "${{ github.workspace }}/infra/SelfHostedIntegrationRuntimeDataFactory/installSHIRGateway.ps1" `
       #         -Blob "installSHIRGateway.ps1"
 
-      # # Deploy Data Landing Zone
+      # # Deploy Data Landing Zone - w/ SHIR
       # - name: Deploy Data Landing Zone - w/ SHIR
       #   id: data_management_zone_deployment002
       #   uses: azure/arm-deploy@v1

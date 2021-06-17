@@ -152,17 +152,17 @@ module loggingServices 'modules/logging.bicep' = {
   }
 }
 
-// Integration resources
-resource integrationResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
-  name: '${name}-integration'
+// Runtime resources
+resource runtimesResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-runtimes'
   location: location
   tags: tags
   properties: {}
 }
 
-module integrationServices 'modules/integration.bicep' = {
-  name: 'integrationServices'
-  scope: integrationResourceGroup
+module runtimeServices 'modules/runtimes.bicep' = {
+  name: 'runtimeServices'
+  scope: runtimesResourceGroup
   params: {
     location: location
     prefix: name
@@ -331,9 +331,9 @@ resource dataProduct001ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01
 }
 
 // Outputs
-output artifactstorage001ResourceGroupName string = split(integrationServices.outputs.artifactstorage001Id, '/')[4]
-output artifactstorage001Name string = last(split(integrationServices.outputs.artifactstorage001Id, '/'))
-output artifactstorage001ContainerName string = integrationServices.outputs.artifactstorage001ContainerName
+output artifactstorage001ResourceGroupName string = split(runtimeServices.outputs.artifactstorage001Id, '/')[4]
+output artifactstorage001Name string = last(split(runtimeServices.outputs.artifactstorage001Id, '/'))
+output artifactstorage001ContainerName string = runtimeServices.outputs.artifactstorage001ContainerName
 output mySqlServer001SubscriptionId string = split(metadataServices.outputs.mySqlServer001Id, '/')[2]
 output mySqlServer001ResourceGroupName string = split(metadataServices.outputs.mySqlServer001Id, '/')[4]
 output mySqlServer001Name string = last(split(metadataServices.outputs.mySqlServer001Id, '/'))

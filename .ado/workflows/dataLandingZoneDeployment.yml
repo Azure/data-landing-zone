@@ -114,7 +114,7 @@ stages:
               ignoreLASTEXITCODE: false
               pwsh: true
 
-          # Deploy Data Landing Zone
+          # Deploy Data Landing Zone - w/o SHIR
           - task: AzureResourceManagerTemplateDeployment@3
             name: data_landing_zone_deployment_001
             displayName: Data Landing Zone - w/o SHIR
@@ -154,25 +154,25 @@ stages:
               failOnStandardError: false
               azurePowerShellVersion: 'latestVersion'
           
-          # # Deploy Data Landing Zone
-          # - task: AzureResourceManagerTemplateDeployment@3
-          #   name: data_landing_zone_deployment_002
-          #   displayName: Data Landing Zone - w/ SHIR
-          #   enabled: true
-          #   continueOnError: false
-          #   inputs:
-          #     deploymentScope: "Subscription"
-          #     azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
-          #     subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
-          #     location: ${{ variables.AZURE_LOCATION }}
-          #     templateLocation: "Linked artifact"
-          #     csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
-          #     csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
-          #     deploymentOutputs: 'dataLandingZoneDetails01'
-          #     deploymentMode: "Incremental"
-          #     overrideParameters: >
-          #       -administratorPassword "$(password)"
-          #       -deploySelfHostedIntegrationRuntimes true
+          # Deploy Data Landing Zone - w/ SHIR
+          - task: AzureResourceManagerTemplateDeployment@3
+            name: data_landing_zone_deployment_002
+            displayName: Data Landing Zone - w/ SHIR
+            enabled: true
+            continueOnError: false
+            inputs:
+              deploymentScope: "Subscription"
+              azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+              subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+              location: ${{ variables.AZURE_LOCATION }}
+              templateLocation: "Linked artifact"
+              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
+              csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
+              deploymentOutputs: 'dataLandingZoneDetails01'
+              deploymentMode: "Incremental"
+              overrideParameters: >
+                -administratorPassword "$(password)"
+                -deploySelfHostedIntegrationRuntimes true
           
           # Restart MySQL Server 001
           - task: AzurePowerShell@4

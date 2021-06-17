@@ -14,7 +14,7 @@ By default, all the services which come under Data Landing Zone are enabled, and
 
 > **Note:** Before deploying the resources, we recommend to check registration status of the required resource providers in your subscription. For more information, see [Resource providers for Azure services](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
 
-![Data Management Zone](./docs/images/DataNode.png)
+![Data Management Zone](./docs/images/DataLandingZone.png)
 
 For each data landing zone, the following services are created:
 

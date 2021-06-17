@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "4849959441496980374"
+      "templateHash": "2673084917945547446"
     }
   },
   "parameters": {
@@ -261,7 +261,7 @@
     {
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2021-01-01",
-      "name": "[format('{0}-integration', variables('name'))]",
+      "name": "[format('{0}-runtimes', variables('name'))]",
       "location": "[parameters('location')]",
       "tags": "[variables('tags')]",
       "properties": {}
@@ -1373,8 +1373,8 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "integrationServices",
-      "resourceGroup": "[format('{0}-integration', variables('name'))]",
+      "name": "runtimeServices",
+      "resourceGroup": "[format('{0}-runtimes', variables('name'))]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -1427,7 +1427,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "6337363778884280211"
+              "templateHash": "8519690493552593547"
             }
           },
           "parameters": {
@@ -1473,20 +1473,20 @@
           "functions": [],
           "variables": {
             "artifactstorage001Name": "[format('{0}-artfct001', parameters('prefix'))]",
-            "datafactoryIntegration001Name": "[format('{0}-integration-datafactory001', parameters('prefix'))]",
+            "datafactoryRuntimes001Name": "[format('{0}-runtime-datafactory001', parameters('prefix'))]",
             "shir001Name": "[format('{0}-shir001', parameters('prefix'))]"
           },
           "resources": [
             {
               "type": "Microsoft.DataFactory/factories/integrationRuntimes",
               "apiVersion": "2018-06-01",
-              "name": "[format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name'))]",
+              "name": "[format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name'))]",
               "properties": {
                 "type": "SelfHosted",
                 "description": "[format('Data Landing Zone - Self Hosted Integration Runtime running on {0}', variables('shir001Name'))]"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001')]"
+                "[resourceId('Microsoft.Resources/deployments', 'datafactoryRuntimes001')]"
               ]
             },
             {
@@ -1623,7 +1623,7 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2019-10-01",
-              "name": "datafactoryIntegration001",
+              "name": "datafactoryRuntimes001",
               "properties": {
                 "expressionEvaluationOptions": {
                   "scope": "inner"
@@ -1640,7 +1640,7 @@
                     "value": "[parameters('subnetId')]"
                   },
                   "datafactoryName": {
-                    "value": "[variables('datafactoryIntegration001Name')]"
+                    "value": "[variables('datafactoryRuntimes001Name')]"
                   },
                   "privateDnsZoneIdDataFactory": {
                     "value": "[parameters('privateDnsZoneIdDataFactory')]"
@@ -1845,7 +1845,7 @@
               "condition": "[parameters('deploySelfHostedIntegrationRuntimes')]",
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2019-10-01",
-              "name": "datafactory001SelfHostedIntegrationRuntime001",
+              "name": "datafactoryRuntimes001SelfHostedIntegrationRuntime001",
               "properties": {
                 "expressionEvaluationOptions": {
                   "scope": "inner"
@@ -1868,7 +1868,7 @@
                     "value": "[parameters('administratorPassword')]"
                   },
                   "datafactoryIntegrationRuntimeAuthKey": {
-                    "value": "[listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1]), '2018-06-01').authKey1]"
+                    "value": "[listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[1]), '2018-06-01').authKey1]"
                   },
                   "storageAccountContainerName": {
                     "value": "[reference(resourceId('Microsoft.Resources/deployments', 'artifactstorage001'), '2019-10-01').outputs.storageAccountContainerName.value]"
@@ -2138,18 +2138,18 @@
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', 'artifactstorage001')]",
-                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
+                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[1])]"
               ]
             },
             {
               "condition": "[parameters('deploySelfHostedIntegrationRuntimes')]",
               "copy": {
-                "name": "shareDatafactoryIntegration001IntegrationRuntime001",
+                "name": "shareDatafactoryRuntimes001IntegrationRuntime001",
                 "count": "[length(parameters('datafactoryIds'))]"
               },
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2019-10-01",
-              "name": "[format('shareDatafactoryIntegration001IntegrationRuntime001-{0}', copyIndex())]",
+              "name": "[format('shareDatafactoryRuntimes001IntegrationRuntime001-{0}', copyIndex())]",
               "subscriptionId": "[split(parameters('datafactoryIds')[copyIndex()], '/')[2]]",
               "resourceGroup": "[split(parameters('datafactoryIds')[copyIndex()], '/')[4]]",
               "properties": {
@@ -2159,10 +2159,10 @@
                 "mode": "Incremental",
                 "parameters": {
                   "datafactorySourceId": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001'), '2019-10-01').outputs.datafactoryId.value]"
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryRuntimes001'), '2019-10-01').outputs.datafactoryId.value]"
                   },
                   "datafactorySourceShirId": {
-                    "value": "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
+                    "value": "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[1])]"
                   },
                   "datafactoryDestinationId": {
                     "value": "[parameters('datafactoryIds')[copyIndex()]]"
@@ -2329,9 +2329,9 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'datafactory001SelfHostedIntegrationRuntime001')]",
-                "[resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001')]",
-                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryIntegration001Name'), variables('shir001Name')), '/')[1])]"
+                "[resourceId('Microsoft.Resources/deployments', 'datafactoryRuntimes001')]",
+                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[1])]",
+                "[resourceId('Microsoft.Resources/deployments', 'datafactoryRuntimes001SelfHostedIntegrationRuntime001')]"
               ]
             },
             {
@@ -2647,8 +2647,8 @@
         }
       },
       "dependsOn": [
-        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-integration', variables('name')))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices')]",
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-runtimes', variables('name')))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-integration', variables('name'))), 'Microsoft.Resources/deployments', 'sharedIntegrationServices')]"
       ]
     },
@@ -6720,15 +6720,15 @@
   "outputs": {
     "artifactstorage001ResourceGroupName": {
       "type": "string",
-      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-integration', variables('name'))), 'Microsoft.Resources/deployments', 'integrationServices'), '2019-10-01').outputs.artifactstorage001Id.value, '/')[4]]"
+      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-runtimes', variables('name'))), 'Microsoft.Resources/deployments', 'runtimeServices'), '2019-10-01').outputs.artifactstorage001Id.value, '/')[4]]"
     },
     "artifactstorage001Name": {
       "type": "string",
-      "value": "[last(split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-integration', variables('name'))), 'Microsoft.Resources/deployments', 'integrationServices'), '2019-10-01').outputs.artifactstorage001Id.value, '/'))]"
+      "value": "[last(split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-runtimes', variables('name'))), 'Microsoft.Resources/deployments', 'runtimeServices'), '2019-10-01').outputs.artifactstorage001Id.value, '/'))]"
     },
     "artifactstorage001ContainerName": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-integration', variables('name'))), 'Microsoft.Resources/deployments', 'integrationServices'), '2019-10-01').outputs.artifactstorage001ContainerName.value]"
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-runtimes', variables('name'))), 'Microsoft.Resources/deployments', 'runtimeServices'), '2019-10-01').outputs.artifactstorage001ContainerName.value]"
     },
     "mySqlServer001SubscriptionId": {
       "type": "string",
