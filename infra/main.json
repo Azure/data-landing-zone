@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "8829024278280913720"
+      "templateHash": "4849959441496980374"
     }
   },
   "parameters": {
@@ -49,18 +49,18 @@
         "description": "Specifies the address space of the subnet that is used for general services of the data landing zone."
       }
     },
-    "databricksDomainPublicSubnetAddressPrefix": {
+    "databricksIntegrationPublicSubnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.1.1.0/24",
       "metadata": {
-        "description": "Specifies the address space of the public subnet that is used for the shared domain databricks workspace."
+        "description": "Specifies the address space of the public subnet that is used for the shared integration databricks workspace."
       }
     },
-    "databricksDomainPrivateSubnetAddressPrefix": {
+    "databricksIntegrationPrivateSubnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.1.2.0/24",
       "metadata": {
-        "description": "Specifies the address space of the private subnet that is used for the shared domain databricks workspace."
+        "description": "Specifies the address space of the private subnet that is used for the shared integration databricks workspace."
       }
     },
     "databricksProductPublicSubnetAddressPrefix": {
@@ -84,18 +84,18 @@
         "description": "Specifies the address space of the subnet that is used for the power bi gateway."
       }
     },
-    "dataDomain001SubnetAddressPrefix": {
+    "dataIntegration001SubnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.1.6.0/24",
       "metadata": {
-        "description": "Specifies the address space of the subnet that is used for data domain 001."
+        "description": "Specifies the address space of the subnet that is used for data integration 001."
       }
     },
-    "dataDomain002SubnetAddressPrefix": {
+    "dataIntegration002SubnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.1.7.0/24",
       "metadata": {
-        "description": "Specifies the address space of the subnet that is used for data domain 002."
+        "description": "Specifies the address space of the subnet that is used for data integration 002."
       }
     },
     "dataProduct001SubnetAddressPrefix": {
@@ -293,7 +293,7 @@
     {
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2021-01-01",
-      "name": "[format('{0}-shared-domain', variables('name'))]",
+      "name": "[format('{0}-shared-integration', variables('name'))]",
       "location": "[parameters('location')]",
       "tags": "[variables('tags')]",
       "properties": {}
@@ -309,7 +309,7 @@
     {
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2021-01-01",
-      "name": "[format('{0}-dd001', variables('name'))]",
+      "name": "[format('{0}-di001', variables('name'))]",
       "location": "[parameters('location')]",
       "tags": "[variables('tags')]",
       "properties": {}
@@ -354,11 +354,11 @@
           "servicesSubnetAddressPrefix": {
             "value": "[parameters('servicesSubnetAddressPrefix')]"
           },
-          "databricksDomainPublicSubnetAddressPrefix": {
-            "value": "[parameters('databricksDomainPublicSubnetAddressPrefix')]"
+          "databricksIntegrationPublicSubnetAddressPrefix": {
+            "value": "[parameters('databricksIntegrationPublicSubnetAddressPrefix')]"
           },
-          "databricksDomainPrivateSubnetAddressPrefix": {
-            "value": "[parameters('databricksDomainPrivateSubnetAddressPrefix')]"
+          "databricksIntegrationPrivateSubnetAddressPrefix": {
+            "value": "[parameters('databricksIntegrationPrivateSubnetAddressPrefix')]"
           },
           "databricksProductPublicSubnetAddressPrefix": {
             "value": "[parameters('databricksProductPublicSubnetAddressPrefix')]"
@@ -369,11 +369,11 @@
           "powerBiGatewaySubnetAddressPrefix": {
             "value": "[parameters('powerBiGatewaySubnetAddressPrefix')]"
           },
-          "dataDomain001SubnetAddressPrefix": {
-            "value": "[parameters('dataDomain001SubnetAddressPrefix')]"
+          "dataIntegration001SubnetAddressPrefix": {
+            "value": "[parameters('dataIntegration001SubnetAddressPrefix')]"
           },
-          "dataDomain002SubnetAddressPrefix": {
-            "value": "[parameters('dataDomain002SubnetAddressPrefix')]"
+          "dataIntegration002SubnetAddressPrefix": {
+            "value": "[parameters('dataIntegration002SubnetAddressPrefix')]"
           },
           "dataProduct001SubnetAddressPrefix": {
             "value": "[parameters('dataProduct001SubnetAddressPrefix')]"
@@ -392,7 +392,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "9200048851931620927"
+              "templateHash": "14917022372276558140"
             }
           },
           "parameters": {
@@ -423,11 +423,11 @@
               "type": "string",
               "defaultValue": "10.1.0.0/24"
             },
-            "databricksDomainPublicSubnetAddressPrefix": {
+            "databricksIntegrationPublicSubnetAddressPrefix": {
               "type": "string",
               "defaultValue": "10.1.1.0/24"
             },
-            "databricksDomainPrivateSubnetAddressPrefix": {
+            "databricksIntegrationPrivateSubnetAddressPrefix": {
               "type": "string",
               "defaultValue": "10.1.2.0/24"
             },
@@ -443,11 +443,11 @@
               "type": "string",
               "defaultValue": "10.1.5.0/24"
             },
-            "dataDomain001SubnetAddressPrefix": {
+            "dataIntegration001SubnetAddressPrefix": {
               "type": "string",
               "defaultValue": "10.1.6.0/24"
             },
-            "dataDomain002SubnetAddressPrefix": {
+            "dataIntegration002SubnetAddressPrefix": {
               "type": "string",
               "defaultValue": "10.1.7.0/24"
             },
@@ -466,13 +466,13 @@
           "functions": [],
           "variables": {
             "servicesSubnetName": "ServicesSubnet",
-            "databricksDomainPrivateSubnetName": "DatabricksDomainSubnetPrivate",
-            "databricksDomainPublicSubnetName": "DatabricksDomainSubnetPublic",
+            "databricksIntegrationPrivateSubnetName": "DatabricksIntegrationSubnetPrivate",
+            "databricksIntegrationPublicSubnetName": "DatabricksIntegrationSubnetPublic",
             "databricksProductPrivateSubnetName": "DatabricksProductSubnetPrivate",
             "databricksProductPublicSubnetName": "DatabricksProductSubnetPublic",
             "powerBiGatewaySubnetName": "PowerBIGatewaySubnet",
-            "dataDomain001SubnetName": "DataDomain001Subnet",
-            "dataDomain002SubnetName": "DataDomain002Subnet",
+            "dataIntegration001SubnetName": "DataIntegration001Subnet",
+            "dataIntegration002SubnetName": "DataIntegration002Subnet",
             "dataProduct001SubnetName": "DataProduct001Subnet",
             "dataProduct002SubnetName": "DataProduct002Subnet",
             "dataManagementZoneVnetSubscriptionId": "[split(parameters('dataManagementZoneVnetId'), '/')[2]]",
@@ -665,9 +665,9 @@
                     }
                   },
                   {
-                    "name": "[variables('databricksDomainPublicSubnetName')]",
+                    "name": "[variables('databricksIntegrationPublicSubnetName')]",
                     "properties": {
-                      "addressPrefix": "[parameters('databricksDomainPublicSubnetAddressPrefix')]",
+                      "addressPrefix": "[parameters('databricksIntegrationPublicSubnetAddressPrefix')]",
                       "addressPrefixes": [],
                       "networkSecurityGroup": {
                         "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-databricks-nsg', parameters('prefix')))]"
@@ -690,9 +690,9 @@
                     }
                   },
                   {
-                    "name": "[variables('databricksDomainPrivateSubnetName')]",
+                    "name": "[variables('databricksIntegrationPrivateSubnetName')]",
                     "properties": {
-                      "addressPrefix": "[parameters('databricksDomainPrivateSubnetAddressPrefix')]",
+                      "addressPrefix": "[parameters('databricksIntegrationPrivateSubnetAddressPrefix')]",
                       "addressPrefixes": [],
                       "networkSecurityGroup": {
                         "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-databricks-nsg', parameters('prefix')))]"
@@ -790,9 +790,9 @@
                     }
                   },
                   {
-                    "name": "[variables('dataDomain001SubnetName')]",
+                    "name": "[variables('dataIntegration001SubnetName')]",
                     "properties": {
-                      "addressPrefix": "[parameters('dataDomain001SubnetAddressPrefix')]",
+                      "addressPrefix": "[parameters('dataIntegration001SubnetAddressPrefix')]",
                       "addressPrefixes": [],
                       "networkSecurityGroup": {
                         "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
@@ -808,9 +808,9 @@
                     }
                   },
                   {
-                    "name": "[variables('dataDomain002SubnetName')]",
+                    "name": "[variables('dataIntegration002SubnetName')]",
                     "properties": {
-                      "addressPrefix": "[parameters('dataDomain002SubnetAddressPrefix')]",
+                      "addressPrefix": "[parameters('dataIntegration002SubnetAddressPrefix')]",
                       "addressPrefixes": [],
                       "networkSecurityGroup": {
                         "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
@@ -962,13 +962,13 @@
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('prefix')))).subnets[0].id]"
             },
-            "databricksDomainPublicSubnetName": {
+            "databricksIntegrationPublicSubnetName": {
               "type": "string",
-              "value": "[variables('databricksDomainPublicSubnetName')]"
+              "value": "[variables('databricksIntegrationPublicSubnetName')]"
             },
-            "databricksDomainPrivateSubnetName": {
+            "databricksIntegrationPrivateSubnetName": {
               "type": "string",
-              "value": "[variables('databricksDomainPrivateSubnetName')]"
+              "value": "[variables('databricksIntegrationPrivateSubnetName')]"
             },
             "databricksProductPublicSubnetName": {
               "type": "string",
@@ -1416,7 +1416,7 @@
           },
           "datafactoryIds": {
             "value": [
-              "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.datafactoryDomain001Id.value]"
+              "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-integration', variables('name'))), 'Microsoft.Resources/deployments', 'sharedIntegrationServices'), '2019-10-01').outputs.datafactoryIntegration001Id.value]"
             ]
           }
         },
@@ -2649,7 +2649,7 @@
       "dependsOn": [
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-integration', variables('name')))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices')]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices')]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-integration', variables('name'))), 'Microsoft.Resources/deployments', 'sharedIntegrationServices')]"
       ]
     },
     {
@@ -4940,8 +4940,8 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "sharedDomainServices",
-      "resourceGroup": "[format('{0}-shared-domain', variables('name'))]",
+      "name": "sharedIntegrationServices",
+      "resourceGroup": "[format('{0}-shared-integration', variables('name'))]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -4963,11 +4963,11 @@
           "vnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.vnetId.value]"
           },
-          "databricksDomain001PrivateSubnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.databricksDomainPrivateSubnetName.value]"
+          "databricksIntegration001PrivateSubnetName": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.databricksIntegrationPrivateSubnetName.value]"
           },
-          "databricksDomain001PublicSubnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.databricksDomainPublicSubnetName.value]"
+          "databricksIntegration001PublicSubnetName": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.databricksIntegrationPublicSubnetName.value]"
           },
           "storageRawId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-storage', variables('name'))), 'Microsoft.Resources/deployments', 'storageServices'), '2019-10-01').outputs.storageRawId.value]"
@@ -5010,7 +5010,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "5945070526752175754"
+              "templateHash": "11263858844704047703"
             }
           },
           "parameters": {
@@ -5032,10 +5032,10 @@
             "vnetId": {
               "type": "string"
             },
-            "databricksDomain001PrivateSubnetName": {
+            "databricksIntegration001PrivateSubnetName": {
               "type": "string"
             },
-            "databricksDomain001PublicSubnetName": {
+            "databricksIntegration001PublicSubnetName": {
               "type": "string"
             },
             "subnetId": {
@@ -5071,9 +5071,9 @@
           },
           "functions": [],
           "variables": {
-            "databricksDomain001Name": "[format('{0}-domain-databricks001', parameters('prefix'))]",
-            "eventhubNamespaceDomain001Name": "[format('{0}-domain-eventhub001', parameters('prefix'))]",
-            "datafactoryDomain001Name": "[format('{0}-domain-datafactory001', parameters('prefix'))]",
+            "databricksIntegration001Name": "[format('{0}-integration-databricks001', parameters('prefix'))]",
+            "eventhubNamespaceIntegration001Name": "[format('{0}-integration-eventhub001', parameters('prefix'))]",
+            "datafactoryIntegration001Name": "[format('{0}-integration-datafactory001', parameters('prefix'))]",
             "storageAccountRawSubscriptionId": "[split(parameters('storageAccountRawFileSystemId'), '/')[2]]",
             "storageAccountRawResourceGroupName": "[split(parameters('storageAccountRawFileSystemId'), '/')[4]]",
             "storageAccountEnrichedCuratedSubscriptionId": "[split(parameters('storageAccountEnrichedCuratedFileSystemId'), '/')[2]]",
@@ -5083,7 +5083,7 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2019-10-01",
-              "name": "databricksDomain001",
+              "name": "databricksIntegration001",
               "properties": {
                 "expressionEvaluationOptions": {
                   "scope": "inner"
@@ -5097,16 +5097,16 @@
                     "value": "[parameters('tags')]"
                   },
                   "databricksName": {
-                    "value": "[variables('databricksDomain001Name')]"
+                    "value": "[variables('databricksIntegration001Name')]"
                   },
                   "vnetId": {
                     "value": "[parameters('vnetId')]"
                   },
                   "privateSubnetName": {
-                    "value": "[parameters('databricksDomain001PrivateSubnetName')]"
+                    "value": "[parameters('databricksIntegration001PrivateSubnetName')]"
                   },
                   "publicSubnetName": {
-                    "value": "[parameters('databricksDomain001PublicSubnetName')]"
+                    "value": "[parameters('databricksIntegration001PublicSubnetName')]"
                   }
                 },
                 "template": {
@@ -5195,7 +5195,7 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2019-10-01",
-              "name": "eventhubNamespaceDomain001",
+              "name": "eventhubNamespaceIntegration001",
               "properties": {
                 "expressionEvaluationOptions": {
                   "scope": "inner"
@@ -5212,7 +5212,7 @@
                     "value": "[parameters('subnetId')]"
                   },
                   "eventhubnamespaceName": {
-                    "value": "[variables('eventhubNamespaceDomain001Name')]"
+                    "value": "[variables('eventhubNamespaceIntegration001Name')]"
                   },
                   "privateDnsZoneIdEventhubNamespace": {
                     "value": "[parameters('privateDnsZoneIdEventhubNamespace')]"
@@ -5342,7 +5342,7 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2019-10-01",
-              "name": "datafactoryDomain001",
+              "name": "datafactoryIntegration001",
               "properties": {
                 "expressionEvaluationOptions": {
                   "scope": "inner"
@@ -5359,7 +5359,7 @@
                     "value": "[parameters('subnetId')]"
                   },
                   "datafactoryName": {
-                    "value": "[variables('datafactoryDomain001Name')]"
+                    "value": "[variables('datafactoryIntegration001Name')]"
                   },
                   "privateDnsZoneIdDataFactory": {
                     "value": "[parameters('privateDnsZoneIdDataFactory')]"
@@ -5377,10 +5377,10 @@
                     "value": "[parameters('storageEnrichedCuratedId')]"
                   },
                   "databricks001Id": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksDomain001'), '2019-10-01').outputs.databricksId.value]"
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksIntegration001'), '2019-10-01').outputs.databricksId.value]"
                   },
                   "databricks001WorkspaceUrl": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksDomain001'), '2019-10-01').outputs.databricksWorkspaceUrl.value]"
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksIntegration001'), '2019-10-01').outputs.databricksWorkspaceUrl.value]"
                   },
                   "keyVault001Id": {
                     "value": "[parameters('keyVault001Id')]"
@@ -5807,7 +5807,7 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'databricksDomain001')]"
+                "[resourceId('Microsoft.Resources/deployments', 'databricksIntegration001')]"
               ]
             },
             {
@@ -5823,7 +5823,7 @@
                 "mode": "Incremental",
                 "parameters": {
                   "datafactoryId": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryDomain001'), '2019-10-01').outputs.datafactoryId.value]"
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001'), '2019-10-01').outputs.datafactoryId.value]"
                   },
                   "storageAccountFileSystemId": {
                     "value": "[parameters('storageAccountRawFileSystemId')]"
@@ -5871,7 +5871,7 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'datafactoryDomain001')]"
+                "[resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001')]"
               ]
             },
             {
@@ -5887,7 +5887,7 @@
                 "mode": "Incremental",
                 "parameters": {
                   "datafactoryId": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryDomain001'), '2019-10-01').outputs.datafactoryId.value]"
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001'), '2019-10-01').outputs.datafactoryId.value]"
                   },
                   "storageAccountFileSystemId": {
                     "value": "[parameters('storageAccountEnrichedCuratedFileSystemId')]"
@@ -5935,7 +5935,7 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'datafactoryDomain001')]"
+                "[resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001')]"
               ]
             },
             {
@@ -5949,10 +5949,10 @@
                 "mode": "Incremental",
                 "parameters": {
                   "datafactoryId": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryDomain001'), '2019-10-01').outputs.datafactoryId.value]"
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001'), '2019-10-01').outputs.datafactoryId.value]"
                   },
                   "databricksId": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksDomain001'), '2019-10-01').outputs.databricksId.value]"
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksIntegration001'), '2019-10-01').outputs.databricksId.value]"
                   }
                 },
                 "template": {
@@ -5996,23 +5996,23 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'databricksDomain001')]",
-                "[resourceId('Microsoft.Resources/deployments', 'datafactoryDomain001')]"
+                "[resourceId('Microsoft.Resources/deployments', 'databricksIntegration001')]",
+                "[resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001')]"
               ]
             }
           ],
           "outputs": {
-            "datafactoryDomain001Id": {
+            "datafactoryIntegration001Id": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryDomain001'), '2019-10-01').outputs.datafactoryId.value]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'datafactoryIntegration001'), '2019-10-01').outputs.datafactoryId.value]"
             },
-            "databricksDomain001Id": {
+            "databricksIntegration001Id": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksDomain001'), '2019-10-01').outputs.databricksId.value]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksIntegration001'), '2019-10-01').outputs.databricksId.value]"
             },
-            "databricksDomain001ApiUrl": {
+            "databricksIntegration001ApiUrl": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksDomain001'), '2019-10-01').outputs.databricksApiUrl.value]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'databricksIntegration001'), '2019-10-01').outputs.databricksApiUrl.value]"
             }
           }
         }
@@ -6020,7 +6020,7 @@
       "dependsOn": [
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-metadata', variables('name'))), 'Microsoft.Resources/deployments', 'metadataServices')]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices')]",
-        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-shared-domain', variables('name')))]",
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-shared-integration', variables('name')))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-storage', variables('name'))), 'Microsoft.Resources/deployments', 'storageServices')]"
       ]
     },
@@ -6770,25 +6770,25 @@
       "type": "string",
       "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-logging', variables('name'))), 'Microsoft.Resources/deployments', 'loggingServices'), '2019-10-01').outputs.logAnalytics001WorkspaceKeySecretName.value]"
     },
-    "databricksDomain001ApiUrl": {
+    "databricksIntegration001ApiUrl": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.databricksDomain001ApiUrl.value]"
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-integration', variables('name'))), 'Microsoft.Resources/deployments', 'sharedIntegrationServices'), '2019-10-01').outputs.databricksIntegration001ApiUrl.value]"
     },
-    "databricksDomain001Id": {
+    "databricksIntegration001Id": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.databricksDomain001Id.value]"
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-integration', variables('name'))), 'Microsoft.Resources/deployments', 'sharedIntegrationServices'), '2019-10-01').outputs.databricksIntegration001Id.value]"
     },
-    "databricksDomain001SubscriptionId": {
+    "databricksIntegration001SubscriptionId": {
       "type": "string",
-      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.databricksDomain001Id.value, '/')[2]]"
+      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-integration', variables('name'))), 'Microsoft.Resources/deployments', 'sharedIntegrationServices'), '2019-10-01').outputs.databricksIntegration001Id.value, '/')[2]]"
     },
-    "databricksDomain001ResourceGroupName": {
+    "databricksIntegration001ResourceGroupName": {
       "type": "string",
-      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.databricksDomain001Id.value, '/')[4]]"
+      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-integration', variables('name'))), 'Microsoft.Resources/deployments', 'sharedIntegrationServices'), '2019-10-01').outputs.databricksIntegration001Id.value, '/')[4]]"
     },
-    "databricksDomain001Name": {
+    "databricksIntegration001Name": {
       "type": "string",
-      "value": "[last(split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-domain', variables('name'))), 'Microsoft.Resources/deployments', 'sharedDomainServices'), '2019-10-01').outputs.databricksDomain001Id.value, '/'))]"
+      "value": "[last(split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-integration', variables('name'))), 'Microsoft.Resources/deployments', 'sharedIntegrationServices'), '2019-10-01').outputs.databricksIntegration001Id.value, '/'))]"
     },
     "databricksProduct001ApiUrl": {
       "type": "string",

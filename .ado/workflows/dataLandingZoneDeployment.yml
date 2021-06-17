@@ -208,11 +208,11 @@ stages:
           #     failOnStandardError: false
           #     powerShellIgnoreLASTEXITCODE: false
           #     arguments: >
-          #       -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksDomain001Name.value)
-          #       -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksDomain001Id.value)
-          #       -DatabricksApiUrl $(dataLandingZoneDetails01.databricksDomain001ApiUrl.value)
-          #       -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksDomain001SubscriptionId.value)
-          #       -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksDomain001ResourceGroupName.value)
+          #       -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksIntegration001Name.value)
+          #       -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksIntegration001Id.value)
+          #       -DatabricksApiUrl $(dataLandingZoneDetails01.databricksIntegration001ApiUrl.value)
+          #       -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksIntegration001SubscriptionId.value)
+          #       -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksIntegration001ResourceGroupName.value)
           #       -HiveKeyVaultId $(dataLandingZoneDetails01.mySqlServer001KeyVaultid.value)
           #       -HiveConnectionStringSecretName $(dataLandingZoneDetails01.mySqlServer001ConnectionStringSecretName.value)
           #       -HiveUsernameSecretName $(dataLandingZoneDetails01.mySqlServer001UsernameSecretName.value)
@@ -231,11 +231,11 @@ stages:
                 -UserPassword '{password}' \`
                 -ClientId '{clientId}' \`
                 -TenantId '{tenantId}' \`
-                -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksDomain001Name.value) \`
-                -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksDomain001Id.value) \`
-                -DatabricksApiUrl $(dataLandingZoneDetails01.databricksDomain001ApiUrl.value) \`
-                -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksDomain001SubscriptionId.value) \`
-                -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksDomain001ResourceGroupName.value) \`
+                -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksIntegration001Name.value) \`
+                -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksIntegration001Id.value) \`
+                -DatabricksApiUrl $(dataLandingZoneDetails01.databricksIntegration001ApiUrl.value) \`
+                -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksIntegration001SubscriptionId.value) \`
+                -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksIntegration001ResourceGroupName.value) \`
                 -HiveKeyVaultId $(dataLandingZoneDetails01.mySqlServer001KeyVaultid.value) \`
                 -HiveConnectionStringSecretName $(dataLandingZoneDetails01.mySqlServer001ConnectionStringSecretName.value) \`
                 -HiveUsernameSecretName $(dataLandingZoneDetails01.mySqlServer001UsernameSecretName.value) \`

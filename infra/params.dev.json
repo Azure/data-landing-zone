@@ -17,10 +17,10 @@
         "servicesSubnetAddressPrefix": {
             "value": "10.1.0.0/24"
         },
-        "databricksDomainPublicSubnetAddressPrefix": {
+        "databricksIntegrationPublicSubnetAddressPrefix": {
             "value": "10.1.1.0/24"
         },
-        "databricksDomainPrivateSubnetAddressPrefix": {
+        "databricksIntegrationPrivateSubnetAddressPrefix": {
             "value": "10.1.2.0/24"
         },
         "databricksProductPublicSubnetAddressPrefix": {
@@ -32,10 +32,10 @@
         "powerBiGatewaySubnetAddressPrefix": {
             "value": "10.1.5.0/24"
         },
-        "dataDomain001SubnetAddressPrefix": {
+        "dataIntegration001SubnetAddressPrefix": {
             "value": "10.1.6.0/24"
         },
-        "dataDomain002SubnetAddressPrefix": {
+        "dataIntegration002SubnetAddressPrefix": {
             "value": "10.1.7.0/24"
         },
         "dataProduct001SubnetAddressPrefix": {

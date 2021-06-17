@@ -154,11 +154,11 @@ jobs:
       #     inlineScript: |
       #       Write-Host "Setting Up Databricks Workspace 001"
       #       & "${{ github.workspace }}/code/SetupDatabricks.ps1" `
-      #         -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001Name }}' `
-      #         -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001Id }}' `
-      #         -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001ApiUrl }}' `
-      #         -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001SubscriptionId }}' `
-      #         -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001ResourceGroupName }}' `
+      #         -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001Name }}' `
+      #         -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001Id }}' `
+      #         -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001ApiUrl }}' `
+      #         -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001SubscriptionId }}' `
+      #         -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001ResourceGroupName }}' `
       #         -HiveKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' `
       #         -HiveConnectionStringSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' `
       #         -HiveUsernameSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' `
@@ -179,11 +179,11 @@ jobs:
       #       -UserPassword '{password}' \`
       #       -ClientId '{clientId}' \`
       #       -TenantId '{tenantId}' \`
-      #       -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001Name }}' \`
-      #       -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001Id }}' \`
-      #       -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001ApiUrl }}' \`
-      #       -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001SubscriptionId }}' \`
-      #       -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksDomain001ResourceGroupName }}' \`
+      #       -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001Name }}' \`
+      #       -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001Id }}' \`
+      #       -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001ApiUrl }}' \`
+      #       -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001SubscriptionId }}' \`
+      #       -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001ResourceGroupName }}' \`
       #       -HiveKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' \`
       #       -HiveConnectionStringSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' \`
       #       -HiveUsernameSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' \`
