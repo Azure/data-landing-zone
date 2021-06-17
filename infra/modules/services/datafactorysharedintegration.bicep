@@ -159,6 +159,9 @@ resource datafactoryKeyVault001ManagedPrivateEndpoint 'Microsoft.DataFactory/fac
 resource datafactoryKeyVault001LinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
   parent: datafactory
   name: replace(keyVault001Name, '-', '')
+  dependsOn: [
+    datafactoryKeyVault001ManagedPrivateEndpoint
+  ]
   properties: {
     type: 'AzureKeyVault'
     annotations: []
@@ -188,6 +191,9 @@ resource datafactorySqlServer001ManagedPrivateEndpoint 'Microsoft.DataFactory/fa
 resource datafactorySqlserver001LinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
   parent: datafactory
   name: '${replace(sqlServer001Name, '-', '')}${replace(sqlDatabase001Name, '-', '')}'
+  dependsOn: [
+    datafactorySqlServer001ManagedPrivateEndpoint
+  ]
   properties: {
     type: 'AzureSqlDatabase'
     annotations: []
@@ -217,6 +223,9 @@ resource datafactoryStorageRawManagedPrivateEndpoint 'Microsoft.DataFactory/fact
 resource datafactoryStorageRawLinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
   parent: datafactory
   name: storageRawName
+  dependsOn: [
+    datafactoryStorageRawManagedPrivateEndpoint
+  ]
   properties: {
     type: 'AzureBlobFS'
     annotations: []
@@ -246,6 +255,9 @@ resource datafactoryStorageEnrichedCuratedManagedPrivateEndpoint 'Microsoft.Data
 resource datafactoryStorageEnrichedCuratedLinkedService 'Microsoft.DataFactory/factories/linkedservices@2018-06-01' = {
   parent: datafactory
   name: storageEnrichedCuratedName
+  dependsOn: [
+    datafactoryStorageEnrichedCuratedManagedPrivateEndpoint
+  ]
   properties: {
     type: 'AzureBlobFS'
     annotations: []

@@ -1,5 +1,5 @@
 // This template is used as a module from the main.bicep template.
-// The module contains a template to create integration resources.
+// The module contains a template to create runtime resources.
 targetScope = 'resourceGroup'
 
 // Parameters
@@ -19,7 +19,7 @@ param datafactoryIds array
 
 // Variables
 var artifactstorage001Name = '${prefix}-artfct001'
-var datafactoryIntegration001Name = '${prefix}-integration-datafactory001'
+var datafactoryRuntimes001Name = '${prefix}-runtime-datafactory001'
 var shir001Name = '${prefix}-shir001'
 
 // Resources
@@ -33,24 +33,24 @@ module artifactstorage001 'services/artifactstorage.bicep' = {
   }
 }
 
-module datafactoryIntegration001 'services/datafactoryintegration.bicep' = {
-  name: 'datafactoryIntegration001'
+module datafactoryRuntimes001 'services/datafactoryruntime.bicep' = {
+  name: 'datafactoryRuntimes001'
   scope: resourceGroup()
   params: {
     location: location
     tags: tags
     subnetId: subnetId
-    datafactoryName: datafactoryIntegration001Name
+    datafactoryName: datafactoryRuntimes001Name
     privateDnsZoneIdDataFactory: privateDnsZoneIdDataFactory
     privateDnsZoneIdDataFactoryPortal: privateDnsZoneIdDataFactoryPortal
     purviewId: purviewId
   }
 }
 
-resource datafactoryIntegration001IntegrationRuntime001 'Microsoft.DataFactory/factories/integrationRuntimes@2018-06-01' = {
-  name: '${datafactoryIntegration001Name}/dataLandingZoneShir-${shir001Name}'
+resource datafactoryRuntimes001IntegrationRuntime001 'Microsoft.DataFactory/factories/integrationRuntimes@2018-06-01' = {
+  name: '${datafactoryRuntimes001Name}/dataLandingZoneShir-${shir001Name}'
   dependsOn: [
-    datafactoryIntegration001
+    datafactoryRuntimes001
   ]
   properties: {
     type: 'SelfHosted'
@@ -58,8 +58,11 @@ resource datafactoryIntegration001IntegrationRuntime001 'Microsoft.DataFactory/f
   }
 }
 
-module datafactory001SelfHostedIntegrationRuntime001 'services/selfHostedIntegrationRuntime.bicep' = if (deploySelfHostedIntegrationRuntimes) {
-  name: 'datafactory001SelfHostedIntegrationRuntime001'
+module datafactoryRuntimes001SelfHostedIntegrationRuntime001 'services/selfHostedIntegrationRuntime.bicep' = if (deploySelfHostedIntegrationRuntimes) {
+  name: 'datafactoryRuntimes001SelfHostedIntegrationRuntime001'
+  dependsOn: [
+    datafactoryRuntimes001IntegrationRuntime001
+  ]
   scope: resourceGroup()
   params: {
     location: location
@@ -67,7 +70,7 @@ module datafactory001SelfHostedIntegrationRuntime001 'services/selfHostedIntegra
     subnetId: subnetId
     administratorUsername: administratorUsername
     administratorPassword: administratorPassword
-    datafactoryIntegrationRuntimeAuthKey: listAuthKeys(datafactoryIntegration001IntegrationRuntime001.id, datafactoryIntegration001IntegrationRuntime001.apiVersion).authKey1
+    datafactoryIntegrationRuntimeAuthKey: listAuthKeys(datafactoryRuntimes001IntegrationRuntime001.id, datafactoryRuntimes001IntegrationRuntime001.apiVersion).authKey1
     storageAccountContainerName: artifactstorage001.outputs.storageAccountContainerName
     storageAccountId: artifactstorage001.outputs.storageAccountId
     vmssName: shir001Name
@@ -77,12 +80,15 @@ module datafactory001SelfHostedIntegrationRuntime001 'services/selfHostedIntegra
   }
 }
 
-module shareDatafactoryIntegration001IntegrationRuntime001 'auxiliary/shareSelfHostedIntegrationRuntime.bicep' = [ for (datafactoryId, i) in datafactoryIds: if (deploySelfHostedIntegrationRuntimes) {
-  name: 'shareDatafactoryIntegration001IntegrationRuntime001-${i}'
+module shareDatafactoryRuntimes001IntegrationRuntime001 'auxiliary/shareSelfHostedIntegrationRuntime.bicep' = [ for (datafactoryId, i) in datafactoryIds: if (deploySelfHostedIntegrationRuntimes) {
+  name: 'shareDatafactoryRuntimes001IntegrationRuntime001-${i}'
+  dependsOn: [
+    datafactoryRuntimes001SelfHostedIntegrationRuntime001
+  ]
   scope: resourceGroup(split(datafactoryId, '/')[2], split(datafactoryId, '/')[4])
   params: {
-    datafactorySourceId: datafactoryIntegration001.outputs.datafactoryId
-    datafactorySourceShirId: datafactoryIntegration001IntegrationRuntime001.id
+    datafactorySourceId: datafactoryRuntimes001.outputs.datafactoryId
+    datafactorySourceShirId: datafactoryRuntimes001IntegrationRuntime001.id
     datafactoryDestinationId: datafactoryId
   }
 }]

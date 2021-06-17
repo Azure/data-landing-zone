@@ -12,26 +12,26 @@ param dnsServerAdresses array = [
 ]
 param vnetAddressPrefix string = '10.1.0.0/16'
 param servicesSubnetAddressPrefix string = '10.1.0.0/24'
-param databricksDomainPublicSubnetAddressPrefix string = '10.1.1.0/24'
-param databricksDomainPrivateSubnetAddressPrefix string = '10.1.2.0/24'
+param databricksIntegrationPublicSubnetAddressPrefix string = '10.1.1.0/24'
+param databricksIntegrationPrivateSubnetAddressPrefix string = '10.1.2.0/24'
 param databricksProductPublicSubnetAddressPrefix string = '10.1.3.0/24'
 param databricksProductPrivateSubnetAddressPrefix string = '10.1.4.0/24'
 param powerBiGatewaySubnetAddressPrefix string = '10.1.5.0/24'
-param dataDomain001SubnetAddressPrefix string = '10.1.6.0/24'
-param dataDomain002SubnetAddressPrefix string = '10.1.7.0/24'
+param dataIntegration001SubnetAddressPrefix string = '10.1.6.0/24'
+param dataIntegration002SubnetAddressPrefix string = '10.1.7.0/24'
 param dataProduct001SubnetAddressPrefix string = '10.1.8.0/24'
 param dataProduct002SubnetAddressPrefix string = '10.1.9.0/24'
 param dataManagementZoneVnetId string
 
 // Variables
 var servicesSubnetName = 'ServicesSubnet'
-var databricksDomainPrivateSubnetName = 'DatabricksDomainSubnetPrivate'
-var databricksDomainPublicSubnetName = 'DatabricksDomainSubnetPublic'
+var databricksIntegrationPrivateSubnetName = 'DatabricksIntegrationSubnetPrivate'
+var databricksIntegrationPublicSubnetName = 'DatabricksIntegrationSubnetPublic'
 var databricksProductPrivateSubnetName = 'DatabricksProductSubnetPrivate'
 var databricksProductPublicSubnetName = 'DatabricksProductSubnetPublic'
 var powerBiGatewaySubnetName = 'PowerBIGatewaySubnet'
-var dataDomain001SubnetName = 'DataDomain001Subnet'
-var dataDomain002SubnetName = 'DataDomain002Subnet'
+var dataIntegration001SubnetName = 'DataIntegration001Subnet'
+var dataIntegration002SubnetName = 'DataIntegration002Subnet'
 var dataProduct001SubnetName = 'DataProduct001Subnet'
 var dataProduct002SubnetName = 'DataProduct002Subnet'
 var dataManagementZoneVnetSubscriptionId = split(dataManagementZoneVnetId, '/')[2]
@@ -219,9 +219,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
         }
       }
       {
-        name: databricksDomainPublicSubnetName
+        name: databricksIntegrationPublicSubnetName
         properties: {
-          addressPrefix: databricksDomainPublicSubnetAddressPrefix
+          addressPrefix: databricksIntegrationPublicSubnetAddressPrefix
           addressPrefixes: []
           networkSecurityGroup: {
             id: databricksNsg.id
@@ -244,9 +244,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
         }
       }
       {
-        name: databricksDomainPrivateSubnetName
+        name: databricksIntegrationPrivateSubnetName
         properties: {
-          addressPrefix: databricksDomainPrivateSubnetAddressPrefix
+          addressPrefix: databricksIntegrationPrivateSubnetAddressPrefix
           addressPrefixes: []
           networkSecurityGroup: {
             id: databricksNsg.id
@@ -344,9 +344,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
         }
       }
       {
-        name: dataDomain001SubnetName
+        name: dataIntegration001SubnetName
         properties: {
-          addressPrefix: dataDomain001SubnetAddressPrefix
+          addressPrefix: dataIntegration001SubnetAddressPrefix
           addressPrefixes: []
           networkSecurityGroup: {
             id: nsg.id
@@ -362,9 +362,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
         }
       }
       {
-        name: dataDomain002SubnetName
+        name: dataIntegration002SubnetName
         properties: {
-          addressPrefix: dataDomain002SubnetAddressPrefix
+          addressPrefix: dataIntegration002SubnetAddressPrefix
           addressPrefixes: []
           networkSecurityGroup: {
             id: nsg.id
@@ -445,7 +445,7 @@ module dataManagementZoneDataLandingZoneVnetPeering 'auxiliary/dataManagementZon
 // Outputs
 output vnetId string = vnet.id
 output servicesSubnetId string = vnet.properties.subnets[0].id
-output databricksDomainPublicSubnetName string = databricksDomainPublicSubnetName
-output databricksDomainPrivateSubnetName string = databricksDomainPrivateSubnetName
+output databricksIntegrationPublicSubnetName string = databricksIntegrationPublicSubnetName
+output databricksIntegrationPrivateSubnetName string = databricksIntegrationPrivateSubnetName
 output databricksProductPublicSubnetName string = databricksProductPublicSubnetName
 output databricksProductPrivateSubnetName string = databricksProductPrivateSubnetName

@@ -20,20 +20,20 @@ param prefix string
 param vnetAddressPrefix string = '10.1.0.0/16'
 @description('Specifies the address space of the subnet that is used for general services of the data landing zone.')
 param servicesSubnetAddressPrefix string = '10.1.0.0/24'
-@description('Specifies the address space of the public subnet that is used for the shared domain databricks workspace.')
-param databricksDomainPublicSubnetAddressPrefix string = '10.1.1.0/24'
-@description('Specifies the address space of the private subnet that is used for the shared domain databricks workspace.')
-param databricksDomainPrivateSubnetAddressPrefix string = '10.1.2.0/24'
+@description('Specifies the address space of the public subnet that is used for the shared integration databricks workspace.')
+param databricksIntegrationPublicSubnetAddressPrefix string = '10.1.1.0/24'
+@description('Specifies the address space of the private subnet that is used for the shared integration databricks workspace.')
+param databricksIntegrationPrivateSubnetAddressPrefix string = '10.1.2.0/24'
 @description('Specifies the address space of the public subnet that is used for the shared product databricks workspace.')
 param databricksProductPublicSubnetAddressPrefix string = '10.1.3.0/24'
 @description('Specifies the address space of the private subnet that is used for the shared product databricks workspace.')
 param databricksProductPrivateSubnetAddressPrefix string = '10.1.4.0/24'
 @description('Specifies the address space of the subnet that is used for the power bi gateway.')
 param powerBiGatewaySubnetAddressPrefix string = '10.1.5.0/24'
-@description('Specifies the address space of the subnet that is used for data domain 001.')
-param dataDomain001SubnetAddressPrefix string = '10.1.6.0/24'
-@description('Specifies the address space of the subnet that is used for data domain 002.')
-param dataDomain002SubnetAddressPrefix string = '10.1.7.0/24'
+@description('Specifies the address space of the subnet that is used for data integration 001.')
+param dataIntegration001SubnetAddressPrefix string = '10.1.6.0/24'
+@description('Specifies the address space of the subnet that is used for data integration 002.')
+param dataIntegration002SubnetAddressPrefix string = '10.1.7.0/24'
 @description('Specifies the address space of the subnet that is used for data product 001.')
 param dataProduct001SubnetAddressPrefix string = '10.1.8.0/24'
 @description('Specifies the address space of the subnet that is used for data product 002.')
@@ -111,13 +111,13 @@ module networkServices 'modules/network.bicep' = {
     dnsServerAdresses: dnsServerAdresses
     vnetAddressPrefix: vnetAddressPrefix
     servicesSubnetAddressPrefix: servicesSubnetAddressPrefix
-    databricksDomainPublicSubnetAddressPrefix: databricksDomainPublicSubnetAddressPrefix
-    databricksDomainPrivateSubnetAddressPrefix: databricksDomainPrivateSubnetAddressPrefix
+    databricksIntegrationPublicSubnetAddressPrefix: databricksIntegrationPublicSubnetAddressPrefix
+    databricksIntegrationPrivateSubnetAddressPrefix: databricksIntegrationPrivateSubnetAddressPrefix
     databricksProductPublicSubnetAddressPrefix: databricksProductPublicSubnetAddressPrefix
     databricksProductPrivateSubnetAddressPrefix: databricksProductPrivateSubnetAddressPrefix
     powerBiGatewaySubnetAddressPrefix: powerBiGatewaySubnetAddressPrefix
-    dataDomain001SubnetAddressPrefix: dataDomain001SubnetAddressPrefix
-    dataDomain002SubnetAddressPrefix: dataDomain002SubnetAddressPrefix
+    dataIntegration001SubnetAddressPrefix: dataIntegration001SubnetAddressPrefix
+    dataIntegration002SubnetAddressPrefix: dataIntegration002SubnetAddressPrefix
     dataProduct001SubnetAddressPrefix: dataProduct001SubnetAddressPrefix
     dataProduct002SubnetAddressPrefix: dataProduct002SubnetAddressPrefix
     dataManagementZoneVnetId: dataManagementZoneVnetId
@@ -152,17 +152,17 @@ module loggingServices 'modules/logging.bicep' = {
   }
 }
 
-// Integration resources
-resource integrationResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
-  name: '${name}-integration'
+// Runtime resources
+resource runtimesResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-runtimes'
   location: location
   tags: tags
   properties: {}
 }
 
-module integrationServices 'modules/integration.bicep' = {
-  name: 'integrationServices'
-  scope: integrationResourceGroup
+module runtimeServices 'modules/runtimes.bicep' = {
+  name: 'runtimeServices'
+  scope: runtimesResourceGroup
   params: {
     location: location
     prefix: name
@@ -176,7 +176,7 @@ module integrationServices 'modules/integration.bicep' = {
     purviewSelfHostedIntegrationRuntimeAuthKey: purviewSelfHostedIntegrationRuntimeAuthKey
     deploySelfHostedIntegrationRuntimes: deploySelfHostedIntegrationRuntimes
     datafactoryIds: [
-      sharedDomainServices.outputs.datafactoryDomain001Id
+      sharedIntegrationServices.outputs.datafactoryIntegration001Id
     ]
   }
 }
@@ -250,25 +250,25 @@ module metadataServices 'modules/metadata.bicep' = {
   }
 }
 
-// Shared domain services
-resource sharedDomainResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
-  name: '${name}-shared-domain'
+// Shared integration services
+resource sharedIntegrationResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-shared-integration'
   location: location
   tags: tags
   properties: {}
 }
 
-module sharedDomainServices 'modules/domain.bicep' = {
-  name: 'sharedDomainServices'
-  scope: sharedDomainResourceGroup
+module sharedIntegrationServices 'modules/sharedintegration.bicep' = {
+  name: 'sharedIntegrationServices'
+  scope: sharedIntegrationResourceGroup
   params: {
     location: location
     prefix: name
     tags: tags
     subnetId: networkServices.outputs.servicesSubnetId
     vnetId: networkServices.outputs.vnetId
-    databricksDomain001PrivateSubnetName: networkServices.outputs.databricksDomainPrivateSubnetName
-    databricksDomain001PublicSubnetName: networkServices.outputs.databricksDomainPublicSubnetName
+    databricksIntegration001PrivateSubnetName: networkServices.outputs.databricksIntegrationPrivateSubnetName
+    databricksIntegration001PublicSubnetName: networkServices.outputs.databricksIntegrationPublicSubnetName
     storageRawId: storageServices.outputs.storageRawId
     storageAccountRawFileSystemId: storageServices.outputs.storageRawFileSystemId
     storageEnrichedCuratedId: storageServices.outputs.storageEnrichedCuratedId
@@ -291,7 +291,7 @@ resource sharedProductResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-
   properties: {}
 }
 
-module sharedProductServices 'modules/product.bicep' = {
+module sharedProductServices 'modules/sharedproduct.bicep' = {
   name: 'sharedProductServices'
   scope: sharedProductResourceGroup
   params: {
@@ -314,9 +314,9 @@ module sharedProductServices 'modules/product.bicep' = {
   }
 }
 
-// Data domain resources 001
-resource dataDomain001ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
-  name: '${name}-dd001'
+// Data integration resources 001
+resource dataIntegration001ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-di001'
   location: location
   tags: tags
   properties: {}
@@ -331,9 +331,9 @@ resource dataProduct001ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01
 }
 
 // Outputs
-output artifactstorage001ResourceGroupName string = split(integrationServices.outputs.artifactstorage001Id, '/')[4]
-output artifactstorage001Name string = last(split(integrationServices.outputs.artifactstorage001Id, '/'))
-output artifactstorage001ContainerName string = integrationServices.outputs.artifactstorage001ContainerName
+output artifactstorage001ResourceGroupName string = split(runtimeServices.outputs.artifactstorage001Id, '/')[4]
+output artifactstorage001Name string = last(split(runtimeServices.outputs.artifactstorage001Id, '/'))
+output artifactstorage001ContainerName string = runtimeServices.outputs.artifactstorage001ContainerName
 output mySqlServer001SubscriptionId string = split(metadataServices.outputs.mySqlServer001Id, '/')[2]
 output mySqlServer001ResourceGroupName string = split(metadataServices.outputs.mySqlServer001Id, '/')[4]
 output mySqlServer001Name string = last(split(metadataServices.outputs.mySqlServer001Id, '/'))
@@ -344,11 +344,11 @@ output mySqlServer001ConnectionStringSecretName string = metadataServices.output
 output logAnalyticsWorkspaceKeyVaultId string = loggingServices.outputs.logAnalytics001WorkspaceKeyVaultId
 output logAnalyticsWorkspaceIdSecretName string = loggingServices.outputs.logAnalytics001WorkspaceIdSecretName
 output logAnalyticsWorkspaceKeySecretName string = loggingServices.outputs.logAnalytics001WorkspaceKeySecretName
-output databricksDomain001ApiUrl string = sharedDomainServices.outputs.databricksDomain001ApiUrl
-output databricksDomain001Id string = sharedDomainServices.outputs.databricksDomain001Id
-output databricksDomain001SubscriptionId string = split(sharedDomainServices.outputs.databricksDomain001Id, '/')[2]
-output databricksDomain001ResourceGroupName string = split(sharedDomainServices.outputs.databricksDomain001Id, '/')[4]
-output databricksDomain001Name string = last(split(sharedDomainServices.outputs.databricksDomain001Id, '/'))
+output databricksIntegration001ApiUrl string = sharedIntegrationServices.outputs.databricksIntegration001ApiUrl
+output databricksIntegration001Id string = sharedIntegrationServices.outputs.databricksIntegration001Id
+output databricksIntegration001SubscriptionId string = split(sharedIntegrationServices.outputs.databricksIntegration001Id, '/')[2]
+output databricksIntegration001ResourceGroupName string = split(sharedIntegrationServices.outputs.databricksIntegration001Id, '/')[4]
+output databricksIntegration001Name string = last(split(sharedIntegrationServices.outputs.databricksIntegration001Id, '/'))
 output databricksProduct001ApiUrl string = sharedProductServices.outputs.databricksProduct001ApiUrl
 output databricksProduct001Id string = sharedProductServices.outputs.databricksProduct001Id
 output databricksProduct001SubscriptionId string = split(sharedProductServices.outputs.databricksProduct001Id, '/')[2]

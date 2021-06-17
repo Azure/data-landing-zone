@@ -1,5 +1,5 @@
 // This template is used as a module from the main.bicep template. 
-// The module contains a template to create domain resources.
+// The module contains a template to create integration resources.
 targetScope = 'resourceGroup'
 
 // Parameters
@@ -9,8 +9,8 @@ param tags object
 param storageAccountRawFileSystemId string
 param storageAccountEnrichedCuratedFileSystemId string
 param vnetId string
-param databricksDomain001PrivateSubnetName string
-param databricksDomain001PublicSubnetName string
+param databricksIntegration001PrivateSubnetName string
+param databricksIntegration001PublicSubnetName string
 param subnetId string
 param purviewId string
 param storageRawId string
@@ -23,57 +23,57 @@ param privateDnsZoneIdDataFactoryPortal string
 param privateDnsZoneIdEventhubNamespace string
 
 // Variables
-var databricksDomain001Name = '${prefix}-domain-databricks001'
-var eventhubNamespaceDomain001Name = '${prefix}-domain-eventhub001'
-var datafactoryDomain001Name = '${prefix}-domain-datafactory001'
+var databricksIntegration001Name = '${prefix}-integration-databricks001'
+var eventhubNamespaceIntegration001Name = '${prefix}-integration-eventhub001'
+var datafactoryIntegration001Name = '${prefix}-integration-datafactory001'
 var storageAccountRawSubscriptionId = split(storageAccountRawFileSystemId, '/')[2]
 var storageAccountRawResourceGroupName = split(storageAccountRawFileSystemId, '/')[4]
 var storageAccountEnrichedCuratedSubscriptionId = split(storageAccountEnrichedCuratedFileSystemId, '/')[2]
 var storageAccountEnrichedCuratedResourceGroupName = split(storageAccountEnrichedCuratedFileSystemId, '/')[4]
 
 // Resources
-module databricksDomain001 'services/databricks.bicep' = {
-  name: 'databricksDomain001'
+module databricksIntegration001 'services/databricks.bicep' = {
+  name: 'databricksIntegration001'
   scope: resourceGroup()
   params: {
     location: location
     tags: tags
-    databricksName: databricksDomain001Name
+    databricksName: databricksIntegration001Name
     vnetId: vnetId
-    privateSubnetName: databricksDomain001PrivateSubnetName
-    publicSubnetName: databricksDomain001PublicSubnetName
+    privateSubnetName: databricksIntegration001PrivateSubnetName
+    publicSubnetName: databricksIntegration001PublicSubnetName
   }
 }
 
-module eventhubNamespaceDomain001 'services/eventhubnamespace.bicep' = {
-  name: 'eventhubNamespaceDomain001'
+module eventhubNamespaceIntegration001 'services/eventhubnamespace.bicep' = {
+  name: 'eventhubNamespaceIntegration001'
   scope: resourceGroup()
   params: {
     location: location
     tags: tags
     subnetId: subnetId
-    eventhubnamespaceName: eventhubNamespaceDomain001Name
+    eventhubnamespaceName: eventhubNamespaceIntegration001Name
     privateDnsZoneIdEventhubNamespace: privateDnsZoneIdEventhubNamespace
     eventhubnamespaceMinThroughput: 1
     eventhubnamespaceMaxThroughput: 1
   }
 }
 
-module datafactoryDomain001 'services/datafactorydomain.bicep' = {
-  name: 'datafactoryDomain001'
+module datafactoryIntegration001 'services/datafactorysharedintegration.bicep' = {
+  name: 'datafactoryIntegration001'
   scope: resourceGroup()
   params: {
     location: location
     tags: tags
     subnetId: subnetId
-    datafactoryName: datafactoryDomain001Name
+    datafactoryName: datafactoryIntegration001Name
     privateDnsZoneIdDataFactory: privateDnsZoneIdDataFactory
     privateDnsZoneIdDataFactoryPortal: privateDnsZoneIdDataFactoryPortal
     purviewId: purviewId
     storageRawId: storageRawId
     storageEnrichedCuratedId: storageEnrichedCuratedId
-    databricks001Id: databricksDomain001.outputs.databricksId
-    databricks001WorkspaceUrl: databricksDomain001.outputs.databricksWorkspaceUrl
+    databricks001Id: databricksIntegration001.outputs.databricksId
+    databricks001WorkspaceUrl: databricksIntegration001.outputs.databricksWorkspaceUrl
     keyVault001Id: keyVault001Id
     sqlServer001Id: sqlServer001Id
     sqlDatabase001Name: sqlDatabase001Name
@@ -84,7 +84,7 @@ module datafactory001StorageRawRoleAssignment 'auxiliary/dataFactoryRoleAssignme
   name: 'datafactory001StorageRawRoleAssignment'
   scope: resourceGroup(storageAccountRawSubscriptionId, storageAccountRawResourceGroupName)
   params: {
-    datafactoryId: datafactoryDomain001.outputs.datafactoryId
+    datafactoryId: datafactoryIntegration001.outputs.datafactoryId
     storageAccountFileSystemId: storageAccountRawFileSystemId
   }
 }
@@ -93,7 +93,7 @@ module datafactory001StorageEnrichedCuratedRoleAssignment 'auxiliary/dataFactory
   name: 'datafactory001StorageEnrichedCuratedRoleAssignment'
   scope: resourceGroup(storageAccountEnrichedCuratedSubscriptionId, storageAccountEnrichedCuratedResourceGroupName)
   params: {
-    datafactoryId: datafactoryDomain001.outputs.datafactoryId
+    datafactoryId: datafactoryIntegration001.outputs.datafactoryId
     storageAccountFileSystemId: storageAccountEnrichedCuratedFileSystemId
   }
 }
@@ -102,12 +102,12 @@ module datafactory001DatabricksRoleAssignment 'auxiliary/dataFactoryRoleAssignme
   name: 'datafactory001DatabricksRoleAssignment'
   scope: resourceGroup()
   params: {
-    datafactoryId: datafactoryDomain001.outputs.datafactoryId
-    databricksId: databricksDomain001.outputs.databricksId
+    datafactoryId: datafactoryIntegration001.outputs.datafactoryId
+    databricksId: databricksIntegration001.outputs.databricksId
   }
 }
 
 // Outputs
-output datafactoryDomain001Id string = datafactoryDomain001.outputs.datafactoryId
-output databricksDomain001Id string = databricksDomain001.outputs.databricksId
-output databricksDomain001ApiUrl string = databricksDomain001.outputs.databricksApiUrl
+output datafactoryIntegration001Id string = datafactoryIntegration001.outputs.datafactoryId
+output databricksIntegration001Id string = databricksIntegration001.outputs.databricksId
+output databricksIntegration001ApiUrl string = databricksIntegration001.outputs.databricksApiUrl

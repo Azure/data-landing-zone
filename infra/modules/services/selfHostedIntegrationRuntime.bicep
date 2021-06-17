@@ -195,7 +195,7 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
                 ]
               }
               protectedSettings: {
-                commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey ${datafactoryIntegrationRuntimeAuthKey}'
+                commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey "${datafactoryIntegrationRuntimeAuthKey}"'
                 storageAccountName: storageAccountName
                 storageAccountKey: listkeys(storageAccountId, '2021-02-01').keys[0].value
               }

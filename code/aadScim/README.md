@@ -1,7 +1,7 @@
-# Required Access for Service Principal
+# Required Access for Service Principal for AAD SCIM automation for Databricks
 
 [Link](https://docs.microsoft.com/en-us/graph/application-provisioning-configure-api?view=graph-rest-1.0&tabs=http)
-director.readwrite.all, application.readwrite.ownedby
+Directory.ReadWrite.All, Application.ReadWrite.OwnedBy
 
 1. Instantiate Application
 
@@ -25,8 +25,8 @@ Link: [Link](https://docs.microsoft.com/en-us/graph/api/synchronization-synchron
 
 5. Save your credentials
 
-Rights: TBD
-Link: TBD
+Rights: TBD (not defined in the docs)
+Link: TBD (not defined in the docs)
 
 6. Start the provisioning job
 

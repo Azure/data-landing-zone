@@ -114,7 +114,7 @@ stages:
               ignoreLASTEXITCODE: false
               pwsh: true
 
-          # Deploy Data Landing Zone
+          # Deploy Data Landing Zone - w/o SHIR
           - task: AzureResourceManagerTemplateDeployment@3
             name: data_landing_zone_deployment_001
             displayName: Data Landing Zone - w/o SHIR
@@ -154,25 +154,25 @@ stages:
               failOnStandardError: false
               azurePowerShellVersion: 'latestVersion'
           
-          # # Deploy Data Landing Zone
-          # - task: AzureResourceManagerTemplateDeployment@3
-          #   name: data_landing_zone_deployment_002
-          #   displayName: Data Landing Zone - w/ SHIR
-          #   enabled: true
-          #   continueOnError: false
-          #   inputs:
-          #     deploymentScope: "Subscription"
-          #     azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
-          #     subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
-          #     location: ${{ variables.AZURE_LOCATION }}
-          #     templateLocation: "Linked artifact"
-          #     csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
-          #     csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
-          #     deploymentOutputs: 'dataLandingZoneDetails01'
-          #     deploymentMode: "Incremental"
-          #     overrideParameters: >
-          #       -administratorPassword "$(password)"
-          #       -deploySelfHostedIntegrationRuntimes true
+          # Deploy Data Landing Zone - w/ SHIR
+          - task: AzureResourceManagerTemplateDeployment@3
+            name: data_landing_zone_deployment_002
+            displayName: Data Landing Zone - w/ SHIR
+            enabled: true
+            continueOnError: false
+            inputs:
+              deploymentScope: "Subscription"
+              azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+              subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+              location: ${{ variables.AZURE_LOCATION }}
+              templateLocation: "Linked artifact"
+              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
+              csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
+              deploymentOutputs: 'dataLandingZoneDetails01'
+              deploymentMode: "Incremental"
+              overrideParameters: >
+                -administratorPassword "$(password)"
+                -deploySelfHostedIntegrationRuntimes true
           
           # Restart MySQL Server 001
           - task: AzurePowerShell@4
@@ -208,11 +208,11 @@ stages:
           #     failOnStandardError: false
           #     powerShellIgnoreLASTEXITCODE: false
           #     arguments: >
-          #       -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksDomain001Name.value)
-          #       -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksDomain001Id.value)
-          #       -DatabricksApiUrl $(dataLandingZoneDetails01.databricksDomain001ApiUrl.value)
-          #       -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksDomain001SubscriptionId.value)
-          #       -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksDomain001ResourceGroupName.value)
+          #       -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksIntegration001Name.value)
+          #       -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksIntegration001Id.value)
+          #       -DatabricksApiUrl $(dataLandingZoneDetails01.databricksIntegration001ApiUrl.value)
+          #       -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksIntegration001SubscriptionId.value)
+          #       -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksIntegration001ResourceGroupName.value)
           #       -HiveKeyVaultId $(dataLandingZoneDetails01.mySqlServer001KeyVaultid.value)
           #       -HiveConnectionStringSecretName $(dataLandingZoneDetails01.mySqlServer001ConnectionStringSecretName.value)
           #       -HiveUsernameSecretName $(dataLandingZoneDetails01.mySqlServer001UsernameSecretName.value)
@@ -231,11 +231,11 @@ stages:
                 -UserPassword '{password}' \`
                 -ClientId '{clientId}' \`
                 -TenantId '{tenantId}' \`
-                -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksDomain001Name.value) \`
-                -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksDomain001Id.value) \`
-                -DatabricksApiUrl $(dataLandingZoneDetails01.databricksDomain001ApiUrl.value) \`
-                -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksDomain001SubscriptionId.value) \`
-                -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksDomain001ResourceGroupName.value) \`
+                -DatabricksWorkspaceName $(dataLandingZoneDetails01.databricksIntegration001Name.value) \`
+                -DatabricksWorkspaceId $(dataLandingZoneDetails01.databricksIntegration001Id.value) \`
+                -DatabricksApiUrl $(dataLandingZoneDetails01.databricksIntegration001ApiUrl.value) \`
+                -DatabricksSubscriptionId $(dataLandingZoneDetails01.databricksIntegration001SubscriptionId.value) \`
+                -DatabricksResourceGroupName $(dataLandingZoneDetails01.databricksIntegration001ResourceGroupName.value) \`
                 -HiveKeyVaultId $(dataLandingZoneDetails01.mySqlServer001KeyVaultid.value) \`
                 -HiveConnectionStringSecretName $(dataLandingZoneDetails01.mySqlServer001ConnectionStringSecretName.value) \`
                 -HiveUsernameSecretName $(dataLandingZoneDetails01.mySqlServer001UsernameSecretName.value) \`

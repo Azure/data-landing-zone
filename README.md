@@ -6,7 +6,7 @@
 
 ## Description
 
-A Data Landing Zone in the [**Enterprise Scale Analytics and AI**](https://github.com/Azure/Enterprise-Scale-Analytics) solution pattern has several layers to enable agility to service the Data Domains and Data Products within the data landing zone. A new Data Landing Zone is always deployed with a standard set of services to enable the entity to start ingesting and analyzing data.
+A Data Landing Zone in the [**Enterprise Scale Analytics and AI**](https://github.com/Azure/Enterprise-Scale-Analytics) solution pattern has several layers to enable agility to service the Data Integrations and Data Products within the data landing zone. A new Data Landing Zone is always deployed with a standard set of services to enable the entity to start ingesting and analyzing data.
 
 ## What will be deployed?
 
@@ -14,7 +14,7 @@ By default, all the services which come under Data Landing Zone are enabled, and
 
 > **Note:** Before deploying the resources, we recommend to check registration status of the required resource providers in your subscription. For more information, see [Resource providers for Azure services](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
 
-![Data Management Zone](./docs/images/DataNode.png)
+![Data Management Zone](./docs/images/DataLandingZone.png)
 
 For each data landing zone, the following services are created:
 
@@ -132,7 +132,7 @@ Additional required role assignments include:
 |:----------|:------------|:------|
 | [Private DNS Zone Contributor](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#private-dns-zone-contributor) | We expect you to deploy all Private DNS Zones for all data services into a single subscription and resource group. Therefor, the service principal needs to be Private DNS Zone Contributor on the global dns resource group which was created during the Data Management Zone deployment. This is required to deploy A-records for the respective private endpoints.| <div style="width: 31ch">(Resource Group Scope) `/subscriptions/{{datamanagement}subscriptionId}/resourceGroups/{resourceGroupName}`</div> |
 | [Network Contributor](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#network-contributor) | In order to setup vnet peering between the Data Landing Zone vnet and the Data Management Landing Zone vnet, the service principal needs **Network Contributor** access rights on the resource group of the remote vnet. | <div style="width: 31ch">(Resource Group Scope) `/subscriptions/{{datamanagement}subscriptionId}/resourceGroups/{resourceGroupName}`</div> |
-| [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) | Required to share the self-hosted integration runtime that gets deployed into the `integration-rg` resource group with other Data Factories, like the one in the `processing-domain-rg` resource group, the service principal needs **User Access Administrator** rights on the Data Factory that gets deployed into the `integration-rg` resource group. It is also required to assign the Data Factory and Synapse managed identities access on the respective storage account file systems. | <div style="width: 31ch">(Resource Scope) `/subscriptions/{{datalandingzone}subscriptionId}`</div> |
+| [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) | Required to share the self-hosted integration runtime that gets deployed into the `integration-rg` resource group with other Data Factories, like the one in the `shared-integration-rg` resource group, the service principal needs **User Access Administrator** rights on the Data Factory that gets deployed into the `integration-rg` resource group. It is also required to assign the Data Factory and Synapse managed identities access on the respective storage account file systems. | <div style="width: 31ch">(Resource Scope) `/subscriptions/{{datalandingzone}subscriptionId}`</div> |
 
 To add these role assignments, you can use the [Azure Portal](https://portal.azure.com/) or run the following commands using Azure CLI/Azure Powershell:
 
@@ -234,7 +234,7 @@ In order to deploy the Infrastructure as Code (IaC) templates to the desired Azu
 
 Update these files in a seperate branch and then merge via Pull Request to trigger the initial deployment.
 
-#### Configure `dataDomainDeployment.yml`
+#### Configure `dataLandingZoneDeployment.yml`
 
 ##### For GitHub Actions
 
@@ -278,13 +278,13 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 | prefix | Specifies the prefix for all resources created in this deployment. | `prefi` |
 | vnetAddressPrefix | Specifies the address space of the vnet of the data landing zone. | `10.1.0.0/16` |
 | servicesSubnetAddressPrefix | Specifies the address space of the subnet that is used for general services of the data landing zone. | `10.1.0.0/24` |
-| databricksDomainPublicSubnetAddressPrefix | Specifies the address space of the public subnet that is used for the shared domain databricks workspace. | `10.1.1.0/24` |
-| databricksDomainPrivateSubnetAddressPrefix | Specifies the address space of the private subnet that is used for the shared domain databricks workspace. | `10.1.2.0/24` |
+| databricksIntegrationPublicSubnetAddressPrefix | Specifies the address space of the public subnet that is used for the shared integration databricks workspace. | `10.1.1.0/24` |
+| databricksIntegrationPrivateSubnetAddressPrefix | Specifies the address space of the private subnet that is used for the shared integration databricks workspace. | `10.1.2.0/24` |
 | databricksProductPublicSubnetAddressPrefix | Specifies the address space of the public subnet that is used for the shared product databricks workspace. | `10.1.3.0/24` |
 | databricksProductPrivateSubnetAddressPrefix | Specifies the address space of the private subnet that is used for the shared product databricks workspace. | `10.1.4.0/24` |
 | powerBiGatewaySubnetAddressPrefix | Specifies the address space of the subnet that is used for the power bi gateway. | `10.1.5.0/24` |
-| dataDomain001SubnetAddressPrefix | Specifies the address space of the subnet that is used for data domain 001. | `10.1.6.0/24` |
-| dataDomain002SubnetAddressPrefix | Specifies the address space of the subnet that is used for data domain 002. | `10.1.7.0/24` |
+| dataIntegration001SubnetAddressPrefix | Specifies the address space of the subnet that is used for data integration 001. | `10.1.6.0/24` |
+| dataIntegration002SubnetAddressPrefix | Specifies the address space of the subnet that is used for data integration 002. | `10.1.7.0/24` |
 | dataProduct001SubnetAddressPrefix | Specifies the address space of the subnet that is used for data product 001. | `10.1.8.0/24` |
 | dataProduct002SubnetAddressPrefix | Specifies the address space of the subnet that is used for data product 002. | `10.1.9.0/24` |
 | dataManagementZoneVnetId | Specifies the resource Id of the vnet in the data management zone. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/virtualNetworks/{vnet-name}` |
@@ -378,8 +378,8 @@ If you are using Azure Pipelines, you can navigate to the pipeline that you have
 - [Documentation](https://github.com/Azure/Enterprise-Scale-Analytics)
 - [Implementation - Data Management](https://github.com/Azure/data-management-zone)
 - [Implementation - Data Landing Zone](https://github.com/Azure/data-landing-zone)
-- [Implementation - Data Domain - Batch](https://github.com/Azure/data-domain-batch)
-- [Implementation - Data Domain - Streaming](https://github.com/Azure/data-domain-streaming)
+- [Implementation - Data Integration - Batch](https://github.com/Azure/data-integration-batch)
+- [Implementation - Data Integration - Streaming](https://github.com/Azure/data-integration-streaming)
 - [Implementation - Data Product - Reporting](https://github.com/Azure/data-product-reporting)
 - [Implementation - Data Product - Analytics & Data Science](https://github.com/Azure/data-product-analytics)
 
