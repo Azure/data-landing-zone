@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "516246575283913834"
+      "templateHash": "8706182833201898731"
     }
   },
   "parameters": {
@@ -2689,7 +2689,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "8678686186083360794"
+              "templateHash": "677842000067199395"
             }
           },
           "parameters": {
@@ -2716,8 +2716,8 @@
           "variables": {
             "domainFileSytemNames": [
               "data",
-              "dd001",
-              "dd002"
+              "di001",
+              "di002"
             ],
             "dataProductFileSystemNames": [
               "data",
