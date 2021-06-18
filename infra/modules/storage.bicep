@@ -13,8 +13,8 @@ param privateDnsZoneIdBlob string
 // Variables
 var domainFileSytemNames = [
   'data'
-  'dd001'
-  'dd002'
+  'di001'
+  'di002'
 ]
 var dataProductFileSystemNames = [
   'data'
