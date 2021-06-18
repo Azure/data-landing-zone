@@ -19,7 +19,7 @@ param purviewId string
 
 // Variables
 var synapseDefaultStorageAccountFileSystemName = last(split(synapseDefaultStorageAccountFileSystemId, '/'))
-var synapseDefaultStorageAccountName = split(synapseDefaultStorageAccountFileSystemId, '/')[7]
+var synapseDefaultStorageAccountName = split(synapseDefaultStorageAccountFileSystemId, '/')[8]
 var synapsePrivateEndpointNameSql = '${synapse.name}-sql-private-endpoint'
 var synapsePrivateEndpointNameSqlOnDemand = '${synapse.name}-sqlondemand-private-endpoint'
 var synapsePrivateEndpointNameDev = '${synapse.name}-dev-private-endpoint'

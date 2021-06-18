@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "2673084917945547446"
+      "templateHash": "516246575283913834"
     }
   },
   "parameters": {
@@ -6091,7 +6091,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "3239541061119784235"
+              "templateHash": "10365561548020079841"
             }
           },
           "parameters": {
@@ -6322,7 +6322,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "9852408634007395344"
+                      "templateHash": "3999292031923492148"
                     }
                   },
                   "parameters": {
@@ -6370,7 +6370,7 @@
                   "functions": [],
                   "variables": {
                     "synapseDefaultStorageAccountFileSystemName": "[last(split(parameters('synapseDefaultStorageAccountFileSystemId'), '/'))]",
-                    "synapseDefaultStorageAccountName": "[split(parameters('synapseDefaultStorageAccountFileSystemId'), '/')[7]]",
+                    "synapseDefaultStorageAccountName": "[split(parameters('synapseDefaultStorageAccountFileSystemId'), '/')[8]]",
                     "synapsePrivateEndpointNameSql": "[format('{0}-sql-private-endpoint', parameters('synapseName'))]",
                     "synapsePrivateEndpointNameSqlOnDemand": "[format('{0}-sqlondemand-private-endpoint', parameters('synapseName'))]",
                     "synapsePrivateEndpointNameDev": "[format('{0}-dev-private-endpoint', parameters('synapseName'))]"
