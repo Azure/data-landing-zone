@@ -11,6 +11,9 @@
         "prefix": {
             "value": "dlz01"
         },
+        "tags": {
+            "value": {}
+        },
         "vnetAddressPrefix": {
             "value": "10.1.0.0/16"
         },

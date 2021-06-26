@@ -14,6 +14,8 @@ param environment string = 'dev'
 @maxLength(10)
 @description('Specifies the prefix for all resources created in this deployment.')
 param prefix string
+@description('Specifies the tags that you want to apply to all resources.')
+param tags object = {}
 
 // Network parameters
 @description('Specifies the address space of the vnet of the data landing zone.')
@@ -83,20 +85,21 @@ param privateDnsZoneIdSynapseSql string
 
 // Variables
 var name = toLower('${prefix}-${environment}')
-var tags = {
+var tagsDefault = {
   Owner: 'Enterprise Scale Analytics'
   Project: 'Enterprise Scale Analytics'
   Environment: environment
   Toolkit: 'bicep'
   Name: name
 }
+var tagsJoined = union(tagsDefault, tags)
 var administratorUsername = 'SuperMainUser'
 
 // Network resources
 resource networkResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-network'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -106,7 +109,7 @@ module networkServices 'modules/network.bicep' = {
   params: {
     location: location
     prefix: name
-    tags: tags
+    tags: tagsJoined
     firewallPrivateIp: firewallPrivateIp
     dnsServerAdresses: dnsServerAdresses
     vnetAddressPrefix: vnetAddressPrefix
@@ -128,7 +131,7 @@ module networkServices 'modules/network.bicep' = {
 resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-mgmt'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -136,7 +139,7 @@ resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01'
 resource loggingResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-logging'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -146,7 +149,7 @@ module loggingServices 'modules/logging.bicep' = {
   params: {
     location: location
     prefix: name
-    tags: tags
+    tags: tagsJoined
     subnetId: networkServices.outputs.servicesSubnetId
     privateDnsZoneIdKeyVault: privateDnsZoneIdKeyVault
   }
@@ -156,7 +159,7 @@ module loggingServices 'modules/logging.bicep' = {
 resource runtimesResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-runtimes'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -166,7 +169,7 @@ module runtimeServices 'modules/runtimes.bicep' = {
   params: {
     location: location
     prefix: name
-    tags: tags
+    tags: tagsJoined
     subnetId: networkServices.outputs.servicesSubnetId
     administratorUsername: administratorUsername
     administratorPassword: administratorPassword
@@ -185,7 +188,7 @@ module runtimeServices 'modules/runtimes.bicep' = {
 resource storageResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-storage'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -195,7 +198,7 @@ module storageServices 'modules/storage.bicep' = {
   params: {
     location: location
     prefix: name
-    tags: tags
+    tags: tagsJoined
     subnetId: networkServices.outputs.servicesSubnetId
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
@@ -206,7 +209,7 @@ module storageServices 'modules/storage.bicep' = {
 resource externalStorageResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-externalstorage'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -216,7 +219,7 @@ module externalStorageServices 'modules/externalstorage.bicep' = {
   params: {
     location: location
     prefix: name
-    tags: tags
+    tags: tagsJoined
     subnetId: networkServices.outputs.servicesSubnetId
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
   }
@@ -226,7 +229,7 @@ module externalStorageServices 'modules/externalstorage.bicep' = {
 resource metadataResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-metadata'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -236,7 +239,7 @@ module metadataServices 'modules/metadata.bicep' = {
   params: {
     location: location
     prefix: name
-    tags: tags
+    tags: tagsJoined
     subnetId: networkServices.outputs.servicesSubnetId
     administratorUsername: administratorUsername
     administratorPassword: administratorPassword
@@ -254,7 +257,7 @@ module metadataServices 'modules/metadata.bicep' = {
 resource sharedIntegrationResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-shared-integration'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -264,7 +267,7 @@ module sharedIntegrationServices 'modules/sharedintegration.bicep' = {
   params: {
     location: location
     prefix: name
-    tags: tags
+    tags: tagsJoined
     subnetId: networkServices.outputs.servicesSubnetId
     vnetId: networkServices.outputs.vnetId
     databricksIntegration001PrivateSubnetName: networkServices.outputs.databricksIntegrationPrivateSubnetName
@@ -287,7 +290,7 @@ module sharedIntegrationServices 'modules/sharedintegration.bicep' = {
 resource sharedProductResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-shared-product'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -297,7 +300,7 @@ module sharedProductServices 'modules/sharedproduct.bicep' = {
   params: {
     location: location
     prefix: name
-    tags: tags
+    tags: tagsJoined
     subnetId: networkServices.outputs.servicesSubnetId
     vnetId: networkServices.outputs.vnetId
     databricksProduct001PrivateSubnetName: networkServices.outputs.databricksProductPrivateSubnetName
@@ -318,7 +321,14 @@ module sharedProductServices 'modules/sharedproduct.bicep' = {
 resource dataIntegration001ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-di001'
   location: location
-  tags: tags
+  tags: tagsJoined
+  properties: {}
+}
+
+resource dataIntegration002ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-di002'
+  location: location
+  tags: tagsJoined
   properties: {}
 }
 
@@ -326,7 +336,14 @@ resource dataIntegration001ResourceGroup 'Microsoft.Resources/resourceGroups@202
 resource dataProduct001ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-dp001'
   location: location
-  tags: tags
+  tags: tagsJoined
+  properties: {}
+}
+
+resource dataProduct002ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: '${name}-dp002'
+  location: location
+  tags: tagsJoined
   properties: {}
 }
 
