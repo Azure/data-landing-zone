@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "16661708964793343315"
+      "templateHash": "15927511665524805601"
     }
   },
   "parameters": {
@@ -6742,6 +6742,10 @@
     }
   ],
   "outputs": {
+    "vnetId": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.vnetId.value]"
+    },
     "artifactstorage001ResourceGroupName": {
       "type": "string",
       "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-runtimes', variables('name'))), 'Microsoft.Resources/deployments', 'runtimeServices'), '2019-10-01').outputs.artifactstorage001Id.value, '/')[4]]"
