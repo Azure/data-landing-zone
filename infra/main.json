@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "8706182833201898731"
+      "templateHash": "15927511665524805601"
     }
   },
   "parameters": {
@@ -34,6 +34,13 @@
       },
       "maxLength": 10,
       "minLength": 2
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {},
+      "metadata": {
+        "description": "Specifies the tags that you want to apply to all resources."
+      }
     },
     "vnetAddressPrefix": {
       "type": "string",
@@ -224,13 +231,14 @@
   "functions": [],
   "variables": {
     "name": "[toLower(format('{0}-{1}', parameters('prefix'), parameters('environment')))]",
-    "tags": {
+    "tagsDefault": {
       "Owner": "Enterprise Scale Analytics",
       "Project": "Enterprise Scale Analytics",
       "Environment": "[parameters('environment')]",
       "Toolkit": "bicep",
       "Name": "[variables('name')]"
     },
+    "tagsJoined": "[union(variables('tagsDefault'), parameters('tags'))]",
     "administratorUsername": "SuperMainUser"
   },
   "resources": [
@@ -239,7 +247,7 @@
       "apiVersion": "2021-01-01",
       "name": "[format('{0}-network', variables('name'))]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]",
+      "tags": "[variables('tagsJoined')]",
       "properties": {}
     },
     {
@@ -247,7 +255,7 @@
       "apiVersion": "2021-01-01",
       "name": "[format('{0}-mgmt', variables('name'))]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]",
+      "tags": "[variables('tagsJoined')]",
       "properties": {}
     },
     {
@@ -255,7 +263,7 @@
       "apiVersion": "2021-01-01",
       "name": "[format('{0}-logging', variables('name'))]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]",
+      "tags": "[variables('tagsJoined')]",
       "properties": {}
     },
     {
@@ -263,7 +271,7 @@
       "apiVersion": "2021-01-01",
       "name": "[format('{0}-runtimes', variables('name'))]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]",
+      "tags": "[variables('tagsJoined')]",
       "properties": {}
     },
     {
@@ -271,7 +279,7 @@
       "apiVersion": "2021-01-01",
       "name": "[format('{0}-storage', variables('name'))]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]",
+      "tags": "[variables('tagsJoined')]",
       "properties": {}
     },
     {
@@ -279,7 +287,7 @@
       "apiVersion": "2021-01-01",
       "name": "[format('{0}-externalstorage', variables('name'))]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]",
+      "tags": "[variables('tagsJoined')]",
       "properties": {}
     },
     {
@@ -287,7 +295,7 @@
       "apiVersion": "2021-01-01",
       "name": "[format('{0}-metadata', variables('name'))]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]",
+      "tags": "[variables('tagsJoined')]",
       "properties": {}
     },
     {
@@ -295,7 +303,7 @@
       "apiVersion": "2021-01-01",
       "name": "[format('{0}-shared-integration', variables('name'))]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]",
+      "tags": "[variables('tagsJoined')]",
       "properties": {}
     },
     {
@@ -303,7 +311,7 @@
       "apiVersion": "2021-01-01",
       "name": "[format('{0}-shared-product', variables('name'))]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]",
+      "tags": "[variables('tagsJoined')]",
       "properties": {}
     },
     {
@@ -311,7 +319,15 @@
       "apiVersion": "2021-01-01",
       "name": "[format('{0}-di001', variables('name'))]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]",
+      "tags": "[variables('tagsJoined')]",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2021-01-01",
+      "name": "[format('{0}-di002', variables('name'))]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tagsJoined')]",
       "properties": {}
     },
     {
@@ -319,7 +335,15 @@
       "apiVersion": "2021-01-01",
       "name": "[format('{0}-dp001', variables('name'))]",
       "location": "[parameters('location')]",
-      "tags": "[variables('tags')]",
+      "tags": "[variables('tagsJoined')]",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2021-01-01",
+      "name": "[format('{0}-dp002', variables('name'))]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tagsJoined')]",
       "properties": {}
     },
     {
@@ -340,7 +364,7 @@
             "value": "[variables('name')]"
           },
           "tags": {
-            "value": "[variables('tags')]"
+            "value": "[variables('tagsJoined')]"
           },
           "firewallPrivateIp": {
             "value": "[parameters('firewallPrivateIp')]"
@@ -1003,7 +1027,7 @@
             "value": "[variables('name')]"
           },
           "tags": {
-            "value": "[variables('tags')]"
+            "value": "[variables('tagsJoined')]"
           },
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.servicesSubnetId.value]"
@@ -1388,7 +1412,7 @@
             "value": "[variables('name')]"
           },
           "tags": {
-            "value": "[variables('tags')]"
+            "value": "[variables('tagsJoined')]"
           },
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.servicesSubnetId.value]"
@@ -2670,7 +2694,7 @@
             "value": "[variables('name')]"
           },
           "tags": {
-            "value": "[variables('tags')]"
+            "value": "[variables('tagsJoined')]"
           },
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.servicesSubnetId.value]"
@@ -3723,7 +3747,7 @@
             "value": "[variables('name')]"
           },
           "tags": {
-            "value": "[variables('tags')]"
+            "value": "[variables('tagsJoined')]"
           },
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.servicesSubnetId.value]"
@@ -4042,7 +4066,7 @@
             "value": "[variables('name')]"
           },
           "tags": {
-            "value": "[variables('tags')]"
+            "value": "[variables('tagsJoined')]"
           },
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.servicesSubnetId.value]"
@@ -4955,7 +4979,7 @@
             "value": "[variables('name')]"
           },
           "tags": {
-            "value": "[variables('tags')]"
+            "value": "[variables('tagsJoined')]"
           },
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.servicesSubnetId.value]"
@@ -6042,7 +6066,7 @@
             "value": "[variables('name')]"
           },
           "tags": {
-            "value": "[variables('tags')]"
+            "value": "[variables('tagsJoined')]"
           },
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.servicesSubnetId.value]"
@@ -6718,6 +6742,10 @@
     }
   ],
   "outputs": {
+    "vnetId": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.vnetId.value]"
+    },
     "artifactstorage001ResourceGroupName": {
       "type": "string",
       "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-runtimes', variables('name'))), 'Microsoft.Resources/deployments', 'runtimeServices'), '2019-10-01').outputs.artifactstorage001Id.value, '/')[4]]"
