@@ -54,6 +54,12 @@ val pom = s"""<project>
           |    <dependency><groupId>org.apache.hadoop</groupId><artifactId>hadoop-client</artifactId><version>$hadoopVersion</version></dependency>
           |    <dependency><groupId>org.mortbay.jetty</groupId><artifactId>jetty-sslengine</artifactId><version>6.1.26</version></dependency>
           |  </dependencies>
+          |  <repositories>
+          |    <repository>
+          |      <id>conjars.org</id>
+          |      <url>http://orig.conjars.org/repo/</url>
+          |    </repository>
+          |  </repositories>
           |</project>"""
 
 import java.nio.file.{Paths, Files}

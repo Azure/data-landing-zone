@@ -133,7 +133,7 @@ Import-DatabricksWorkspaceItem -Path $notebookPath -Format SOURCE -Language SCAL
 Write-Output "Executing Workspace Configuration Notebook"
 $runName = "WorkspaceConfigurationExecution"
 $jobClusterDefinition = @{
-    "spark_version" = "7.5.x-scala2.12"
+    "spark_version" = "8.2.x-scala2.12"
     "node_type_id"  = "Standard_D3_v2"
     "num_workers"   = 1
 }
