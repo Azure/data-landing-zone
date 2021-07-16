@@ -54,7 +54,7 @@ param dnsServerAdresses array = [
 @description('Specifies the administrator password of the sql servers.')
 param administratorPassword string
 @description('Specifies the resource ID of the central purview instance.')
-param purviewId string
+param purviewId string = ''
 @secure()
 @description('Specifies the Auth Key for the Self-hosted integration runtime of Purview.')
 param purviewSelfHostedIntegrationRuntimeAuthKey string = ''

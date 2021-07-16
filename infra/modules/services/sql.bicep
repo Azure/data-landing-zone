@@ -95,7 +95,7 @@ resource sqlserverPrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11-01
   }
 }
 
-resource sqlserverPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+resource sqlserverPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdSqlServer)) {
   parent: sqlserverPrivateEndpoint
   name: 'aRecord'
   properties: {
