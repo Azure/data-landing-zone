@@ -37,7 +37,7 @@ resource sqlserver 'Microsoft.Sql/servers@2020-11-01-preview' = {
 
 resource sqlserverAdministrators 'Microsoft.Sql/servers/administrators@2020-11-01-preview' = if (sqlserverAdminGroupName != '' && sqlserverAdminGroupObjectID != '') {
   parent: sqlserver
-  name: 'activeDirectory'
+  name: 'ActiveDirectory'
   properties: {
     administratorType: 'ActiveDirectory'
     login: sqlserverAdminGroupName
