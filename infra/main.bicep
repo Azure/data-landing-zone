@@ -60,6 +60,8 @@ param purviewId string = ''
 param purviewSelfHostedIntegrationRuntimeAuthKey string = ''
 @description('Specifies whether the self-hosted integration runtimes should be installed. This only works, if the pwsh script was uploded and is available.')
 param deploySelfHostedIntegrationRuntimes bool = false
+@description('Specifies whether the deployment was submitted through the Azure Portal.')
+param portalDeployment bool = false
 
 // Private DNS Zone parameters
 @description('Specifies the resource ID of the private DNS zone for Key Vault.')
@@ -181,6 +183,7 @@ module runtimeServices 'modules/runtimes.bicep' = {
     datafactoryIds: [
       sharedIntegrationServices.outputs.datafactoryIntegration001Id
     ]
+    portalDeployment: portalDeployment
   }
 }
 
