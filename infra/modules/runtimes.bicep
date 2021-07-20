@@ -16,6 +16,7 @@ param purviewId string
 param purviewSelfHostedIntegrationRuntimeAuthKey string = ''
 param deploySelfHostedIntegrationRuntimes bool
 param datafactoryIds array
+param portalDeployment bool
 
 // Variables
 var artifactstorage001Name = '${prefix}-artfct001'
@@ -77,6 +78,7 @@ module datafactoryRuntimes001SelfHostedIntegrationRuntime001 'services/selfHoste
     vmssSkuCapacity: 1
     vmssSkuName: 'Standard_DS2_v2'
     vmssSkuTier: 'Standard'
+    portalDeployment: portalDeployment
   }
 }
 
@@ -109,6 +111,7 @@ module purviewSelfHostedIntegrationRuntime001 'services/selfHostedIntegrationRun
     vmssSkuCapacity: 1
     vmssSkuName: 'Standard_DS2_v2'
     vmssSkuTier: 'Standard'
+    portalDeployment: portalDeployment
   }
 }
 
