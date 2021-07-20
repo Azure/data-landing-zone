@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.412.5873",
-      "templateHash": "1232111557895336140"
+      "templateHash": "3481509164620113441"
     }
   },
   "parameters": {
@@ -165,7 +165,7 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "description": "Specifies whether the self-hosted integration runtimes should be installed. This only works, if the pwsh script was uploded and is available."
+        "description": "Specifies whether the self-hosted integration runtimes should be deployed. This only works, if the pwsh script was uploded and is available."
       }
     },
     "portalDeployment": {
@@ -177,60 +177,70 @@
     },
     "privateDnsZoneIdKeyVault": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the private DNS zone for Key Vault."
       }
     },
     "privateDnsZoneIdDataFactory": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the private DNS zone for Data Factory."
       }
     },
     "privateDnsZoneIdDataFactoryPortal": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the private DNS zone for Data Factory Portal."
       }
     },
     "privateDnsZoneIdBlob": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the private DNS zone for Blob Storage."
       }
     },
     "privateDnsZoneIdDfs": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the private DNS zone for Datalake Storage."
       }
     },
     "privateDnsZoneIdSqlServer": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the private DNS zone for Sql Server."
       }
     },
     "privateDnsZoneIdMySqlServer": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the private DNS zone for My SQL Server."
       }
     },
     "privateDnsZoneIdEventhubNamespace": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the private DNS zone for EventHub Namespaces."
       }
     },
     "privateDnsZoneIdSynapseDev": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the private DNS zone for Synapse Dev."
       }
     },
     "privateDnsZoneIdSynapseSql": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the private DNS zone for Synapse Sql."
       }
