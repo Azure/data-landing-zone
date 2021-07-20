@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 // The module contains a template to share a self hosted integration runtime with another data factory.
 targetScope = 'resourceGroup'
 
