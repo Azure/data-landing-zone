@@ -36,9 +36,7 @@ This will generate the following JSON output:
 
 ## Adding additional role assigments
 
-For automation purposes, one more role assignments is required for the service principal.
-Additional required role assignments include:
-
+For automation purposes, more role assignments are required for the service principal.
 Additional required role assignments include:
 
 | Role Name | Description | Scope |
@@ -87,6 +85,15 @@ New-AzRoleAssignment `
   -ObjectId $spObjectId `
   -RoleDefinitionName "{roleName}" `
   -ResourceGroupName "{resourceGroupName}"
+
+# For Child-Resource Scope level assignment
+New-AzRoleAssignment `
+  -ObjectId $spObjectId `
+  -RoleDefinitionName "{roleName}" `
+  -ResourceName "{resourceName}" `
+  -ResourceType "{resourceType (e.g. 'Microsoft.Network/virtualNetworks/subnets')}" `
+  -ParentResource "{parentResource (e.g. 'virtualNetworks/{virtualNetworkName}')" `
+  -ResourceGroupName "{resourceGroupName}
 ```
 
 >[Previous](/docs/EnterpriseScaleAnalytics-Prerequisites.md)
