@@ -1,4 +1,4 @@
-# Enterprise Scale Analytics and AI - Data Landing Zone
+# Enterprise-Scale Analytics and AI - Data Landing Zone
 
 ## Objective
 
@@ -19,11 +19,11 @@ _The Enterprise-Scale Analytics architecture represents the strategic design pat
 
 ---
 
-This respository describes the Data Landing Zone, which is where data is persisted and data workloads are executed. A Data Landing Zone is a unit of scale of the Enterprise Scale Analytics architecture pattern and it enables regional deployments, clear seperation of ownership, chargeback of cost, in-place data sharing within and across Data Landing Zones and many other much asked benefits. In addition, it is possible to scale within Data Landing Zones with cross-functional Data Integration and Data Product teams. The reference design targets a self-service approach for these teams to overcome bottlenecks and the need for a central team for cloud service deployments. The Data Landing Zone reference implementation will create a consistent setup inside a subscription and will deploy storage accounts as well as data processing services like Azure Synapse, Azure Data Factory as well as Azure Databricks.
+This respository describes the Data Landing Zone, which is where data is persisted and data workloads are executed. A Data Landing Zone is a unit of scale of the Enterprise-Scale Analytics architecture pattern and it enables regional deployments, clear seperation of ownership, chargeback of cost, in-place data sharing within and across Data Landing Zones and many other much asked benefits. In addition, it is possible to scale within Data Landing Zones with cross-functional Data Integration and Data Product teams. The reference design targets a self-service approach for these teams to overcome bottlenecks and the need for a central team for cloud service deployments. The Data Landing Zone reference implementation will create a consistent setup inside a subscription and will deploy storage accounts as well as data processing services like Azure Synapse, Azure Data Factory as well as Azure Databricks.
 
 > **Note:** Before getting started with the deployment, please make sure you are familiar with the [complementary documentation in the Cloud Adoption Framework](https://aka.ms/adopt/datamanagement). Also, before deploying your first Data Landing Zone, please make sure that you have deployed a [Data Management Zone](https://github.com/Azure/data-management-zone). The minimal recommended setup consists of a single [Data Management Zone](https://github.com/Azure/data-management-zone) and a single Data Landing Zone.
 
-## Deploy Enterprise Scale Analytics
+## Deploy Enterprise-Scale Analytics
 
 The Enterprise-Scale Analytics architecture is modular by design and allows customers to start with a small footprint and grow over time. In order to not end up in a migration project, customers should decide upfront how they want to organize data domains across Data Landing Zones. All Enterprise-Scale Analytics architecture building blocks can be deployed through the Azure Portal as well as through GitHub Actions workflows and Azure DevOps Pipelines. The template repositories contain sample YAML pipelines to more quickly get started with the setup of the environments.
 
