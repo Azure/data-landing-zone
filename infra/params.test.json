@@ -70,6 +70,9 @@
         "deploySelfHostedIntegrationRuntimes": {
             "value": false
         },
+        "portalDeployment": {
+            "value": false
+        },
         "privateDnsZoneIdKeyVault": {
             "value": "/subscriptions/17588eb2-2943-461a-ab3f-00a3ceac3112/resourceGroups/dmz-test-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
         },

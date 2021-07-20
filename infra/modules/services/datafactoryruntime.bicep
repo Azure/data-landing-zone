@@ -56,7 +56,7 @@ resource datafactoryPrivateEndpointDatafactory 'Microsoft.Network/privateEndpoin
   }
 }
 
-resource datafactoryPrivateEndpointDatafactoryARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+resource datafactoryPrivateEndpointDatafactoryARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdDataFactory)) {
   parent: datafactoryPrivateEndpointDatafactory
   name: 'aRecord'
   properties: {
@@ -95,7 +95,7 @@ resource datafactoryPrivateEndpointPortal 'Microsoft.Network/privateEndpoints@20
   }
 }
 
-resource datafactoryPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+resource datafactoryPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdDataFactoryPortal)) {
   parent: datafactoryPrivateEndpointPortal
   name: 'aRecord'
   properties: {

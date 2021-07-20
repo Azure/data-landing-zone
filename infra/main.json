@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.63.48766",
-      "templateHash": "15927511665524805601"
+      "version": "0.4.412.5873",
+      "templateHash": "1232111557895336140"
     }
   },
   "parameters": {
@@ -149,6 +149,7 @@
     },
     "purviewId": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the central purview instance."
       }
@@ -165,6 +166,13 @@
       "defaultValue": false,
       "metadata": {
         "description": "Specifies whether the self-hosted integration runtimes should be installed. This only works, if the pwsh script was uploded and is available."
+      }
+    },
+    "portalDeployment": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Specifies whether the deployment was submitted through the Azure Portal."
       }
     },
     "privateDnsZoneIdKeyVault": {
@@ -415,8 +423,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "14917022372276558140"
+              "version": "0.4.412.5873",
+              "templateHash": "5543172154942092629"
             }
           },
           "parameters": {
@@ -936,8 +944,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "13771581651852909468"
+                      "version": "0.4.412.5873",
+                      "templateHash": "14368268246329448026"
                     }
                   },
                   "parameters": {
@@ -1042,8 +1050,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "17833140494822054958"
+              "version": "0.4.412.5873",
+              "templateHash": "6738052682595178698"
             }
           },
           "parameters": {
@@ -1101,8 +1109,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "6740242501723752947"
+                      "version": "0.4.412.5873",
+                      "templateHash": "8622004642618025199"
                     }
                   },
                   "parameters": {
@@ -1185,6 +1193,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdKeyVault')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('keyVaultPrivateEndpointName'), 'aRecord')]",
@@ -1242,8 +1251,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "9045242264257257279"
+                      "version": "0.4.412.5873",
+                      "templateHash": "8592659423803853957"
                     }
                   },
                   "parameters": {
@@ -1308,8 +1317,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "7086008448300397903"
+                      "version": "0.4.412.5873",
+                      "templateHash": "8317340841705732586"
                     }
                   },
                   "parameters": {
@@ -1442,6 +1451,9 @@
             "value": [
               "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-integration', variables('name'))), 'Microsoft.Resources/deployments', 'sharedIntegrationServices'), '2019-10-01').outputs.datafactoryIntegration001Id.value]"
             ]
+          },
+          "portalDeployment": {
+            "value": "[parameters('portalDeployment')]"
           }
         },
         "template": {
@@ -1450,8 +1462,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "8519690493552593547"
+              "version": "0.4.412.5873",
+              "templateHash": "15189300702651017306"
             }
           },
           "parameters": {
@@ -1492,6 +1504,9 @@
             },
             "datafactoryIds": {
               "type": "array"
+            },
+            "portalDeployment": {
+              "type": "bool"
             }
           },
           "functions": [],
@@ -1539,8 +1554,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "7890877663587464788"
+                      "version": "0.4.412.5873",
+                      "templateHash": "16361271560574731295"
                     }
                   },
                   "parameters": {
@@ -1682,8 +1697,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "2855494708183463789"
+                      "version": "0.4.412.5873",
+                      "templateHash": "3794734573049577232"
                     }
                   },
                   "parameters": {
@@ -1762,6 +1777,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdDataFactory')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('datafactoryPrivateEndpointNameDatafactory'), 'aRecord')]",
@@ -1808,6 +1824,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdDataFactoryPortal')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('datafactoryPrivateEndpointNamePortal'), 'aRecord')]",
@@ -1911,6 +1928,9 @@
                   },
                   "vmssSkuTier": {
                     "value": "Standard"
+                  },
+                  "portalDeployment": {
+                    "value": "[parameters('portalDeployment')]"
                   }
                 },
                 "template": {
@@ -1919,8 +1939,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "5698397447156348935"
+                      "version": "0.4.412.5873",
+                      "templateHash": "12118184337106395202"
                     }
                   },
                   "parameters": {
@@ -1963,12 +1983,16 @@
                     },
                     "datafactoryIntegrationRuntimeAuthKey": {
                       "type": "secureString"
+                    },
+                    "portalDeployment": {
+                      "type": "bool"
                     }
                   },
                   "functions": [],
                   "variables": {
                     "storageAccountName": "[last(split(parameters('storageAccountId'), '/'))]",
-                    "loadbalancerName": "[format('{0}-lb', parameters('vmssName'))]"
+                    "loadbalancerName": "[format('{0}-lb', parameters('vmssName'))]",
+                    "fileUri": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/code/installSHIRGateway.ps1"
                   },
                   "resources": [
                     {
@@ -2142,7 +2166,7 @@
                                   "autoUpgradeMinorVersion": true,
                                   "settings": {
                                     "fileUris": [
-                                      "[format('https://{0}.blob.{1}/{2}/installSHIRGateway.ps1', variables('storageAccountName'), environment().suffixes.storage, parameters('storageAccountContainerName'))]"
+                                      "[if(parameters('portalDeployment'), variables('fileUri'), format('https://{0}.blob.{1}/{2}/installSHIRGateway.ps1', variables('storageAccountName'), environment().suffixes.storage, parameters('storageAccountContainerName')))]"
                                     ]
                                   },
                                   "protectedSettings": {
@@ -2198,8 +2222,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "14925736167344227456"
+                      "version": "0.4.412.5873",
+                      "templateHash": "3650440865104468018"
                     }
                   },
                   "parameters": {
@@ -2265,8 +2289,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.4.63.48766",
-                              "templateHash": "3528229249629528423"
+                              "version": "0.4.412.5873",
+                              "templateHash": "9815706119382416758"
                             }
                           },
                           "parameters": {
@@ -2326,8 +2350,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.4.63.48766",
-                              "templateHash": "6766662091545209608"
+                              "version": "0.4.412.5873",
+                              "templateHash": "7921719487472087808"
                             }
                           },
                           "parameters": {
@@ -2404,6 +2428,9 @@
                   },
                   "vmssSkuTier": {
                     "value": "Standard"
+                  },
+                  "portalDeployment": {
+                    "value": "[parameters('portalDeployment')]"
                   }
                 },
                 "template": {
@@ -2412,8 +2439,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "5698397447156348935"
+                      "version": "0.4.412.5873",
+                      "templateHash": "12118184337106395202"
                     }
                   },
                   "parameters": {
@@ -2456,12 +2483,16 @@
                     },
                     "datafactoryIntegrationRuntimeAuthKey": {
                       "type": "secureString"
+                    },
+                    "portalDeployment": {
+                      "type": "bool"
                     }
                   },
                   "functions": [],
                   "variables": {
                     "storageAccountName": "[last(split(parameters('storageAccountId'), '/'))]",
-                    "loadbalancerName": "[format('{0}-lb', parameters('vmssName'))]"
+                    "loadbalancerName": "[format('{0}-lb', parameters('vmssName'))]",
+                    "fileUri": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/code/installSHIRGateway.ps1"
                   },
                   "resources": [
                     {
@@ -2635,7 +2666,7 @@
                                   "autoUpgradeMinorVersion": true,
                                   "settings": {
                                     "fileUris": [
-                                      "[format('https://{0}.blob.{1}/{2}/installSHIRGateway.ps1', variables('storageAccountName'), environment().suffixes.storage, parameters('storageAccountContainerName'))]"
+                                      "[if(parameters('portalDeployment'), variables('fileUri'), format('https://{0}.blob.{1}/{2}/installSHIRGateway.ps1', variables('storageAccountName'), environment().suffixes.storage, parameters('storageAccountContainerName')))]"
                                     ]
                                   },
                                   "protectedSettings": {
@@ -2712,8 +2743,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "677842000067199395"
+              "version": "0.4.412.5873",
+              "templateHash": "14944063351766430577"
             }
           },
           "parameters": {
@@ -2788,8 +2819,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "10139213334935749900"
+                      "version": "0.4.412.5873",
+                      "templateHash": "11984142203551809167"
                     }
                   },
                   "parameters": {
@@ -2983,6 +3014,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdBlob')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameBlob'), 'aRecord')]",
@@ -3029,6 +3061,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdDfs')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameDfs'), 'aRecord')]",
@@ -3103,8 +3136,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "10139213334935749900"
+                      "version": "0.4.412.5873",
+                      "templateHash": "11984142203551809167"
                     }
                   },
                   "parameters": {
@@ -3298,6 +3331,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdBlob')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameBlob'), 'aRecord')]",
@@ -3344,6 +3378,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdDfs')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameDfs'), 'aRecord')]",
@@ -3418,8 +3453,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "10139213334935749900"
+                      "version": "0.4.412.5873",
+                      "templateHash": "11984142203551809167"
                     }
                   },
                   "parameters": {
@@ -3613,6 +3648,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdBlob')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameBlob'), 'aRecord')]",
@@ -3659,6 +3695,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdDfs')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('storagePrivateEndpointNameDfs'), 'aRecord')]",
@@ -3762,8 +3799,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "6637703272143439723"
+              "version": "0.4.412.5873",
+              "templateHash": "15711055843974675531"
             }
           },
           "parameters": {
@@ -3825,8 +3862,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "12425647697164167132"
+                      "version": "0.4.412.5873",
+                      "templateHash": "15488942083010620935"
                     }
                   },
                   "parameters": {
@@ -4019,6 +4056,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdBlob')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('storageExternalPrivateEndpointNameBlob'), 'aRecord')]",
@@ -4105,8 +4143,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "17617574869683752002"
+              "version": "0.4.412.5873",
+              "templateHash": "16371471833603026852"
             }
           },
           "parameters": {
@@ -4240,8 +4278,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "6740242501723752947"
+                      "version": "0.4.412.5873",
+                      "templateHash": "8622004642618025199"
                     }
                   },
                   "parameters": {
@@ -4324,6 +4362,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdKeyVault')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('keyVaultPrivateEndpointName'), 'aRecord')]",
@@ -4387,8 +4426,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "6740242501723752947"
+                      "version": "0.4.412.5873",
+                      "templateHash": "8622004642618025199"
                     }
                   },
                   "parameters": {
@@ -4471,6 +4510,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdKeyVault')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('keyVaultPrivateEndpointName'), 'aRecord')]",
@@ -4546,8 +4586,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "12173825696430598761"
+                      "version": "0.4.412.5873",
+                      "templateHash": "16713498785014560692"
                     }
                   },
                   "parameters": {
@@ -4608,7 +4648,7 @@
                       "condition": "[and(not(equals(parameters('sqlserverAdminGroupName'), '')), not(equals(parameters('sqlserverAdminGroupObjectID'), '')))]",
                       "type": "Microsoft.Sql/servers/administrators",
                       "apiVersion": "2020-11-01-preview",
-                      "name": "[format('{0}/{1}', parameters('sqlserverName'), 'activeDirectory')]",
+                      "name": "[format('{0}/{1}', parameters('sqlserverName'), 'ActiveDirectory')]",
                       "properties": {
                         "administratorType": "ActiveDirectory",
                         "login": "[parameters('sqlserverAdminGroupName')]",
@@ -4676,6 +4716,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdSqlServer')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('sqlserverPrivateEndpointName'), 'aRecord')]",
@@ -4751,8 +4792,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "1523227387629967725"
+                      "version": "0.4.412.5873",
+                      "templateHash": "7948662757588401170"
                     }
                   },
                   "parameters": {
@@ -4792,7 +4833,7 @@
                   },
                   "resources": [
                     {
-                      "type": "Microsoft.DBForMySQL/servers",
+                      "type": "Microsoft.DBforMySQL/servers",
                       "apiVersion": "2017-12-01",
                       "name": "[parameters('mysqlserverName')]",
                       "location": "[parameters('location')]",
@@ -4825,7 +4866,7 @@
                       }
                     },
                     {
-                      "type": "Microsoft.DBForMySQL/servers/configurations",
+                      "type": "Microsoft.DBforMySQL/servers/configurations",
                       "apiVersion": "2017-12-01",
                       "name": "[format('{0}/{1}', parameters('mysqlserverName'), 'lower_case_table_names')]",
                       "properties": {
@@ -4833,11 +4874,11 @@
                         "source": "user-override"
                       },
                       "dependsOn": [
-                        "[resourceId('Microsoft.DBForMySQL/servers', parameters('mysqlserverName'))]"
+                        "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]"
                       ]
                     },
                     {
-                      "type": "Microsoft.DBForMySQL/servers/databases",
+                      "type": "Microsoft.DBforMySQL/servers/databases",
                       "apiVersion": "2017-12-01",
                       "name": "[format('{0}/{1}', parameters('mysqlserverName'), variables('mySqlServerDatabaseName'))]",
                       "properties": {
@@ -4845,12 +4886,12 @@
                         "collation": "latin1_swedish_ci"
                       },
                       "dependsOn": [
-                        "[resourceId('Microsoft.DBForMySQL/servers', parameters('mysqlserverName'))]"
+                        "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]"
                       ]
                     },
                     {
                       "condition": "[and(not(equals(parameters('mysqlserverAdminGroupName'), '')), not(equals(parameters('mysqlserverAdminGroupObjectID'), '')))]",
-                      "type": "Microsoft.DBForMySQL/servers/administrators",
+                      "type": "Microsoft.DBforMySQL/servers/administrators",
                       "apiVersion": "2017-12-01",
                       "name": "[format('{0}/{1}', parameters('mysqlserverName'), 'activeDirectory')]",
                       "properties": {
@@ -4860,7 +4901,7 @@
                         "tenantId": "[subscription().tenantId]"
                       },
                       "dependsOn": [
-                        "[resourceId('Microsoft.DBForMySQL/servers', parameters('mysqlserverName'))]"
+                        "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]"
                       ]
                     },
                     {
@@ -4878,7 +4919,7 @@
                               "groupIds": [
                                 "mysqlServer"
                               ],
-                              "privateLinkServiceId": "[resourceId('Microsoft.DBForMySQL/servers', parameters('mysqlserverName'))]",
+                              "privateLinkServiceId": "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]",
                               "requestMessage": ""
                             }
                           }
@@ -4888,10 +4929,11 @@
                         }
                       },
                       "dependsOn": [
-                        "[resourceId('Microsoft.DBForMySQL/servers', parameters('mysqlserverName'))]"
+                        "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]"
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdMySqlServer')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('mysqlserverPrivateEndpointName'), 'aRecord')]",
@@ -4913,7 +4955,7 @@
                   "outputs": {
                     "mySqlServerId": {
                       "type": "string",
-                      "value": "[resourceId('Microsoft.DBForMySQL/servers', parameters('mysqlserverName'))]"
+                      "value": "[resourceId('Microsoft.DBforMySQL/servers', parameters('mysqlserverName'))]"
                     },
                     "mySqlServerDatabaseName": {
                       "type": "string",
@@ -5033,8 +5075,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "11263858844704047703"
+              "version": "0.4.412.5873",
+              "templateHash": "5343206957096985121"
             }
           },
           "parameters": {
@@ -5139,8 +5181,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "8848065734037985158"
+                      "version": "0.4.412.5873",
+                      "templateHash": "13840030506954205683"
                     }
                   },
                   "parameters": {
@@ -5254,8 +5296,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "2219898231841039919"
+                      "version": "0.4.412.5873",
+                      "templateHash": "5845861392246687442"
                     }
                   },
                   "parameters": {
@@ -5342,6 +5384,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdEventhubNamespace')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('eventhubNamespacePrivateEndpointName'), 'aRecord')]",
@@ -5422,8 +5465,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "12172814063001948017"
+                      "version": "0.4.412.5873",
+                      "templateHash": "16163138762043175281"
                     }
                   },
                   "parameters": {
@@ -5528,6 +5571,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdDataFactory')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('datafactoryPrivateEndpointNameDatafactory'), 'aRecord')]",
@@ -5574,6 +5618,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdDataFactoryPortal')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('datafactoryPrivateEndpointNamePortal'), 'aRecord')]",
@@ -5859,8 +5904,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "10538955580246361787"
+                      "version": "0.4.412.5873",
+                      "templateHash": "15354015689966322101"
                     }
                   },
                   "parameters": {
@@ -5923,8 +5968,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "10538955580246361787"
+                      "version": "0.4.412.5873",
+                      "templateHash": "15354015689966322101"
                     }
                   },
                   "parameters": {
@@ -5985,8 +6030,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "9820041683358685144"
+                      "version": "0.4.412.5873",
+                      "templateHash": "48002958310610998"
                     }
                   },
                   "parameters": {
@@ -6114,8 +6159,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "10365561548020079841"
+              "version": "0.4.412.5873",
+              "templateHash": "1732095713068697728"
             }
           },
           "parameters": {
@@ -6212,8 +6257,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "8848065734037985158"
+                      "version": "0.4.412.5873",
+                      "templateHash": "13840030506954205683"
                     }
                   },
                   "parameters": {
@@ -6345,8 +6390,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "3999292031923492148"
+                      "version": "0.4.412.5873",
+                      "templateHash": "17263994793766418445"
                     }
                   },
                   "parameters": {
@@ -6538,6 +6583,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdSynapseSql')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('synapsePrivateEndpointNameSql'), 'aRecord')]",
@@ -6584,6 +6630,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdSynapseSql')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('synapsePrivateEndpointNameSqlOnDemand'), 'aRecord')]",
@@ -6630,6 +6677,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdSynapseDev')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('synapsePrivateEndpointNameDev'), 'aRecord')]",
@@ -6682,8 +6730,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "5974581213502951038"
+                      "version": "0.4.412.5873",
+                      "templateHash": "5823015004187513708"
                     }
                   },
                   "parameters": {

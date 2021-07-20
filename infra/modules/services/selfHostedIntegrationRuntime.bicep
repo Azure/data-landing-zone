@@ -17,10 +17,12 @@ param administratorUsername string = 'VmssMainUser'
 param administratorPassword string
 @secure()
 param datafactoryIntegrationRuntimeAuthKey string
+param portalDeployment bool
 
 // Variables
 var storageAccountName = last(split(storageAccountId, '/'))
 var loadbalancerName = '${vmssName}-lb'
+var fileUri = 'https://raw.githubusercontent.com/Azure/data-landing-zone/main/code/installSHIRGateway.ps1'
 
 // Resources
 resource loadbalancer001 'Microsoft.Network/loadBalancers@2020-11-01' = {
@@ -191,7 +193,7 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
               autoUpgradeMinorVersion: true
               settings: {
                 fileUris: [
-                  'https://${storageAccountName}.blob.${environment().suffixes.storage}/${storageAccountContainerName}/installSHIRGateway.ps1'
+                  portalDeployment ? fileUri : 'https://${storageAccountName}.blob.${environment().suffixes.storage}/${storageAccountContainerName}/installSHIRGateway.ps1'
                 ]
               }
               protectedSettings: {
