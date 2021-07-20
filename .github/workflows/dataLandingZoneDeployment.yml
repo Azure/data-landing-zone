@@ -118,7 +118,7 @@ jobs:
               -ResourceGroupName "${{ steps.data_management_zone_deployment001.outputs.artifactstorage001ResourceGroupName }}" `
               -StorageAccountName "${{ steps.data_management_zone_deployment001.outputs.artifactstorage001Name }}" `
               -StorageAccountContainerName "${{ steps.data_management_zone_deployment001.outputs.artifactstorage001ContainerName }}" `
-              -File "${{ github.workspace }}/infra/SelfHostedIntegrationRuntimeDataFactory/installSHIRGateway.ps1" `
+              -File "${{ github.workspace }}/code/installSHIRGateway.ps1" `
               -Blob "installSHIRGateway.ps1"
 
       # Deploy Data Landing Zone - w/ SHIR
