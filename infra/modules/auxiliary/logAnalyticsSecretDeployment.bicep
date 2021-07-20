@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 // The module contains a template to deploy the log analytics secrets to the .
 targetScope = 'resourceGroup'
 

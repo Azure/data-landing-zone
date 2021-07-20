@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 targetScope = 'subscription'
 
 // General parameters
@@ -58,32 +61,32 @@ param purviewId string = ''
 @secure()
 @description('Specifies the Auth Key for the Self-hosted integration runtime of Purview.')
 param purviewSelfHostedIntegrationRuntimeAuthKey string = ''
-@description('Specifies whether the self-hosted integration runtimes should be installed. This only works, if the pwsh script was uploded and is available.')
+@description('Specifies whether the self-hosted integration runtimes should be deployed. This only works, if the pwsh script was uploded and is available.')
 param deploySelfHostedIntegrationRuntimes bool = false
 @description('Specifies whether the deployment was submitted through the Azure Portal.')
 param portalDeployment bool = false
 
 // Private DNS Zone parameters
 @description('Specifies the resource ID of the private DNS zone for Key Vault.')
-param privateDnsZoneIdKeyVault string
+param privateDnsZoneIdKeyVault string = ''
 @description('Specifies the resource ID of the private DNS zone for Data Factory.')
-param privateDnsZoneIdDataFactory string
+param privateDnsZoneIdDataFactory string = ''
 @description('Specifies the resource ID of the private DNS zone for Data Factory Portal.')
-param privateDnsZoneIdDataFactoryPortal string
+param privateDnsZoneIdDataFactoryPortal string = ''
 @description('Specifies the resource ID of the private DNS zone for Blob Storage.')
-param privateDnsZoneIdBlob string
+param privateDnsZoneIdBlob string = ''
 @description('Specifies the resource ID of the private DNS zone for Datalake Storage.')
-param privateDnsZoneIdDfs string
+param privateDnsZoneIdDfs string = ''
 @description('Specifies the resource ID of the private DNS zone for Sql Server.')
-param privateDnsZoneIdSqlServer string
+param privateDnsZoneIdSqlServer string = ''
 @description('Specifies the resource ID of the private DNS zone for My SQL Server.')
-param privateDnsZoneIdMySqlServer string
+param privateDnsZoneIdMySqlServer string = ''
 @description('Specifies the resource ID of the private DNS zone for EventHub Namespaces.')
-param privateDnsZoneIdEventhubNamespace string
+param privateDnsZoneIdEventhubNamespace string = ''
 @description('Specifies the resource ID of the private DNS zone for Synapse Dev.')
-param privateDnsZoneIdSynapseDev string
+param privateDnsZoneIdSynapseDev string = ''
 @description('Specifies the resource ID of the private DNS zone for Synapse Sql.')
-param privateDnsZoneIdSynapseSql string
+param privateDnsZoneIdSynapseSql string = ''
 
 // Variables
 var name = toLower('${prefix}-${environment}')

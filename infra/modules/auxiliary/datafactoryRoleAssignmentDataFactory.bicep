@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 // The module contains a template to assign a datafactory as contributor to another data factory.
 targetScope = 'resourceGroup'
 

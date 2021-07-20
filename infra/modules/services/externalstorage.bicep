@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 // This template is used to create a storage account where the access key needs to be shared.
 targetScope = 'resourceGroup'
 

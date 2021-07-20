@@ -1,4 +1,4 @@
-# Manual Azure Databricks Setup
+# Data Landing Zone - Manual Azure Databricks Setup
 
 ## Blockers
 
@@ -13,18 +13,18 @@ Due to the issue mentioned above, we cannot rely on the application workflow, bu
 In order to simplify the manual setup and configuration of Databricks, we are providing a Powershell script (`SetupDatabricksManually.ps1`) as well as pre-defined commands in the DevOps and GitHub workflows. You can copy and paste these commands into your Powershell console to setup your Databricks workspaces manually by executing a single script. The Powershell script will perform the following actions in your Databricks workspace:
 
 1. Setup of Key Vault backed secret scopes and the respective ACLs. These secret scopes store the credentials that are required for connecting to the external Hive metastore as well as the Log Analytics workspace.
-2. Execution of a Databricks Notebook to achieve the following:
+1. Execution of a Databricks Notebook to achieve the following:
     - Download of Jar Files from maven, which are required for connecting to the external Hive metastore. This will allow you to access the external Hive metastore, even if maven is down.
     - Download and build of jars required for [application logging](https://github.com/mspnp/spark-monitoring) in Databricks.
-3. Configuration, upload and setup of init scripts for application logging (cluster init script) and external Hive metastore connection (global init script).
-4. Setup of Databricks cluster policies to enforce settings across all clusters in the workspace.
+1. Configuration, upload and setup of init scripts for application logging (cluster init script) and external Hive metastore connection (global init script).
+1. Setup of Databricks cluster policies to enforce settings across all clusters in the workspace.
 
 ## Prerequisites
 
 The following prerequisites are required before executing the Powershell script:
 
 1. First, you have to create an AAD application as described in [this subsection](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/aad/app-aad-token#configure-an-app-in-azure-portal). Please take note of the **Application (client) ID** and the **Directory (tenant) ID** of the AAD application, after executing the steps successfully.
-2. You need to have **Owner** or **Contributor** access rights to the Databricks workspace.
+1. You need to have **Owner** or **Contributor** access rights to the Databricks workspace.
 
 ## Execution of Powershell script
 
