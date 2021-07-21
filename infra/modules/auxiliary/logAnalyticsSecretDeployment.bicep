@@ -9,10 +9,10 @@ param keyVaultId string
 param logAnalyticsId string
 
 // Variables
-var keyVaultName = last(split(keyVaultId, '/'))
-var logAnalyticsSubscriptionId = split(logAnalyticsId, '/')[2]
-var logAnalyticsResourceGroupName = split(logAnalyticsId, '/')[4]
-var logAnalyticsName = last(split(logAnalyticsId, '/'))
+var keyVaultName = length(split(keyVaultId, '/')) >= 9 ? last(split(keyVaultId, '/')) : 'incorrectSegmentLength'
+var logAnalyticsSubscriptionId = length(split(logAnalyticsId, '/')) >= 9 ? split(logAnalyticsId, '/')[2] : subscription().subscriptionId
+var logAnalyticsResourceGroupName = length(split(logAnalyticsId, '/')) >= 9 ? split(logAnalyticsId, '/')[4] : resourceGroup().name
+var logAnalyticsName = length(split(logAnalyticsId, '/')) >= 9 ? last(split(logAnalyticsId, '/')) : 'incorrectSegmentLength'
 var logAnalyticsWorkspaceIdSecretName = '${logAnalyticsName}Id'
 var logAnalyticsWorkspaceKeySecretName = '${logAnalyticsName}Key'
 

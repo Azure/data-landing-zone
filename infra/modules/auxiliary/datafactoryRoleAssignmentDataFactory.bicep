@@ -9,10 +9,10 @@ param datafactorySourceId string
 param datafactoryDestinationId string
 
 // Variables
-var datafactorySourceName = last(split(datafactorySourceId, '/'))
-var datafactoryDestinationSubscriptionId = split(datafactoryDestinationId, '/')[2]
-var datafactoryDestinationResourceGroup = split(datafactoryDestinationId, '/')[4]
-var datafactoryDestinationName = last(split(datafactoryDestinationId, '/'))
+var datafactorySourceName = length(split(datafactorySourceId, '/')) >= 9 ? last(split(datafactorySourceId, '/')) : 'incorrectSegmentLength'
+var datafactoryDestinationSubscriptionId = length(split(datafactoryDestinationId, '/')) >= 9 ? split(datafactoryDestinationId, '/')[2] : subscription().subscriptionId
+var datafactoryDestinationResourceGroup = length(split(datafactoryDestinationId, '/')) >= 9 ? split(datafactoryDestinationId, '/')[4] : resourceGroup().name
+var datafactoryDestinationName = length(split(datafactoryDestinationId, '/')) >= 9 ? last(split(datafactoryDestinationId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource datafactorySource 'Microsoft.DataFactory/factories@2018-06-01' existing = {

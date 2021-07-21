@@ -29,10 +29,10 @@ param privateDnsZoneIdEventhubNamespace string
 var databricksIntegration001Name = '${prefix}-integration-databricks001'
 var eventhubNamespaceIntegration001Name = '${prefix}-integration-eventhub001'
 var datafactoryIntegration001Name = '${prefix}-integration-datafactory001'
-var storageAccountRawSubscriptionId = split(storageAccountRawFileSystemId, '/')[2]
-var storageAccountRawResourceGroupName = split(storageAccountRawFileSystemId, '/')[4]
-var storageAccountEnrichedCuratedSubscriptionId = split(storageAccountEnrichedCuratedFileSystemId, '/')[2]
-var storageAccountEnrichedCuratedResourceGroupName = split(storageAccountEnrichedCuratedFileSystemId, '/')[4]
+var storageAccountRawSubscriptionId = length(split(storageAccountRawFileSystemId, '/')) >= 13 ? split(storageAccountRawFileSystemId, '/')[2] : subscription().subscriptionId
+var storageAccountRawResourceGroupName = length(split(storageAccountRawFileSystemId, '/')) >= 13 ? split(storageAccountRawFileSystemId, '/')[4] : resourceGroup().name
+var storageAccountEnrichedCuratedSubscriptionId = length(split(storageAccountEnrichedCuratedFileSystemId, '/')) >= 13 ? split(storageAccountEnrichedCuratedFileSystemId, '/')[2] : subscription().subscriptionId
+var storageAccountEnrichedCuratedResourceGroupName = length(split(storageAccountEnrichedCuratedFileSystemId, '/')) >= 13 ? split(storageAccountEnrichedCuratedFileSystemId, '/')[4] : resourceGroup().name
 
 // Resources
 module databricksIntegration001 'services/databricks.bicep' = {

@@ -25,9 +25,8 @@ param subnetId string
 param purviewId string
 
 // Variables
-var synapseProduct001DefaultStorageAccountSubscriptionId = split(synapseProduct001DefaultStorageAccountFileSystemId, '/')[2]
-var synapseProduct001DefaultStorageAccountResourceGroupName = split(synapseProduct001DefaultStorageAccountFileSystemId, '/')[4]
-
+var synapseProduct001DefaultStorageAccountSubscriptionId = length(split(synapseProduct001DefaultStorageAccountFileSystemId, '/')) >= 13 ? split(synapseProduct001DefaultStorageAccountFileSystemId, '/')[2] : subscription().subscriptionId
+var synapseProduct001DefaultStorageAccountResourceGroupName = length(split(synapseProduct001DefaultStorageAccountFileSystemId, '/')) >= 13 ? split(synapseProduct001DefaultStorageAccountFileSystemId, '/')[4] : resourceGroup().name
 var databricksProduct001Name = '${prefix}-product-databricks001'
 var synapseProduct001Name = '${prefix}-product-synapse001'
 
