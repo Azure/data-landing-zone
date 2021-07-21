@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.412.5873",
-      "templateHash": "3481509164620113441"
+      "templateHash": "11642060974169894926"
     }
   },
   "parameters": {
@@ -434,7 +434,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.412.5873",
-              "templateHash": "5543172154942092629"
+              "templateHash": "6160378696007169182"
             }
           },
           "parameters": {
@@ -932,7 +932,7 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2019-10-01",
-              "name": "dataManagementZoneDataLandingZoneVnetPeering",
+              "name": "[format('dataManagementZoneDataLandingZoneVnetPeering-{0}', parameters('prefix'))]",
               "subscriptionId": "[variables('dataManagementZoneVnetSubscriptionId')]",
               "resourceGroup": "[variables('dataManagementZoneVnetResourceGroupName')]",
               "properties": {

@@ -437,7 +437,7 @@ resource dataLandingZoneDataManagementZoneVnetPeering 'Microsoft.Network/virtual
 }
 
 module dataManagementZoneDataLandingZoneVnetPeering 'auxiliary/dataManagementZoneVnetPeering.bicep' = {
-  name: 'dataManagementZoneDataLandingZoneVnetPeering'
+  name: 'dataManagementZoneDataLandingZoneVnetPeering-${prefix}'
   scope: resourceGroup(dataManagementZoneVnetSubscriptionId, dataManagementZoneVnetResourceGroupName)
   params: {
     dataLandingZoneVnetId: vnet.id
