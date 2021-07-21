@@ -10,10 +10,10 @@ param datafactorySourceShirId string
 param datafactoryDestinationId string
 
 // Variables
-var datafactorySourceSubscriptionId = split(datafactorySourceId, '/')[2]
-var datafactorySourceResourceGroup = split(datafactorySourceId, '/')[4]
-var datafactorySourceShirName = last(split(datafactorySourceShirId, '/'))
-var datafactoryDestinationName = last(split(datafactoryDestinationId, '/'))
+var datafactorySourceSubscriptionId = length(split(datafactorySourceId, '/')) >= 9 ? split(datafactorySourceId, '/')[2] : subscription().subscriptionId
+var datafactorySourceResourceGroup = length(split(datafactorySourceId, '/')) >= 9 ? split(datafactorySourceId, '/')[4] : resourceGroup().name
+var datafactorySourceShirName = length(split(datafactorySourceShirId, '/')) >= 11 ? last(split(datafactorySourceShirId, '/')) : 'incorrectSegmentLength'
+var datafactoryDestinationName = length(split(datafactoryDestinationId, '/')) >= 9 ? last(split(datafactoryDestinationId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 module datafactoryDestinationRoleAssignment 'datafactoryRoleAssignmentDataFactory.bicep' = {

@@ -9,11 +9,11 @@ param storageAccountFileSystemId string
 param datafactoryId string
 
 // Variables
-var storageAccountFileSystemName = last(split(storageAccountFileSystemId, '/'))
-var storageAccountName = split(storageAccountFileSystemId, '/')[8]
-var datafactorySubscriptionId = split(datafactoryId, '/')[2]
-var datafactoryResourceGroupName = split(datafactoryId, '/')[4]
-var datafactoryName = last(split(datafactoryId, '/'))
+var storageAccountFileSystemName = length(split(storageAccountFileSystemId, '/')) >= 13 ? last(split(storageAccountFileSystemId, '/')) : 'incorrectSegmentLength'
+var storageAccountName = length(split(storageAccountFileSystemId, '/')) >= 13 ? split(storageAccountFileSystemId, '/')[8] : 'incorrectSegmentLength'
+var datafactorySubscriptionId = length(split(datafactoryId, '/')) >= 9 ? split(datafactoryId, '/')[2] : subscription().subscriptionId
+var datafactoryResourceGroupName = length(split(datafactoryId, '/')) >= 9 ? split(datafactoryId, '/')[4] : resourceGroup().name
+var datafactoryName = length(split(datafactoryId, '/')) >= 9 ? last(split(datafactoryId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource storageAccountFileSystem 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' existing = {

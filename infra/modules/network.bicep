@@ -37,9 +37,9 @@ var dataIntegration001SubnetName = 'DataIntegration001Subnet'
 var dataIntegration002SubnetName = 'DataIntegration002Subnet'
 var dataProduct001SubnetName = 'DataProduct001Subnet'
 var dataProduct002SubnetName = 'DataProduct002Subnet'
-var dataManagementZoneVnetSubscriptionId = split(dataManagementZoneVnetId, '/')[2]
-var dataManagementZoneVnetResourceGroupName = split(dataManagementZoneVnetId, '/')[4]
-var dataManagementZoneVnetName = last(split(dataManagementZoneVnetId, '/'))
+var dataManagementZoneVnetSubscriptionId = length(split(dataManagementZoneVnetId, '/')) >= 9 ? split(dataManagementZoneVnetId, '/')[2] : subscription().subscriptionId
+var dataManagementZoneVnetResourceGroupName = length(split(dataManagementZoneVnetId, '/')) >= 9 ? split(dataManagementZoneVnetId, '/')[4] : resourceGroup().name
+var dataManagementZoneVnetName = length(split(dataManagementZoneVnetId, '/')) >= 9 ? last(split(dataManagementZoneVnetId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
@@ -422,7 +422,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
   }
 }
 
-resource dataLandingZoneDataManagementZoneVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-11-01' = {
+resource dataLandingZoneDataManagementZoneVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-11-01' = if (!empty(dataManagementZoneVnetId)) {
   name: '${vnet.name}/${dataManagementZoneVnetName}'
   properties: {
     allowForwardedTraffic: true
@@ -436,7 +436,7 @@ resource dataLandingZoneDataManagementZoneVnetPeering 'Microsoft.Network/virtual
   }
 }
 
-module dataManagementZoneDataLandingZoneVnetPeering 'auxiliary/dataManagementZoneVnetPeering.bicep' = {
+module dataManagementZoneDataLandingZoneVnetPeering 'auxiliary/dataManagementZoneVnetPeering.bicep' = if (!empty(dataManagementZoneVnetId)) {
   name: 'dataManagementZoneDataLandingZoneVnetPeering-${prefix}'
   scope: resourceGroup(dataManagementZoneVnetSubscriptionId, dataManagementZoneVnetResourceGroupName)
   params: {

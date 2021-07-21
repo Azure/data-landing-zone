@@ -9,11 +9,11 @@ param storageAccountFileSystemId string
 param synapseId string
 
 // Variables
-var storageAccountFileSystemName = last(split(storageAccountFileSystemId, '/'))
-var storageAccountName = split(storageAccountFileSystemId, '/')[8]
-var synapseSubscriptionId = split(synapseId, '/')[2]
-var synapseResourceGroupName = split(synapseId, '/')[4]
-var synapseName = last(split(synapseId, '/'))
+var storageAccountFileSystemName = length(split(storageAccountFileSystemId, '/')) >= 13 ? last(split(storageAccountFileSystemId, '/')) : 'incorrectSegmentLength'
+var storageAccountName = length(split(storageAccountFileSystemId, '/')) >= 13 ? split(storageAccountFileSystemId, '/')[8] : 'incorrectSegmentLength'
+var synapseSubscriptionId = length(split(synapseId, '/')) >= 9 ? split(synapseId, '/')[2] : subscription().subscriptionId
+var synapseResourceGroupName = length(split(synapseId, '/')) >= 9 ? split(synapseId, '/')[4] : resourceGroup().name
+var synapseName = length(split(synapseId, '/')) >= 9 ? last(split(synapseId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource storageAccountFileSystem 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' existing = {

@@ -9,8 +9,8 @@ param dataManagementZoneVnetId string
 param dataLandingZoneVnetId string
 
 // Variables
-var dataManagementZoneVnetName = last(split(dataManagementZoneVnetId, '/'))
-var dataLandingZoneVnetName = last(split(dataLandingZoneVnetId, '/'))
+var dataManagementZoneVnetName = length(split(dataManagementZoneVnetId, '/')) >= 9 ? last(split(dataManagementZoneVnetId, '/')) : 'incorrectSegmentLength'
+var dataLandingZoneVnetName = length(split(dataLandingZoneVnetId, '/')) >= 9 ? last(split(dataLandingZoneVnetId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource dataManagementZoneDataLandingZoneVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-11-01' = {

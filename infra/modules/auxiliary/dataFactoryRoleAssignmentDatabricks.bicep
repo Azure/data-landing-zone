@@ -9,10 +9,10 @@ param databricksId string
 param datafactoryId string
 
 // Variables
-var databricksName = last(split(databricksId, '/'))
-var datafactorySubscriptionId = split(datafactoryId, '/')[2]
-var datafactoryResourceGroupName = split(datafactoryId, '/')[4]
-var datafactoryName = last(split(datafactoryId, '/'))
+var databricksName = length(split(databricksId, '/')) >= 9 ? last(split(databricksId, '/')) : 'incorrectSegmentLength'
+var datafactorySubscriptionId = length(split(datafactoryId, '/')) >= 9 ? split(datafactoryId, '/')[2] : subscription().subscriptionId
+var datafactoryResourceGroupName = length(split(datafactoryId, '/')) >= 9 ? split(datafactoryId, '/')[4] : resourceGroup().name
+var datafactoryName = length(split(datafactoryId, '/')) >= 9 ? last(split(datafactoryId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' existing = {

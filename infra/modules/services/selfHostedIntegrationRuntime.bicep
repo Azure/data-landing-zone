@@ -22,7 +22,7 @@ param datafactoryIntegrationRuntimeAuthKey string
 param portalDeployment bool
 
 // Variables
-var storageAccountName = last(split(storageAccountId, '/'))
+var storageAccountName = length(split(storageAccountId, '/')) >= 9 ? last(split(storageAccountId, '/')) : 'incorrectSegmentLength'
 var loadbalancerName = '${vmssName}-lb'
 var fileUri = 'https://raw.githubusercontent.com/Azure/data-landing-zone/main/code/installSHIRGateway.ps1'
 
