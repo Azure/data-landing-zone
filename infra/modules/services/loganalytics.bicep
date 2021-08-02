@@ -19,7 +19,7 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2020-10-01' = {
   properties: {
     features: {}
     publicNetworkAccessForIngestion: 'Enabled'
-    publicNetworkAccessForQuery: 'Disabled'
+    publicNetworkAccessForQuery: 'Enabled'
     retentionInDays: 120
     sku: {
       name: 'PerGB2018'
