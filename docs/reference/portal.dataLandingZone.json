@@ -20,23 +20,23 @@
                             }
                         },
                         {
-							"name": "deploymentDetails",
-							"label": "Deployment Details",
-							"type": "Microsoft.Common.Section",
+                            "name": "deploymentDetails",
+                            "label": "Deployment Details",
+                            "type": "Microsoft.Common.Section",
                             "visible": true,
-							"elements": [
+                            "elements": [
                                 {
-									"name": "deploymentDetailsText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Select the subscription as well as the location to specify the scope of your Data Landing Zone deployment.",
-										"link": {
-											"label": "",
-											"uri": ""
-										}
-									}
-								},
+                                    "name": "deploymentDetailsText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Select the subscription as well as the location to specify the scope of your Data Landing Zone deployment.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
                                 {
                                     "name": "subscriptionApi",
                                     "type": "Microsoft.Solutions.ArmApiControl",
@@ -99,23 +99,23 @@
                             ]
                         },
                         {
-							"name": "dataLandingZoneName",
-							"label": "Data Landing Zone Name",
-							"type": "Microsoft.Common.Section",
+                            "name": "dataLandingZoneName",
+                            "label": "Data Landing Zone Name",
+                            "type": "Microsoft.Common.Section",
                             "visible": true,
-							"elements": [
+                            "elements": [
                                 {
-									"name": "dataLandingZoneNameText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Specify a prefix and select an environment (Development, Test, Production) which will both be used as a prefix for all resource names. Independent of the environment, the same resources get deployed.",
-										"link": {
-											"label": "",
-											"uri": ""
-										}
-									}
-								},
+                                    "name": "dataLandingZoneNameText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify a prefix and select an environment (Development, Test, Production) which will both be used as a prefix for all resource names. Independent of the environment, the same resources get deployed.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
                                 {
                                     "name": "environment",
                                     "label": "Environment",
@@ -362,33 +362,33 @@
                     ]
                 },
                 {
-					"name": "generalSettings",
-					"label": "General Settings",
-					"subLabel": {
-						"preValidation": "Provide settings for your Data Landing Zone deployment.",
+                    "name": "generalSettings",
+                    "label": "General Settings",
+                    "subLabel": {
+                        "preValidation": "Provide settings for your Data Landing Zone deployment.",
                         "postValidation": "Done"
-					},
-					"bladeTitle": "General Settings",
+                    },
+                    "bladeTitle": "General Settings",
                     "bladeSubtitle": "General Settings",
-					"elements": [
+                    "elements": [
                         {
-							"name": "servicesSettings",
-							"label": "Services Settings",
-							"type": "Microsoft.Common.Section",
+                            "name": "servicesSettings",
+                            "label": "Services Settings",
+                            "type": "Microsoft.Common.Section",
                             "visible": true,
-							"elements": [
+                            "elements": [
                                 {
-									"name": "administratorPasswordText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Select an administrator password for the Synapse workspaces and potentially Self-hosted integration runtimes hosted on VMSS.",
-										"link": {
-											"label": "",
-											"uri": ""
-										}
-									}
-								},
+                                    "name": "administratorPasswordText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Select an administrator password for the Synapse workspaces and potentially Self-hosted integration runtimes hosted on VMSS.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
                                 {
                                     "name": "administratorPassword",
                                     "label": {
@@ -426,23 +426,23 @@
                             ]
                         },
                         {
-							"name": "dataGovernance",
-							"label": "Data Governance",
-							"type": "Microsoft.Common.Section",
+                            "name": "dataGovernance",
+                            "label": "Data Governance",
+                            "type": "Microsoft.Common.Section",
                             "visible": true,
-							"elements": [
+                            "elements": [
                                 {
-									"name": "dataGovernanceText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Select the Purview account to which you want to connect Synapse and Data Factory.",
-										"link": {
-											"label": "Learn more",
-											"uri": "https://docs.microsoft.com/en-us/azure/purview/overview"
-										}
-									}
-								},
+                                    "name": "dataGovernanceText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Select the Purview account to which you want to connect Synapse and Data Factory.",
+                                        "link": {
+                                            "label": "Learn more",
+                                            "uri": "https://docs.microsoft.com/en-us/azure/purview/overview"
+                                        }
+                                    }
+                                },
                                 {
                                     "name": "purviewId",
                                     "label": "Connect to Purview Account",
@@ -491,23 +491,23 @@
                     "bladeSubtitle": "Connectivity Settings",
                     "elements": [
                         {
-							"name": "virtualNetworkConfiguration",
-							"label": "Virtual Network Configuration",
-							"type": "Microsoft.Common.Section",
+                            "name": "virtualNetworkConfiguration",
+                            "label": "Virtual Network Configuration",
+                            "type": "Microsoft.Common.Section",
                             "visible": true,
-							"elements": [
+                            "elements": [
                                 {
-									"name": "virtualNetworkConfigurationText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Specify the Virtual network and subnet CIDR range for your Data Landing Zone. Please make sure that the address space is not overlapping with the address space of your Data Management Zone and your other Data Landing Zones.",
-										"link": {
-											"label": "",
-											"uri": ""
-										}
-									}
-								},
+                                    "name": "virtualNetworkConfigurationText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify the Virtual network and subnet CIDR range for your Data Landing Zone. Please make sure that the address space is not overlapping with the address space of your Data Management Zone and your other Data Landing Zones.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
                                 {
                                     "name": "virtualNetworkAddressCidrRange",
                                     "label": "Vnet Address CIDR Range",
@@ -654,11 +654,11 @@
                             ]
                         },
                         {
-							"name": "dataManagementZoneVnetConfiguration",
-							"label": "Data Management Zone Virtual Network Configuration",
-							"type": "Microsoft.Common.Section",
+                            "name": "dataManagementZoneVnetConfiguration",
+                            "label": "Data Management Zone Virtual Network Configuration",
+                            "type": "Microsoft.Common.Section",
                             "visible": true,
-							"elements": [
+                            "elements": [
                                 {
                                     "name": "infoBoxDataManagementZoneVnet",
                                     "type": "Microsoft.Common.InfoBox",
@@ -721,23 +721,23 @@
                             ]
                         },
                         {
-							"name": "sharedNetworkInfrastructureConfiguration",
-							"label": "Shared Network Infrastructure Configuration",
-							"type": "Microsoft.Common.Section",
+                            "name": "sharedNetworkInfrastructureConfiguration",
+                            "label": "Shared Network Infrastructure Configuration",
+                            "type": "Microsoft.Common.Section",
                             "visible": true,
-							"elements": [
+                            "elements": [
                                 {
-									"name": "sharedNetworkInfrastructureText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Specify the details of your shared network infrastructure in order to correctly setup the network configuration (Vnet and RouteTables).",
-										"link": {
-											"label": "",
-											"uri": ""
-										}
-									}
-								},
+                                    "name": "sharedNetworkInfrastructureText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify the details of your shared network infrastructure in order to correctly setup the network configuration (Vnet and RouteTables).",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
                                 {
                                     "name": "existingFirewallType",
                                     "label": "Existing Firewall",
@@ -851,23 +851,23 @@
                             ]
                         },
                         {
-							"name": "privateDnsZones",
-							"label": "Private DNS Zones",
-							"type": "Microsoft.Common.Section",
+                            "name": "privateDnsZones",
+                            "label": "Private DNS Zones",
+                            "type": "Microsoft.Common.Section",
                             "visible": true,
-							"elements": [
+                            "elements": [
                                 {
-									"name": "privateDnsZonesText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Select the Private DNS Zone settings for your deployment.",
-										"link": {
-											"label": "",
-											"uri": ""
-										}
-									}
-								},
+                                    "name": "privateDnsZonesText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Select the Private DNS Zone settings for your deployment.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
                                 {
                                     "name": "infoBoxPrivateDnsZone",
                                     "type": "Microsoft.Common.InfoBox",
@@ -1101,8 +1101,8 @@
                                         "required": true
                                     }
                                 }
-							]
-						}
+                            ]
+                        }
                     ]
                 },
                 {
