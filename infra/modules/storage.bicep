@@ -10,10 +10,13 @@ param location string
 param prefix string
 param tags object
 param subnetId string
-param privateDnsZoneIdDfs string
-param privateDnsZoneIdBlob string
+param privateDnsZoneIdDfs string = ''
+param privateDnsZoneIdBlob string = ''
 
 // Variables
+var storageRawName = '${prefix}-raw'
+var storageEnrichedCuratedName = '${prefix}-encur'
+var storageWorkspaceName = '${prefix}-work'
 var domainFileSytemNames = [
   'data'
   'di001'
@@ -33,7 +36,7 @@ module storageRaw 'services/storage.bicep' = {
     location: location
     tags: tags
     subnetId: subnetId
-    storageName: '${prefix}-raw'
+    storageName: storageRawName
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: domainFileSytemNames
@@ -47,7 +50,7 @@ module storageEnrichedCurated 'services/storage.bicep' = {
     location: location
     tags: tags
     subnetId: subnetId
-    storageName: '${prefix}-encur'
+    storageName: storageEnrichedCuratedName
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: domainFileSytemNames
@@ -61,7 +64,7 @@ module storageWorkspace 'services/storage.bicep' = {
     location: location
     tags: tags
     subnetId: subnetId
-    storageName: '${prefix}-work'
+    storageName: storageWorkspaceName
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: dataProductFileSystemNames

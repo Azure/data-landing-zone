@@ -10,9 +10,10 @@ param location string
 param prefix string
 param tags object
 param subnetId string
-param privateDnsZoneIdBlob string
+param privateDnsZoneIdBlob string = ''
 
 // Variables
+var storageExternal001Name = '${prefix}-ext001'
 var fileSytemNames = [
   'data'
 ]
@@ -25,7 +26,7 @@ module storageExternal001 'services/externalstorage.bicep' = {
     location: location
     tags: tags
     subnetId: subnetId
-    storageName: '${prefix}-ext001'
+    storageName: storageExternal001Name
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     fileSytemNames: fileSytemNames
   }

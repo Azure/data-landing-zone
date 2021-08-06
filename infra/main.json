@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.451.19169",
-      "templateHash": "5384798474894276589"
+      "templateHash": "14959750851476386637"
     }
   },
   "parameters": {
@@ -121,6 +121,7 @@
     },
     "dataManagementZoneVnetId": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource Id of the vnet in the data management zone."
       }
@@ -434,7 +435,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.451.19169",
-              "templateHash": "10122569344573951191"
+              "templateHash": "3214738905419216359"
             }
           },
           "parameters": {
@@ -502,7 +503,8 @@
               "defaultValue": "10.1.9.0/24"
             },
             "dataManagementZoneVnetId": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             }
           },
           "functions": [],
@@ -1063,7 +1065,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.451.19169",
-              "templateHash": "4541932394413966111"
+              "templateHash": "16654446678492731724"
             }
           },
           "parameters": {
@@ -1080,7 +1082,8 @@
               "type": "string"
             },
             "privateDnsZoneIdKeyVault": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             }
           },
           "functions": [],
@@ -1122,7 +1125,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "4159319117189458462"
+                      "templateHash": "2990634956747970752"
                     }
                   },
                   "parameters": {
@@ -1139,7 +1142,8 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdKeyVault": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
@@ -1475,7 +1479,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.451.19169",
-              "templateHash": "14893682690669624839"
+              "templateHash": "15543923753541536003"
             }
           },
           "parameters": {
@@ -1499,26 +1503,31 @@
               "type": "secureString"
             },
             "privateDnsZoneIdDataFactory": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdDataFactoryPortal": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "purviewId": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "purviewSelfHostedIntegrationRuntimeAuthKey": {
               "type": "string",
               "defaultValue": ""
             },
             "deploySelfHostedIntegrationRuntimes": {
-              "type": "bool"
+              "type": "bool",
+              "defaultValue": false
             },
             "datafactoryIds": {
               "type": "array"
             },
             "portalDeployment": {
-              "type": "bool"
+              "type": "bool",
+              "defaultValue": false
             }
           },
           "functions": [],
@@ -1710,7 +1719,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "7573655646499628890"
+                      "templateHash": "681270348743239375"
                     }
                   },
                   "parameters": {
@@ -1727,13 +1736,16 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdDataFactory": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "privateDnsZoneIdDataFactoryPortal": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "purviewId": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
@@ -1952,7 +1964,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "16503633533804284361"
+                      "templateHash": "2014671208267950392"
                     }
                   },
                   "parameters": {
@@ -1997,7 +2009,8 @@
                       "type": "secureString"
                     },
                     "portalDeployment": {
-                      "type": "bool"
+                      "type": "bool",
+                      "defaultValue": false
                     }
                   },
                   "functions": [],
@@ -2452,7 +2465,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "16503633533804284361"
+                      "templateHash": "2014671208267950392"
                     }
                   },
                   "parameters": {
@@ -2497,7 +2510,8 @@
                       "type": "secureString"
                     },
                     "portalDeployment": {
-                      "type": "bool"
+                      "type": "bool",
+                      "defaultValue": false
                     }
                   },
                   "functions": [],
@@ -2756,7 +2770,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.451.19169",
-              "templateHash": "13494289325338250891"
+              "templateHash": "7677158750345598677"
             }
           },
           "parameters": {
@@ -2773,14 +2787,19 @@
               "type": "string"
             },
             "privateDnsZoneIdDfs": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdBlob": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             }
           },
           "functions": [],
           "variables": {
+            "storageRawName": "[format('{0}-raw', parameters('prefix'))]",
+            "storageEnrichedCuratedName": "[format('{0}-encur', parameters('prefix'))]",
+            "storageWorkspaceName": "[format('{0}-work', parameters('prefix'))]",
             "domainFileSytemNames": [
               "data",
               "di001",
@@ -2813,7 +2832,7 @@
                     "value": "[parameters('subnetId')]"
                   },
                   "storageName": {
-                    "value": "[format('{0}-raw', parameters('prefix'))]"
+                    "value": "[variables('storageRawName')]"
                   },
                   "privateDnsZoneIdBlob": {
                     "value": "[parameters('privateDnsZoneIdBlob')]"
@@ -2832,7 +2851,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "8787020411570067076"
+                      "templateHash": "565010050621211865"
                     }
                   },
                   "parameters": {
@@ -2849,10 +2868,12 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdDfs": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "privateDnsZoneIdBlob": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "fileSystemNames": {
                       "type": "array"
@@ -3130,7 +3151,7 @@
                     "value": "[parameters('subnetId')]"
                   },
                   "storageName": {
-                    "value": "[format('{0}-encur', parameters('prefix'))]"
+                    "value": "[variables('storageEnrichedCuratedName')]"
                   },
                   "privateDnsZoneIdBlob": {
                     "value": "[parameters('privateDnsZoneIdBlob')]"
@@ -3149,7 +3170,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "8787020411570067076"
+                      "templateHash": "565010050621211865"
                     }
                   },
                   "parameters": {
@@ -3166,10 +3187,12 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdDfs": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "privateDnsZoneIdBlob": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "fileSystemNames": {
                       "type": "array"
@@ -3447,7 +3470,7 @@
                     "value": "[parameters('subnetId')]"
                   },
                   "storageName": {
-                    "value": "[format('{0}-work', parameters('prefix'))]"
+                    "value": "[variables('storageWorkspaceName')]"
                   },
                   "privateDnsZoneIdBlob": {
                     "value": "[parameters('privateDnsZoneIdBlob')]"
@@ -3466,7 +3489,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "8787020411570067076"
+                      "templateHash": "565010050621211865"
                     }
                   },
                   "parameters": {
@@ -3483,10 +3506,12 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdDfs": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "privateDnsZoneIdBlob": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "fileSystemNames": {
                       "type": "array"
@@ -3812,7 +3837,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.451.19169",
-              "templateHash": "8026624973995012573"
+              "templateHash": "17784088996803176345"
             }
           },
           "parameters": {
@@ -3829,11 +3854,13 @@
               "type": "string"
             },
             "privateDnsZoneIdBlob": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             }
           },
           "functions": [],
           "variables": {
+            "storageExternal001Name": "[format('{0}-ext001', parameters('prefix'))]",
             "fileSytemNames": [
               "data"
             ]
@@ -3859,7 +3886,7 @@
                     "value": "[parameters('subnetId')]"
                   },
                   "storageName": {
-                    "value": "[format('{0}-ext001', parameters('prefix'))]"
+                    "value": "[variables('storageExternal001Name')]"
                   },
                   "privateDnsZoneIdBlob": {
                     "value": "[parameters('privateDnsZoneIdBlob')]"
@@ -3875,7 +3902,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "1194740968012149595"
+                      "templateHash": "3510901841677112527"
                     }
                   },
                   "parameters": {
@@ -3892,7 +3919,8 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdBlob": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "fileSytemNames": {
                       "type": "array",
@@ -4156,7 +4184,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.451.19169",
-              "templateHash": "12328160478214431785"
+              "templateHash": "4877019322981192018"
             }
           },
           "parameters": {
@@ -4180,25 +4208,32 @@
               "type": "secureString"
             },
             "sqlserverAdminGroupName": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "sqlserverAdminGroupObjectID": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "mysqlserverAdminGroupName": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "mysqlserverAdminGroupObjectID": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdSqlServer": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdMySqlServer": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdKeyVault": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             }
           },
           "functions": [],
@@ -4291,7 +4326,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "4159319117189458462"
+                      "templateHash": "2990634956747970752"
                     }
                   },
                   "parameters": {
@@ -4308,7 +4343,8 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdKeyVault": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
@@ -4439,7 +4475,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "4159319117189458462"
+                      "templateHash": "2990634956747970752"
                     }
                   },
                   "parameters": {
@@ -4456,7 +4492,8 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdKeyVault": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
@@ -4599,7 +4636,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "754450801418136403"
+                      "templateHash": "2436481605024990658"
                     }
                   },
                   "parameters": {
@@ -4623,13 +4660,16 @@
                       "type": "secureString"
                     },
                     "sqlserverAdminGroupName": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "sqlserverAdminGroupObjectID": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "privateDnsZoneIdSqlServer": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
@@ -4657,7 +4697,7 @@
                       }
                     },
                     {
-                      "condition": "[and(not(equals(parameters('sqlserverAdminGroupName'), '')), not(equals(parameters('sqlserverAdminGroupObjectID'), '')))]",
+                      "condition": "[and(not(empty(parameters('sqlserverAdminGroupName'))), not(empty(parameters('sqlserverAdminGroupObjectID'))))]",
                       "type": "Microsoft.Sql/servers/administrators",
                       "apiVersion": "2020-11-01-preview",
                       "name": "[format('{0}/{1}', parameters('sqlserverName'), 'ActiveDirectory')]",
@@ -4805,7 +4845,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "8935329970858958596"
+                      "templateHash": "5397604455572596992"
                     }
                   },
                   "parameters": {
@@ -4829,13 +4869,16 @@
                       "type": "secureString"
                     },
                     "mysqlserverAdminGroupName": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "mysqlserverAdminGroupObjectID": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "privateDnsZoneIdMySqlServer": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
@@ -4902,7 +4945,7 @@
                       ]
                     },
                     {
-                      "condition": "[and(not(equals(parameters('mysqlserverAdminGroupName'), '')), not(equals(parameters('mysqlserverAdminGroupObjectID'), '')))]",
+                      "condition": "[and(not(empty(parameters('mysqlserverAdminGroupName'))), not(empty(parameters('mysqlserverAdminGroupObjectID'))))]",
                       "type": "Microsoft.DBforMySQL/servers/administrators",
                       "apiVersion": "2017-12-01",
                       "name": "[format('{0}/{1}', parameters('mysqlserverName'), 'activeDirectory')]",
@@ -5088,7 +5131,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.451.19169",
-              "templateHash": "17162960948474752788"
+              "templateHash": "16643626909008912084"
             }
           },
           "parameters": {
@@ -5120,7 +5163,8 @@
               "type": "string"
             },
             "purviewId": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "storageRawId": {
               "type": "string"
@@ -5138,13 +5182,16 @@
               "type": "string"
             },
             "privateDnsZoneIdDataFactory": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdDataFactoryPortal": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdEventhubNamespace": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             }
           },
           "functions": [],
@@ -5309,7 +5356,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "11040675642181409081"
+                      "templateHash": "1379509119878568447"
                     }
                   },
                   "parameters": {
@@ -5338,7 +5385,8 @@
                       "minValue": 1
                     },
                     "privateDnsZoneIdEventhubNamespace": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
@@ -5478,7 +5526,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "16981690882147989295"
+                      "templateHash": "6629503404892383792"
                     }
                   },
                   "parameters": {
@@ -5495,13 +5543,16 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdDataFactory": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "privateDnsZoneIdDataFactoryPortal": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "purviewId": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "storageRawId": {
                       "type": "string"
@@ -6172,7 +6223,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.451.19169",
-              "templateHash": "10307806299298265887"
+              "templateHash": "15836750582852543336"
             }
           },
           "parameters": {
@@ -6193,22 +6244,27 @@
               "type": "secureString"
             },
             "synapseSqlAdminGroupName": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "synapseSqlAdminGroupObjectID": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "synapseProduct001DefaultStorageAccountFileSystemId": {
               "type": "string"
             },
             "synapseProduct001ComputeSubnetId": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdSynapseSql": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdSynapseDev": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "vnetId": {
               "type": "string"
@@ -6223,7 +6279,8 @@
               "type": "string"
             },
             "purviewId": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             }
           },
           "functions": [],
@@ -6403,7 +6460,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.451.19169",
-                      "templateHash": "3978219076080944354"
+                      "templateHash": "1288115280911381727"
                     }
                   },
                   "parameters": {
@@ -6427,25 +6484,31 @@
                       "type": "secureString"
                     },
                     "synapseSqlAdminGroupName": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "synapseSqlAdminGroupObjectID": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "synapseDefaultStorageAccountFileSystemId": {
                       "type": "string"
                     },
                     "synapseComputeSubnetId": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "privateDnsZoneIdSynapseSql": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "privateDnsZoneIdSynapseDev": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "purviewId": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
@@ -6552,7 +6615,7 @@
                       ]
                     },
                     {
-                      "condition": "[and(not(equals(parameters('synapseSqlAdminGroupName'), '')), not(equals(parameters('synapseSqlAdminGroupObjectID'), '')))]",
+                      "condition": "[and(not(empty(parameters('synapseSqlAdminGroupName'))), not(empty(parameters('synapseSqlAdminGroupObjectID'))))]",
                       "type": "Microsoft.Synapse/workspaces/administrators",
                       "apiVersion": "2021-03-01",
                       "name": "[format('{0}/{1}', parameters('synapseName'), 'activeDirectory')]",

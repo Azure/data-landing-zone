@@ -13,13 +13,13 @@ param subnetId string
 param administratorUsername string = 'VmssMainUser'
 @secure()
 param administratorPassword string
-param privateDnsZoneIdDataFactory string
-param privateDnsZoneIdDataFactoryPortal string
-param purviewId string
+param privateDnsZoneIdDataFactory string = ''
+param privateDnsZoneIdDataFactoryPortal string = ''
+param purviewId string = ''
 param purviewSelfHostedIntegrationRuntimeAuthKey string = ''
-param deploySelfHostedIntegrationRuntimes bool
+param deploySelfHostedIntegrationRuntimes bool = false
 param datafactoryIds array
-param portalDeployment bool
+param portalDeployment bool = false
 
 // Variables
 var artifactstorage001Name = '${prefix}-artfct001'

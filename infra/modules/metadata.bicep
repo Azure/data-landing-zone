@@ -13,13 +13,13 @@ param subnetId string
 param administratorUsername string = 'SqlServerMainUser'
 @secure()
 param administratorPassword string
-param sqlserverAdminGroupName string
-param sqlserverAdminGroupObjectID string
-param mysqlserverAdminGroupName string
-param mysqlserverAdminGroupObjectID string
-param privateDnsZoneIdSqlServer string
-param privateDnsZoneIdMySqlServer string
-param privateDnsZoneIdKeyVault string
+param sqlserverAdminGroupName string = ''
+param sqlserverAdminGroupObjectID string = ''
+param mysqlserverAdminGroupName string = ''
+param mysqlserverAdminGroupObjectID string = ''
+param privateDnsZoneIdSqlServer string = ''
+param privateDnsZoneIdMySqlServer string = ''
+param privateDnsZoneIdKeyVault string = ''
 
 // Variables
 var keyVault001Name = '${prefix}-vault001'

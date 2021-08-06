@@ -10,7 +10,7 @@ param location string
 param prefix string
 param tags object
 param subnetId string
-param privateDnsZoneIdKeyVault string
+param privateDnsZoneIdKeyVault string = ''
 
 // Variables
 var keyVault001Name = '${prefix}-vault003'

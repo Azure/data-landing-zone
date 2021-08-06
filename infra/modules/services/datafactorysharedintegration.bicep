@@ -9,10 +9,10 @@ param location string
 param tags object
 param subnetId string
 param datafactoryName string
-param privateDnsZoneIdDataFactory string
-param privateDnsZoneIdDataFactoryPortal string
+param privateDnsZoneIdDataFactory string = ''
+param privateDnsZoneIdDataFactoryPortal string = ''
 
-param purviewId string
+param purviewId string = ''
 param storageRawId string
 param storageEnrichedCuratedId string
 param databricks001Id string

@@ -9,9 +9,9 @@ param location string
 param tags object
 param subnetId string
 param datafactoryName string
-param privateDnsZoneIdDataFactory string
-param privateDnsZoneIdDataFactoryPortal string
-param purviewId string
+param privateDnsZoneIdDataFactory string = ''
+param privateDnsZoneIdDataFactoryPortal string = ''
+param purviewId string = ''
 
 // Variables
 var datafactoryDefaultManagedVnetIntegrationRuntimeName = 'AutoResolveIntegrationRuntime'
