@@ -12,17 +12,17 @@ param tags object
 param administratorUsername string = 'SqlServerMainUser'
 @secure()
 param administratorPassword string
-param synapseSqlAdminGroupName string
-param synapseSqlAdminGroupObjectID string
+param synapseSqlAdminGroupName string = ''
+param synapseSqlAdminGroupObjectID string = ''
 param synapseProduct001DefaultStorageAccountFileSystemId string
-param synapseProduct001ComputeSubnetId string
-param privateDnsZoneIdSynapseSql string
-param privateDnsZoneIdSynapseDev string
+param synapseProduct001ComputeSubnetId string = ''
+param privateDnsZoneIdSynapseSql string = ''
+param privateDnsZoneIdSynapseDev string = ''
 param vnetId string
 param databricksProduct001PrivateSubnetName string
 param databricksProduct001PublicSubnetName string
 param subnetId string
-param purviewId string
+param purviewId string = ''
 
 // Variables
 var synapseProduct001DefaultStorageAccountSubscriptionId = length(split(synapseProduct001DefaultStorageAccountFileSystemId, '/')) >= 13 ? split(synapseProduct001DefaultStorageAccountFileSystemId, '/')[2] : subscription().subscriptionId

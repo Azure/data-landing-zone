@@ -12,13 +12,13 @@ param synapseName string
 param administratorUsername string = 'SqlServerMainUser'
 @secure()
 param administratorPassword string
-param synapseSqlAdminGroupName string
-param synapseSqlAdminGroupObjectID string
+param synapseSqlAdminGroupName string = ''
+param synapseSqlAdminGroupObjectID string = ''
 param synapseDefaultStorageAccountFileSystemId string
-param synapseComputeSubnetId string
-param privateDnsZoneIdSynapseSql string
-param privateDnsZoneIdSynapseDev string
-param purviewId string
+param synapseComputeSubnetId string = ''
+param privateDnsZoneIdSynapseSql string = ''
+param privateDnsZoneIdSynapseDev string = ''
+param purviewId string = ''
 
 // Variables
 var synapseDefaultStorageAccountFileSystemName = length(split(synapseDefaultStorageAccountFileSystemId, '/')) >= 13 ? last(split(synapseDefaultStorageAccountFileSystemId, '/')) : 'incorrectSegmentLength'
@@ -122,7 +122,7 @@ resource synapseManagedIdentitySqlControlSettings 'Microsoft.Synapse/workspaces/
   }
 }
 
-resource synapseAadAdministrators 'Microsoft.Synapse/workspaces/administrators@2021-03-01' = if (synapseSqlAdminGroupName != '' && synapseSqlAdminGroupObjectID != '') {
+resource synapseAadAdministrators 'Microsoft.Synapse/workspaces/administrators@2021-03-01' = if (!empty(synapseSqlAdminGroupName) && !empty(synapseSqlAdminGroupObjectID)) {
   parent: synapse
   name: 'activeDirectory'
   properties: {

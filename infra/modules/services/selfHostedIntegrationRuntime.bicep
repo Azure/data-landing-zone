@@ -19,7 +19,7 @@ param administratorUsername string = 'VmssMainUser'
 param administratorPassword string
 @secure()
 param datafactoryIntegrationRuntimeAuthKey string
-param portalDeployment bool
+param portalDeployment bool = false
 
 // Variables
 var storageAccountName = length(split(storageAccountId, '/')) >= 9 ? last(split(storageAccountId, '/')) : 'incorrectSegmentLength'

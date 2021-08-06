@@ -15,15 +15,15 @@ param vnetId string
 param databricksIntegration001PrivateSubnetName string
 param databricksIntegration001PublicSubnetName string
 param subnetId string
-param purviewId string
+param purviewId string = ''
 param storageRawId string
 param storageEnrichedCuratedId string
 param keyVault001Id string
 param sqlServer001Id string
 param sqlDatabase001Name string
-param privateDnsZoneIdDataFactory string
-param privateDnsZoneIdDataFactoryPortal string
-param privateDnsZoneIdEventhubNamespace string
+param privateDnsZoneIdDataFactory string = ''
+param privateDnsZoneIdDataFactoryPortal string = ''
+param privateDnsZoneIdEventhubNamespace string = ''
 
 // Variables
 var databricksIntegration001Name = '${prefix}-integration-databricks001'

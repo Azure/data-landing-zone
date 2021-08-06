@@ -24,7 +24,7 @@ param dataIntegration001SubnetAddressPrefix string = '10.1.6.0/24'
 param dataIntegration002SubnetAddressPrefix string = '10.1.7.0/24'
 param dataProduct001SubnetAddressPrefix string = '10.1.8.0/24'
 param dataProduct002SubnetAddressPrefix string = '10.1.9.0/24'
-param dataManagementZoneVnetId string
+param dataManagementZoneVnetId string = ''
 
 // Variables
 var servicesSubnetName = 'ServicesSubnet'
@@ -423,7 +423,8 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
 }
 
 resource dataLandingZoneDataManagementZoneVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-11-01' = if (!empty(dataManagementZoneVnetId)) {
-  name: '${vnet.name}/${dataManagementZoneVnetName}'
+  name: dataManagementZoneVnetName
+  parent: vnet
   properties: {
     allowForwardedTraffic: true
     allowGatewayTransit: true

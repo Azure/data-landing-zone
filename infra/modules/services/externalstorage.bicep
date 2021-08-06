@@ -9,7 +9,7 @@ param location string
 param tags object
 param subnetId string
 param storageName string
-param privateDnsZoneIdBlob string
+param privateDnsZoneIdBlob string = ''
 param fileSytemNames array = [
   'data'
 ]

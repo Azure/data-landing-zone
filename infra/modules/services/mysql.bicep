@@ -12,9 +12,9 @@ param subnetId string
 param administratorUsername string = 'SqlServerMainUser'
 @secure()
 param administratorPassword string
-param mysqlserverAdminGroupName string
-param mysqlserverAdminGroupObjectID string
-param privateDnsZoneIdMySqlServer string
+param mysqlserverAdminGroupName string = ''
+param mysqlserverAdminGroupObjectID string = ''
+param privateDnsZoneIdMySqlServer string = ''
 
 // Variables
 var mySqlServerDatabaseName = 'HiveMetastoreDb'
@@ -71,7 +71,7 @@ resource mysqlserverHiveMetastoreDb 'Microsoft.DBForMySQL/servers/databases@2017
   }
 }
 
-resource mysqlserverAdministrators 'Microsoft.DBForMySQL/servers/administrators@2017-12-01' = if (mysqlserverAdminGroupName != '' && mysqlserverAdminGroupObjectID != '') {
+resource mysqlserverAdministrators 'Microsoft.DBForMySQL/servers/administrators@2017-12-01' = if (!empty(mysqlserverAdminGroupName) && !empty(mysqlserverAdminGroupObjectID)) {
   parent: mysqlserver
   name: 'activeDirectory'
   properties: {
