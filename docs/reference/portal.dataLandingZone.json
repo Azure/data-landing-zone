@@ -550,6 +550,10 @@
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetAddressPrefix, '/')), '.'), 3))), true)]",
                                                 "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetAddressPrefix, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
                                             }
                                         ]
                                     }
@@ -579,6 +583,10 @@
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksIntegrationPublicSubnetAddressPrefix, '/')), '.'), 3))), true)]",
                                                 "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksIntegrationPublicSubnetAddressPrefix, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
                                             }
                                         ]
                                     }
@@ -608,6 +616,10 @@
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksIntegrationPrivateSubnetAddressPrefix, '/')), '.'), 3))), true)]",
                                                 "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksIntegrationPrivateSubnetAddressPrefix, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
                                             }
                                         ]
                                     }
@@ -637,6 +649,10 @@
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksProductPublicSubnetAddressPrefix, '/')), '.'), 3))), true)]",
                                                 "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksProductPublicSubnetAddressPrefix, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
                                             }
                                         ]
                                     }
@@ -666,6 +682,10 @@
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksProductPrivateSubnetAddressPrefix, '/')), '.'), 3))), true)]",
                                                 "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksProductPrivateSubnetAddressPrefix, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
                                             }
                                         ]
                                     }
@@ -695,6 +715,10 @@
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.powerBiGatewaySubnetAddressPrefix, '/')), '.'), 3))), true)]",
                                                 "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.powerBiGatewaySubnetAddressPrefix, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
                                             }
                                         ]
                                     }
@@ -724,6 +748,10 @@
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.dataIntegration001SubnetAddressPrefix, '/')), '.'), 3))), true)]",
                                                 "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.dataIntegration001SubnetAddressPrefix, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
                                             }
                                         ]
                                     }
@@ -753,6 +781,10 @@
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.dataIntegration002SubnetAddressPrefix, '/')), '.'), 3))), true)]",
                                                 "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.dataIntegration002SubnetAddressPrefix, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
                                             }
                                         ]
                                     }
@@ -782,6 +814,10 @@
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.dataProduct001SubnetAddressPrefix, '/')), '.'), 3))), true)]",
                                                 "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.dataProduct001SubnetAddressPrefix, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
                                             }
                                         ]
                                     }
@@ -811,6 +847,10 @@
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.dataProduct002SubnetAddressPrefix, '/')), '.'), 3))), true)]",
                                                 "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.dataProduct002SubnetAddressPrefix, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
                                             }
                                         ]
                                     }
