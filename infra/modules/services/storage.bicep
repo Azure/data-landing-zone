@@ -212,7 +212,7 @@ resource storagePrivateEndpointBlob 'Microsoft.Network/privateEndpoints@2020-11-
 
 resource storagePrivateEndpointBlobARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdBlob)) {
   parent: storagePrivateEndpointBlob
-  name: 'aRecord'
+  name: 'default'
   properties: {
     privateDnsZoneConfigs: [
       {
@@ -251,7 +251,7 @@ resource storagePrivateEndpointDfs 'Microsoft.Network/privateEndpoints@2020-11-0
 
 resource storagePrivateEndpointDfsARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdDfs)) {
   parent: storagePrivateEndpointDfs
-  name: 'aRecord'
+  name: 'default'
   properties: {
     privateDnsZoneConfigs: [
       {

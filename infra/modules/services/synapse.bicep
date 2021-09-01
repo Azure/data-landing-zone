@@ -159,7 +159,7 @@ resource synapsePrivateEndpointSql 'Microsoft.Network/privateEndpoints@2020-11-0
 
 resource synapsePrivateEndpointSqlARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdSynapseSql)) {
   parent: synapsePrivateEndpointSql
-  name: 'aRecord'
+  name: 'default'
   properties: {
     privateDnsZoneConfigs: [
       {
@@ -198,7 +198,7 @@ resource synapsePrivateEndpointSqlOnDemand 'Microsoft.Network/privateEndpoints@2
 
 resource synapsePrivateEndpointSqlOnDemandARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdSynapseSql)) {
   parent: synapsePrivateEndpointSqlOnDemand
-  name: 'aRecord'
+  name: 'default'
   properties: {
     privateDnsZoneConfigs: [
       {
@@ -237,7 +237,7 @@ resource synapsePrivateEndpointDev 'Microsoft.Network/privateEndpoints@2020-11-0
 
 resource synapsePrivateEndpointDevARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdSynapseDev)) {
   parent: synapsePrivateEndpointDev
-  name: 'aRecord'
+  name: 'default'
   properties: {
     privateDnsZoneConfigs: [
       {

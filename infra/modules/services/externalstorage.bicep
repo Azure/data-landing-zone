@@ -212,7 +212,7 @@ resource storageExternalPrivateEndpointBlob 'Microsoft.Network/privateEndpoints@
 
 resource storageExternalPrivateEndpointBlobARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdBlob)) {
   parent: storageExternalPrivateEndpointBlob
-  name: 'aRecord'
+  name: 'default'
   properties: {
     privateDnsZoneConfigs: [
       {
