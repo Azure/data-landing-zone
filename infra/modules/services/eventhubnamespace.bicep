@@ -92,7 +92,7 @@ resource eventhubNamespacePrivateEndpoint 'Microsoft.Network/privateEndpoints@20
 
 resource eventhubNamespacePrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdEventhubNamespace)) {
   parent: eventhubNamespacePrivateEndpoint
-  name: 'aRecord'
+  name: 'default'
   properties: {
     privateDnsZoneConfigs: [
       {
