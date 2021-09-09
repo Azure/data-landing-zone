@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "9981222792841072144"
+      "templateHash": "16087423225530639993"
     }
   },
   "parameters": {
@@ -1479,7 +1479,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "15940573301475350104"
+              "templateHash": "5688325945014789879"
             }
           },
           "parameters": {
@@ -1576,7 +1576,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "254526733707449126"
+                      "templateHash": "941099064868635315"
                     }
                   },
                   "parameters": {
@@ -1605,8 +1605,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_LRS",
-                        "tier": "Standard"
+                        "name": "Standard_LRS"
                       },
                       "kind": "StorageV2",
                       "properties": {
@@ -2770,7 +2769,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "15947388376654117579"
+              "templateHash": "12457625601675035711"
             }
           },
           "parameters": {
@@ -2851,7 +2850,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "6502188476424026987"
+                      "templateHash": "1783674557943310705"
                     }
                   },
                   "parameters": {
@@ -2883,7 +2882,25 @@
                   "variables": {
                     "storageNameCleaned": "[replace(parameters('storageName'), '-', '')]",
                     "storagePrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]",
-                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]"
+                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]",
+                    "storageZrsRegions": [
+                      "southafricanorth",
+                      "southeastasia",
+                      "australiaeast",
+                      "japaneast",
+                      "canadacentral",
+                      "northeurope",
+                      "westeurope",
+                      "francecentral",
+                      "germanywestcentral",
+                      "uksouth",
+                      "brazilsouth",
+                      "centralus",
+                      "eastus",
+                      "eastus2",
+                      "southcentralus",
+                      "westus2"
+                    ]
                   },
                   "resources": [
                     {
@@ -2896,8 +2913,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_ZRS",
-                        "tier": "Standard"
+                        "name": "[if(contains(variables('storageZrsRegions'), parameters('location')), 'Standard_ZRS', 'Standard_LRS')]"
                       },
                       "kind": "StorageV2",
                       "properties": {
@@ -3170,7 +3186,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "6502188476424026987"
+                      "templateHash": "1783674557943310705"
                     }
                   },
                   "parameters": {
@@ -3202,7 +3218,25 @@
                   "variables": {
                     "storageNameCleaned": "[replace(parameters('storageName'), '-', '')]",
                     "storagePrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]",
-                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]"
+                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]",
+                    "storageZrsRegions": [
+                      "southafricanorth",
+                      "southeastasia",
+                      "australiaeast",
+                      "japaneast",
+                      "canadacentral",
+                      "northeurope",
+                      "westeurope",
+                      "francecentral",
+                      "germanywestcentral",
+                      "uksouth",
+                      "brazilsouth",
+                      "centralus",
+                      "eastus",
+                      "eastus2",
+                      "southcentralus",
+                      "westus2"
+                    ]
                   },
                   "resources": [
                     {
@@ -3215,8 +3249,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_ZRS",
-                        "tier": "Standard"
+                        "name": "[if(contains(variables('storageZrsRegions'), parameters('location')), 'Standard_ZRS', 'Standard_LRS')]"
                       },
                       "kind": "StorageV2",
                       "properties": {
@@ -3489,7 +3522,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "6502188476424026987"
+                      "templateHash": "1783674557943310705"
                     }
                   },
                   "parameters": {
@@ -3521,7 +3554,25 @@
                   "variables": {
                     "storageNameCleaned": "[replace(parameters('storageName'), '-', '')]",
                     "storagePrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]",
-                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]"
+                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]",
+                    "storageZrsRegions": [
+                      "southafricanorth",
+                      "southeastasia",
+                      "australiaeast",
+                      "japaneast",
+                      "canadacentral",
+                      "northeurope",
+                      "westeurope",
+                      "francecentral",
+                      "germanywestcentral",
+                      "uksouth",
+                      "brazilsouth",
+                      "centralus",
+                      "eastus",
+                      "eastus2",
+                      "southcentralus",
+                      "westus2"
+                    ]
                   },
                   "resources": [
                     {
@@ -3534,8 +3585,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_ZRS",
-                        "tier": "Standard"
+                        "name": "[if(contains(variables('storageZrsRegions'), parameters('location')), 'Standard_ZRS', 'Standard_LRS')]"
                       },
                       "kind": "StorageV2",
                       "properties": {
@@ -3837,7 +3887,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "7994848459041262511"
+              "templateHash": "3208236183047677545"
             }
           },
           "parameters": {
@@ -3902,7 +3952,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "8664369870995257573"
+                      "templateHash": "13207011486762052692"
                     }
                   },
                   "parameters": {
@@ -3945,8 +3995,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_ZRS",
-                        "tier": "Standard"
+                        "name": "Standard_ZRS"
                       },
                       "kind": "StorageV2",
                       "properties": {

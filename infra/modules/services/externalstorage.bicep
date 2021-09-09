@@ -28,7 +28,6 @@ resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   }
   sku: {
     name: 'Standard_ZRS'
-    tier: 'Standard'
   }
   kind: 'StorageV2'
   properties: {

@@ -17,6 +17,24 @@ param fileSystemNames array
 var storageNameCleaned = replace(storageName, '-', '')
 var storagePrivateEndpointNameBlob = '${storage.name}-blob-private-endpoint'
 var storagePrivateEndpointNameDfs = '${storage.name}-dfs-private-endpoint'
+var storageZrsRegions = [
+  'southafricanorth'
+  'southeastasia'
+  'australiaeast'
+  'japaneast'
+  'canadacentral'
+  'northeurope'
+  'westeurope'
+  'francecentral'
+  'germanywestcentral'
+  'uksouth'
+  'brazilsouth'
+  'centralus'
+  'eastus'
+  'eastus2'
+  'southcentralus'
+  'westus2'
+]
 
 // Resources
 resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
@@ -27,8 +45,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
     type: 'SystemAssigned'
   }
   sku: {
-    name: 'Standard_ZRS'
-    tier: 'Standard'
+    name: contains(storageZrsRegions, location) ? 'Standard_ZRS' : 'Standard_LRS'
   }
   kind: 'StorageV2'
   properties: {
