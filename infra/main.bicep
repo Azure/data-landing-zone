@@ -355,6 +355,8 @@ resource dataProduct002ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01
 
 // Outputs
 output vnetId string = networkServices.outputs.vnetId
+output nsgId string = networkServices.outputs.nsgId
+output routeTableId string = networkServices.outputs.routeTableId
 output artifactstorage001ResourceGroupName string = split(runtimeServices.outputs.artifactstorage001Id, '/')[4]
 output artifactstorage001Name string = last(split(runtimeServices.outputs.artifactstorage001Id, '/'))
 output artifactstorage001ContainerName string = runtimeServices.outputs.artifactstorage001ContainerName
