@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "9981222792841072144"
+      "templateHash": "5067869481715148392"
     }
   },
   "parameters": {
@@ -435,7 +435,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "9422999081567317327"
+              "templateHash": "11191816052024276049"
             }
           },
           "parameters": {
@@ -1003,6 +1003,14 @@
             "vnetId": {
               "type": "string",
               "value": "[resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('prefix')))]"
+            },
+            "nsgId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
+            },
+            "routeTableId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
             },
             "servicesSubnetId": {
               "type": "string",
@@ -6868,6 +6876,14 @@
     "vnetId": {
       "type": "string",
       "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.vnetId.value]"
+    },
+    "nsgId": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.nsgId.value]"
+    },
+    "routeTableId": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.routeTableId.value]"
     },
     "artifactstorage001ResourceGroupName": {
       "type": "string",
