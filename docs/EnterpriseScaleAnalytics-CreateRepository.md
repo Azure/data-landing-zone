@@ -1,8 +1,8 @@
-# Data Management Zone - Create repository from the template
+# Data Landing Zone - Create repository from the template
 
 First, you must generate your own respository based off this template respository. To do so, please follow the steps below:
 
-1. On GitHub, navigate to the [main page of this repository](https://github.com/Azure/data-management-zone).
+1. On GitHub, navigate to the [main page of this repository](https://github.com/Azure/data-landing-zone).
 1. Above the file list, click **Use this template**
 
     ![GitHub Template repository](/docs/images/UseThisTemplateGH.png)
