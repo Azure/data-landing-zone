@@ -6603,7 +6603,7 @@
                         "nodeSizeFamily": "MemoryOptimized",
                         "sessionLevelPackagesEnabled": true,
                         "sparkEventsFolder": "events/",
-                        "sparkVersion": "3.0"
+                        "sparkVersion": "3.1"
                       },
                       "dependsOn": [
                         "[resourceId('Microsoft.Synapse/workspaces', parameters('synapseName'))]"
