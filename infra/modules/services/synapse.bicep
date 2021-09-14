@@ -108,7 +108,7 @@ resource synapseBigDataPool001 'Microsoft.Synapse/workspaces/bigDataPools@2021-0
     //   filename: 'spark.conf'
     // }
     sparkEventsFolder: 'events/'
-    sparkVersion: '3.0'
+    sparkVersion: '3.1'
   }
 }
 

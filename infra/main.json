@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "16087423225530639993"
+      "templateHash": "14673768049774557257"
     }
   },
   "parameters": {
@@ -435,7 +435,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "9422999081567317327"
+              "templateHash": "11191816052024276049"
             }
           },
           "parameters": {
@@ -1003,6 +1003,14 @@
             "vnetId": {
               "type": "string",
               "value": "[resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('prefix')))]"
+            },
+            "nsgId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
+            },
+            "routeTableId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
             },
             "servicesSubnetId": {
               "type": "string",
@@ -6272,7 +6280,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "16622311990752948471"
+              "templateHash": "1803028102218246558"
             }
           },
           "parameters": {
@@ -6509,7 +6517,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "12267714962417796830"
+                      "templateHash": "13095982571376811461"
                     }
                   },
                   "parameters": {
@@ -6644,7 +6652,7 @@
                         "nodeSizeFamily": "MemoryOptimized",
                         "sessionLevelPackagesEnabled": true,
                         "sparkEventsFolder": "events/",
-                        "sparkVersion": "3.0"
+                        "sparkVersion": "3.1"
                       },
                       "dependsOn": [
                         "[resourceId('Microsoft.Synapse/workspaces', parameters('synapseName'))]"
@@ -6917,6 +6925,14 @@
     "vnetId": {
       "type": "string",
       "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.vnetId.value]"
+    },
+    "nsgId": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.nsgId.value]"
+    },
+    "routeTableId": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.routeTableId.value]"
     },
     "artifactstorage001ResourceGroupName": {
       "type": "string",
