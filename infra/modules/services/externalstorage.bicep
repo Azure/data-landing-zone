@@ -27,7 +27,7 @@ resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
     type: 'SystemAssigned'
   }
   sku: {
-    name: 'Standard_ZRS'
+    name: 'Standard_LRS'
   }
   kind: 'StorageV2'
   properties: {
