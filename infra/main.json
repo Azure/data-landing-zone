@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "15582937476667412995"
+      "templateHash": "14855675369895544620"
     }
   },
   "parameters": {
@@ -5139,7 +5139,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "13127185223595451873"
+              "templateHash": "12838599591005772497"
             }
           },
           "parameters": {
@@ -5249,7 +5249,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "3158553689611505689"
+                      "templateHash": "2447281483125098022"
                     }
                   },
                   "parameters": {
@@ -5276,7 +5276,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Databricks/workspaces",
-                      "apiVersion": "2018-04-01",
+                      "apiVersion": "2021-04-01-preview",
                       "name": "[parameters('databricksName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -6231,7 +6231,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "11458065933881293255"
+              "templateHash": "4716596571283833800"
             }
           },
           "parameters": {
@@ -6335,7 +6335,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "3158553689611505689"
+                      "templateHash": "2447281483125098022"
                     }
                   },
                   "parameters": {
@@ -6362,7 +6362,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Databricks/workspaces",
-                      "apiVersion": "2018-04-01",
+                      "apiVersion": "2021-04-01-preview",
                       "name": "[parameters('databricksName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",

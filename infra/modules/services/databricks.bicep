@@ -15,7 +15,7 @@ param publicSubnetName string
 // Variables
 
 // Resources
-resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
+resource databricks 'Microsoft.Databricks/workspaces@2021-04-01-preview' = {
   name: databricksName
   location: location
   tags: tags
