@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "17681692497628322749"
+      "templateHash": "15582937476667412995"
     }
   },
   "parameters": {
@@ -6231,7 +6231,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "1803028102218246558"
+              "templateHash": "11458065933881293255"
             }
           },
           "parameters": {
@@ -6468,7 +6468,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "13095982571376811461"
+                      "templateHash": "8679177942379137286"
                     }
                   },
                   "parameters": {
@@ -6559,55 +6559,6 @@
                           "computeSubnetId": "[parameters('synapseComputeSubnetId')]"
                         }
                       }
-                    },
-                    {
-                      "type": "Microsoft.Synapse/workspaces/sqlPools",
-                      "apiVersion": "2021-03-01",
-                      "name": "[format('{0}/{1}', parameters('synapseName'), 'sqlPool001')]",
-                      "location": "[parameters('location')]",
-                      "tags": "[parameters('tags')]",
-                      "sku": {
-                        "name": "DW100c"
-                      },
-                      "properties": {
-                        "collation": "SQL_Latin1_General_CP1_CI_AS",
-                        "createMode": "Default",
-                        "storageAccountType": "GRS"
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.Synapse/workspaces', parameters('synapseName'))]"
-                      ]
-                    },
-                    {
-                      "type": "Microsoft.Synapse/workspaces/bigDataPools",
-                      "apiVersion": "2021-03-01",
-                      "name": "[format('{0}/{1}', parameters('synapseName'), 'bigDataPool001')]",
-                      "location": "[parameters('location')]",
-                      "tags": "[parameters('tags')]",
-                      "properties": {
-                        "autoPause": {
-                          "enabled": true,
-                          "delayInMinutes": 15
-                        },
-                        "autoScale": {
-                          "enabled": true,
-                          "maxNodeCount": 10,
-                          "minNodeCount": 3
-                        },
-                        "customLibraries": [],
-                        "defaultSparkLogFolder": "logs/",
-                        "dynamicExecutorAllocation": {
-                          "enabled": true
-                        },
-                        "nodeSize": "Small",
-                        "nodeSizeFamily": "MemoryOptimized",
-                        "sessionLevelPackagesEnabled": true,
-                        "sparkEventsFolder": "events/",
-                        "sparkVersion": "3.1"
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.Synapse/workspaces', parameters('synapseName'))]"
-                      ]
                     },
                     {
                       "type": "Microsoft.Synapse/workspaces/managedIdentitySqlControlSettings",
