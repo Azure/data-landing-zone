@@ -41,6 +41,18 @@ resource eventhubNamespace 'Microsoft.EventHub/namespaces@2021-01-01-preview' = 
   }
 }
 
+resource eventhubNamespaceNetworkRuleSets 'Microsoft.EventHub/namespaces/networkRuleSets@2021-06-01-preview' = {
+  name: 'default'
+  parent: eventhubNamespace
+  properties: {
+    defaultAction: 'Deny'
+    ipRules: []
+    virtualNetworkRules: []
+    publicNetworkAccess: 'Disabled'
+    trustedServiceAccessEnabled: false
+  }
+}
+
 // resource eventhub001 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = {  // Uncomment to deploy an Event Hub in the namespace
 //   parent: eventhubNamespace
 //   name: 'default'
