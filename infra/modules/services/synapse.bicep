@@ -86,14 +86,16 @@ resource synapse 'Microsoft.Synapse/workspaces@2021-03-01' = {
 //     }
 //     autoScale: {
 //       enabled: true
-//       maxNodeCount: 10
 //       minNodeCount: 3
+//       maxNodeCount: 10
 //     }
 //     // cacheSize: 100  // Uncomment to set a specific cache size
 //     customLibraries: []
 //     defaultSparkLogFolder: 'logs/'
 //     dynamicExecutorAllocation: {
 //       enabled: true
+//       minExecutors: 1
+//       maxExecutors: 9
 //     }
 //     // isComputeIsolationEnabled: true  // Uncomment to enable compute isolation (only available in selective regions)
 //     // libraryRequirements: {  // Uncomment to install pip dependencies on the Spark cluster
