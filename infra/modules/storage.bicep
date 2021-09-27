@@ -71,6 +71,14 @@ module storageWorkspace 'services/storage.bicep' = {
   }
 }
 
+module lock 'services/lock.bicep' = {
+  name: 'lock'
+  scope: resourceGroup()
+  params: {
+    lockEffect: 'CanNotDelete'
+  }
+}
+
 // Outputs
 output storageRawId string = storageRaw.outputs.storageId
 output storageRawFileSystemId string = storageRaw.outputs.storageFileSystemIds[0].storageFileSystemId

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "4109190605093468141"
+      "templateHash": "1749470466635824666"
     }
   },
   "parameters": {
@@ -2778,7 +2778,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "15947388376654117579"
+              "templateHash": "15390355243573116252"
             }
           },
           "parameters": {
@@ -3774,6 +3774,55 @@
                       }
                     }
                   }
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2019-10-01",
+              "name": "lock",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "lockEffect": {
+                    "value": "CanNotDelete"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.4.613.9944",
+                      "templateHash": "15970337114729251288"
+                    }
+                  },
+                  "parameters": {
+                    "lockEffect": {
+                      "type": "string",
+                      "defaultValue": "CanNotDelete",
+                      "allowedValues": [
+                        "CanNotDelete",
+                        "ReadOnly"
+                      ]
+                    }
+                  },
+                  "functions": [],
+                  "resources": [
+                    {
+                      "type": "Microsoft.Authorization/locks",
+                      "apiVersion": "2016-09-01",
+                      "name": "lock",
+                      "properties": {
+                        "level": "[parameters('lockEffect')]",
+                        "notes": "Prevent Deletion of Resource Group and resources within the Resource Group."
+                      }
+                    }
+                  ]
                 }
               }
             }
