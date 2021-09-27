@@ -14,7 +14,7 @@ param lockEffect string = 'CanNotDelete'
 // Variables
 
 // Resources
-resource lock 'Microsoft.Authorization/locks@2016-09-01' = {
+resource lock 'Microsoft.Authorization/locks@2021-01-01' = {
   name: 'lock'
   properties: {
     level: lockEffect

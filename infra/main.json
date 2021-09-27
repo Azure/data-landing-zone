@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "1749470466635824666"
+      "templateHash": "13166319048969332866"
     }
   },
   "parameters": {
@@ -2778,7 +2778,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "15390355243573116252"
+              "templateHash": "15601587954198620788"
             }
           },
           "parameters": {
@@ -3798,7 +3798,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "15970337114729251288"
+                      "templateHash": "13838143596572751245"
                     }
                   },
                   "parameters": {
@@ -3815,7 +3815,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Authorization/locks",
-                      "apiVersion": "2016-09-01",
+                      "apiVersion": "2021-01-01",
                       "name": "lock",
                       "properties": {
                         "level": "[parameters('lockEffect')]",
