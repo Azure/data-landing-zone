@@ -96,7 +96,6 @@ stages:
                   --location ${{ variables.AZURE_LOCATION }} `
                   --subscription ${{ variables.AZURE_SUBSCRIPTION_ID }} `
                   --exclude-change-types Ignore NoChange Unsupported `
-                  --mode "Incremental" `
                   --template-file "$(System.DefaultWorkingDirectory)/infra/main.json" `
                   --parameters "$(System.DefaultWorkingDirectory)/infra/params.dev.json" administratorPassword="$(password)" deploySelfHostedIntegrationRuntimes=false `
                   --result-format "FullResourcePayloads"

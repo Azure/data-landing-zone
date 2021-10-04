@@ -71,7 +71,6 @@ jobs:
               --location ${{ env.AZURE_LOCATION }} \
               --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
               --exclude-change-types Ignore NoChange Unsupported \
-              --mode "Incremental" \
               --template-file "${GITHUB_WORKSPACE}/infra/main.json" \
               --parameters "${GITHUB_WORKSPACE}/infra/params.dev.json" administratorPassword="${{ steps.generate_password_001.outputs.password }}" deploySelfHostedIntegrationRuntimes=false \
               --result-format "FullResourcePayloads"
