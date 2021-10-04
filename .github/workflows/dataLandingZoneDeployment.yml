@@ -68,7 +68,7 @@ jobs:
               --subscription ${{ env.AZURE_SUBSCRIPTION_ID }}
             
             az deployment sub what-if \
-              --location ${{ variables.AZURE_LOCATION }} \
+              --location ${{ env.AZURE_LOCATION }} \
               --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
               --exclude-change-types Ignore NoChange Unsupported \
               --mode "Incremental" \
