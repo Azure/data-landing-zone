@@ -42,11 +42,11 @@ jobs:
         id: generate_password_001
         run: |
           echo "Generating Password"
-          pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
+          pwsh "${GITHUB_WORKSPACE}/code/GeneratePassword.ps1" -GitHub
 
       # Deploy Data Landing Zone - validation
       - name: Deploy Data Landing Zone - validation
-        id: data_management_zone_validation
+        id: data_landing_zone_validation
         uses: azure/arm-deploy@v1
         with:
           scope: subscription
@@ -56,6 +56,24 @@ jobs:
           parameters: ${{ github.workspace }}/infra/params.dev.json administratorPassword="${{ steps.generate_password_001.outputs.password }}" deploySelfHostedIntegrationRuntimes=false
           deploymentMode: Validate
           failOnStdErr: false
+
+      # Deploy Data Landing Zone - what-if
+      - name: Deploy Data Landing Zone - what-if
+        id: data_landing_zone_whatif
+        uses: azure/CLI@v1
+        with:
+          azcliversion: "latest"
+          inlineScript: |
+            az account set \
+              --subscription ${{ env.AZURE_SUBSCRIPTION_ID }}
+            
+            az deployment sub what-if \
+              --location ${{ env.AZURE_LOCATION }} \
+              --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
+              --exclude-change-types Ignore NoChange Unsupported \
+              --template-file "${GITHUB_WORKSPACE}/infra/main.json" \
+              --parameters "${GITHUB_WORKSPACE}/infra/params.dev.json" administratorPassword="${{ steps.generate_password_001.outputs.password }}" deploySelfHostedIntegrationRuntimes=false \
+              --result-format "FullResourcePayloads"
 
       # Log out from Azure
       - name: Log out from Azure
@@ -92,11 +110,11 @@ jobs:
         id: generate_password_001
         run: |
           echo "Generating Password"
-          pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
+          pwsh "${GITHUB_WORKSPACE}/code/GeneratePassword.ps1" -GitHub
 
       # Deploy Data Landing Zone - w/o SHIR
       - name: Deploy Data Landing Zone - w/o SHIR
-        id: data_management_zone_deployment001
+        id: data_landing_zone_deployment001
         uses: azure/arm-deploy@v1
         with:
           scope: subscription
@@ -115,15 +133,15 @@ jobs:
           azPSVersion: latest
           inlineScript: |
             & "${{ github.workspace }}/code/UploadBlob.ps1" `
-              -ResourceGroupName "${{ steps.data_management_zone_deployment001.outputs.artifactstorage001ResourceGroupName }}" `
-              -StorageAccountName "${{ steps.data_management_zone_deployment001.outputs.artifactstorage001Name }}" `
-              -StorageAccountContainerName "${{ steps.data_management_zone_deployment001.outputs.artifactstorage001ContainerName }}" `
+              -ResourceGroupName "${{ steps.data_landing_zone_deployment001.outputs.artifactstorage001ResourceGroupName }}" `
+              -StorageAccountName "${{ steps.data_landing_zone_deployment001.outputs.artifactstorage001Name }}" `
+              -StorageAccountContainerName "${{ steps.data_landing_zone_deployment001.outputs.artifactstorage001ContainerName }}" `
               -File "${{ github.workspace }}/code/installSHIRGateway.ps1" `
               -Blob "installSHIRGateway.ps1"
 
       # Deploy Data Landing Zone - w/ SHIR
       - name: Deploy Data Landing Zone - w/ SHIR
-        id: data_management_zone_deployment002
+        id: data_landing_zone_deployment002
         uses: azure/arm-deploy@v1
         with:
           scope: subscription
@@ -142,9 +160,9 @@ jobs:
           azPSVersion: latest
           inlineScript: |
             & "${{ github.workspace }}/code/RestartMySqlServer.ps1" `
-              -SubscriptionId "${{ steps.data_management_zone_deployment001.outputs.mySqlServer001SubscriptionId }}" `
-              -ResourceGroupName "${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ResourceGroupName }}" `
-              -MySqlServerName "${{ steps.data_management_zone_deployment001.outputs.mySqlServer001Name }}"
+              -SubscriptionId "${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001SubscriptionId }}" `
+              -ResourceGroupName "${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001ResourceGroupName }}" `
+              -MySqlServerName "${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001Name }}"
 
       # # Setup databricks 001 - Disabled, because automation is currently blocked.
       # - name: Setup Databricks 001
@@ -155,18 +173,18 @@ jobs:
       #     inlineScript: |
       #       Write-Host "Setting Up Databricks Workspace 001"
       #       & "${{ github.workspace }}/code/SetupDatabricks.ps1" `
-      #         -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001Name }}' `
-      #         -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001Id }}' `
-      #         -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001ApiUrl }}' `
-      #         -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001SubscriptionId }}' `
-      #         -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001ResourceGroupName }}' `
-      #         -HiveKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' `
-      #         -HiveConnectionStringSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' `
-      #         -HiveUsernameSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' `
-      #         -HivePasswordSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' `
-      #         -LogAnalyticsKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' `
-      #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' `
-      #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' `
+      #         -DatabricksWorkspaceName '${{ steps.data_landing_zone_deployment001.outputs.databricksIntegration001Name }}' `
+      #         -DatabricksWorkspaceId '${{ steps.data_landing_zone_deployment001.outputs.databricksIntegration001Id }}' `
+      #         -DatabricksApiUrl '${{ steps.data_landing_zone_deployment001.outputs.databricksIntegration001ApiUrl }}' `
+      #         -DatabricksSubscriptionId '${{ steps.data_landing_zone_deployment001.outputs.databricksIntegration001SubscriptionId }}' `
+      #         -DatabricksResourceGroupName '${{ steps.data_landing_zone_deployment001.outputs.databricksIntegration001ResourceGroupName }}' `
+      #         -HiveKeyVaultId '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' `
+      #         -HiveConnectionStringSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' `
+      #         -HiveUsernameSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' `
+      #         -HivePasswordSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' `
+      #         -LogAnalyticsKeyVaultId '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' `
+      #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' `
+      #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' `
       #         -HiveVersion '2.3.7' `
       #         -HadoopVersion '2.7.4' `
 
@@ -180,18 +198,18 @@ jobs:
             -UserPassword '{password}' \`
             -ClientId '{clientId}' \`
             -TenantId '{tenantId}' \`
-            -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001Name }}' \`
-            -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001Id }}' \`
-            -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001ApiUrl }}' \`
-            -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001SubscriptionId }}' \`
-            -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksIntegration001ResourceGroupName }}' \`
-            -HiveKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' \`
-            -HiveConnectionStringSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' \`
-            -HiveUsernameSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' \`
-            -HivePasswordSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' \`
-            -LogAnalyticsKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' \`
-            -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
-            -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
+            -DatabricksWorkspaceName '${{ steps.data_landing_zone_deployment001.outputs.databricksIntegration001Name }}' \`
+            -DatabricksWorkspaceId '${{ steps.data_landing_zone_deployment001.outputs.databricksIntegration001Id }}' \`
+            -DatabricksApiUrl '${{ steps.data_landing_zone_deployment001.outputs.databricksIntegration001ApiUrl }}' \`
+            -DatabricksSubscriptionId '${{ steps.data_landing_zone_deployment001.outputs.databricksIntegration001SubscriptionId }}' \`
+            -DatabricksResourceGroupName '${{ steps.data_landing_zone_deployment001.outputs.databricksIntegration001ResourceGroupName }}' \`
+            -HiveKeyVaultId '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' \`
+            -HiveConnectionStringSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' \`
+            -HiveUsernameSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' \`
+            -HivePasswordSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' \`
+            -LogAnalyticsKeyVaultId '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' \`
+            -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
+            -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
             -HiveVersion '2.3.7' \`
             -HadoopVersion '2.7.4'
           "
@@ -205,18 +223,18 @@ jobs:
       #     inlineScript: |
       #       Write-Host "Setting Up Databricks Workspace 002"
       #       & "${{ github.workspace }}/code/SetupDatabricks.ps1" `
-      #         -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001Name }}' `
-      #         -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001Id }}' `
-      #         -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001ApiUrl }}' `
-      #         -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001SubscriptionId }}' `
-      #         -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001ResourceGroupName }}' `
-      #         -HiveKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' `
-      #         -HiveConnectionStringSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' `
-      #         -HiveUsernameSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' `
-      #         -HivePasswordSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' `
-      #         -LogAnalyticsKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' `
-      #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' `
-      #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' `
+      #         -DatabricksWorkspaceName '${{ steps.data_landing_zone_deployment001.outputs.databricksProduct001Name }}' `
+      #         -DatabricksWorkspaceId '${{ steps.data_landing_zone_deployment001.outputs.databricksProduct001Id }}' `
+      #         -DatabricksApiUrl '${{ steps.data_landing_zone_deployment001.outputs.databricksProduct001ApiUrl }}' `
+      #         -DatabricksSubscriptionId '${{ steps.data_landing_zone_deployment001.outputs.databricksProduct001SubscriptionId }}' `
+      #         -DatabricksResourceGroupName '${{ steps.data_landing_zone_deployment001.outputs.databricksProduct001ResourceGroupName }}' `
+      #         -HiveKeyVaultId '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' `
+      #         -HiveConnectionStringSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' `
+      #         -HiveUsernameSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' `
+      #         -HivePasswordSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' `
+      #         -LogAnalyticsKeyVaultId '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' `
+      #         -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' `
+      #         -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' `
       #         -HiveVersion '2.3.7' `
       #         -HadoopVersion '2.7.4' `
 
@@ -230,18 +248,18 @@ jobs:
             -UserPassword '{password}' \`
             -ClientId '{clientId}' \`
             -TenantId '{tenantId}' \`
-            -DatabricksWorkspaceName '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001Name }}' \`
-            -DatabricksWorkspaceId '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001Id }}' \`
-            -DatabricksApiUrl '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001ApiUrl }}' \`
-            -DatabricksSubscriptionId '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001SubscriptionId }}' \`
-            -DatabricksResourceGroupName '${{ steps.data_management_zone_deployment001.outputs.databricksProduct001ResourceGroupName }}' \`
-            -HiveKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' \`
-            -HiveConnectionStringSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' \`
-            -HiveUsernameSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' \`
-            -HivePasswordSecretName '${{ steps.data_management_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' \`
-            -LogAnalyticsKeyVaultId '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' \`
-            -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
-            -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_management_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
+            -DatabricksWorkspaceName '${{ steps.data_landing_zone_deployment001.outputs.databricksProduct001Name }}' \`
+            -DatabricksWorkspaceId '${{ steps.data_landing_zone_deployment001.outputs.databricksProduct001Id }}' \`
+            -DatabricksApiUrl '${{ steps.data_landing_zone_deployment001.outputs.databricksProduct001ApiUrl }}' \`
+            -DatabricksSubscriptionId '${{ steps.data_landing_zone_deployment001.outputs.databricksProduct001SubscriptionId }}' \`
+            -DatabricksResourceGroupName '${{ steps.data_landing_zone_deployment001.outputs.databricksProduct001ResourceGroupName }}' \`
+            -HiveKeyVaultId '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001KeyVaultid }}' \`
+            -HiveConnectionStringSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001ConnectionStringSecretName }}' \`
+            -HiveUsernameSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001UsernameSecretName }}' \`
+            -HivePasswordSecretName '${{ steps.data_landing_zone_deployment001.outputs.mySqlServer001PasswordSecretName }}' \`
+            -LogAnalyticsKeyVaultId '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceKeyVaultId }}' \`
+            -LogAnalyticsWorkspaceIdSecretName '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceIdSecretName }}' \`
+            -LogAnalyticsWorkspaceKeySecretName '${{ steps.data_landing_zone_deployment001.outputs.logAnalyticsWorkspaceKeySecretName }}' \`
             -HiveVersion '2.3.7' \`
             -HadoopVersion '2.7.4'
           "
