@@ -27,6 +27,9 @@ var storageEnrichedCuratedName = length(split(storageEnrichedCuratedId, '/')) >=
 var databricks001Name = length(split(databricks001Id, '/')) >= 9 ? last(split(databricks001Id, '/')) : 'incorrectSegmentLength'
 var keyVault001Name = length(split(keyVault001Id, '/')) >= 9 ? last(split(keyVault001Id, '/')) : 'incorrectSegmentLength'
 var sqlServer001Name = length(split(sqlServer001Id, '/')) >= 9 ? last(split(sqlServer001Id, '/')) : 'incorrectSegmentLength'
+var purviewSubscriptionId = length(split(purviewId, '/')) >= 9 ? split(purviewId, '/')[2] : subscription().subscriptionId
+var purviewResourceGroupName = length(split(purviewId, '/')) >= 9 ? split(purviewId, '/')[4] : resourceGroup().name
+var purviewName = length(split(purviewId, '/')) >= 9 ? last(split(purviewId, '/')) : 'incorrectSegmentLength'
 var datafactoryDefaultManagedVnetIntegrationRuntimeName = 'AutoResolveIntegrationRuntime'
 var datafactoryPrivateEndpointNameDatafactory = '${datafactory.name}-datafactory-private-endpoint'
 var datafactoryPrivateEndpointNamePortal = '${datafactory.name}-portal-private-endpoint'
@@ -146,6 +149,51 @@ resource datafactoryManagedIntegrationRuntime001 'Microsoft.DataFactory/factorie
         location: 'AutoResolve'
       }
     }
+  }
+}
+
+resource purview 'Microsoft.Purview/accounts@2021-07-01' existing = if(!empty(purviewId)) {
+  name: purviewName
+  scope: resourceGroup(purviewSubscriptionId, purviewResourceGroupName)
+}
+
+resource datafactoryPurviewManagedPrivateEndpoint 'Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints@2018-06-01' = if(!empty(purviewId)) {
+  parent: datafactoryManagedVirtualNetwork
+  name: 'Purview'
+  properties: {
+    fqdns: []
+    groupId: 'account'
+    privateLinkResourceId: purview.id
+  }
+}
+
+resource datafactoryPurviewBlobManagedPrivateEndpoint 'Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints@2018-06-01' = if(!empty(purviewId)) {
+  parent: datafactoryManagedVirtualNetwork
+  name: 'Purview_blob'
+  properties: {
+    fqdns: []
+    groupId: 'blob'
+    privateLinkResourceId: purview.properties.managedResources.storageAccount
+  }
+}
+
+resource datafactoryPurviewQueueManagedPrivateEndpoint 'Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints@2018-06-01' = if(!empty(purviewId)) {
+  parent: datafactoryManagedVirtualNetwork
+  name: 'Purview_queue'
+  properties: {
+    fqdns: []
+    groupId: 'queue'
+    privateLinkResourceId: purview.properties.managedResources.storageAccount
+  }
+}
+
+resource datafactoryPurviewNamespaceManagedPrivateEndpoint 'Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints@2018-06-01' = if(!empty(purviewId)) {
+  parent: datafactoryManagedVirtualNetwork
+  name: 'Purview_namespace'
+  properties: {
+    fqdns: []
+    groupId: 'namespace'
+    privateLinkResourceId: purview.properties.managedResources.eventHubNamespace
   }
 }
 
