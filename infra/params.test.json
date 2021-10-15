@@ -64,6 +64,12 @@
         "purviewId": {
             "value": "/subscriptions/17588eb2-2943-461a-ab3f-00a3ceac3112/resourceGroups/dmz-test-governance/providers/Microsoft.Purview/accounts/dmz-test-purview001"
         },
+        "purviewManagedStorageId": {
+            "value": "/subscriptions/17588eb2-2943-461a-ab3f-00a3ceac3112/resourceGroups/dmz-test-purview001/providers/Microsoft.Storage/storageAccounts/scannortheuropekkkshlo"
+        },
+        "purviewManagedEventHubId": {
+            "value": "/subscriptions/17588eb2-2943-461a-ab3f-00a3ceac3112/resourceGroups/dmz-test-purview001/providers/Microsoft.EventHub/namespaces/Atlas-a487e969-df29-4159-8858-9e68d81285e9"
+        },
         "purviewSelfHostedIntegrationRuntimeAuthKey": {
             "value": ""
         },

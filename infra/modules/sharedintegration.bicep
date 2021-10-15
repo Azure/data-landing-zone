@@ -16,6 +16,8 @@ param databricksIntegration001PrivateSubnetName string
 param databricksIntegration001PublicSubnetName string
 param subnetId string
 param purviewId string = ''
+param purviewManagedStorageId string = ''
+param purviewManagedEventHubId string = ''
 param storageRawId string
 param storageEnrichedCuratedId string
 param keyVault001Id string
@@ -73,6 +75,8 @@ module datafactoryIntegration001 'services/datafactorysharedintegration.bicep' =
     privateDnsZoneIdDataFactory: privateDnsZoneIdDataFactory
     privateDnsZoneIdDataFactoryPortal: privateDnsZoneIdDataFactoryPortal
     purviewId: purviewId
+    purviewManagedStorageId: purviewManagedStorageId
+    purviewManagedEventHubId: purviewManagedEventHubId
     storageRawId: storageRawId
     storageEnrichedCuratedId: storageEnrichedCuratedId
     databricks001Id: databricksIntegration001.outputs.databricksId

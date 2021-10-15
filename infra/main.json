@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "10514491848955589386"
+      "templateHash": "10408780046315254093"
     }
   },
   "parameters": {
@@ -153,6 +153,20 @@
       "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the central purview instance."
+      }
+    },
+    "purviewManagedStorageId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Specifies the resource ID of the managed storage of the central purview instance."
+      }
+    },
+    "purviewManagedEventHubId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Specifies the resource ID of the managed event hub of the central purview instance."
       }
     },
     "purviewSelfHostedIntegrationRuntimeAuthKey": {
@@ -5122,6 +5136,12 @@
           "purviewId": {
             "value": "[parameters('purviewId')]"
           },
+          "purviewManagedStorageId": {
+            "value": "[parameters('purviewManagedStorageId')]"
+          },
+          "purviewManagedEventHubId": {
+            "value": "[parameters('purviewManagedEventHubId')]"
+          },
           "privateDnsZoneIdDataFactory": {
             "value": "[parameters('privateDnsZoneIdDataFactory')]"
           },
@@ -5139,7 +5159,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "13272327171462018535"
+              "templateHash": "7695691246108585623"
             }
           },
           "parameters": {
@@ -5171,6 +5191,14 @@
               "type": "string"
             },
             "purviewId": {
+              "type": "string",
+              "defaultValue": ""
+            },
+            "purviewManagedStorageId": {
+              "type": "string",
+              "defaultValue": ""
+            },
+            "purviewManagedEventHubId": {
               "type": "string",
               "defaultValue": ""
             },
@@ -5520,6 +5548,12 @@
                   "purviewId": {
                     "value": "[parameters('purviewId')]"
                   },
+                  "purviewManagedStorageId": {
+                    "value": "[parameters('purviewManagedStorageId')]"
+                  },
+                  "purviewManagedEventHubId": {
+                    "value": "[parameters('purviewManagedEventHubId')]"
+                  },
                   "storageRawId": {
                     "value": "[parameters('storageRawId')]"
                   },
@@ -5549,7 +5583,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "14988007860412230225"
+                      "templateHash": "13741131931814912162"
                     }
                   },
                   "parameters": {
@@ -5574,6 +5608,14 @@
                       "defaultValue": ""
                     },
                     "purviewId": {
+                      "type": "string",
+                      "defaultValue": ""
+                    },
+                    "purviewManagedStorageId": {
+                      "type": "string",
+                      "defaultValue": ""
+                    },
+                    "purviewManagedEventHubId": {
                       "type": "string",
                       "defaultValue": ""
                     },
@@ -5606,9 +5648,6 @@
                     "databricks001Name": "[if(greaterOrEquals(length(split(parameters('databricks001Id'), '/')), 9), last(split(parameters('databricks001Id'), '/')), 'incorrectSegmentLength')]",
                     "keyVault001Name": "[if(greaterOrEquals(length(split(parameters('keyVault001Id'), '/')), 9), last(split(parameters('keyVault001Id'), '/')), 'incorrectSegmentLength')]",
                     "sqlServer001Name": "[if(greaterOrEquals(length(split(parameters('sqlServer001Id'), '/')), 9), last(split(parameters('sqlServer001Id'), '/')), 'incorrectSegmentLength')]",
-                    "purviewSubscriptionId": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[2], subscription().subscriptionId)]",
-                    "purviewResourceGroupName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[4], resourceGroup().name)]",
-                    "purviewName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), last(split(parameters('purviewId'), '/')), 'incorrectSegmentLength')]",
                     "datafactoryDefaultManagedVnetIntegrationRuntimeName": "AutoResolveIntegrationRuntime",
                     "datafactoryPrivateEndpointNameDatafactory": "[format('{0}-datafactory-private-endpoint', parameters('datafactoryName'))]",
                     "datafactoryPrivateEndpointNamePortal": "[format('{0}-portal-private-endpoint', parameters('datafactoryName'))]"
@@ -5763,7 +5802,7 @@
                       "properties": {
                         "fqdns": [],
                         "groupId": "account",
-                        "privateLinkResourceId": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName'))]"
+                        "privateLinkResourceId": "[parameters('purviewId')]"
                       },
                       "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', parameters('datafactoryName'))]",
@@ -5771,14 +5810,14 @@
                       ]
                     },
                     {
-                      "condition": "[not(empty(parameters('purviewId')))]",
+                      "condition": "[not(empty(parameters('purviewManagedStorageId')))]",
                       "type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
                       "apiVersion": "2018-06-01",
                       "name": "[format('{0}/{1}/{2}', parameters('datafactoryName'), 'default', 'Purview_blob')]",
                       "properties": {
                         "fqdns": [],
                         "groupId": "blob",
-                        "privateLinkResourceId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName')), '2021-07-01').managedResources.storageAccount]"
+                        "privateLinkResourceId": "[parameters('purviewManagedStorageId')]"
                       },
                       "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', parameters('datafactoryName'))]",
@@ -5786,14 +5825,14 @@
                       ]
                     },
                     {
-                      "condition": "[not(empty(parameters('purviewId')))]",
+                      "condition": "[not(empty(parameters('purviewManagedStorageId')))]",
                       "type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
                       "apiVersion": "2018-06-01",
                       "name": "[format('{0}/{1}/{2}', parameters('datafactoryName'), 'default', 'Purview_queue')]",
                       "properties": {
                         "fqdns": [],
                         "groupId": "queue",
-                        "privateLinkResourceId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName')), '2021-07-01').managedResources.storageAccount]"
+                        "privateLinkResourceId": "[parameters('purviewManagedStorageId')]"
                       },
                       "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', parameters('datafactoryName'))]",
@@ -5801,14 +5840,14 @@
                       ]
                     },
                     {
-                      "condition": "[not(empty(parameters('purviewId')))]",
+                      "condition": "[not(empty(parameters('purviewManagedEventHubId')))]",
                       "type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
                       "apiVersion": "2018-06-01",
                       "name": "[format('{0}/{1}/{2}', parameters('datafactoryName'), 'default', 'Purview_namespace')]",
                       "properties": {
                         "fqdns": [],
                         "groupId": "namespace",
-                        "privateLinkResourceId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName')), '2021-07-01').managedResources.eventHubNamespace]"
+                        "privateLinkResourceId": "[parameters('purviewManagedEventHubId')]"
                       },
                       "dependsOn": [
                         "[resourceId('Microsoft.DataFactory/factories', parameters('datafactoryName'))]",
