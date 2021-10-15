@@ -475,6 +475,14 @@
                                     "options": {
                                         "hideConfirmation": true
                                     }
+                                },
+                                {
+                                    "name": "purviewApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('generalSettings').dataGovernance.purviewId.id, '?api-version=2021-07-01')]"
+                                    }
                                 }
                             ]
                         }
@@ -1368,6 +1376,8 @@
                 "deploySelfHostedIntegrationRuntimes": "[steps('generalSettings').servicesSettings.deploySelfHostedIntegrationRuntimes]",
                 "purviewSelfHostedIntegrationRuntimeAuthKey": "[if(empty(steps('generalSettings').dataGovernance.purviewSelfHostedIntegrationRuntimeAuthKey), '', steps('generalSettings').dataGovernance.purviewSelfHostedIntegrationRuntimeAuthKey)]",
                 "purviewId": "[if(empty(steps('generalSettings').dataGovernance.purviewId.id), '', steps('generalSettings').dataGovernance.purviewId.id)]",
+                "purviewManagedStorageId": "[if(empty(steps('generalSettings').dataGovernance.purviewId.id), '', steps('generalSettings').dataGovernance.purviewApi.properties.managedResources.storageAccount)]",
+                "purviewManagedEventHubId": "[if(empty(steps('generalSettings').dataGovernance.purviewId.id), '', steps('generalSettings').dataGovernance.purviewApi.properties.managedResources.eventHubNamespace)]",
                 "privateDnsZoneIdKeyVault": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault)]",
                 "privateDnsZoneIdDataFactory": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactory), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactory)]",
                 "privateDnsZoneIdDataFactoryPortal": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactoryPortal), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactoryPortal)]",
