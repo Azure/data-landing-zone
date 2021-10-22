@@ -188,6 +188,52 @@ resource databricksNsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
   }
 }
 
+resource amlNsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
+  name: '${prefix}-aml-nsg'
+  location: location
+  tags: tags
+  properties: {
+    securityRules: [
+      {
+        name: 'AllowAzureMachineLearning'
+        properties: {
+          description: 'Required for Azure Machine Learning Compute Clusters and Instances with public IP.'
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '44224'
+          sourceAddressPrefix: 'AzureMachineLearning'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 120
+          direction: 'Inbound'
+          sourcePortRanges: []
+          destinationPortRanges: []
+          sourceAddressPrefixes: []
+          destinationAddressPrefixes: []
+        }
+      }
+      {
+        name: 'AllowBatchNodeManagement'
+        properties: {
+          description: 'Required for Azure Machine Learning Compute Clusters and Instances with public IP.'
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '29876-29877'
+          sourceAddressPrefix: 'BatchNodeManagement'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 130
+          direction: 'Inbound'
+          sourcePortRanges: []
+          destinationPortRanges: []
+          sourceAddressPrefixes: []
+          destinationAddressPrefixes: []
+        }
+      }
+    ]
+  }
+}
+
 resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
   name: '${prefix}-vnet'
   location: location
