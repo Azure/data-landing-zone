@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "9862647564383138125"
+      "templateHash": "17725145245715892859"
     }
   },
   "parameters": {
@@ -449,7 +449,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "9779799105824358373"
+              "templateHash": "7279192272160550381"
             }
           },
           "parameters": {
@@ -678,6 +678,53 @@
                       "access": "Allow",
                       "priority": 100,
                       "direction": "Outbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "apiVersion": "2020-11-01",
+              "name": "[format('{0}-aml-nsg', parameters('prefix'))]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "AllowAzureMachineLearning",
+                    "properties": {
+                      "description": "Required for Azure Machine Learning Compute Clusters and Instances with public IP.",
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "44224",
+                      "sourceAddressPrefix": "AzureMachineLearning",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 120,
+                      "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                    }
+                  },
+                  {
+                    "name": "AllowBatchNodeManagement",
+                    "properties": {
+                      "description": "Required for Azure Machine Learning Compute Clusters and Instances with public IP.",
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "29876-29877",
+                      "sourceAddressPrefix": "BatchNodeManagement",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 130,
+                      "direction": "Inbound",
                       "sourcePortRanges": [],
                       "destinationPortRanges": [],
                       "sourceAddressPrefixes": [],
