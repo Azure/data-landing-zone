@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "17725145245715892859"
+      "templateHash": "1776509211155428054"
     }
   },
   "parameters": {
@@ -1548,7 +1548,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "10344909173331100565"
+              "templateHash": "1483310791486338071"
             }
           },
           "parameters": {
@@ -1603,7 +1603,8 @@
           "variables": {
             "artifactstorage001Name": "[format('{0}-artfct001', parameters('prefix'))]",
             "datafactoryRuntimes001Name": "[format('{0}-runtime-datafactory001', parameters('prefix'))]",
-            "shir001Name": "[format('{0}-shir001', parameters('prefix'))]"
+            "shir001Name": "[format('{0}-shir001', parameters('prefix'))]",
+            "shir002Name": "[format('{0}-shir002', parameters('prefix'))]"
           },
           "resources": [
             {
@@ -2512,7 +2513,7 @@
                     "value": "[reference(resourceId('Microsoft.Resources/deployments', 'artifactstorage001'), '2020-06-01').outputs.storageAccountId.value]"
                   },
                   "vmssName": {
-                    "value": "[variables('shir001Name')]"
+                    "value": "[variables('shir002Name')]"
                   },
                   "vmssSkuCapacity": {
                     "value": 1
