@@ -58,6 +58,10 @@ param dnsServerAdresses array = [
 param administratorPassword string
 @description('Specifies the resource ID of the central purview instance.')
 param purviewId string = ''
+@description('Specifies the resource ID of the managed storage of the central purview instance.')
+param purviewManagedStorageId string = ''
+@description('Specifies the resource ID of the managed event hub of the central purview instance.')
+param purviewManagedEventHubId string = ''
 @secure()
 @description('Specifies the Auth Key for the Self-hosted integration runtime of Purview.')
 param purviewSelfHostedIntegrationRuntimeAuthKey string = ''
@@ -286,6 +290,8 @@ module sharedIntegrationServices 'modules/sharedintegration.bicep' = {
     sqlServer001Id: metadataServices.outputs.sqlServer001Id
     sqlDatabase001Name: metadataServices.outputs.sqlServer001DatabaseName
     purviewId: purviewId
+    purviewManagedStorageId: purviewManagedStorageId
+    purviewManagedEventHubId: purviewManagedEventHubId
     privateDnsZoneIdDataFactory: privateDnsZoneIdDataFactory
     privateDnsZoneIdDataFactoryPortal: privateDnsZoneIdDataFactoryPortal
     privateDnsZoneIdEventhubNamespace: privateDnsZoneIdEventhubNamespace

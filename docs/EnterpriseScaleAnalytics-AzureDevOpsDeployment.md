@@ -88,6 +88,8 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 | dnsServerAdresses | Specifies the private IP addresses of the dns servers. | `[ 10.0.0.4 ]` |
 | administratorPassword | Specifies the administrator password of the sql servers. Will be automatically set in the workflow. **Leave this value as is.** | `<your-secure-password>` |
 | purviewId | Specifies the resource ID of the central purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Purview/accounts/{purview-name}` |
+| purviewManagedStorageId | Specifies the resource ID of the managed storage of the central purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Storage/storageAccounts/{storage-account-name}` |
+| purviewManagedEventHubId | Specifies the resource ID of the managed event hub of the central purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.EventHub/namespaces/{eventhub-namespace-name}` |
 | purviewSelfHostedIntegrationRuntimeAuthKey | Specifies the Auth Key for the Self-hosted integration runtime of Purview. | `<your-purview-shir-auth-key>` |
 | deploySelfHostedIntegrationRuntimes | Specifies whether the self-hosted integration runtimes should be installed. This only works, if the pwsh script was uploded and is available. | `true` or `false` |
 | privateDnsZoneIdKeyVault | Specifies the resource ID of the private DNS zone for KeyVault. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net` |
