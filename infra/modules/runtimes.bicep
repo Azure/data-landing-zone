@@ -25,6 +25,7 @@ param portalDeployment bool = false
 var artifactstorage001Name = '${prefix}-artfct001'
 var datafactoryRuntimes001Name = '${prefix}-runtime-datafactory001'
 var shir001Name = '${prefix}-shir001'
+var shir002Name = '${prefix}-shir002'
 
 // Resources
 module artifactstorage001 'services/artifactstorage.bicep' = {
@@ -110,7 +111,7 @@ module purviewSelfHostedIntegrationRuntime001 'services/selfHostedIntegrationRun
     datafactoryIntegrationRuntimeAuthKey: purviewSelfHostedIntegrationRuntimeAuthKey
     storageAccountContainerName: artifactstorage001.outputs.storageAccountContainerName
     storageAccountId: artifactstorage001.outputs.storageAccountId
-    vmssName: shir001Name
+    vmssName: shir002Name
     vmssSkuCapacity: 1
     vmssSkuName: 'Standard_DS2_v2'
     vmssSkuTier: 'Standard'
