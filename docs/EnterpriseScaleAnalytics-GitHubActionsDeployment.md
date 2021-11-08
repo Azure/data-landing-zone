@@ -60,41 +60,41 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 
 | Parameter                                | Description  | Sample value |
 |:-----------------------------------------|:-------------|:-------------|
-| location    | Specifies the location for all resources. | `northeurope` |
-| environment | Specifies the environment of the deployment. | `dev`, `tst` or `prd` |
-| prefix      | Specifies the prefix for all resources created in this deployment. | `prefi` |
-| tags        | Specifies the tags that you want to apply to all resources. | {`key`: `value`} |
-| vnetAddressPrefix | Specifies the address space of the vnet of the Data Landing Zone. | `10.1.0.0/16` |
-| servicesSubnetAddressPrefix | Specifies the address space of the subnet that is used for general services of the Data Landing Zone. | `10.1.0.0/24` |
-| databricksIntegrationPublicSubnetAddressPrefix | Specifies the address space of the public subnet that is used for the shared integration Databricks workspace. | `10.1.1.0/24` |
-| databricksIntegrationPrivateSubnetAddressPrefix | Specifies the address space of the private subnet that is used for the shared integration Databricks workspace. | `10.1.2.0/24` |
-| databricksProductPublicSubnetAddressPrefix | Specifies the address space of the public subnet that is used for the shared product Databricks workspace. | `10.1.3.0/24` |
-| databricksProductPrivateSubnetAddressPrefix | Specifies the address space of the private subnet that is used for the shared product Databricks workspace. | `10.1.4.0/24` |
-| powerBiGatewaySubnetAddressPrefix | Specifies the address space of the subnet that is used for the Power BI Gateway. | `10.1.5.0/24` |
-| dataIntegration001SubnetAddressPrefix | Specifies the address space of the subnet that is used for Data Integration 001. | `10.1.6.0/24` |
-| dataIntegration002SubnetAddressPrefix | Specifies the address space of the subnet that is used for Data Integration 002. | `10.1.7.0/24` |
-| dataProduct001SubnetAddressPrefix | Specifies the address space of the subnet that is used for Data Product 001. | `10.1.8.0/24` |
-| dataProduct002SubnetAddressPrefix | Specifies the address space of the subnet that is used for Data Product 002. | `10.1.9.0/24` |
-| dataManagementZoneVnetId | Specifies the resource Id of the vnet in the Data Management Zone. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/virtualNetworks/{vnet-name}` |
-| firewallPrivateIp | Specifies the private IP address of the central firewall. | `10.0.0.4` |
-| dnsServerAdresses | Specifies the private IP addresses of the DNS Servers. | `[ 10.0.0.4 ]` |
-| administratorPassword | Specifies the administrator password of the SQL Servers. Will be automatically set in the workflow. **Leave this value as is.** | `<your-secure-password>` |
-| purviewId | Specifies the resource ID of the central Purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Purview/accounts/{purview-name}` |
-| purviewManagedStorageId | Specifies the resource ID of the managed storage of the central purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Storage/storageAccounts/{storage-account-name}` |
-| purviewManagedEventHubId | Specifies the resource ID of the managed event hub of the central purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.EventHub/namespaces/{eventhub-namespace-name}` |
-| purviewSelfHostedIntegrationRuntimeAuthKey | Specifies the Auth Key for the Self-hosted integration runtime of Purview. | `<your-purview-shir-auth-key>` |
-| deploySelfHostedIntegrationRuntimes | Specifies whether the self-hosted integration runtimes should be deployed. This only works, if the pwsh script was uploded and is available. | `true` or `false` |
-| portalDeployment | Specifies whether the deployment was submitted through the Azure Portal. | `true` or `false` |
-| privateDnsZoneIdKeyVault | Specifies the resource ID of the private DNS zone for KeyVault. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net` |
-| privateDnsZoneIdDataFactory | Specifies the resource ID of the private DNS zone for Data Factory. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net` |
-| privateDnsZoneIdDataFactoryPortal | Specifies the resource ID of the private DNS zone for Data Factory Portal. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com` |
-| privateDnsZoneIdBlob | Specifies the resource ID of the private DNS zone for Blob Storage. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net` |
-| privateDnsZoneIdDfs | Specifies the resource ID of the private DNS zone for Datalake Storage. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net` |
-| privateDnsZoneIdSqlServer | Specifies the resource ID of the private DNS zone for Sql Server. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net` |
-| privateDnsZoneIdMySqlServer | Specifies the resource ID of the private DNS zone for MySql Server. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com` |
-| privateDnsZoneIdEventhubNamespace | Specifies the resource ID of the private DNS zone for EventHub Namespaces. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net` |
-| privateDnsZoneIdSynapseDev | Specifies the resource ID of the private DNS zone for Synapse Dev. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net` |
-| privateDnsZoneIdSynapseSql | Specifies the resource ID of the private DNS zone for Synapse Sql. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net` |
+| `location`    | Specifies the location for all resources. | `northeurope` |
+| `environment` | Specifies the environment of the deployment. | `dev`, `tst` or `prd` |
+| `prefix`      | Specifies the prefix for all resources created in this deployment. | `prefi` |
+| `tags`        | Specifies the tags that you want to apply to all resources. | {`key`: `value`} |
+| `vnetAddressPrefix` | Specifies the address space of the vnet of the Data Landing Zone. | `10.1.0.0/16` |
+| `servicesSubnetAddressPrefix` | Specifies the address space of the subnet that is used for general services of the Data Landing Zone. | `10.1.0.0/24` |
+| `databricksIntegrationPublicSubnetAddressPrefix` | Specifies the address space of the public subnet that is used for the shared integration Databricks workspace. | `10.1.1.0/24` |
+| `databricksIntegrationPrivateSubnetAddressPrefix` | Specifies the address space of the private subnet that is used for the shared integration Databricks workspace. | `10.1.2.0/24` |
+| `databricksProductPublicSubnetAddressPrefix` | Specifies the address space of the public subnet that is used for the shared product Databricks workspace. | `10.1.3.0/24` |
+| `databricksProductPrivateSubnetAddressPrefix` | Specifies the address space of the private subnet that is used for the shared product Databricks workspace. | `10.1.4.0/24` |
+| `powerBiGatewaySubnetAddressPrefix` | Specifies the address space of the subnet that is used for the Power BI Gateway. | `10.1.5.0/24` |
+| `dataIntegration001SubnetAddressPrefix` | Specifies the address space of the subnet that is used for Data Integration 001. | `10.1.6.0/24` |
+| `dataIntegration002SubnetAddressPrefix` | Specifies the address space of the subnet that is used for Data Integration 002. | `10.1.7.0/24` |
+| `dataProduct001SubnetAddressPrefix` | Specifies the address space of the subnet that is used for Data Product 001. | `10.1.8.0/24` |
+| `dataProduct002SubnetAddressPrefix` | Specifies the address space of the subnet that is used for Data Product 002. | `10.1.9.0/24` |
+| `dataManagementZoneVnetId` | Specifies the resource Id of the vnet in the Data Management Zone. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/virtualNetworks/{vnet-name}` |
+| `firewallPrivateIp` | Specifies the private IP address of the central firewall. | `10.0.0.4` |
+| `dnsServerAdresses` | Specifies the private IP addresses of the DNS Servers. | `[ 10.0.0.4 ]` |
+| `administratorPassword` | Specifies the administrator password of the SQL Servers. Will be automatically set in the workflow. **Leave this value as is.** | `<your-secure-password>` |
+| `purviewId` | Specifies the Resource ID of the central Purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Purview/accounts/{purview-name}` |
+| `purviewManagedStorageId` | Specifies the Resource ID of the managed storage of the central purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Storage/storageAccounts/{storage-account-name}` |
+| `purviewManagedEventHubId` | Specifies the Resource ID of the managed event hub of the central purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.EventHub/namespaces/{eventhub-namespace-name}` |
+| `purviewSelfHostedIntegrationRuntimeAuthKey` | Specifies the Auth Key for the Self-hosted integration runtime of Purview. | `<your-purview-shir-auth-key>` |
+| `deploySelfHostedIntegrationRuntimes` | Specifies whether the self-hosted integration runtimes should be deployed. This only works, if the pwsh script was uploded and is available. | `true` or `false` |
+| `portalDeployment` | Specifies whether the deployment was submitted through the Azure Portal. | `true` or `false` |
+| `privateDnsZoneIdKeyVault` | Specifies the Resource ID of the private DNS zone for KeyVault. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net` |
+| `privateDnsZoneIdDataFactory` | Specifies the Resource ID of the private DNS zone for Data Factory. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net` |
+| `privateDnsZoneIdDataFactoryPortal` | Specifies the Resource ID of the private DNS zone for Data Factory Portal. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com` |
+| `privateDnsZoneIdBlob` | Specifies the Resource ID of the private DNS zone for Blob Storage. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net` |
+| `privateDnsZoneIdDfs` | Specifies the Resource ID of the private DNS zone for Datalake Storage. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.core.windows.net` |
+| `privateDnsZoneIdSqlServer` | Specifies the Resource ID of the private DNS zone for Sql Server. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.database.windows.net` |
+| `privateDnsZoneIdMySqlServer` | Specifies the Resource ID of the private DNS zone for MySql Server. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com` |
+| `privateDnsZoneIdEventhubNamespace` | Specifies the Resource ID of the private DNS zone for EventHub Namespaces. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net` |
+| `privateDnsZoneIdSynapseDev` | Specifies the Resource ID of the private DNS zone for Synapse Dev. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net` |
+| `privateDnsZoneIdSynapseSql` | Specifies the Resource ID of the private DNS zone for Synapse Sql. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net` |
 
 ## Merge these changes back to the `main` branch of your repo
 
