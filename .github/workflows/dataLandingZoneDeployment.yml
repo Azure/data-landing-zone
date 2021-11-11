@@ -62,7 +62,7 @@ jobs:
         id: data_landing_zone_whatif
         uses: azure/CLI@v1
         with:
-          azcliversion: "2.29.2"
+          azcliversion: "agentazcliversion"
           inlineScript: |
             az account set \
               --subscription ${{ env.AZURE_SUBSCRIPTION_ID }}
@@ -80,7 +80,7 @@ jobs:
         id: azure_logout
         uses: azure/cli@v1
         with:
-          azcliversion: latest
+          azcliversion: "agentazcliversion"
           inlineScript: |
             az logout
 
@@ -269,6 +269,6 @@ jobs:
         id: azure_logout
         uses: azure/cli@v1
         with:
-          azcliversion: latest
+          azcliversion: "agentazcliversion"
           inlineScript: |
             az logout
