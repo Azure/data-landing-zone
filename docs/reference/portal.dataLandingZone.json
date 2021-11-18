@@ -1132,17 +1132,17 @@
                                     "label": "DNS A-Records are deployed through Azure Policy",
                                     "type": "Microsoft.Common.OptionsGroup",
                                     "visible": true,
-                                    "toolTip": "If 'No' is selected, you will have to choose private DNS Zones that will be used for the A-Record deployment of the private DNS Zones.",
-                                    "defaultValue": "Yes",
+                                    "toolTip": "If 'Yes' is selected, Private DNS Zone Groups will not be deployed and we are assuming that this gets created through Azure Policies. If this does not get created, you will not be able to access any resources within this environment.",
+                                    "defaultValue": "No",
                                     "constraints": {
                                         "allowedValues": [
                                             {
-                                                "label": "Yes",
-                                                "value": "yes"
-                                            },
-                                            {
                                                 "label": "No",
                                                 "value": "no"
+                                            },
+                                            {
+                                                "label": "Yes",
+                                                "value": "yes"
                                             }
                                         ]
                                     }
@@ -1157,11 +1157,11 @@
                                 },
                                 {
                                     "name": "privateDnsZonesSub",
-                                    "label": "Private DNS Zone Subscription",
+                                    "label": "Subscription with Private DNS Zones",
                                     "type": "Microsoft.Common.DropDown",
                                     "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
                                     "defaultValue": "",
-                                    "toolTip": "Select the Subscription of your Private DNS Zones.",
+                                    "toolTip": "Select the Subscription of your Private DNS Zones. If you have deployed the Data Management Zone with a Firewall and Private DNS Zones then select the subscription that you have used for your Data Management Zone.",
                                     "multiselect": false,
                                     "selectAll": false,
                                     "filter": true,
