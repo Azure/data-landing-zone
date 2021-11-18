@@ -481,7 +481,7 @@
                                     "type": "Microsoft.Common.OptionsGroup",
                                     "visible": true,
                                     "defaultValue": "Yes (recommended)",
-                                    "toolTip": "If 'Yes' is selected, a Self-hosted Integration Runtime hosted on VMSS will be deployed for Data Factory.",
+                                    "toolTip": "If 'Yes' is selected, a Self-hosted Integration Runtime hosted on VMSS will be deployed for Data Factory and a second one will be deployed for Purview if you provide the Authentication Key below.",
                                     "constraints": {
                                         "required": true,
                                         "allowedValues": [
