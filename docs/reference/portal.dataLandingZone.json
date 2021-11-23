@@ -382,7 +382,7 @@
                                     "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
                                     "options": {
-                                        "text": "Select an administrator password for the Synapse workspaces and potentially Self-hosted integration runtimes hosted on VMSS.",
+                                        "text": "Select an administrator password for the Synapse workspaces, SQL Servers and potentially Self-hosted integration runtimes hosted on VMSS.",
                                         "link": {
                                             "label": "",
                                             "uri": ""
@@ -410,18 +410,6 @@
                                         "hideConfirmation": false
                                     },
                                     "osPlatform": "Windows"
-                                },
-                                {
-                                    "name": "deploySelfHostedIntegrationRuntimes",
-                                    "label": "Deploy Self-hosted Integration Runtimes",
-                                    "type": "Microsoft.Common.CheckBox",
-                                    "visible": true,
-                                    "defaultValue": false,
-                                    "toolTip": "If selected, a Self-hosted Integration Runtime hosted on VMSS will be deployed.",
-                                    "constraints": {
-                                        "required": false,
-                                        "validationMessage": "Enable deployment of Self-hosted Integration Runtime hosted on VMSS."
-                                    }
                                 }
                             ]
                         },
@@ -460,28 +448,69 @@
                                     }
                                 },
                                 {
+                                    "name": "purviewApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('generalSettings').dataGovernanceSettings.purviewId.id, '?api-version=2021-07-01')]"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "name": "selfhostedIntegrationRuntimeSettings",
+                            "label": "Self-hosted Integration Runtime Settings",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "selfhostedIntegrationRuntimeText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify whether you would like to deploy Self-hosted Integration Runtimes into your Data Landing Zone.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "deploySelfHostedIntegrationRuntimes",
+                                    "label": "Deploy Self-hosted Integration Runtimes",
+                                    "type": "Microsoft.Common.OptionsGroup",
+                                    "visible": true,
+                                    "defaultValue": "Yes (recommended)",
+                                    "toolTip": "If 'Yes' is selected, a Self-hosted Integration Runtime hosted on VMSS will be deployed for Data Factory and a second one will be deployed for Purview if you provide the Authentication Key below.",
+                                    "constraints": {
+                                        "required": true,
+                                        "allowedValues": [
+                                            {
+                                                "label": "Yes (recommended)",
+                                                "value": "Yes"
+                                            },
+                                            {
+                                                "label": "No",
+                                                "value": "No"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
                                     "name": "purviewSelfHostedIntegrationRuntimeAuthKey",
                                     "label": {
                                         "password": "Purview Self-hosted Integration Runtime Authentication Key",
                                         "confirmPassword": "Confirm Purview Self-hosted Integration Runtime Authentication Key"
                                     },
                                     "type": "Microsoft.Common.PasswordBox",
-                                    "visible": "[steps('generalSettings').servicesSettings.deploySelfHostedIntegrationRuntimes]",
+                                    "visible": "[equals(steps('generalSettings').selfhostedIntegrationRuntimeSettings.deploySelfHostedIntegrationRuntimes, 'Yes')]",
                                     "defaultValue": "",
-                                    "toolTip": "Specify a Purview Self-hosted Integration Runtime Authentication Key to automatically create a Self-hosted Integration Runtime for Purview to scan private endpoint enabled datasources.",
+                                    "toolTip": "If provided, a Self-hosted Integration Runtime for Purview hosted on VMSS will be created to scan private endpoint enabled datasources.",
                                     "constraints": {
                                         "required": false
                                     },
                                     "options": {
                                         "hideConfirmation": true
-                                    }
-                                },
-                                {
-                                    "name": "purviewApi",
-                                    "type": "Microsoft.Solutions.ArmApiControl",
-                                    "request": {
-                                        "method": "GET",
-                                        "path": "[concat(steps('generalSettings').dataGovernanceSettings.purviewId.id, '?api-version=2021-07-01')]"
                                     }
                                 }
                             ]
@@ -1103,17 +1132,17 @@
                                     "label": "DNS A-Records are deployed through Azure Policy",
                                     "type": "Microsoft.Common.OptionsGroup",
                                     "visible": true,
-                                    "toolTip": "If 'No' is selected, you will have to choose private DNS Zones that will be used for the A-Record deployment of the private DNS Zones.",
-                                    "defaultValue": "Yes",
+                                    "toolTip": "If 'Yes' is selected, Private DNS Zone Groups will not be deployed and we are assuming that this gets created through Azure Policies. If this does not get created, you will not be able to access any resources within this environment.",
+                                    "defaultValue": "No",
                                     "constraints": {
                                         "allowedValues": [
                                             {
-                                                "label": "Yes",
-                                                "value": "yes"
-                                            },
-                                            {
                                                 "label": "No",
                                                 "value": "no"
+                                            },
+                                            {
+                                                "label": "Yes",
+                                                "value": "yes"
                                             }
                                         ]
                                     }
@@ -1128,11 +1157,11 @@
                                 },
                                 {
                                     "name": "privateDnsZonesSub",
-                                    "label": "Private DNS Zone Subscription",
+                                    "label": "Subscription with Private DNS Zones",
                                     "type": "Microsoft.Common.DropDown",
                                     "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
                                     "defaultValue": "",
-                                    "toolTip": "Select the Subscription of your Private DNS Zones.",
+                                    "toolTip": "Select the Subscription of your Private DNS Zones. If you have deployed the Data Management Zone with a Firewall and Private DNS Zones then select the subscription that you have used for your Data Management Zone.",
                                     "multiselect": false,
                                     "selectAll": false,
                                     "filter": true,
@@ -1373,8 +1402,8 @@
                 "dnsServerAdresses": "[if(equals(steps('connectivitySettings').sharedNetworkInfrastructureConfiguration.existingFirewallType, 'azureFirewall'), map(steps('connectivitySettings').sharedNetworkInfrastructureConfiguration.azureFirewallPrivateIpApi.properties.ipConfigurations, (item) => item.properties.privateIPAddress), split(steps('connectivitySettings').sharedNetworkInfrastructureConfiguration.dnsServerAdresses, ','))]",
                 "administratorPassword": "[if(empty(steps('generalSettings').servicesSettings.administratorPassword.password), '', steps('generalSettings').servicesSettings.administratorPassword.password)]",
                 "portalDeployment": true,
-                "deploySelfHostedIntegrationRuntimes": "[steps('generalSettings').servicesSettings.deploySelfHostedIntegrationRuntimes]",
-                "purviewSelfHostedIntegrationRuntimeAuthKey": "[if(empty(steps('generalSettings').dataGovernanceSettings.purviewSelfHostedIntegrationRuntimeAuthKey), '', steps('generalSettings').dataGovernanceSettings.purviewSelfHostedIntegrationRuntimeAuthKey)]",
+                "deploySelfHostedIntegrationRuntimes": "[if(equals(steps('generalSettings').selfhostedIntegrationRuntimeSettings.deploySelfHostedIntegrationRuntimes, 'Yes'), true, false)]",
+                "purviewSelfHostedIntegrationRuntimeAuthKey": "[if(empty(steps('generalSettings').selfhostedIntegrationRuntimeSettings.purviewSelfHostedIntegrationRuntimeAuthKey), '', steps('generalSettings').selfhostedIntegrationRuntimeSettings.purviewSelfHostedIntegrationRuntimeAuthKey)]",
                 "purviewId": "[if(empty(steps('generalSettings').dataGovernanceSettings.purviewId.id), '', steps('generalSettings').dataGovernanceSettings.purviewId.id)]",
                 "purviewManagedStorageId": "[if(empty(steps('generalSettings').dataGovernanceSettings.purviewId.id), '', steps('generalSettings').dataGovernanceSettings.purviewApi.properties.managedResources.storageAccount)]",
                 "purviewManagedEventHubId": "[if(empty(steps('generalSettings').dataGovernanceSettings.purviewId.id), '', steps('generalSettings').dataGovernanceSettings.purviewApi.properties.managedResources.eventHubNamespace)]",
