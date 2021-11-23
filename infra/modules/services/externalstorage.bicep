@@ -13,10 +13,26 @@ param privateDnsZoneIdBlob string = ''
 param fileSytemNames array = [
   'data'
 ]
+param purviewId string = ''
 
 // Variables
 var storageNameCleaned = replace(storageName, '-', '')
 var storageExternalPrivateEndpointNameBlob = '${storageExternal.name}-blob-private-endpoint'
+var resourceAccessRules = empty(purviewId) ? [
+  {
+    tenantId: subscription().tenantId
+    resourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*'
+  }
+] : [
+  {
+    tenantId: subscription().tenantId
+    resourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*'
+  }
+  {
+    tenantId: subscription().tenantId
+    resourceId: purviewId
+  }
+]
 
 // Resources
 resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
@@ -28,7 +44,6 @@ resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   }
   sku: {
     name: 'Standard_ZRS'
-    tier: 'Standard'
   }
   kind: 'StorageV2'
   properties: {
@@ -66,7 +81,7 @@ resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
       defaultAction: 'Deny'
       ipRules: []
       virtualNetworkRules: []
-      resourceAccessRules: []
+      resourceAccessRules: resourceAccessRules
     }
     // routingPreference: {  // Not supported for thsi account
     //   routingChoice: 'MicrosoftRouting'
