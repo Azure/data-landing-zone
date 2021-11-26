@@ -74,7 +74,7 @@
             "value": ""
         },
         "deploySelfHostedIntegrationRuntimes": {
-            "value": false
+            "value": true
         },
         "privateDnsZoneIdKeyVault": {
             "value": "/subscriptions/17588eb2-2943-461a-ab3f-00a3ceac3112/resourceGroups/dmz-dev-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
