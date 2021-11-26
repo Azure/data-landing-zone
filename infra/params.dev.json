@@ -73,9 +73,6 @@
         "purviewSelfHostedIntegrationRuntimeAuthKey": {
             "value": ""
         },
-        "portalDeployment": {
-            "value": false
-        },
         "deploySelfHostedIntegrationRuntimes": {
             "value": false
         },

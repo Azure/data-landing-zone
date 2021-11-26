@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "1776509211155428054"
+      "templateHash": "6416051468759421425"
     }
   },
   "parameters": {
@@ -181,13 +181,6 @@
       "defaultValue": false,
       "metadata": {
         "description": "Specifies whether the self-hosted integration runtimes should be deployed. This only works, if the pwsh script was uploded and is available."
-      }
-    },
-    "portalDeployment": {
-      "type": "bool",
-      "defaultValue": false,
-      "metadata": {
-        "description": "Specifies whether the deployment was submitted through the Azure Portal."
       }
     },
     "privateDnsZoneIdKeyVault": {
@@ -1536,9 +1529,6 @@
             "value": [
               "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-shared-integration', variables('name'))), 'Microsoft.Resources/deployments', 'sharedIntegrationServices'), '2020-06-01').outputs.datafactoryIntegration001Id.value]"
             ]
-          },
-          "portalDeployment": {
-            "value": "[parameters('portalDeployment')]"
           }
         },
         "template": {
@@ -1548,7 +1538,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "1483310791486338071"
+              "templateHash": "3091899515443697712"
             }
           },
           "parameters": {
@@ -1593,15 +1583,10 @@
             },
             "datafactoryIds": {
               "type": "array"
-            },
-            "portalDeployment": {
-              "type": "bool",
-              "defaultValue": false
             }
           },
           "functions": [],
           "variables": {
-            "artifactstorage001Name": "[format('{0}-artfct001', parameters('prefix'))]",
             "datafactoryRuntimes001Name": "[format('{0}-runtime-datafactory001', parameters('prefix'))]",
             "shir001Name": "[format('{0}-shir001', parameters('prefix'))]",
             "shir002Name": "[format('{0}-shir002', parameters('prefix'))]"
@@ -1618,137 +1603,6 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', 'datafactoryRuntimes001')]"
               ]
-            },
-            {
-              "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-06-01",
-              "name": "artifactstorage001",
-              "properties": {
-                "expressionEvaluationOptions": {
-                  "scope": "inner"
-                },
-                "mode": "Incremental",
-                "parameters": {
-                  "location": {
-                    "value": "[parameters('location')]"
-                  },
-                  "tags": {
-                    "value": "[parameters('tags')]"
-                  },
-                  "artifactstorageName": {
-                    "value": "[variables('artifactstorage001Name')]"
-                  }
-                },
-                "template": {
-                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                  "contentVersion": "1.0.0.0",
-                  "metadata": {
-                    "_generator": {
-                      "name": "bicep",
-                      "version": "0.4.1008.15138",
-                      "templateHash": "17632007425059106421"
-                    }
-                  },
-                  "parameters": {
-                    "location": {
-                      "type": "string"
-                    },
-                    "tags": {
-                      "type": "object"
-                    },
-                    "artifactstorageName": {
-                      "type": "string"
-                    }
-                  },
-                  "functions": [],
-                  "variables": {
-                    "artifactstorageNameCleaned": "[replace(parameters('artifactstorageName'), '-', '')]"
-                  },
-                  "resources": [
-                    {
-                      "type": "Microsoft.Storage/storageAccounts",
-                      "apiVersion": "2021-02-01",
-                      "name": "[variables('artifactstorageNameCleaned')]",
-                      "location": "[parameters('location')]",
-                      "tags": "[parameters('tags')]",
-                      "identity": {
-                        "type": "SystemAssigned"
-                      },
-                      "sku": {
-                        "name": "Standard_LRS",
-                        "tier": "Standard"
-                      },
-                      "kind": "StorageV2",
-                      "properties": {
-                        "accessTier": "Hot",
-                        "allowBlobPublicAccess": false,
-                        "allowSharedKeyAccess": true,
-                        "encryption": {
-                          "keySource": "Microsoft.Storage",
-                          "requireInfrastructureEncryption": false,
-                          "services": {
-                            "blob": {
-                              "enabled": true,
-                              "keyType": "Account"
-                            },
-                            "file": {
-                              "enabled": true,
-                              "keyType": "Account"
-                            },
-                            "queue": {
-                              "enabled": true,
-                              "keyType": "Service"
-                            },
-                            "table": {
-                              "enabled": true,
-                              "keyType": "Service"
-                            }
-                          }
-                        },
-                        "isHnsEnabled": false,
-                        "isNfsV3Enabled": false,
-                        "largeFileSharesState": "Disabled",
-                        "minimumTlsVersion": "TLS1_2",
-                        "networkAcls": {
-                          "bypass": "AzureServices",
-                          "defaultAction": "Allow",
-                          "ipRules": [],
-                          "virtualNetworkRules": [],
-                          "resourceAccessRules": []
-                        },
-                        "routingPreference": {
-                          "routingChoice": "MicrosoftRouting",
-                          "publishInternetEndpoints": false,
-                          "publishMicrosoftEndpoints": false
-                        },
-                        "supportsHttpsTrafficOnly": true
-                      }
-                    },
-                    {
-                      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-                      "apiVersion": "2021-02-01",
-                      "name": "[format('{0}/{1}/{2}', variables('artifactstorageNameCleaned'), 'default', 'scripts')]",
-                      "properties": {
-                        "publicAccess": "None",
-                        "metadata": {}
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('artifactstorageNameCleaned'))]"
-                      ]
-                    }
-                  ],
-                  "outputs": {
-                    "storageAccountId": {
-                      "type": "string",
-                      "value": "[resourceId('Microsoft.Storage/storageAccounts', variables('artifactstorageNameCleaned'))]"
-                    },
-                    "storageAccountContainerName": {
-                      "type": "string",
-                      "value": "scripts"
-                    }
-                  }
-                }
-              }
             },
             {
               "type": "Microsoft.Resources/deployments",
@@ -2005,12 +1859,6 @@
                   "datafactoryIntegrationRuntimeAuthKey": {
                     "value": "[listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[1]), '2018-06-01').authKey1]"
                   },
-                  "storageAccountContainerName": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'artifactstorage001'), '2020-06-01').outputs.storageAccountContainerName.value]"
-                  },
-                  "storageAccountId": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'artifactstorage001'), '2020-06-01').outputs.storageAccountId.value]"
-                  },
                   "vmssName": {
                     "value": "[variables('shir001Name')]"
                   },
@@ -2022,9 +1870,6 @@
                   },
                   "vmssSkuTier": {
                     "value": "Standard"
-                  },
-                  "portalDeployment": {
-                    "value": "[parameters('portalDeployment')]"
                   }
                 },
                 "template": {
@@ -2034,7 +1879,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "11018197224708795421"
+                      "templateHash": "17374805133401694702"
                     }
                   },
                   "parameters": {
@@ -2062,12 +1907,6 @@
                       "type": "int",
                       "defaultValue": 1
                     },
-                    "storageAccountId": {
-                      "type": "string"
-                    },
-                    "storageAccountContainerName": {
-                      "type": "string"
-                    },
                     "administratorUsername": {
                       "type": "string",
                       "defaultValue": "VmssMainUser"
@@ -2077,22 +1916,16 @@
                     },
                     "datafactoryIntegrationRuntimeAuthKey": {
                       "type": "secureString"
-                    },
-                    "portalDeployment": {
-                      "type": "bool",
-                      "defaultValue": false
                     }
                   },
                   "functions": [],
                   "variables": {
-                    "storageAccountName": "[if(greaterOrEquals(length(split(parameters('storageAccountId'), '/')), 9), last(split(parameters('storageAccountId'), '/')), 'incorrectSegmentLength')]",
-                    "loadbalancerName": "[format('{0}-lb', parameters('vmssName'))]",
-                    "fileUri": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/code/installSHIRGateway.ps1"
+                    "loadbalancerName": "[format('{0}-lb', parameters('vmssName'))]"
                   },
                   "resources": [
                     {
                       "type": "Microsoft.Network/loadBalancers",
-                      "apiVersion": "2020-11-01",
+                      "apiVersion": "2021-03-01",
                       "name": "[variables('loadbalancerName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -2168,7 +2001,7 @@
                     },
                     {
                       "type": "Microsoft.Compute/virtualMachineScaleSets",
-                      "apiVersion": "2020-12-01",
+                      "apiVersion": "2021-07-01",
                       "name": "[parameters('vmssName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -2200,7 +2033,8 @@
                           "osProfile": {
                             "adminUsername": "[parameters('administratorUsername')]",
                             "adminPassword": "[parameters('administratorPassword')]",
-                            "computerNamePrefix": "[take(parameters('vmssName'), 9)]"
+                            "computerNamePrefix": "[take(parameters('vmssName'), 9)]",
+                            "customData": "IyBDb3B5cmlnaHQgKGMpIE1pY3Jvc29mdCBDb3Jwb3JhdGlvbi4NCiMgTGljZW5zZWQgdW5kZXIgdGhlIE1JVCBsaWNlbnNlLg0KDQojIERlZmluZSBzY3JpcHQgYXJndW1lbnRzDQpbQ21kbGV0QmluZGluZygpXQ0KcGFyYW0gKA0KCVtQYXJhbWV0ZXIoTWFuZGF0b3J5ID0gJHRydWUpXQ0KCVtWYWxpZGF0ZU5vdE51bGxPckVtcHR5KCldDQoJW1N0cmluZ10NCgkkZ2F0ZXdheUtleSwNCg0KCVtQYXJhbWV0ZXIoRG9udFNob3cpXQ0KCVtTdHJpbmddDQoJJGdhdGV3YXlVcmkgPSAiaHR0cHM6Ly9nby5taWNyb3NvZnQuY29tL2Z3bGluay8/bGlua2lkPTgzOTgyMiINCikNCg0KIyBEZWZpbmUgdmFyaWFibGVzDQokZ2F0ZXdheVBhdGggPSAiJFBXRFxnYXRld2F5Lm1zaSINCiRsb2dMb2MgPSAiJGVudjpTeXN0ZW1Ecml2ZVxXaW5kb3dzQXp1cmVcTG9nc1xQbHVnaW5zXE1pY3Jvc29mdC5Db21wdXRlLkN1c3RvbVNjcmlwdEV4dGVuc2lvblwiDQokbG9nUGF0aCA9ICIkbG9nTG9jXHRyYWNlbG9nLmxvZyINCg0KZnVuY3Rpb24gTmV3LUVycm9yKFtzdHJpbmddICRtc2cpIHsNCgl0cnkgew0KCQl0aHJvdyAkbXNnDQoJfQ0KCWNhdGNoIHsNCgkJJHN0YWNrID0gJF8uU2NyaXB0U3RhY2tUcmFjZQ0KCQlUcmFjZS1Mb2cgIkRNRFRUUCBpcyBmYWlsZWQ6ICRtc2dgblN0YWNrOmBuJHN0YWNrIg0KCX0NCgl0aHJvdyAkbXNnDQp9DQoNCmZ1bmN0aW9uIFRyYWNlLUxvZyhbc3RyaW5nXSAkbXNnKSB7DQoJJG5vdyA9IEdldC1EYXRlIC1Gb3JtYXQgInl5eXktTU0tZGQgSEg6bW06c3MiDQoJdHJ5IHsNCgkJIiR7bm93fSAkbXNnYG4iIHwgT3V0LUZpbGUgJGxvZ1BhdGggLUFwcGVuZA0KCX0NCgljYXRjaCB7DQoJCVdyaXRlLUVycm9yICJFcnJvciB3aGVuIHdyaXRpbmcgdHJhY2UgbG9nIg0KCX0NCn0NCg0KZnVuY3Rpb24gSW52b2tlLVByb2Nlc3MoW3N0cmluZ10gJHByb2Nlc3MsIFtzdHJpbmddICRhcmd1bWVudHMpIHsNCglXcml0ZS1WZXJib3NlICJSdW4tUHJvY2VzczogJHByb2Nlc3MgJGFyZ3VtZW50cyINCg0KCSRlcnJvckZpbGUgPSAiJGVudjp0bXBcdG1wJHBpZC5lcnIiDQoJJG91dEZpbGUgPSAiJGVudjp0bXBcdG1wJHBpZC5vdXQiDQoJIiIgfCBPdXQtRmlsZSAkb3V0RmlsZQ0KCSIiIHwgT3V0LUZpbGUgJGVycm9yRmlsZQ0KDQoJJGVyclZhcmlhYmxlID0gIiINCg0KCWlmIChbc3RyaW5nXTo6SXNOdWxsT3JFbXB0eSgkYXJndW1lbnRzKSkgew0KCQkkcHJvYyA9IFN0YXJ0LVByb2Nlc3MgLUZpbGVQYXRoICRwcm9jZXNzIC1XYWl0IC1QYXNzdGhydSAtTm9OZXdXaW5kb3cgYA0KCQkJLVJlZGlyZWN0U3RhbmRhcmRFcnJvciAkZXJyb3JGaWxlIC1SZWRpcmVjdFN0YW5kYXJkT3V0cHV0ICRvdXRGaWxlIC1FcnJvclZhcmlhYmxlIGVyclZhcmlhYmxlDQoJfQ0KCWVsc2Ugew0KCQkkcHJvYyA9IFN0YXJ0LVByb2Nlc3MgLUZpbGVQYXRoICRwcm9jZXNzIC1Bcmd1bWVudExpc3QgJGFyZ3VtZW50cyAtV2FpdCAtUGFzc3RocnUgLU5vTmV3V2luZG93IGANCgkJCS1SZWRpcmVjdFN0YW5kYXJkRXJyb3IgJGVycm9yRmlsZSAtUmVkaXJlY3RTdGFuZGFyZE91dHB1dCAkb3V0RmlsZSAtRXJyb3JWYXJpYWJsZSBlcnJWYXJpYWJsZQ0KCX0NCg0KCSRlcnJDb250ZW50ID0gW3N0cmluZ10gKEdldC1Db250ZW50IC1QYXRoICRlcnJvckZpbGUgLURlbGltaXRlciAiISEhRG9lc05vdEV4aXN0ISEhIikNCgkkb3V0Q29udGVudCA9IFtzdHJpbmddIChHZXQtQ29udGVudCAtUGF0aCAkb3V0RmlsZSAtRGVsaW1pdGVyICIhISFEb2VzTm90RXhpc3QhISEiKQ0KDQoJUmVtb3ZlLUl0ZW0gJGVycm9yRmlsZQ0KCVJlbW92ZS1JdGVtICRvdXRGaWxlDQoNCglpZiAoJHByb2MuRXhpdENvZGUgLW5lIDAgLW9yICRlcnJWYXJpYWJsZSAtbmUgIiIpIHsNCgkJTmV3LUVycm9yICJGYWlsZWQgdG8gcnVuIHByb2Nlc3M6IGV4aXRDb2RlPSQoJHByb2MuRXhpdENvZGUpLCBlcnJWYXJpYWJsZT0kZXJyVmFyaWFibGUsIGVyckNvbnRlbnQ9JGVyckNvbnRlbnQsIG91dENvbnRlbnQ9JG91dENvbnRlbnQuIg0KCX0NCg0KCVRyYWNlLUxvZyAiUnVuLVByb2Nlc3M6IEV4aXRDb2RlPSQoJHByb2MuRXhpdENvZGUpLCBvdXRwdXQ9JG91dENvbnRlbnQiDQoNCglpZiAoW3N0cmluZ106OklzTnVsbE9yRW1wdHkoJG91dENvbnRlbnQpKSB7DQoJCXJldHVybiAkb3V0Q29udGVudA0KCX0NCg0KCXJldHVybiAkb3V0Q29udGVudC5UcmltKCkNCn0NCg0KZnVuY3Rpb24gR2V0LUdhdGV3YXkoW3N0cmluZ10gJHVybCwgW3N0cmluZ10gJGdhdGV3YXlQYXRoKSB7DQoJdHJ5IHsNCgkJJEVycm9yQWN0aW9uUHJlZmVyZW5jZSA9ICJTdG9wIjsNCgkJJGNsaWVudCA9IE5ldy1PYmplY3QgU3lzdGVtLk5ldC5XZWJDbGllbnQNCgkJJGNsaWVudC5Eb3dubG9hZEZpbGUoJHVybCwgJGdhdGV3YXlQYXRoKQ0KCQlUcmFjZS1Mb2cgIkRvd25sb2FkIGdhdGV3YXkgc3VjY2Vzc2Z1bGx5LiBHYXRld2F5IGxvYzogJHtnYXRld2F5UGF0aH0iDQoJfQ0KCWNhdGNoIHsNCgkJVHJhY2UtTG9nICJGYWlsIHRvIGRvd25sb2FkIGdhdGV3YXkgbXNpIg0KCQlUcmFjZS1Mb2cgJF8uRXhjZXB0aW9uLlRvU3RyaW5nKCkNCgkJdGhyb3cNCgl9DQp9DQoNCmZ1bmN0aW9uIEluc3RhbGwtR2F0ZXdheShbc3RyaW5nXSAkZ2F0ZXdheVBhdGgpIHsNCglpZiAoW3N0cmluZ106OklzTnVsbE9yRW1wdHkoJGdhdGV3YXlQYXRoKSkgew0KCQlOZXctRXJyb3IgIkdhdGV3YXkgcGF0aCBpcyBub3Qgc3BlY2lmaWVkIg0KCX0NCglpZiAoIShUZXN0LVBhdGggLVBhdGggJGdhdGV3YXlQYXRoKSkgew0KCQlOZXctRXJyb3IgIkludmFsaWQgZ2F0ZXdheSBwYXRoOiAke2dhdGV3YXlQYXRofSINCgl9DQoJVHJhY2UtTG9nICJTdGFydCBHYXRld2F5IGluc3RhbGxhdGlvbiINCglJbnZva2UtUHJvY2VzcyAibXNpZXhlYy5leGUiICIvaSBnYXRld2F5Lm1zaSBJTlNUQUxMVFlQRT1BenVyZVRlbXBsYXRlIC9xdWlldCAvbm9yZXN0YXJ0Ig0KCVN0YXJ0LVNsZWVwIC1TZWNvbmRzIDMwDQoJVHJhY2UtTG9nICJJbnN0YWxsYXRpb24gb2YgZ2F0ZXdheSBpcyBzdWNjZXNzZnVsIg0KfQ0KDQpmdW5jdGlvbiBHZXQtUmVnaXN0cnlQcm9wZXJ0eShbc3RyaW5nXSAka2V5UGF0aCwgW3N0cmluZ10gJHByb3BlcnR5KSB7DQoJVHJhY2UtTG9nICJHZXQtUmVnaXN0cnlQcm9wZXJ0eTogR2V0ICRwcm9wZXJ0eSBmcm9tICRrZXlQYXRoIg0KCWlmICghIChUZXN0LVBhdGggJGtleVBhdGgpKSB7DQoJCVRyYWNlLUxvZyAiR2V0LVJlZ2lzdHJ5UHJvcGVydHk6ICRrZXlQYXRoIGRvZXMgbm90IGV4aXN0Ig0KCX0NCg0KCSRrZXlSZWcgPSBHZXQtSXRlbSAka2V5UGF0aA0KCWlmICghICgka2V5UmVnLlByb3BlcnR5IC1jb250YWlucyAkcHJvcGVydHkpKSB7DQoJCVRyYWNlLUxvZyAiR2V0LVJlZ2lzdHJ5UHJvcGVydHk6ICRwcm9wZXJ0eSBkb2VzIG5vdCBleGlzdCINCgkJcmV0dXJuICIiDQoJfQ0KCXJldHVybiAka2V5UmVnLkdldFZhbHVlKCRwcm9wZXJ0eSkNCn0NCg0KZnVuY3Rpb24gR2V0LUluc3RhbGxlZEZpbGVQYXRoKCkgew0KCSRmaWxlUGF0aCA9IEdldC1SZWdpc3RyeVByb3BlcnR5ICJoa2xtOlxTb2Z0d2FyZVxNaWNyb3NvZnRcRGF0YVRyYW5zZmVyXERhdGFNYW5hZ2VtZW50R2F0ZXdheVxDb25maWd1cmF0aW9uTWFuYWdlciIgIkRpYWNtZFBhdGgiDQoJaWYgKFtzdHJpbmddOjpJc051bGxPckVtcHR5KCRmaWxlUGF0aCkpIHsNCgkJTmV3LUVycm9yICJHZXQtSW5zdGFsbGVkRmlsZVBhdGg6IENhbm5vdCBmaW5kIGluc3RhbGxlZCBGaWxlIFBhdGgiDQoJfQ0KCVRyYWNlLUxvZyAiR2F0ZXdheSBpbnN0YWxsYXRpb24gZmlsZTogJGZpbGVQYXRoIg0KCXJldHVybiAkZmlsZVBhdGgNCn0NCg0KZnVuY3Rpb24gUmVnaXN0ZXItR2F0ZXdheShbc3RyaW5nXSAkaW5zdGFuY2VLZXkpIHsNCglUcmFjZS1Mb2cgIlJlZ2lzdGVyIEFnZW50Ig0KCSRmaWxlUGF0aCA9IEdldC1JbnN0YWxsZWRGaWxlUGF0aA0KCUludm9rZS1Qcm9jZXNzICRmaWxlUGF0aCAiLWVyYSA4MDYwIg0KCUludm9rZS1Qcm9jZXNzICRmaWxlUGF0aCAiLWsgJGluc3RhbmNlS2V5Ig0KCVRyYWNlLUxvZyAiQWdlbnQgcmVnaXN0cmF0aW9uIGlzIHN1Y2Nlc3NmdWwhIg0KfQ0KDQojIEluaXQgbG9nIHNldHRpbmdzDQppZiAoIShUZXN0LVBhdGgoJGxvZ0xvYykpKSB7DQoJTmV3LUl0ZW0gLVBhdGggJGxvZ0xvYyAtSXRlbVR5cGUgRGlyZWN0b3J5IC1Gb3JjZQ0KfQ0KIlN0YXJ0IHRvIGV4Y3V0ZSBnYXRld2F5SW5zdGFsbC5wczEuIGBuIiB8IE91dC1GaWxlICRsb2dQYXRoDQpUcmFjZS1Mb2cgIkxvZyBmaWxlOiAkbG9nTG9jIg0KVHJhY2UtTG9nICJHYXRld2F5IGRvd25sb2FkIGZ3IGxpbms6ICR7Z2F0ZXdheVVyaX0iDQpUcmFjZS1Mb2cgIkdhdGV3YXkgZG93bmxvYWQgbG9jYXRpb246ICR7Z2F0ZXdheVBhdGh9Ig0KDQpHZXQtR2F0ZXdheSAkZ2F0ZXdheVVyaSAkZ2F0ZXdheVBhdGgNCkluc3RhbGwtR2F0ZXdheSAkZ2F0ZXdheVBhdGgNClJlZ2lzdGVyLUdhdGV3YXkgJGdhdGV3YXlLZXkNCg=="
                           },
                           "networkProfile": {
                             "networkInterfaceConfigurations": [
@@ -2242,7 +2076,7 @@
                             "imageReference": {
                               "offer": "WindowsServer",
                               "publisher": "MicrosoftWindowsServer",
-                              "sku": "2019-Datacenter",
+                              "sku": "2022-datacenter-azure-edition",
                               "version": "latest"
                             },
                             "osDisk": {
@@ -2260,14 +2094,10 @@
                                   "typeHandlerVersion": "1.10",
                                   "autoUpgradeMinorVersion": true,
                                   "settings": {
-                                    "fileUris": [
-                                      "[if(parameters('portalDeployment'), variables('fileUri'), format('https://{0}.blob.{1}/{2}/installSHIRGateway.ps1', variables('storageAccountName'), environment().suffixes.storage, parameters('storageAccountContainerName')))]"
-                                    ]
+                                    "fileUris": []
                                   },
                                   "protectedSettings": {
-                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey \"{0}\"', parameters('datafactoryIntegrationRuntimeAuthKey'))]",
-                                    "storageAccountName": "[variables('storageAccountName')]",
-                                    "storageAccountKey": "[listkeys(parameters('storageAccountId'), '2021-02-01').keys[0].value]"
+                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -NonInteractive -command \"cp c:/azuredata/customdata.bin c:/azuredata/installSHIRGateway.ps1; c:/azuredata/installSHIRGateway.ps1 -gatewayKey \"{0}\"', parameters('datafactoryIntegrationRuntimeAuthKey'))]"
                                   }
                                 }
                               }
@@ -2280,7 +2110,6 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'artifactstorage001')]",
                 "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[0], split(format('{0}/dataLandingZoneShir-{1}', variables('datafactoryRuntimes001Name'), variables('shir001Name')), '/')[1])]"
               ]
             },
@@ -2506,12 +2335,6 @@
                   "datafactoryIntegrationRuntimeAuthKey": {
                     "value": "[parameters('purviewSelfHostedIntegrationRuntimeAuthKey')]"
                   },
-                  "storageAccountContainerName": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'artifactstorage001'), '2020-06-01').outputs.storageAccountContainerName.value]"
-                  },
-                  "storageAccountId": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'artifactstorage001'), '2020-06-01').outputs.storageAccountId.value]"
-                  },
                   "vmssName": {
                     "value": "[variables('shir002Name')]"
                   },
@@ -2523,9 +2346,6 @@
                   },
                   "vmssSkuTier": {
                     "value": "Standard"
-                  },
-                  "portalDeployment": {
-                    "value": "[parameters('portalDeployment')]"
                   }
                 },
                 "template": {
@@ -2535,7 +2355,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "11018197224708795421"
+                      "templateHash": "17374805133401694702"
                     }
                   },
                   "parameters": {
@@ -2563,12 +2383,6 @@
                       "type": "int",
                       "defaultValue": 1
                     },
-                    "storageAccountId": {
-                      "type": "string"
-                    },
-                    "storageAccountContainerName": {
-                      "type": "string"
-                    },
                     "administratorUsername": {
                       "type": "string",
                       "defaultValue": "VmssMainUser"
@@ -2578,22 +2392,16 @@
                     },
                     "datafactoryIntegrationRuntimeAuthKey": {
                       "type": "secureString"
-                    },
-                    "portalDeployment": {
-                      "type": "bool",
-                      "defaultValue": false
                     }
                   },
                   "functions": [],
                   "variables": {
-                    "storageAccountName": "[if(greaterOrEquals(length(split(parameters('storageAccountId'), '/')), 9), last(split(parameters('storageAccountId'), '/')), 'incorrectSegmentLength')]",
-                    "loadbalancerName": "[format('{0}-lb', parameters('vmssName'))]",
-                    "fileUri": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/code/installSHIRGateway.ps1"
+                    "loadbalancerName": "[format('{0}-lb', parameters('vmssName'))]"
                   },
                   "resources": [
                     {
                       "type": "Microsoft.Network/loadBalancers",
-                      "apiVersion": "2020-11-01",
+                      "apiVersion": "2021-03-01",
                       "name": "[variables('loadbalancerName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -2669,7 +2477,7 @@
                     },
                     {
                       "type": "Microsoft.Compute/virtualMachineScaleSets",
-                      "apiVersion": "2020-12-01",
+                      "apiVersion": "2021-07-01",
                       "name": "[parameters('vmssName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -2701,7 +2509,8 @@
                           "osProfile": {
                             "adminUsername": "[parameters('administratorUsername')]",
                             "adminPassword": "[parameters('administratorPassword')]",
-                            "computerNamePrefix": "[take(parameters('vmssName'), 9)]"
+                            "computerNamePrefix": "[take(parameters('vmssName'), 9)]",
+                            "customData": "IyBDb3B5cmlnaHQgKGMpIE1pY3Jvc29mdCBDb3Jwb3JhdGlvbi4NCiMgTGljZW5zZWQgdW5kZXIgdGhlIE1JVCBsaWNlbnNlLg0KDQojIERlZmluZSBzY3JpcHQgYXJndW1lbnRzDQpbQ21kbGV0QmluZGluZygpXQ0KcGFyYW0gKA0KCVtQYXJhbWV0ZXIoTWFuZGF0b3J5ID0gJHRydWUpXQ0KCVtWYWxpZGF0ZU5vdE51bGxPckVtcHR5KCldDQoJW1N0cmluZ10NCgkkZ2F0ZXdheUtleSwNCg0KCVtQYXJhbWV0ZXIoRG9udFNob3cpXQ0KCVtTdHJpbmddDQoJJGdhdGV3YXlVcmkgPSAiaHR0cHM6Ly9nby5taWNyb3NvZnQuY29tL2Z3bGluay8/bGlua2lkPTgzOTgyMiINCikNCg0KIyBEZWZpbmUgdmFyaWFibGVzDQokZ2F0ZXdheVBhdGggPSAiJFBXRFxnYXRld2F5Lm1zaSINCiRsb2dMb2MgPSAiJGVudjpTeXN0ZW1Ecml2ZVxXaW5kb3dzQXp1cmVcTG9nc1xQbHVnaW5zXE1pY3Jvc29mdC5Db21wdXRlLkN1c3RvbVNjcmlwdEV4dGVuc2lvblwiDQokbG9nUGF0aCA9ICIkbG9nTG9jXHRyYWNlbG9nLmxvZyINCg0KZnVuY3Rpb24gTmV3LUVycm9yKFtzdHJpbmddICRtc2cpIHsNCgl0cnkgew0KCQl0aHJvdyAkbXNnDQoJfQ0KCWNhdGNoIHsNCgkJJHN0YWNrID0gJF8uU2NyaXB0U3RhY2tUcmFjZQ0KCQlUcmFjZS1Mb2cgIkRNRFRUUCBpcyBmYWlsZWQ6ICRtc2dgblN0YWNrOmBuJHN0YWNrIg0KCX0NCgl0aHJvdyAkbXNnDQp9DQoNCmZ1bmN0aW9uIFRyYWNlLUxvZyhbc3RyaW5nXSAkbXNnKSB7DQoJJG5vdyA9IEdldC1EYXRlIC1Gb3JtYXQgInl5eXktTU0tZGQgSEg6bW06c3MiDQoJdHJ5IHsNCgkJIiR7bm93fSAkbXNnYG4iIHwgT3V0LUZpbGUgJGxvZ1BhdGggLUFwcGVuZA0KCX0NCgljYXRjaCB7DQoJCVdyaXRlLUVycm9yICJFcnJvciB3aGVuIHdyaXRpbmcgdHJhY2UgbG9nIg0KCX0NCn0NCg0KZnVuY3Rpb24gSW52b2tlLVByb2Nlc3MoW3N0cmluZ10gJHByb2Nlc3MsIFtzdHJpbmddICRhcmd1bWVudHMpIHsNCglXcml0ZS1WZXJib3NlICJSdW4tUHJvY2VzczogJHByb2Nlc3MgJGFyZ3VtZW50cyINCg0KCSRlcnJvckZpbGUgPSAiJGVudjp0bXBcdG1wJHBpZC5lcnIiDQoJJG91dEZpbGUgPSAiJGVudjp0bXBcdG1wJHBpZC5vdXQiDQoJIiIgfCBPdXQtRmlsZSAkb3V0RmlsZQ0KCSIiIHwgT3V0LUZpbGUgJGVycm9yRmlsZQ0KDQoJJGVyclZhcmlhYmxlID0gIiINCg0KCWlmIChbc3RyaW5nXTo6SXNOdWxsT3JFbXB0eSgkYXJndW1lbnRzKSkgew0KCQkkcHJvYyA9IFN0YXJ0LVByb2Nlc3MgLUZpbGVQYXRoICRwcm9jZXNzIC1XYWl0IC1QYXNzdGhydSAtTm9OZXdXaW5kb3cgYA0KCQkJLVJlZGlyZWN0U3RhbmRhcmRFcnJvciAkZXJyb3JGaWxlIC1SZWRpcmVjdFN0YW5kYXJkT3V0cHV0ICRvdXRGaWxlIC1FcnJvclZhcmlhYmxlIGVyclZhcmlhYmxlDQoJfQ0KCWVsc2Ugew0KCQkkcHJvYyA9IFN0YXJ0LVByb2Nlc3MgLUZpbGVQYXRoICRwcm9jZXNzIC1Bcmd1bWVudExpc3QgJGFyZ3VtZW50cyAtV2FpdCAtUGFzc3RocnUgLU5vTmV3V2luZG93IGANCgkJCS1SZWRpcmVjdFN0YW5kYXJkRXJyb3IgJGVycm9yRmlsZSAtUmVkaXJlY3RTdGFuZGFyZE91dHB1dCAkb3V0RmlsZSAtRXJyb3JWYXJpYWJsZSBlcnJWYXJpYWJsZQ0KCX0NCg0KCSRlcnJDb250ZW50ID0gW3N0cmluZ10gKEdldC1Db250ZW50IC1QYXRoICRlcnJvckZpbGUgLURlbGltaXRlciAiISEhRG9lc05vdEV4aXN0ISEhIikNCgkkb3V0Q29udGVudCA9IFtzdHJpbmddIChHZXQtQ29udGVudCAtUGF0aCAkb3V0RmlsZSAtRGVsaW1pdGVyICIhISFEb2VzTm90RXhpc3QhISEiKQ0KDQoJUmVtb3ZlLUl0ZW0gJGVycm9yRmlsZQ0KCVJlbW92ZS1JdGVtICRvdXRGaWxlDQoNCglpZiAoJHByb2MuRXhpdENvZGUgLW5lIDAgLW9yICRlcnJWYXJpYWJsZSAtbmUgIiIpIHsNCgkJTmV3LUVycm9yICJGYWlsZWQgdG8gcnVuIHByb2Nlc3M6IGV4aXRDb2RlPSQoJHByb2MuRXhpdENvZGUpLCBlcnJWYXJpYWJsZT0kZXJyVmFyaWFibGUsIGVyckNvbnRlbnQ9JGVyckNvbnRlbnQsIG91dENvbnRlbnQ9JG91dENvbnRlbnQuIg0KCX0NCg0KCVRyYWNlLUxvZyAiUnVuLVByb2Nlc3M6IEV4aXRDb2RlPSQoJHByb2MuRXhpdENvZGUpLCBvdXRwdXQ9JG91dENvbnRlbnQiDQoNCglpZiAoW3N0cmluZ106OklzTnVsbE9yRW1wdHkoJG91dENvbnRlbnQpKSB7DQoJCXJldHVybiAkb3V0Q29udGVudA0KCX0NCg0KCXJldHVybiAkb3V0Q29udGVudC5UcmltKCkNCn0NCg0KZnVuY3Rpb24gR2V0LUdhdGV3YXkoW3N0cmluZ10gJHVybCwgW3N0cmluZ10gJGdhdGV3YXlQYXRoKSB7DQoJdHJ5IHsNCgkJJEVycm9yQWN0aW9uUHJlZmVyZW5jZSA9ICJTdG9wIjsNCgkJJGNsaWVudCA9IE5ldy1PYmplY3QgU3lzdGVtLk5ldC5XZWJDbGllbnQNCgkJJGNsaWVudC5Eb3dubG9hZEZpbGUoJHVybCwgJGdhdGV3YXlQYXRoKQ0KCQlUcmFjZS1Mb2cgIkRvd25sb2FkIGdhdGV3YXkgc3VjY2Vzc2Z1bGx5LiBHYXRld2F5IGxvYzogJHtnYXRld2F5UGF0aH0iDQoJfQ0KCWNhdGNoIHsNCgkJVHJhY2UtTG9nICJGYWlsIHRvIGRvd25sb2FkIGdhdGV3YXkgbXNpIg0KCQlUcmFjZS1Mb2cgJF8uRXhjZXB0aW9uLlRvU3RyaW5nKCkNCgkJdGhyb3cNCgl9DQp9DQoNCmZ1bmN0aW9uIEluc3RhbGwtR2F0ZXdheShbc3RyaW5nXSAkZ2F0ZXdheVBhdGgpIHsNCglpZiAoW3N0cmluZ106OklzTnVsbE9yRW1wdHkoJGdhdGV3YXlQYXRoKSkgew0KCQlOZXctRXJyb3IgIkdhdGV3YXkgcGF0aCBpcyBub3Qgc3BlY2lmaWVkIg0KCX0NCglpZiAoIShUZXN0LVBhdGggLVBhdGggJGdhdGV3YXlQYXRoKSkgew0KCQlOZXctRXJyb3IgIkludmFsaWQgZ2F0ZXdheSBwYXRoOiAke2dhdGV3YXlQYXRofSINCgl9DQoJVHJhY2UtTG9nICJTdGFydCBHYXRld2F5IGluc3RhbGxhdGlvbiINCglJbnZva2UtUHJvY2VzcyAibXNpZXhlYy5leGUiICIvaSBnYXRld2F5Lm1zaSBJTlNUQUxMVFlQRT1BenVyZVRlbXBsYXRlIC9xdWlldCAvbm9yZXN0YXJ0Ig0KCVN0YXJ0LVNsZWVwIC1TZWNvbmRzIDMwDQoJVHJhY2UtTG9nICJJbnN0YWxsYXRpb24gb2YgZ2F0ZXdheSBpcyBzdWNjZXNzZnVsIg0KfQ0KDQpmdW5jdGlvbiBHZXQtUmVnaXN0cnlQcm9wZXJ0eShbc3RyaW5nXSAka2V5UGF0aCwgW3N0cmluZ10gJHByb3BlcnR5KSB7DQoJVHJhY2UtTG9nICJHZXQtUmVnaXN0cnlQcm9wZXJ0eTogR2V0ICRwcm9wZXJ0eSBmcm9tICRrZXlQYXRoIg0KCWlmICghIChUZXN0LVBhdGggJGtleVBhdGgpKSB7DQoJCVRyYWNlLUxvZyAiR2V0LVJlZ2lzdHJ5UHJvcGVydHk6ICRrZXlQYXRoIGRvZXMgbm90IGV4aXN0Ig0KCX0NCg0KCSRrZXlSZWcgPSBHZXQtSXRlbSAka2V5UGF0aA0KCWlmICghICgka2V5UmVnLlByb3BlcnR5IC1jb250YWlucyAkcHJvcGVydHkpKSB7DQoJCVRyYWNlLUxvZyAiR2V0LVJlZ2lzdHJ5UHJvcGVydHk6ICRwcm9wZXJ0eSBkb2VzIG5vdCBleGlzdCINCgkJcmV0dXJuICIiDQoJfQ0KCXJldHVybiAka2V5UmVnLkdldFZhbHVlKCRwcm9wZXJ0eSkNCn0NCg0KZnVuY3Rpb24gR2V0LUluc3RhbGxlZEZpbGVQYXRoKCkgew0KCSRmaWxlUGF0aCA9IEdldC1SZWdpc3RyeVByb3BlcnR5ICJoa2xtOlxTb2Z0d2FyZVxNaWNyb3NvZnRcRGF0YVRyYW5zZmVyXERhdGFNYW5hZ2VtZW50R2F0ZXdheVxDb25maWd1cmF0aW9uTWFuYWdlciIgIkRpYWNtZFBhdGgiDQoJaWYgKFtzdHJpbmddOjpJc051bGxPckVtcHR5KCRmaWxlUGF0aCkpIHsNCgkJTmV3LUVycm9yICJHZXQtSW5zdGFsbGVkRmlsZVBhdGg6IENhbm5vdCBmaW5kIGluc3RhbGxlZCBGaWxlIFBhdGgiDQoJfQ0KCVRyYWNlLUxvZyAiR2F0ZXdheSBpbnN0YWxsYXRpb24gZmlsZTogJGZpbGVQYXRoIg0KCXJldHVybiAkZmlsZVBhdGgNCn0NCg0KZnVuY3Rpb24gUmVnaXN0ZXItR2F0ZXdheShbc3RyaW5nXSAkaW5zdGFuY2VLZXkpIHsNCglUcmFjZS1Mb2cgIlJlZ2lzdGVyIEFnZW50Ig0KCSRmaWxlUGF0aCA9IEdldC1JbnN0YWxsZWRGaWxlUGF0aA0KCUludm9rZS1Qcm9jZXNzICRmaWxlUGF0aCAiLWVyYSA4MDYwIg0KCUludm9rZS1Qcm9jZXNzICRmaWxlUGF0aCAiLWsgJGluc3RhbmNlS2V5Ig0KCVRyYWNlLUxvZyAiQWdlbnQgcmVnaXN0cmF0aW9uIGlzIHN1Y2Nlc3NmdWwhIg0KfQ0KDQojIEluaXQgbG9nIHNldHRpbmdzDQppZiAoIShUZXN0LVBhdGgoJGxvZ0xvYykpKSB7DQoJTmV3LUl0ZW0gLVBhdGggJGxvZ0xvYyAtSXRlbVR5cGUgRGlyZWN0b3J5IC1Gb3JjZQ0KfQ0KIlN0YXJ0IHRvIGV4Y3V0ZSBnYXRld2F5SW5zdGFsbC5wczEuIGBuIiB8IE91dC1GaWxlICRsb2dQYXRoDQpUcmFjZS1Mb2cgIkxvZyBmaWxlOiAkbG9nTG9jIg0KVHJhY2UtTG9nICJHYXRld2F5IGRvd25sb2FkIGZ3IGxpbms6ICR7Z2F0ZXdheVVyaX0iDQpUcmFjZS1Mb2cgIkdhdGV3YXkgZG93bmxvYWQgbG9jYXRpb246ICR7Z2F0ZXdheVBhdGh9Ig0KDQpHZXQtR2F0ZXdheSAkZ2F0ZXdheVVyaSAkZ2F0ZXdheVBhdGgNCkluc3RhbGwtR2F0ZXdheSAkZ2F0ZXdheVBhdGgNClJlZ2lzdGVyLUdhdGV3YXkgJGdhdGV3YXlLZXkNCg=="
                           },
                           "networkProfile": {
                             "networkInterfaceConfigurations": [
@@ -2743,7 +2552,7 @@
                             "imageReference": {
                               "offer": "WindowsServer",
                               "publisher": "MicrosoftWindowsServer",
-                              "sku": "2019-Datacenter",
+                              "sku": "2022-datacenter-azure-edition",
                               "version": "latest"
                             },
                             "osDisk": {
@@ -2761,14 +2570,10 @@
                                   "typeHandlerVersion": "1.10",
                                   "autoUpgradeMinorVersion": true,
                                   "settings": {
-                                    "fileUris": [
-                                      "[if(parameters('portalDeployment'), variables('fileUri'), format('https://{0}.blob.{1}/{2}/installSHIRGateway.ps1', variables('storageAccountName'), environment().suffixes.storage, parameters('storageAccountContainerName')))]"
-                                    ]
+                                    "fileUris": []
                                   },
                                   "protectedSettings": {
-                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey \"{0}\"', parameters('datafactoryIntegrationRuntimeAuthKey'))]",
-                                    "storageAccountName": "[variables('storageAccountName')]",
-                                    "storageAccountKey": "[listkeys(parameters('storageAccountId'), '2021-02-01').keys[0].value]"
+                                    "commandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -NonInteractive -command \"cp c:/azuredata/customdata.bin c:/azuredata/installSHIRGateway.ps1; c:/azuredata/installSHIRGateway.ps1 -gatewayKey \"{0}\"', parameters('datafactoryIntegrationRuntimeAuthKey'))]"
                                   }
                                 }
                               }
@@ -2779,22 +2584,9 @@
                     }
                   ]
                 }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'artifactstorage001')]"
-              ]
+              }
             }
-          ],
-          "outputs": {
-            "artifactstorage001Id": {
-              "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'artifactstorage001'), '2020-06-01').outputs.storageAccountId.value]"
-            },
-            "artifactstorage001ContainerName": {
-              "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'artifactstorage001'), '2020-06-01').outputs.storageAccountContainerName.value]"
-            }
-          }
+          ]
         }
       },
       "dependsOn": [
@@ -7000,18 +6792,6 @@
     "routeTableId": {
       "type": "string",
       "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2020-06-01').outputs.routeTableId.value]"
-    },
-    "artifactstorage001ResourceGroupName": {
-      "type": "string",
-      "value": "[split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-runtimes', variables('name'))), 'Microsoft.Resources/deployments', 'runtimeServices'), '2020-06-01').outputs.artifactstorage001Id.value, '/')[4]]"
-    },
-    "artifactstorage001Name": {
-      "type": "string",
-      "value": "[last(split(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-runtimes', variables('name'))), 'Microsoft.Resources/deployments', 'runtimeServices'), '2020-06-01').outputs.artifactstorage001Id.value, '/'))]"
-    },
-    "artifactstorage001ContainerName": {
-      "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-runtimes', variables('name'))), 'Microsoft.Resources/deployments', 'runtimeServices'), '2020-06-01').outputs.artifactstorage001ContainerName.value]"
     },
     "mySqlServer001SubscriptionId": {
       "type": "string",
