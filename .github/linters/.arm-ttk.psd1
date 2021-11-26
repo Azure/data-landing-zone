@@ -9,5 +9,6 @@
         'DependsOn Best Practices',
         'Outputs Must Not Contain Secrets',
         'IDs Should Be Derived From ResourceIDs'
+        'apiVersions Should Be Recent'
     )
 }

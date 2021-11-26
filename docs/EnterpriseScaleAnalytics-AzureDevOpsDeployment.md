@@ -26,7 +26,7 @@ First, you need to create an Azure Resource Manager service connection. To do so
 1. On the next page select **Service principal (manual)**.
 1. Select the appropriate environment to which you would like to deploy the templates. Only the default option **Azure Cloud** is currently supported.
 1. For the **Scope Level**, select **Subscription** and enter your `subscription Id` and `name`.
-1. Enter the details of the service principal that we have generated in step 3. (**Service Principal Id** = **clientId**, **Service Principal Key** = **clientSecret**, **Tenant ID** = **tenantId**) and click on **Verify** to make sure that the connection works.
+1. Enter the details of the service principal that we have generated in step 3. (**Service Principal ID** = **clientId**, **Service Principal Key** = **clientSecret**, **Tenant ID** = **tenantId**) and click on **Verify** to make sure that the connection works.
 1. Enter a user-friendly **Connection name** to use when referring to this service connection. Take note of the name because this will be required in the parameter update process.
 1. Optionally, enter a **Description**.
 1. Click on **Verify and save**.
@@ -83,7 +83,7 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 | `dataIntegration002SubnetAddressPrefix` | Specifies the address space of the subnet that is used for data integration 002. | `10.1.7.0/24` |
 | `dataProduct001SubnetAddressPrefix` | Specifies the address space of the subnet that is used for data product 001. | `10.1.8.0/24` |
 | `dataProduct002SubnetAddressPrefix` | Specifies the address space of the subnet that is used for data product 002. | `10.1.9.0/24` |
-| `dataManagementZoneVnetId` | Specifies the Resource Id of the VNET in the data management zone. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/virtualNetworks/{vnet-name}` |
+| `dataManagementZoneVnetId` | Specifies the Resource ID of the VNET in the data management zone. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/virtualNetworks/{vnet-name}` |
 | `firewallPrivateIp` | Specifies the private IP address of the central firewall. | `10.0.0.4` |
 | `dnsServerAdresses` | Specifies the private IP addresses of the DNS servers. | `[ 10.0.0.4 ]` |
 | `administratorPassword` | Specifies the administrator password of the sql servers. Will be automatically set in the workflow. **Leave this value as is.** | `<your-secure-password>` |
@@ -141,7 +141,7 @@ As a last step, you need to create an Azure DevOps pipeline in your project base
 
 1. Click on **Continue** and then on **Run**.
 
-## Merge these changes back to the `main` branch of your repo
+## Merge these changes back to the `main` branch of your repository
 
 After following the instructions and updating the parameters and variables in your repository in a separate branch and opening the pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository. By doing this, you trigger the deployment workflow.
 
