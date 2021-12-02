@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Enterprise-Scale Analytics - Data Landing Zone",
+            "title": "Data Management & Analytics Scenario - Data Landing Zone",
             "steps": [
                 {
                     "name": "basics",
@@ -14,7 +14,7 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Enterprise-Scale Analytics is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
+                                "text": "Data Management & Analytics Scenario is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
                                 "style": "Info",
                                 "uri": "https://aka.ms/adopt/datamanagement"
                             }
@@ -67,7 +67,7 @@
                                     "type": "Microsoft.Common.InfoBox",
                                     "visible": true,
                                     "options": {
-                                        "text": "Since not all service features are available in all regions, Enterprise-Scale Analytics is available in a subset of regions.",
+                                        "text": "Since not all service features are available in all regions, this deployment is available in a subset of regions.",
                                         "style": "Info"
                                     }
                                 },
