@@ -11,7 +11,7 @@ The Data Management & Analytics architecture consists of two core building block
 
 The architecture is modular by design and allows organizations to start small with a single Data Management Zone and Data Landing Zone, but also allows to scale to a multi-subscription data platform environment by adding more Data Landing Zones to the architecture. Thereby, the reference design allows to implement different modern data platform patterns like data-mesh, data-fabric as well as traditional datalake architectures. Data Management & Analytics has been very well aligned with the data-mesh approach, and is ideally suited to help organizations build data products and share these across business units of an organization. If core recommendations are followed, the resulting target architecture will put the customer on a path to sustainable scale.
 
-![Data Management & Analytics](/docs/images/EnterpriseScaleAnalytics.gif)
+![Data Management & Analytics](/docs/images/DataManagementAnalytics.gif)
 
 ---
 
@@ -40,13 +40,13 @@ The Data Management & Analytics architecture is modular by design and allows cus
 
 To deploy the Data Landing Zone into your Azure Subscription, please follow the step-by-step instructions:
 
-1. [Prerequisites](/docs/EnterpriseScaleAnalytics-Prerequisites.md)
-2. [Create repository](/docs/EnterpriseScaleAnalytics-CreateRepository.md)
-3. [Setting up Service Principal](/docs/EnterpriseScaleAnalytics-ServicePrincipal.md)
+1. [Prerequisites](/docs/DataManagementAnalytics-Prerequisites.md)
+2. [Create repository](/docs/DataManagementAnalytics-CreateRepository.md)
+3. [Setting up Service Principal](/docs/DataManagementAnalytics-ServicePrincipal.md)
 4. Template Deployment
-    1. [GitHub Action Deployment](/docs/EnterpriseScaleAnalytics-GitHubActionsDeployment.md)
-    2. [Azure DevOps Deployment](/docs/EnterpriseScaleAnalytics-AzureDevOpsDeployment.md)
-5. [Known Issues](/docs/EnterpriseScaleAnalytics-KnownIssues.md)
+    1. [GitHub Action Deployment](/docs/DataManagementAnalytics-GitHubActionsDeployment.md)
+    2. [Azure DevOps Deployment](/docs/DataManagementAnalytics-AzureDevOpsDeployment.md)
+5. [Known Issues](/docs/DataManagementAnalytics-KnownIssues.md)
 
 ## Contributing
 

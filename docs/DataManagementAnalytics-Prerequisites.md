@@ -91,4 +91,4 @@ To use the Deploy to Azure Button, please click on the button below:
 
 Alternatively, click on `Next` to follow the steps required to successfully deploy the Data Landing Zone through GitHub Actions or Azure DevOps.
 
->[Next](/docs/EnterpriseScaleAnalytics-CreateRepository.md)
+>[Next](/docs/DataManagementAnalytics-CreateRepository.md)

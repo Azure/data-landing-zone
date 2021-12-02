@@ -60,7 +60,7 @@ The following table explains each of the parameters:
 | Parameter                                   | Description  | Sample value |
 |:--------------------------------------------|:-------------|:-------------|
 | **AZURE_SUBSCRIPTION_ID**                   | Specifies the subscription ID of the Data Landing Zone where all the resources will be deployed | <div style="width: 36ch">`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`</div> |
-| **AZURE_LOCATION**                          | Specifies the region where you want the resources to be deployed. Please check [Supported Regions](/docs/EnterpriseScaleAnalytics-Prerequisites.md). | `northeurope` |
+| **AZURE_LOCATION**                          | Specifies the region where you want the resources to be deployed. Please check [Supported Regions](/docs/DataManagementAnalytics-Prerequisites.md#supported-regions). | `northeurope` |
 | **AZURE_RESOURCE_MANAGER _CONNECTION_NAME** | Specifies the resource manager connection name in Azure DevOps. More details on how to create the resource manager service connection in Azure DevOps was described in the previous paragraph or [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal). | `my-connection-name` |
 
 ### Configure `params.dev.json`
@@ -149,7 +149,7 @@ After following the instructions and updating the parameters and variables in yo
 
 **Congratulations!** You have successfully executed all steps to deploy the template into your environment through Azure DevOps.
 
-Now, you can navigate to the pipeline that you have created as part of step 5 and monitor it as each service is deployed. If you run into any issues, please check the [Known Issues](/docs/EnterpriseScaleAnalytics-KnownIssues.md) first and open an [issue](https://github.com/Azure/data-landing-zone/issues) if you come accross a potential bug in the repository.
+Now, you can navigate to the pipeline that you have created as part of step 5 and monitor it as each service is deployed. If you run into any issues, please check the [Known Issues](/docs/DataManagementAnalytics-KnownIssues.md) first and open an [issue](https://github.com/Azure/data-landing-zone/issues) if you come accross a potential bug in the repository.
 
->[Previous](/docs/EnterpriseScaleAnalytics-ServicePrincipal.md)
->[Next](/docs/EnterpriseScaleAnalytics-KnownIssues.md)
+>[Previous](/docs/DataManagementAnalytics-ServicePrincipal.md)
+>[Next](/docs/DataManagementAnalytics-KnownIssues.md)
