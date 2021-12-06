@@ -65,7 +65,7 @@ param purviewManagedEventHubId string = ''
 @secure()
 @description('Specifies the Auth Key for the Self-hosted integration runtime of Purview.')
 param purviewSelfHostedIntegrationRuntimeAuthKey string = ''
-@description('Specifies whether the self-hosted integration runtimes should be deployed. This only works, if the pwsh script was uploded and is available.')
+@description('Specifies whether the self-hosted integration runtimes should be deployed.')
 param deploySelfHostedIntegrationRuntimes bool = false
 
 // Private DNS Zone parameters

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "6416051468759421425"
+      "templateHash": "16046280463323421704"
     }
   },
   "parameters": {
@@ -180,7 +180,7 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "description": "Specifies whether the self-hosted integration runtimes should be deployed. This only works, if the pwsh script was uploded and is available."
+        "description": "Specifies whether the self-hosted integration runtimes should be deployed."
       }
     },
     "privateDnsZoneIdKeyVault": {
