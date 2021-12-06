@@ -19,25 +19,13 @@ param purviewId string = ''
 param purviewSelfHostedIntegrationRuntimeAuthKey string = ''
 param deploySelfHostedIntegrationRuntimes bool = false
 param datafactoryIds array
-param portalDeployment bool = false
 
 // Variables
-var artifactstorage001Name = '${prefix}-artfct001'
 var datafactoryRuntimes001Name = '${prefix}-runtime-datafactory001'
 var shir001Name = '${prefix}-shir001'
 var shir002Name = '${prefix}-shir002'
 
 // Resources
-module artifactstorage001 'services/artifactstorage.bicep' = {
-  name: 'artifactstorage001'
-  scope: resourceGroup()
-  params: {
-    location: location
-    tags: tags
-    artifactstorageName: artifactstorage001Name
-  }
-}
-
 module datafactoryRuntimes001 'services/datafactoryruntime.bicep' = {
   name: 'datafactoryRuntimes001'
   scope: resourceGroup()
@@ -76,13 +64,10 @@ module datafactoryRuntimes001SelfHostedIntegrationRuntime001 'services/selfHoste
     administratorUsername: administratorUsername
     administratorPassword: administratorPassword
     datafactoryIntegrationRuntimeAuthKey: listAuthKeys(datafactoryRuntimes001IntegrationRuntime001.id, datafactoryRuntimes001IntegrationRuntime001.apiVersion).authKey1
-    storageAccountContainerName: artifactstorage001.outputs.storageAccountContainerName
-    storageAccountId: artifactstorage001.outputs.storageAccountId
     vmssName: shir001Name
     vmssSkuCapacity: 1
     vmssSkuName: 'Standard_DS2_v2'
     vmssSkuTier: 'Standard'
-    portalDeployment: portalDeployment
   }
 }
 
@@ -109,16 +94,11 @@ module purviewSelfHostedIntegrationRuntime001 'services/selfHostedIntegrationRun
     administratorUsername: administratorUsername
     administratorPassword: administratorPassword
     datafactoryIntegrationRuntimeAuthKey: purviewSelfHostedIntegrationRuntimeAuthKey
-    storageAccountContainerName: artifactstorage001.outputs.storageAccountContainerName
-    storageAccountId: artifactstorage001.outputs.storageAccountId
     vmssName: shir002Name
     vmssSkuCapacity: 1
     vmssSkuName: 'Standard_DS2_v2'
     vmssSkuTier: 'Standard'
-    portalDeployment: portalDeployment
   }
 }
 
 // Outputs
-output artifactstorage001Id string = artifactstorage001.outputs.storageAccountId
-output artifactstorage001ContainerName string = artifactstorage001.outputs.storageAccountContainerName

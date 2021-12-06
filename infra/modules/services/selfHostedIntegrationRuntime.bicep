@@ -12,22 +12,17 @@ param vmssName string
 param vmssSkuName string = 'Standard_DS2_v2'
 param vmssSkuTier string = 'Standard'
 param vmssSkuCapacity int = 1
-param storageAccountId string
-param storageAccountContainerName string
 param administratorUsername string = 'VmssMainUser'
 @secure()
 param administratorPassword string
 @secure()
 param datafactoryIntegrationRuntimeAuthKey string
-param portalDeployment bool = false
 
 // Variables
-var storageAccountName = length(split(storageAccountId, '/')) >= 9 ? last(split(storageAccountId, '/')) : 'incorrectSegmentLength'
 var loadbalancerName = '${vmssName}-lb'
-var fileUri = 'https://raw.githubusercontent.com/Azure/data-landing-zone/main/code/installSHIRGateway.ps1'
 
 // Resources
-resource loadbalancer001 'Microsoft.Network/loadBalancers@2020-11-01' = {
+resource loadbalancer001 'Microsoft.Network/loadBalancers@2021-03-01' = {
   name: loadbalancerName
   location: location
   tags: tags
@@ -102,7 +97,7 @@ resource loadbalancer001 'Microsoft.Network/loadBalancers@2020-11-01' = {
   }
 }
 
-resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
+resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2021-07-01' = {
   name: vmssName
   location: location
   tags: tags
@@ -135,6 +130,7 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
         adminUsername: administratorUsername
         adminPassword: administratorPassword
         computerNamePrefix: take(vmssName, 9)
+        customData: loadFileAsBase64('../../../code/installSHIRGateway.ps1')
       }
       networkProfile: {
         networkInterfaceConfigurations: [
@@ -176,7 +172,7 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
         imageReference: {
           offer: 'WindowsServer'
           publisher: 'MicrosoftWindowsServer'
-          sku: '2019-Datacenter'
+          sku: '2022-datacenter-azure-edition'
           version: 'latest'
         }
         osDisk: {
@@ -194,14 +190,10 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
               typeHandlerVersion: '1.10'
               autoUpgradeMinorVersion: true
               settings: {
-                fileUris: [
-                  portalDeployment ? fileUri : 'https://${storageAccountName}.blob.${environment().suffixes.storage}/${storageAccountContainerName}/installSHIRGateway.ps1'
-                ]
+                fileUris: []
               }
               protectedSettings: {
-                commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File installSHIRGateway.ps1 -gatewayKey "${datafactoryIntegrationRuntimeAuthKey}"'
-                storageAccountName: storageAccountName
-                storageAccountKey: listkeys(storageAccountId, '2021-02-01').keys[0].value
+                commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -NonInteractive -command "cp c:/azuredata/customdata.bin c:/azuredata/installSHIRGateway.ps1; c:/azuredata/installSHIRGateway.ps1 -gatewayKey "${datafactoryIntegrationRuntimeAuthKey}"'
               }
             }
           }
