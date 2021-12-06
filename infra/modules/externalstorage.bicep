@@ -10,6 +10,7 @@ param location string
 param prefix string
 param tags object
 param subnetId string
+param purviewId string = ''
 param privateDnsZoneIdBlob string = ''
 
 // Variables
@@ -29,6 +30,7 @@ module storageExternal001 'services/externalstorage.bicep' = {
     storageName: storageExternal001Name
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     fileSytemNames: fileSytemNames
+    purviewId: purviewId
   }
 }
 

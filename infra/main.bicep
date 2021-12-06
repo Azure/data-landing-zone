@@ -207,6 +207,7 @@ module storageServices 'modules/storage.bicep' = {
     prefix: name
     tags: tagsJoined
     subnetId: networkServices.outputs.servicesSubnetId
+    purviewId: purviewId
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
   }
@@ -227,6 +228,7 @@ module externalStorageServices 'modules/externalstorage.bicep' = {
     location: location
     prefix: name
     tags: tagsJoined
+    purviewId: purviewId
     subnetId: networkServices.outputs.servicesSubnetId
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
   }
@@ -354,6 +356,25 @@ resource dataProduct002ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01
   location: location
   tags: tagsJoined
   properties: {}
+}
+
+// Role assignment
+module purviewSubscriptionRoleAssignmentReader 'modules/auxiliary/purviewRoleAssignmentSubscription.bicep' = if(!empty(purviewId)) {
+  name: 'purviewSubscriptionRoleAssignmentReader'
+  scope: subscription()
+  params: {
+    purviewId: purviewId
+    role: 'Reader'
+  }
+}
+
+module purviewSubscriptionRoleAssignmentStorageBlobReader 'modules/auxiliary/purviewRoleAssignmentSubscription.bicep' = if(!empty(purviewId)) {
+  name: 'purviewSubscriptionRoleAssignmentStorageBlobReader'
+  scope: subscription()
+  params: {
+    purviewId: purviewId
+    role: 'StorageBlobDataReader'
+  }
 }
 
 // Outputs

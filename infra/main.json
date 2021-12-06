@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "16046280463323421704"
+      "templateHash": "1532090616127962739"
     }
   },
   "parameters": {
@@ -2618,6 +2618,9 @@
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2020-06-01').outputs.servicesSubnetId.value]"
           },
+          "purviewId": {
+            "value": "[parameters('purviewId')]"
+          },
           "privateDnsZoneIdBlob": {
             "value": "[parameters('privateDnsZoneIdBlob')]"
           },
@@ -2632,7 +2635,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "14534809536071581236"
+              "templateHash": "2241249390270477566"
             }
           },
           "parameters": {
@@ -2647,6 +2650,10 @@
             },
             "subnetId": {
               "type": "string"
+            },
+            "purviewId": {
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdDfs": {
               "type": "string",
@@ -2704,6 +2711,9 @@
                   },
                   "fileSystemNames": {
                     "value": "[variables('domainFileSytemNames')]"
+                  },
+                  "purviewId": {
+                    "value": "[parameters('purviewId')]"
                   }
                 },
                 "template": {
@@ -2713,7 +2723,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "4335413910786193758"
+                      "templateHash": "4350977779944189850"
                     }
                   },
                   "parameters": {
@@ -2739,13 +2749,18 @@
                     },
                     "fileSystemNames": {
                       "type": "array"
+                    },
+                    "purviewId": {
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
                   "variables": {
                     "storageNameCleaned": "[replace(parameters('storageName'), '-', '')]",
                     "storagePrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]",
-                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]"
+                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]",
+                    "resourceAccessRules": "[if(empty(parameters('purviewId')), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId))), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId)), createObject('tenantId', subscription().tenantId, 'resourceId', parameters('purviewId'))))]"
                   },
                   "resources": [
                     {
@@ -2758,8 +2773,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_ZRS",
-                        "tier": "Standard"
+                        "name": "Standard_ZRS"
                       },
                       "kind": "StorageV2",
                       "properties": {
@@ -2797,7 +2811,7 @@
                           "defaultAction": "Deny",
                           "ipRules": [],
                           "virtualNetworkRules": [],
-                          "resourceAccessRules": []
+                          "resourceAccessRules": "[variables('resourceAccessRules')]"
                         },
                         "supportsHttpsTrafficOnly": true
                       }
@@ -3023,6 +3037,9 @@
                   },
                   "fileSystemNames": {
                     "value": "[variables('domainFileSytemNames')]"
+                  },
+                  "purviewId": {
+                    "value": "[parameters('purviewId')]"
                   }
                 },
                 "template": {
@@ -3032,7 +3049,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "4335413910786193758"
+                      "templateHash": "4350977779944189850"
                     }
                   },
                   "parameters": {
@@ -3058,13 +3075,18 @@
                     },
                     "fileSystemNames": {
                       "type": "array"
+                    },
+                    "purviewId": {
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
                   "variables": {
                     "storageNameCleaned": "[replace(parameters('storageName'), '-', '')]",
                     "storagePrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]",
-                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]"
+                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]",
+                    "resourceAccessRules": "[if(empty(parameters('purviewId')), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId))), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId)), createObject('tenantId', subscription().tenantId, 'resourceId', parameters('purviewId'))))]"
                   },
                   "resources": [
                     {
@@ -3077,8 +3099,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_ZRS",
-                        "tier": "Standard"
+                        "name": "Standard_ZRS"
                       },
                       "kind": "StorageV2",
                       "properties": {
@@ -3116,7 +3137,7 @@
                           "defaultAction": "Deny",
                           "ipRules": [],
                           "virtualNetworkRules": [],
-                          "resourceAccessRules": []
+                          "resourceAccessRules": "[variables('resourceAccessRules')]"
                         },
                         "supportsHttpsTrafficOnly": true
                       }
@@ -3342,6 +3363,9 @@
                   },
                   "fileSystemNames": {
                     "value": "[variables('dataProductFileSystemNames')]"
+                  },
+                  "purviewId": {
+                    "value": "[parameters('purviewId')]"
                   }
                 },
                 "template": {
@@ -3351,7 +3375,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "4335413910786193758"
+                      "templateHash": "4350977779944189850"
                     }
                   },
                   "parameters": {
@@ -3377,13 +3401,18 @@
                     },
                     "fileSystemNames": {
                       "type": "array"
+                    },
+                    "purviewId": {
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
                   "variables": {
                     "storageNameCleaned": "[replace(parameters('storageName'), '-', '')]",
                     "storagePrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]",
-                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]"
+                    "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]",
+                    "resourceAccessRules": "[if(empty(parameters('purviewId')), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId))), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId)), createObject('tenantId', subscription().tenantId, 'resourceId', parameters('purviewId'))))]"
                   },
                   "resources": [
                     {
@@ -3396,8 +3425,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_ZRS",
-                        "tier": "Standard"
+                        "name": "Standard_ZRS"
                       },
                       "kind": "StorageV2",
                       "properties": {
@@ -3435,7 +3463,7 @@
                           "defaultAction": "Deny",
                           "ipRules": [],
                           "virtualNetworkRules": [],
-                          "resourceAccessRules": []
+                          "resourceAccessRules": "[variables('resourceAccessRules')]"
                         },
                         "supportsHttpsTrafficOnly": true
                       }
@@ -3685,6 +3713,9 @@
           "tags": {
             "value": "[variables('tagsJoined')]"
           },
+          "purviewId": {
+            "value": "[parameters('purviewId')]"
+          },
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2020-06-01').outputs.servicesSubnetId.value]"
           },
@@ -3699,7 +3730,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "1767359006042222108"
+              "templateHash": "13631667228081798033"
             }
           },
           "parameters": {
@@ -3714,6 +3745,10 @@
             },
             "subnetId": {
               "type": "string"
+            },
+            "purviewId": {
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdBlob": {
               "type": "string",
@@ -3755,6 +3790,9 @@
                   },
                   "fileSytemNames": {
                     "value": "[variables('fileSytemNames')]"
+                  },
+                  "purviewId": {
+                    "value": "[parameters('purviewId')]"
                   }
                 },
                 "template": {
@@ -3764,7 +3802,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "11367885506937201765"
+                      "templateHash": "4669412684747056012"
                     }
                   },
                   "parameters": {
@@ -3789,12 +3827,17 @@
                       "defaultValue": [
                         "data"
                       ]
+                    },
+                    "purviewId": {
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
                   "variables": {
                     "storageNameCleaned": "[replace(parameters('storageName'), '-', '')]",
-                    "storageExternalPrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]"
+                    "storageExternalPrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]",
+                    "resourceAccessRules": "[if(empty(parameters('purviewId')), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId))), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId)), createObject('tenantId', subscription().tenantId, 'resourceId', parameters('purviewId'))))]"
                   },
                   "resources": [
                     {
@@ -3807,8 +3850,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_ZRS",
-                        "tier": "Standard"
+                        "name": "Standard_ZRS"
                       },
                       "kind": "StorageV2",
                       "properties": {
@@ -3846,7 +3888,7 @@
                           "defaultAction": "Deny",
                           "ipRules": [],
                           "virtualNetworkRules": [],
-                          "resourceAccessRules": []
+                          "resourceAccessRules": "[variables('resourceAccessRules')]"
                         },
                         "supportsHttpsTrafficOnly": true
                       }
@@ -6778,6 +6820,138 @@
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-shared-product', variables('name')))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-storage', variables('name'))), 'Microsoft.Resources/deployments', 'storageServices')]"
       ]
+    },
+    {
+      "condition": "[not(empty(parameters('purviewId')))]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "purviewSubscriptionRoleAssignmentReader",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "purviewId": {
+            "value": "[parameters('purviewId')]"
+          },
+          "role": {
+            "value": "Reader"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "10665117672434887879"
+            }
+          },
+          "parameters": {
+            "purviewId": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string",
+              "allowedValues": [
+                "Reader",
+                "StorageBlobDataReader"
+              ]
+            }
+          },
+          "functions": [],
+          "variables": {
+            "purviewSubscriptionId": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[2], subscription().subscriptionId)]",
+            "purviewResourceGroupName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[4], 'incorrectSegmentLength')]",
+            "purviewName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), last(split(parameters('purviewId'), '/')), 'incorrectSegmentLength')]",
+            "roles": {
+              "Reader": "acdd72a7-3385-48ef-bd42-f606fba81ae7",
+              "StorageBlobDataReader": "2a2b9908-6ea1-4ae2-8e65-a410df84e7d1"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2020-04-01-preview",
+              "name": "[guid(uniqueString(subscription().subscriptionId, extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName')), variables('roles')[parameters('role')]))]",
+              "properties": {
+                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('roles')[parameters('role')])]",
+                "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName')), '2021-07-01', 'full').identity.principalId]",
+                "principalType": "ServicePrincipal"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "condition": "[not(empty(parameters('purviewId')))]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "purviewSubscriptionRoleAssignmentStorageBlobReader",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "purviewId": {
+            "value": "[parameters('purviewId')]"
+          },
+          "role": {
+            "value": "StorageBlobDataReader"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "10665117672434887879"
+            }
+          },
+          "parameters": {
+            "purviewId": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string",
+              "allowedValues": [
+                "Reader",
+                "StorageBlobDataReader"
+              ]
+            }
+          },
+          "functions": [],
+          "variables": {
+            "purviewSubscriptionId": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[2], subscription().subscriptionId)]",
+            "purviewResourceGroupName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[4], 'incorrectSegmentLength')]",
+            "purviewName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), last(split(parameters('purviewId'), '/')), 'incorrectSegmentLength')]",
+            "roles": {
+              "Reader": "acdd72a7-3385-48ef-bd42-f606fba81ae7",
+              "StorageBlobDataReader": "2a2b9908-6ea1-4ae2-8e65-a410df84e7d1"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2020-04-01-preview",
+              "name": "[guid(uniqueString(subscription().subscriptionId, extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName')), variables('roles')[parameters('role')]))]",
+              "properties": {
+                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('roles')[parameters('role')])]",
+                "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName')), '2021-07-01', 'full').identity.principalId]",
+                "principalType": "ServicePrincipal"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "outputs": {
