@@ -65,10 +65,8 @@ param purviewManagedEventHubId string = ''
 @secure()
 @description('Specifies the Auth Key for the Self-hosted integration runtime of Purview.')
 param purviewSelfHostedIntegrationRuntimeAuthKey string = ''
-@description('Specifies whether the self-hosted integration runtimes should be deployed. This only works, if the pwsh script was uploded and is available.')
+@description('Specifies whether the self-hosted integration runtimes should be deployed.')
 param deploySelfHostedIntegrationRuntimes bool = false
-@description('Specifies whether the deployment was submitted through the Azure Portal.')
-param portalDeployment bool = false
 
 // Private DNS Zone parameters
 @description('Specifies the resource ID of the private DNS zone for Key Vault.')
@@ -190,7 +188,6 @@ module runtimeServices 'modules/runtimes.bicep' = {
     datafactoryIds: [
       sharedIntegrationServices.outputs.datafactoryIntegration001Id
     ]
-    portalDeployment: portalDeployment
   }
 }
 
@@ -210,6 +207,7 @@ module storageServices 'modules/storage.bicep' = {
     prefix: name
     tags: tagsJoined
     subnetId: networkServices.outputs.servicesSubnetId
+    purviewId: purviewId
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
   }
@@ -230,6 +228,7 @@ module externalStorageServices 'modules/externalstorage.bicep' = {
     location: location
     prefix: name
     tags: tagsJoined
+    purviewId: purviewId
     subnetId: networkServices.outputs.servicesSubnetId
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
   }
@@ -359,13 +358,29 @@ resource dataProduct002ResourceGroup 'Microsoft.Resources/resourceGroups@2021-01
   properties: {}
 }
 
+// Role assignment
+module purviewSubscriptionRoleAssignmentReader 'modules/auxiliary/purviewRoleAssignmentSubscription.bicep' = if(!empty(purviewId)) {
+  name: 'purviewSubscriptionRoleAssignmentReader'
+  scope: subscription()
+  params: {
+    purviewId: purviewId
+    role: 'Reader'
+  }
+}
+
+module purviewSubscriptionRoleAssignmentStorageBlobReader 'modules/auxiliary/purviewRoleAssignmentSubscription.bicep' = if(!empty(purviewId)) {
+  name: 'purviewSubscriptionRoleAssignmentStorageBlobReader'
+  scope: subscription()
+  params: {
+    purviewId: purviewId
+    role: 'StorageBlobDataReader'
+  }
+}
+
 // Outputs
 output vnetId string = networkServices.outputs.vnetId
 output nsgId string = networkServices.outputs.nsgId
 output routeTableId string = networkServices.outputs.routeTableId
-output artifactstorage001ResourceGroupName string = split(runtimeServices.outputs.artifactstorage001Id, '/')[4]
-output artifactstorage001Name string = last(split(runtimeServices.outputs.artifactstorage001Id, '/'))
-output artifactstorage001ContainerName string = runtimeServices.outputs.artifactstorage001ContainerName
 output mySqlServer001SubscriptionId string = split(metadataServices.outputs.mySqlServer001Id, '/')[2]
 output mySqlServer001ResourceGroupName string = split(metadataServices.outputs.mySqlServer001Id, '/')[4]
 output mySqlServer001Name string = last(split(metadataServices.outputs.mySqlServer001Id, '/'))

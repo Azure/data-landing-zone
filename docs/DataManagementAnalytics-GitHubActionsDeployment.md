@@ -75,7 +75,7 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 | `dataIntegration002SubnetAddressPrefix` | Specifies the address space of the subnet that is used for Data Integration 002. | `10.1.7.0/24` |
 | `dataProduct001SubnetAddressPrefix` | Specifies the address space of the subnet that is used for Data Product 001. | `10.1.8.0/24` |
 | `dataProduct002SubnetAddressPrefix` | Specifies the address space of the subnet that is used for Data Product 002. | `10.1.9.0/24` |
-| `dataManagementZoneVnetId` | Specifies the Resource ID of the vnet in the Data Management Zone. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/virtualNetworks/{vnet-name}` |
+| `dataManagementZoneVnetId` | Specifies the Resource ID of the VNet in the Data Management Zone. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/virtualNetworks/{vnet-name}` |
 | `firewallPrivateIp` | Specifies the private IP address of the central firewall. | `10.0.0.4` |
 | `dnsServerAdresses` | Specifies the private IP addresses of the DNS Servers. | `[ 10.0.0.4 ]` |
 | `administratorPassword` | Specifies the administrator password of the SQL Servers. Will be automatically set in the workflow. **Leave this value as is.** | `<your-secure-password>` |
@@ -84,7 +84,6 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 | `purviewManagedEventHubId` | Specifies the Resource ID of the managed event hub of the central purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.EventHub/namespaces/{eventhub-namespace-name}` |
 | `purviewSelfHostedIntegrationRuntimeAuthKey` | Specifies the Auth Key for the Self-hosted integration runtime of Purview. | `<your-purview-shir-auth-key>` |
 | `deploySelfHostedIntegrationRuntimes` | Specifies whether the self-hosted integration runtimes should be deployed. This only works, if the pwsh script was uploded and is available. | `true` or `false` |
-| `portalDeployment` | Specifies whether the deployment was submitted through the Azure Portal. | `true` or `false` |
 | `privateDnsZoneIdKeyVault` | Specifies the Resource ID of the private DNS zone for KeyVault. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net` |
 | `privateDnsZoneIdDataFactory` | Specifies the Resource ID of the private DNS zone for Data Factory. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net` |
 | `privateDnsZoneIdDataFactoryPortal` | Specifies the Resource ID of the private DNS zone for Data Factory Portal. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com` |

@@ -76,7 +76,6 @@ stages:
               deploymentMode: "Validation"
               overrideParameters: >
                 -administratorPassword "$(password)"
-                -deploySelfHostedIntegrationRuntimes false
 
           # Deploy Data Landing Zone - what-if
           - task: AzureCLI@2
@@ -97,7 +96,7 @@ stages:
                   --subscription ${{ variables.AZURE_SUBSCRIPTION_ID }} `
                   --exclude-change-types Ignore NoChange Unsupported `
                   --template-file "$(System.DefaultWorkingDirectory)/infra/main.json" `
-                  --parameters "$(System.DefaultWorkingDirectory)/infra/params.dev.json" administratorPassword="$(password)" deploySelfHostedIntegrationRuntimes=false `
+                  --parameters "$(System.DefaultWorkingDirectory)/infra/params.dev.json" administratorPassword="$(password)" `
                   --result-format "FullResourcePayloads"
                 
               powerShellErrorActionPreference: "stop"
@@ -142,10 +141,10 @@ stages:
               ignoreLASTEXITCODE: false
               pwsh: true
 
-          # Deploy Data Landing Zone - w/o SHIR
+          # Deploy Data Landing Zone
           - task: AzureResourceManagerTemplateDeployment@3
             name: data_landing_zone_deployment_001
-            displayName: Data Landing Zone - w/o SHIR
+            displayName: Data Landing Zone
             enabled: true
             continueOnError: false
             inputs:
@@ -160,47 +159,6 @@ stages:
               deploymentMode: "Incremental"
               overrideParameters: >
                 -administratorPassword "$(password)"
-                -deploySelfHostedIntegrationRuntimes false
-          
-          # Upload File to Artifact Storage Account
-          - task: AzurePowerShell@4
-            name: upload_file_001
-            displayName: Upload File to Artifact Storage Account
-            enabled: true
-            continueOnError: false
-            inputs:
-              azureSubscription: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
-              scriptType: 'filePath'
-              scriptPath: '$(System.DefaultWorkingDirectory)/code/UploadBlob.ps1'
-              scriptArguments:
-                -ResourceGroupName $(dataLandingZoneDetails01.artifactstorage001ResourceGroupName.value)
-                -StorageAccountName $(dataLandingZoneDetails01.artifactstorage001Name.value)
-                -StorageAccountContainerName $(dataLandingZoneDetails01.artifactstorage001ContainerName.value)
-                -File "$(System.DefaultWorkingDirectory)/code/installSHIRGateway.ps1"
-                -Blob "installSHIRGateway.ps1"
-              errorActionPreference: 'stop'
-              failOnStandardError: false
-              azurePowerShellVersion: 'latestVersion'
-          
-          # Deploy Data Landing Zone - w/ SHIR
-          - task: AzureResourceManagerTemplateDeployment@3
-            name: data_landing_zone_deployment_002
-            displayName: Data Landing Zone - w/ SHIR
-            enabled: true
-            continueOnError: false
-            inputs:
-              deploymentScope: "Subscription"
-              azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
-              subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
-              location: ${{ variables.AZURE_LOCATION }}
-              templateLocation: "Linked artifact"
-              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
-              csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
-              deploymentOutputs: 'dataLandingZoneDetails01'
-              deploymentMode: "Incremental"
-              overrideParameters: >
-                -administratorPassword "$(password)"
-                -deploySelfHostedIntegrationRuntimes true
           
           # Restart MySQL Server 001
           - task: AzurePowerShell@4

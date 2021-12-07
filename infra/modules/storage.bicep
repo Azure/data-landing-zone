@@ -10,6 +10,7 @@ param location string
 param prefix string
 param tags object
 param subnetId string
+param purviewId string = ''
 param privateDnsZoneIdDfs string = ''
 param privateDnsZoneIdBlob string = ''
 
@@ -40,6 +41,7 @@ module storageRaw 'services/storage.bicep' = {
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: domainFileSytemNames
+    purviewId: purviewId
   }
 }
 
@@ -54,6 +56,7 @@ module storageEnrichedCurated 'services/storage.bicep' = {
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: domainFileSytemNames
+    purviewId: purviewId
   }
 }
 
@@ -68,6 +71,7 @@ module storageWorkspace 'services/storage.bicep' = {
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: dataProductFileSystemNames
+    purviewId: purviewId
   }
 }
 
