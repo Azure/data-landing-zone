@@ -10,7 +10,7 @@
                     "label": "Data Landing Zone",
                     "elements": [
                         {
-                            "name": "infoBoxEnterpriseScaleAnalytics",
+                            "name": "infoBoxDataManagementAnalytics",
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
