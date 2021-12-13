@@ -8,7 +8,7 @@ Due to the following service limitations, Databricks needs to be setup manually:
 
 ## Manual Databricks configuration
 
-Due to the issue mentioned above, we cannot rely on the application workflow, but only rely on the on-behalf workflow. This means, that instead of using a Service Principle for authentication, we need to rely on a user being authenticated against the workspace. Only then, we can use the Databricks API to create a Key Vault backed secret scopes. If you are OK with Databricks backed secret scopes, then you can already automate the complete setup end-to-end. However, for manageability reasons, we recommend using Azure Key Vaults for storing secrets.
+Due to the issue mentioned above, we cannot rely on the application workflow, but only rely on the on-behalf workflow. This means, that instead of using a Service Principal for authentication, we need to rely on a user being authenticated against the workspace. Only then, we can use the Databricks API to create a Key Vault backed secret scopes. If you are OK with Databricks backed secret scopes, then you can already automate the complete setup end-to-end. However, for manageability reasons, we recommend using Azure Key Vaults for storing secrets.
 
 In order to simplify the manual setup and configuration of Databricks, we are providing a Powershell script (`SetupDatabricksManually.ps1`) as well as predefined commands in the DevOps and GitHub workflows. You can copy and paste these commands into your Powershell console to setup your Databricks workspaces manually by executing a single script. The Powershell script will perform the following actions in your Databricks workspace:
 

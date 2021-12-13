@@ -52,7 +52,7 @@ The following table explains each of the parameters:
 | Parameter                                   | Description  | Sample value |
 |:--------------------------------------------|:-------------|:-------------|
 | **AZURE_SUBSCRIPTION_ID**                   | Specifies the subscription ID of the Data Landing Zone where all the resources will be deployed | <div style="width: 36ch">`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`</div> |
-| **AZURE_LOCATION**                          | Specifies the region where you want the resources to be deployed. Please check [Supported Regions](/docs/EnterpriseScaleAnalytics-Prerequisites.md) | `northeurope` |
+| **AZURE_LOCATION**                          | Specifies the region where you want the resources to be deployed. Please check [Supported Regions](/docs/DataManagementAnalytics-Prerequisites.md#supported-regions) | `northeurope` |
 
 ### Configure `params.dev.json`
 
@@ -103,7 +103,7 @@ After following the instructions and updating the parameters and variables in yo
 
 **Congratulations!** You have successfully executed all steps to deploy the template into your environment through GitHub Actions.
 
-Now, you can navigate to the **Actions** tab of the main page of the repository, where you will see a workflow with the name `Data Landing Zone Deployment` running. Click on it to see how it deploys the environment. If you run into any issues, please check the [Known Issues](/docs/EnterpriseScaleAnalytics-KnownIssues.md) first and open an [issue](https://github.com/Azure/data-landing-zone/issues) if you come accross a potential bug in the repository.
+Now, you can navigate to the **Actions** tab of the main page of the repository, where you will see a workflow with the name `Data Landing Zone Deployment` running. Click on it to see how it deploys the environment. If you run into any issues, please check the [Known Issues](/docs/DataManagementAnalytics-KnownIssues.md) first and open an [issue](https://github.com/Azure/data-landing-zone/issues) if you come accross a potential bug in the repository.
 
->[Previous](/docs/EnterpriseScaleAnalytics-ServicePrincipal.md)
->[Next](/docs/EnterpriseScaleAnalytics-KnownIssues.md)
+>[Previous](/docs/DataManagementAnalytics-ServicePrincipal.md)
+>[Next](/docs/DataManagementAnalytics-KnownIssues.md)
