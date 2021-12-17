@@ -52,6 +52,7 @@ For now, we are recommending to select one of the regions mentioned below. The l
 - (Asia Pacific) Central India
 - (Asia Pacific) Japan East
 - (Asia Pacific) Southeast Asia
+- (Asia Pacific) South India
 - (Canada) Canada Central
 - (Europe) France Central
 - (Europe) Germany West Central
@@ -65,6 +66,8 @@ For now, we are recommending to select one of the regions mentioned below. The l
 - (US) South Central US
 - (US) West Central US
 - (US) West US 2
+
+**Please open a pull request if you want to deploy the artifacts into a region that is not listed above.**
 
 ## Prerequisites
 
