@@ -33,6 +33,41 @@ var resourceAccessRules = empty(purviewId) ? [
     resourceId: purviewId
   }
 ]
+var storageZrsRegions = [
+  // Africa
+  'southafricanorth'
+
+  // Asia
+  'australiaeast'
+  'centralindia'
+  'eastasia'
+  'japaneast'
+  'koreacentral'
+  'southeastasia'
+
+  // Canada
+  'canadacentral'
+
+  // Europe
+  'francecentral'
+  'germanywestcentral'
+  'northeurope'
+  'norwayeast'
+  'swedencentral'
+  'uksouth'
+  'westeurope'
+
+  // South America
+  'brazilsouth'
+
+  // US
+  'centralus'
+  'eastus'
+  'eastus2'
+  'southcentralus'
+  'westus2'
+  'westus3'
+]
 
 // Resources
 resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
@@ -43,7 +78,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
     type: 'SystemAssigned'
   }
   sku: {
-    name: 'Standard_ZRS'
+    name: contains(storageZrsRegions, location) ? 'Standard_ZRS' : 'Standard_LRS'
   }
   kind: 'StorageV2'
   properties: {
