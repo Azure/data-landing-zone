@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "7618844142089139852"
+      "templateHash": "6542674684264803931"
     }
   },
   "parameters": {
@@ -448,7 +448,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "13883560175464909401"
+              "templateHash": "16882101118127557101"
             }
           },
           "parameters": {
@@ -723,6 +723,53 @@
                       "access": "Allow",
                       "priority": 130,
                       "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "apiVersion": "2020-11-01",
+              "name": "[format('{0}-adfssis-nsg', parameters('prefix'))]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "AllowBatchNodeManagement",
+                    "properties": {
+                      "description": "Required for Azure SSIS with public IP.",
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "29876-29877",
+                      "sourceAddressPrefix": "BatchNodeManagement",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 110,
+                      "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                    }
+                  },
+                  {
+                    "name": "AllowAzureCloud",
+                    "properties": {
+                      "description": "Required for Azure SSIS workers to access Azure services, such as Azure Storage and Azure Event Hubs.",
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "443",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "AzureCloud",
+                      "access": "Allow",
+                      "priority": 120,
+                      "direction": "Outbound",
                       "sourcePortRanges": [],
                       "destinationPortRanges": [],
                       "sourceAddressPrefixes": [],
@@ -2631,7 +2678,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "2199353610392000178"
+              "templateHash": "16664940655471776009"
             }
           },
           "parameters": {
@@ -2725,7 +2772,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "13029846851650780358"
+                      "templateHash": "2297446507511138895"
                     }
                   },
                   "parameters": {
@@ -2779,7 +2826,31 @@
                       "tenantId": "[subscription().tenantId]",
                       "resourceId": "[parameters('purviewId')]"
                     },
-                    "resourceAccessRules": "[if(empty(parameters('purviewId')), variables('synapseResourceAccessrules'), union(variables('synapseResourceAccessrules'), array(variables('purviewResourceAccessRules'))))]"
+                    "resourceAccessRules": "[if(empty(parameters('purviewId')), variables('synapseResourceAccessrules'), union(variables('synapseResourceAccessrules'), array(variables('purviewResourceAccessRules'))))]",
+                    "storageZrsRegions": [
+                      "southafricanorth",
+                      "australiaeast",
+                      "centralindia",
+                      "eastasia",
+                      "japaneast",
+                      "koreacentral",
+                      "southeastasia",
+                      "canadacentral",
+                      "francecentral",
+                      "germanywestcentral",
+                      "northeurope",
+                      "norwayeast",
+                      "swedencentral",
+                      "uksouth",
+                      "westeurope",
+                      "brazilsouth",
+                      "centralus",
+                      "eastus",
+                      "eastus2",
+                      "southcentralus",
+                      "westus2",
+                      "westus3"
+                    ]
                   },
                   "resources": [
                     {
@@ -2792,7 +2863,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_ZRS"
+                        "name": "[if(contains(variables('storageZrsRegions'), parameters('location')), 'Standard_ZRS', 'Standard_LRS')]"
                       },
                       "kind": "StorageV2",
                       "properties": {
@@ -3071,7 +3142,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "13029846851650780358"
+                      "templateHash": "2297446507511138895"
                     }
                   },
                   "parameters": {
@@ -3125,7 +3196,31 @@
                       "tenantId": "[subscription().tenantId]",
                       "resourceId": "[parameters('purviewId')]"
                     },
-                    "resourceAccessRules": "[if(empty(parameters('purviewId')), variables('synapseResourceAccessrules'), union(variables('synapseResourceAccessrules'), array(variables('purviewResourceAccessRules'))))]"
+                    "resourceAccessRules": "[if(empty(parameters('purviewId')), variables('synapseResourceAccessrules'), union(variables('synapseResourceAccessrules'), array(variables('purviewResourceAccessRules'))))]",
+                    "storageZrsRegions": [
+                      "southafricanorth",
+                      "australiaeast",
+                      "centralindia",
+                      "eastasia",
+                      "japaneast",
+                      "koreacentral",
+                      "southeastasia",
+                      "canadacentral",
+                      "francecentral",
+                      "germanywestcentral",
+                      "northeurope",
+                      "norwayeast",
+                      "swedencentral",
+                      "uksouth",
+                      "westeurope",
+                      "brazilsouth",
+                      "centralus",
+                      "eastus",
+                      "eastus2",
+                      "southcentralus",
+                      "westus2",
+                      "westus3"
+                    ]
                   },
                   "resources": [
                     {
@@ -3138,7 +3233,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_ZRS"
+                        "name": "[if(contains(variables('storageZrsRegions'), parameters('location')), 'Standard_ZRS', 'Standard_LRS')]"
                       },
                       "kind": "StorageV2",
                       "properties": {
@@ -3417,7 +3512,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "13029846851650780358"
+                      "templateHash": "2297446507511138895"
                     }
                   },
                   "parameters": {
@@ -3471,7 +3566,31 @@
                       "tenantId": "[subscription().tenantId]",
                       "resourceId": "[parameters('purviewId')]"
                     },
-                    "resourceAccessRules": "[if(empty(parameters('purviewId')), variables('synapseResourceAccessrules'), union(variables('synapseResourceAccessrules'), array(variables('purviewResourceAccessRules'))))]"
+                    "resourceAccessRules": "[if(empty(parameters('purviewId')), variables('synapseResourceAccessrules'), union(variables('synapseResourceAccessrules'), array(variables('purviewResourceAccessRules'))))]",
+                    "storageZrsRegions": [
+                      "southafricanorth",
+                      "australiaeast",
+                      "centralindia",
+                      "eastasia",
+                      "japaneast",
+                      "koreacentral",
+                      "southeastasia",
+                      "canadacentral",
+                      "francecentral",
+                      "germanywestcentral",
+                      "northeurope",
+                      "norwayeast",
+                      "swedencentral",
+                      "uksouth",
+                      "westeurope",
+                      "brazilsouth",
+                      "centralus",
+                      "eastus",
+                      "eastus2",
+                      "southcentralus",
+                      "westus2",
+                      "westus3"
+                    ]
                   },
                   "resources": [
                     {
@@ -3484,7 +3603,7 @@
                         "type": "SystemAssigned"
                       },
                       "sku": {
-                        "name": "Standard_ZRS"
+                        "name": "[if(contains(variables('storageZrsRegions'), parameters('location')), 'Standard_ZRS', 'Standard_LRS')]"
                       },
                       "kind": "StorageV2",
                       "properties": {
