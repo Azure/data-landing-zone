@@ -67,6 +67,8 @@ param purviewManagedEventHubId string = ''
 param purviewSelfHostedIntegrationRuntimeAuthKey string = ''
 @description('Specifies whether the self-hosted integration runtimes should be deployed.')
 param deploySelfHostedIntegrationRuntimes bool = false
+@description('Specifies the subscription IDs of the other Data Landing Zones.')
+param dataLandingZoneSubscriptionIds array = []
 
 // Private DNS Zone parameters
 @description('Specifies the resource ID of the private DNS zone for Key Vault.')
@@ -210,6 +212,7 @@ module storageServices 'modules/storage.bicep' = {
     purviewId: purviewId
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
+    dataLandingZoneSubscriptionIds: dataLandingZoneSubscriptionIds
   }
 }
 
@@ -231,6 +234,7 @@ module externalStorageServices 'modules/externalstorage.bicep' = {
     purviewId: purviewId
     subnetId: networkServices.outputs.servicesSubnetId
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
+    dataLandingZoneSubscriptionIds: dataLandingZoneSubscriptionIds
   }
 }
 
@@ -386,6 +390,7 @@ output mySqlServer001ResourceGroupName string = split(metadataServices.outputs.m
 output mySqlServer001Name string = last(split(metadataServices.outputs.mySqlServer001Id, '/'))
 output mySqlServer001KeyVaultid string = metadataServices.outputs.keyVault001Id
 output mySqlServer001UsernameSecretName string = metadataServices.outputs.mySqlServer001UsernameSecretName
+#disable-next-line outputs-should-not-contain-secrets
 output mySqlServer001PasswordSecretName string = metadataServices.outputs.mySqlServer001PasswordSecretName
 output mySqlServer001ConnectionStringSecretName string = metadataServices.outputs.mySqlServer001ConnectionStringSecretName
 output logAnalyticsWorkspaceKeyVaultId string = loggingServices.outputs.logAnalytics001WorkspaceKeyVaultId

@@ -135,5 +135,6 @@ output sqlServer001Id string = sqlServer001.outputs.sqlServerId
 output sqlServer001DatabaseName string = sqlServer001.outputs.sqlServerDatabaseName
 output mySqlServer001Id string = mySqlServer001.outputs.mySqlServerId
 output mySqlServer001UsernameSecretName string = mySqlServer001UsernameSecretName
+#disable-next-line outputs-should-not-contain-secrets
 output mySqlServer001PasswordSecretName string = mySqlServer001PasswordSecretName
 output mySqlServer001ConnectionStringSecretName string = mySqlServer001ConnectionStringSecretName 

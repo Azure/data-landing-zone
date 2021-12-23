@@ -44,6 +44,7 @@ resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
   properties: {
     globalParameters: {}
     publicNetworkAccess: 'Disabled'
+    #disable-next-line BCP037
     purviewConfiguration: {
       purviewResourceId: purviewId
     }

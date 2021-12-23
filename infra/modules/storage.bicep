@@ -13,6 +13,7 @@ param subnetId string
 param purviewId string = ''
 param privateDnsZoneIdDfs string = ''
 param privateDnsZoneIdBlob string = ''
+param dataLandingZoneSubscriptionIds array = []
 
 // Variables
 var storageRawName = '${prefix}-raw'
@@ -42,6 +43,7 @@ module storageRaw 'services/storage.bicep' = {
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: domainFileSytemNames
     purviewId: purviewId
+    dataLandingZoneSubscriptionIds: dataLandingZoneSubscriptionIds
   }
 }
 
@@ -57,6 +59,7 @@ module storageEnrichedCurated 'services/storage.bicep' = {
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: domainFileSytemNames
     purviewId: purviewId
+    dataLandingZoneSubscriptionIds: dataLandingZoneSubscriptionIds
   }
 }
 
@@ -72,6 +75,7 @@ module storageWorkspace 'services/storage.bicep' = {
     privateDnsZoneIdDfs: privateDnsZoneIdDfs
     fileSystemNames: dataProductFileSystemNames
     purviewId: purviewId
+    dataLandingZoneSubscriptionIds: dataLandingZoneSubscriptionIds
   }
 }
 

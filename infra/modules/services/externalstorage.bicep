@@ -14,25 +14,20 @@ param fileSytemNames array = [
   'data'
 ]
 param purviewId string = ''
+param dataLandingZoneSubscriptionIds array = []
 
 // Variables
 var storageNameCleaned = replace(storageName, '-', '')
 var storageExternalPrivateEndpointNameBlob = '${storageExternal.name}-blob-private-endpoint'
-var resourceAccessRules = empty(purviewId) ? [
-  {
-    tenantId: subscription().tenantId
-    resourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*'
-  }
-] : [
-  {
-    tenantId: subscription().tenantId
-    resourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*'
-  }
-  {
-    tenantId: subscription().tenantId
-    resourceId: purviewId
-  }
-]
+var synapseResourceAccessrules = [for subscriptionId in union(dataLandingZoneSubscriptionIds, array(subscription().subscriptionId)): {
+  tenantId: subscription().tenantId
+  resourceId: '/subscriptions/${subscriptionId}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*'
+}]
+var purviewResourceAccessRules = {
+  tenantId: subscription().tenantId
+  resourceId: purviewId
+}
+var resourceAccessRules = empty(purviewId) ? synapseResourceAccessrules : union(synapseResourceAccessrules, array(purviewResourceAccessRules))
 
 // Resources
 resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {

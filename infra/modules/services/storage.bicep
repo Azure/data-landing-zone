@@ -13,26 +13,21 @@ param privateDnsZoneIdDfs string = ''
 param privateDnsZoneIdBlob string = ''
 param fileSystemNames array
 param purviewId string = ''
+param dataLandingZoneSubscriptionIds array = []
 
 // Variables
 var storageNameCleaned = replace(storageName, '-', '')
 var storagePrivateEndpointNameBlob = '${storage.name}-blob-private-endpoint'
 var storagePrivateEndpointNameDfs = '${storage.name}-dfs-private-endpoint'
-var resourceAccessRules = empty(purviewId) ? [
-  {
-    tenantId: subscription().tenantId
-    resourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*'
-  }
-] : [
-  {
-    tenantId: subscription().tenantId
-    resourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*'
-  }
-  {
-    tenantId: subscription().tenantId
-    resourceId: purviewId
-  }
-]
+var synapseResourceAccessrules = [for subscriptionId in union(dataLandingZoneSubscriptionIds, array(subscription().subscriptionId)): {
+  tenantId: subscription().tenantId
+  resourceId: '/subscriptions/${subscriptionId}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*'
+}]
+var purviewResourceAccessRules = {
+  tenantId: subscription().tenantId
+  resourceId: purviewId
+}
+var resourceAccessRules = empty(purviewId) ? synapseResourceAccessrules : union(synapseResourceAccessrules, array(purviewResourceAccessRules))
 
 // Resources
 resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
