@@ -10,5 +10,7 @@
         'Outputs Must Not Contain Secrets',
         'IDs Should Be Derived From ResourceIDs',
         'apiVersions Should Be Recent'
+        'Parameters Must Be Referenced'
+        'Variables Must Be Referenced'
     )
 }

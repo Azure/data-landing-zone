@@ -53,9 +53,6 @@ resource datafactoryRuntimes001IntegrationRuntime001 'Microsoft.DataFactory/fact
 
 module datafactoryRuntimes001SelfHostedIntegrationRuntime001 'services/selfHostedIntegrationRuntime.bicep' = if (deploySelfHostedIntegrationRuntimes) {
   name: 'datafactoryRuntimes001SelfHostedIntegrationRuntime001'
-  dependsOn: [
-    datafactoryRuntimes001IntegrationRuntime001
-  ]
   scope: resourceGroup()
   params: {
     location: location
