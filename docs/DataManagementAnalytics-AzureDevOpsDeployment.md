@@ -83,7 +83,7 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 | `dataIntegration002SubnetAddressPrefix` | Specifies the address space of the subnet that is used for data integration 002. | `10.1.7.0/24` |
 | `dataProduct001SubnetAddressPrefix` | Specifies the address space of the subnet that is used for data product 001. | `10.1.8.0/24` |
 | `dataProduct002SubnetAddressPrefix` | Specifies the address space of the subnet that is used for data product 002. | `10.1.9.0/24` |
-| `dataManagementZoneVnetId` | Specifies the Resource ID of the VNet in the data management zone. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/virtualNetworks/{vnet-name}` |
+| `dataManagementZoneVnetId` | Specifies the Resource ID of the VNet in the data management landing zone. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/virtualNetworks/{vnet-name}` |
 | `firewallPrivateIp` | Specifies the private IP address of the central firewall. | `10.0.0.4` |
 | `dnsServerAdresses` | Specifies the private IP addresses of the DNS servers. | `[ 10.0.0.4 ]` |
 | `administratorPassword` | Specifies the administrator password of the sql servers. Will be automatically set in the workflow. **Leave this value as is.** | `<your-secure-password>` |

@@ -123,7 +123,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Specifies the resource Id of the vnet in the data management zone."
+        "description": "Specifies the resource Id of the vnet in the data management landing zone."
       }
     },
     "firewallPrivateIp": {
