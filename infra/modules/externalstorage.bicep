@@ -12,6 +12,7 @@ param tags object
 param subnetId string
 param purviewId string = ''
 param privateDnsZoneIdBlob string = ''
+param dataLandingZoneSubscriptionIds array = []
 
 // Variables
 var storageExternal001Name = '${prefix}-ext001'
@@ -31,6 +32,7 @@ module storageExternal001 'services/externalstorage.bicep' = {
     privateDnsZoneIdBlob: privateDnsZoneIdBlob
     fileSytemNames: fileSytemNames
     purviewId: purviewId
+    dataLandingZoneSubscriptionIds: dataLandingZoneSubscriptionIds
   }
 }
 
