@@ -43,7 +43,7 @@ param dataIntegration002SubnetAddressPrefix string = '10.1.7.0/24'
 param dataProduct001SubnetAddressPrefix string = '10.1.8.0/24'
 @description('Specifies the address space of the subnet that is used for data product 002.')
 param dataProduct002SubnetAddressPrefix string = '10.1.9.0/24'
-@description('Specifies the resource Id of the vnet in the data management zone.')
+@description('Specifies the resource Id of the vnet in the data management landing zone.')
 param dataManagementZoneVnetId string = ''
 @description('Specifies the private IP address of the central firewall.')
 param firewallPrivateIp string = '10.0.0.4'
