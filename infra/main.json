@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "14299394037293410597"
+      "templateHash": "6542674684264803931"
     }
   },
   "parameters": {
@@ -181,6 +181,13 @@
       "defaultValue": false,
       "metadata": {
         "description": "Specifies whether the self-hosted integration runtimes should be deployed."
+      }
+    },
+    "dataLandingZoneSubscriptionIds": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "Specifies the subscription IDs of the other Data Landing Zones."
       }
     },
     "privateDnsZoneIdKeyVault": {
@@ -441,7 +448,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "13883560175464909401"
+              "templateHash": "16882101118127557101"
             }
           },
           "parameters": {
@@ -716,6 +723,53 @@
                       "access": "Allow",
                       "priority": 130,
                       "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "apiVersion": "2020-11-01",
+              "name": "[format('{0}-adfssis-nsg', parameters('prefix'))]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "AllowBatchNodeManagement",
+                    "properties": {
+                      "description": "Required for Azure SSIS with public IP.",
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "29876-29877",
+                      "sourceAddressPrefix": "BatchNodeManagement",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 110,
+                      "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                    }
+                  },
+                  {
+                    "name": "AllowAzureCloud",
+                    "properties": {
+                      "description": "Required for Azure SSIS workers to access Azure services, such as Azure Storage and Azure Event Hubs.",
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "443",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "AzureCloud",
+                      "access": "Allow",
+                      "priority": 120,
+                      "direction": "Outbound",
                       "sourcePortRanges": [],
                       "destinationPortRanges": [],
                       "sourceAddressPrefixes": [],
@@ -2612,6 +2666,9 @@
           },
           "privateDnsZoneIdDfs": {
             "value": "[parameters('privateDnsZoneIdDfs')]"
+          },
+          "dataLandingZoneSubscriptionIds": {
+            "value": "[parameters('dataLandingZoneSubscriptionIds')]"
           }
         },
         "template": {
@@ -2621,7 +2678,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "15686426375161894569"
+              "templateHash": "16664940655471776009"
             }
           },
           "parameters": {
@@ -2648,6 +2705,10 @@
             "privateDnsZoneIdBlob": {
               "type": "string",
               "defaultValue": ""
+            },
+            "dataLandingZoneSubscriptionIds": {
+              "type": "array",
+              "defaultValue": []
             }
           },
           "variables": {
@@ -2699,6 +2760,9 @@
                   },
                   "purviewId": {
                     "value": "[parameters('purviewId')]"
+                  },
+                  "dataLandingZoneSubscriptionIds": {
+                    "value": "[parameters('dataLandingZoneSubscriptionIds')]"
                   }
                 },
                 "template": {
@@ -2708,7 +2772,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "8167311175243009544"
+                      "templateHash": "2297446507511138895"
                     }
                   },
                   "parameters": {
@@ -2738,13 +2802,31 @@
                     "purviewId": {
                       "type": "string",
                       "defaultValue": ""
+                    },
+                    "dataLandingZoneSubscriptionIds": {
+                      "type": "array",
+                      "defaultValue": []
                     }
                   },
                   "variables": {
+                    "copy": [
+                      {
+                        "name": "synapseResourceAccessrules",
+                        "count": "[length(union(parameters('dataLandingZoneSubscriptionIds'), array(subscription().subscriptionId)))]",
+                        "input": {
+                          "tenantId": "[subscription().tenantId]",
+                          "resourceId": "[format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', union(parameters('dataLandingZoneSubscriptionIds'), array(subscription().subscriptionId))[copyIndex('synapseResourceAccessrules')])]"
+                        }
+                      }
+                    ],
                     "storageNameCleaned": "[replace(parameters('storageName'), '-', '')]",
                     "storagePrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]",
                     "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]",
-                    "resourceAccessRules": "[if(empty(parameters('purviewId')), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId))), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId)), createObject('tenantId', subscription().tenantId, 'resourceId', parameters('purviewId'))))]",
+                    "purviewResourceAccessRules": {
+                      "tenantId": "[subscription().tenantId]",
+                      "resourceId": "[parameters('purviewId')]"
+                    },
+                    "resourceAccessRules": "[if(empty(parameters('purviewId')), variables('synapseResourceAccessrules'), union(variables('synapseResourceAccessrules'), array(variables('purviewResourceAccessRules'))))]",
                     "storageZrsRegions": [
                       "southafricanorth",
                       "australiaeast",
@@ -3048,6 +3130,9 @@
                   },
                   "purviewId": {
                     "value": "[parameters('purviewId')]"
+                  },
+                  "dataLandingZoneSubscriptionIds": {
+                    "value": "[parameters('dataLandingZoneSubscriptionIds')]"
                   }
                 },
                 "template": {
@@ -3057,7 +3142,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "8167311175243009544"
+                      "templateHash": "2297446507511138895"
                     }
                   },
                   "parameters": {
@@ -3087,13 +3172,31 @@
                     "purviewId": {
                       "type": "string",
                       "defaultValue": ""
+                    },
+                    "dataLandingZoneSubscriptionIds": {
+                      "type": "array",
+                      "defaultValue": []
                     }
                   },
                   "variables": {
+                    "copy": [
+                      {
+                        "name": "synapseResourceAccessrules",
+                        "count": "[length(union(parameters('dataLandingZoneSubscriptionIds'), array(subscription().subscriptionId)))]",
+                        "input": {
+                          "tenantId": "[subscription().tenantId]",
+                          "resourceId": "[format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', union(parameters('dataLandingZoneSubscriptionIds'), array(subscription().subscriptionId))[copyIndex('synapseResourceAccessrules')])]"
+                        }
+                      }
+                    ],
                     "storageNameCleaned": "[replace(parameters('storageName'), '-', '')]",
                     "storagePrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]",
                     "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]",
-                    "resourceAccessRules": "[if(empty(parameters('purviewId')), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId))), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId)), createObject('tenantId', subscription().tenantId, 'resourceId', parameters('purviewId'))))]",
+                    "purviewResourceAccessRules": {
+                      "tenantId": "[subscription().tenantId]",
+                      "resourceId": "[parameters('purviewId')]"
+                    },
+                    "resourceAccessRules": "[if(empty(parameters('purviewId')), variables('synapseResourceAccessrules'), union(variables('synapseResourceAccessrules'), array(variables('purviewResourceAccessRules'))))]",
                     "storageZrsRegions": [
                       "southafricanorth",
                       "australiaeast",
@@ -3397,6 +3500,9 @@
                   },
                   "purviewId": {
                     "value": "[parameters('purviewId')]"
+                  },
+                  "dataLandingZoneSubscriptionIds": {
+                    "value": "[parameters('dataLandingZoneSubscriptionIds')]"
                   }
                 },
                 "template": {
@@ -3406,7 +3512,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "8167311175243009544"
+                      "templateHash": "2297446507511138895"
                     }
                   },
                   "parameters": {
@@ -3436,13 +3542,31 @@
                     "purviewId": {
                       "type": "string",
                       "defaultValue": ""
+                    },
+                    "dataLandingZoneSubscriptionIds": {
+                      "type": "array",
+                      "defaultValue": []
                     }
                   },
                   "variables": {
+                    "copy": [
+                      {
+                        "name": "synapseResourceAccessrules",
+                        "count": "[length(union(parameters('dataLandingZoneSubscriptionIds'), array(subscription().subscriptionId)))]",
+                        "input": {
+                          "tenantId": "[subscription().tenantId]",
+                          "resourceId": "[format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', union(parameters('dataLandingZoneSubscriptionIds'), array(subscription().subscriptionId))[copyIndex('synapseResourceAccessrules')])]"
+                        }
+                      }
+                    ],
                     "storageNameCleaned": "[replace(parameters('storageName'), '-', '')]",
                     "storagePrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]",
                     "storagePrivateEndpointNameDfs": "[format('{0}-dfs-private-endpoint', variables('storageNameCleaned'))]",
-                    "resourceAccessRules": "[if(empty(parameters('purviewId')), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId))), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId)), createObject('tenantId', subscription().tenantId, 'resourceId', parameters('purviewId'))))]",
+                    "purviewResourceAccessRules": {
+                      "tenantId": "[subscription().tenantId]",
+                      "resourceId": "[parameters('purviewId')]"
+                    },
+                    "resourceAccessRules": "[if(empty(parameters('purviewId')), variables('synapseResourceAccessrules'), union(variables('synapseResourceAccessrules'), array(variables('purviewResourceAccessRules'))))]",
                     "storageZrsRegions": [
                       "southafricanorth",
                       "australiaeast",
@@ -3775,6 +3899,9 @@
           },
           "privateDnsZoneIdBlob": {
             "value": "[parameters('privateDnsZoneIdBlob')]"
+          },
+          "dataLandingZoneSubscriptionIds": {
+            "value": "[parameters('dataLandingZoneSubscriptionIds')]"
           }
         },
         "template": {
@@ -3784,7 +3911,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "2304260616781789559"
+              "templateHash": "15595935015946830721"
             }
           },
           "parameters": {
@@ -3807,6 +3934,10 @@
             "privateDnsZoneIdBlob": {
               "type": "string",
               "defaultValue": ""
+            },
+            "dataLandingZoneSubscriptionIds": {
+              "type": "array",
+              "defaultValue": []
             }
           },
           "variables": {
@@ -3846,6 +3977,9 @@
                   },
                   "purviewId": {
                     "value": "[parameters('purviewId')]"
+                  },
+                  "dataLandingZoneSubscriptionIds": {
+                    "value": "[parameters('dataLandingZoneSubscriptionIds')]"
                   }
                 },
                 "template": {
@@ -3855,7 +3989,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "8481423623907022196"
+                      "templateHash": "17102192983244728525"
                     }
                   },
                   "parameters": {
@@ -3884,12 +4018,30 @@
                     "purviewId": {
                       "type": "string",
                       "defaultValue": ""
+                    },
+                    "dataLandingZoneSubscriptionIds": {
+                      "type": "array",
+                      "defaultValue": []
                     }
                   },
                   "variables": {
+                    "copy": [
+                      {
+                        "name": "synapseResourceAccessrules",
+                        "count": "[length(union(parameters('dataLandingZoneSubscriptionIds'), array(subscription().subscriptionId)))]",
+                        "input": {
+                          "tenantId": "[subscription().tenantId]",
+                          "resourceId": "[format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', union(parameters('dataLandingZoneSubscriptionIds'), array(subscription().subscriptionId))[copyIndex('synapseResourceAccessrules')])]"
+                        }
+                      }
+                    ],
                     "storageNameCleaned": "[replace(parameters('storageName'), '-', '')]",
                     "storageExternalPrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', variables('storageNameCleaned'))]",
-                    "resourceAccessRules": "[if(empty(parameters('purviewId')), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId))), createArray(createObject('tenantId', subscription().tenantId, 'resourceId', format('/subscriptions/{0}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*', subscription().subscriptionId)), createObject('tenantId', subscription().tenantId, 'resourceId', parameters('purviewId'))))]"
+                    "purviewResourceAccessRules": {
+                      "tenantId": "[subscription().tenantId]",
+                      "resourceId": "[parameters('purviewId')]"
+                    },
+                    "resourceAccessRules": "[if(empty(parameters('purviewId')), variables('synapseResourceAccessrules'), union(variables('synapseResourceAccessrules'), array(variables('purviewResourceAccessRules'))))]"
                   },
                   "resources": [
                     {

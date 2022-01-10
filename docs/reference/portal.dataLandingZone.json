@@ -514,6 +514,71 @@
                                     }
                                 }
                             ]
+                        },
+                        {
+                            "name": "dataLandingZoneSubscriptions",
+                            "label": "Other Data Landing Zone Subscriptions",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "selfhostedIntegrationRuntimeText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify the subscriptions that are used for your other Data Landing Zones.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "subscriptionApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "subscriptions?api-version=2020-01-01"
+                                    }
+                                },
+                                {
+                                    "name": "dataLandingZoneSubscriptionIds",
+                                    "ariaLabel": "Enter information per Data Landing Zone",
+                                    "label": "Data Landing Zone Subscriptions",
+                                    "type": "Microsoft.Common.EditableGrid",
+                                    "visible": true,
+                                    "constraints": {
+                                        "width": "Full",
+                                        "rows": {
+                                            "count": {
+                                                "min": 0,
+                                                "max": 50
+                                            }
+                                        },
+                                        "columns": [
+                                            {
+                                                "id": "subscription",
+                                                "header": "Subscription",
+                                                "width": "1fr",
+                                                "element": {
+                                                    "name": "subscription",
+                                                    "type": "Microsoft.Common.DropDown",
+                                                    "placeholder": "Select a subscription...",
+                                                    "multiselect": false,
+                                                    "selectAll": false,
+                                                    "filter": true,
+                                                    "filterPlaceholder": "Filter items ...",
+                                                    "multiLine": true,
+                                                    "constraints": {
+                                                        "allowedValues": "[map(steps('generalSettings').dataLandingZoneSubscriptions.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.subscriptionId, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
+                                                        "required": true
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
                         }
                     ]
                 },
@@ -1406,6 +1471,7 @@
                 "purviewId": "[if(empty(steps('generalSettings').dataGovernanceSettings.purviewId.id), '', steps('generalSettings').dataGovernanceSettings.purviewId.id)]",
                 "purviewManagedStorageId": "[if(empty(steps('generalSettings').dataGovernanceSettings.purviewId.id), '', steps('generalSettings').dataGovernanceSettings.purviewApi.properties.managedResources.storageAccount)]",
                 "purviewManagedEventHubId": "[if(empty(steps('generalSettings').dataGovernanceSettings.purviewId.id), '', steps('generalSettings').dataGovernanceSettings.purviewApi.properties.managedResources.eventHubNamespace)]",
+                "dataLandingZoneSubscriptionIds": "[if(empty(steps('generalSettings').dataLandingZoneSubscriptions.dataLandingZoneSubscriptionIds), parse('[]'), map(steps('generalSettings').dataLandingZoneSubscriptions.dataLandingZoneSubscriptionIds, (item) => item.subscription))]",
                 "privateDnsZoneIdKeyVault": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault)]",
                 "privateDnsZoneIdDataFactory": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactory), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactory)]",
                 "privateDnsZoneIdDataFactoryPortal": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactoryPortal), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdDataFactoryPortal)]",

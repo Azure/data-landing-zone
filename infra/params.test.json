@@ -76,6 +76,9 @@
         "deploySelfHostedIntegrationRuntimes": {
             "value": true
         },
+        "dataLandingZoneSubscriptionIds": {
+            "value": []
+        },
         "privateDnsZoneIdKeyVault": {
             "value": "/subscriptions/17588eb2-2943-461a-ab3f-00a3ceac3112/resourceGroups/dmz-tst-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
         },

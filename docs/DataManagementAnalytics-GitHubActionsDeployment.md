@@ -84,6 +84,7 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 | `purviewManagedEventHubId` | Specifies the Resource ID of the managed event hub of the central purview instance. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.EventHub/namespaces/{eventhub-namespace-name}` |
 | `purviewSelfHostedIntegrationRuntimeAuthKey` | Specifies the Auth Key for the Self-hosted integration runtime of Purview. | `<your-purview-shir-auth-key>` |
 | `deploySelfHostedIntegrationRuntimes` | Specifies whether the self-hosted integration runtimes should be deployed. This only works, if the pwsh script was uploded and is available. | `true` or `false` |
+| `dataLandingZoneSubscriptionIds` | Specifies the subscription IDs of the other Data Landing Zones. | `[ '{subscriptionId1}', '{subscriptionId2}' ]` |
 | `privateDnsZoneIdKeyVault` | Specifies the Resource ID of the private DNS zone for KeyVault. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net` |
 | `privateDnsZoneIdDataFactory` | Specifies the Resource ID of the private DNS zone for Data Factory. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net` |
 | `privateDnsZoneIdDataFactoryPortal` | Specifies the Resource ID of the private DNS zone for Data Factory Portal. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com` |
