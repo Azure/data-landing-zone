@@ -88,9 +88,9 @@ If you want the team to review the changes, mark the pull request as "Ready for 
 
 After the pull request has been reviewed and approved, the feature branch will be merged into the main branch and automatically closed and deleted.
 
-## Stewardship of the code repo's
+## Stewardship of the code repository
 
-The Data Management & Analytics Scenario code repo's are maintained by the code owners. The repo's including language, design, policy oversight, and reference implementations. Elevated privileges will be solely based on active contributions in the project repo's.
+The Data Management & Analytics Scenario code repository are maintained by the code owners. The repository including language, design, policy oversight, and reference implementations. Elevated privileges will be solely based on active contributions in the project repository.
 
 User may be given elevated privileges once approved by the currents members. All members abide by all organizational polices, including the code of conduct. Elevated privileges can be withdrawn in the case of written notice of resignation or if the member is unreachable or unresponsive for extended time.
 
@@ -108,7 +108,7 @@ The following users have elevated privileges:
 
 ### Responsibilities
 
-Code owners are responsible for reviewing and approving issues proposing new features or design changes in the repo's. The initial owners consists of Microsoft employees. It is expected that over time, community will grow and new community members will join. Privileges are heavily dependent on the level of contribution and expertise: individuals who contribute in meaningful ways to the project will be recognized accordingly.
+Code owners are responsible for reviewing and approving issues proposing new features or design changes in the repository. The initial owners consists of Microsoft employees. It is expected that over time, community will grow and new community members will join. Privileges are heavily dependent on the level of contribution and expertise: individuals who contribute in meaningful ways to the project will be recognized accordingly.
 
 At any point in time, current contributors can nominate a strong community member to increased responsibilities. Nominations should be submitted in the form of RFCs detailing why that individual is qualified and how they will contribute. After the RFC has been discussed, a unanimous vote will be required for the new Committee Member to be confirmed.
 
@@ -121,7 +121,7 @@ Established community members are expected to demonstrate their adherence to the
 | Member | Active contributor in the community | Sponsored by 2 reviewers and multiple contributions to the code |
 | Reviewer | Review contributions from other members | History of review and authorship of the code |
 | Approver | Contributions acceptance approval| Highly experienced active reviewer and contributor to the code |
-| Code repo owners | Set direction and priorities for the project | Demonstrated responsibility and excellent technical judgement for the the content of the repository |
+| Code repository owners | Set direction and priorities for the project | Demonstrated responsibility and excellent technical judgement for the the content of the repository |
 
 ## CLA
 
