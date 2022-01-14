@@ -118,10 +118,10 @@ Established community members are expected to demonstrate their adherence to the
 
 | Role | Responsibilities | Requirements |
 | -----| ---------------- | ------------ |
-| Member | Active contributor in the community | Sponsored by 2 reviewers and multiple contributions to the project |
-| Reviewer | Review contributions from other members | History of review and authorship in the project |
-| Approver | Contributions acceptance approval| Highly experienced active reviewer and contributor to the project |
-| Code repo owners | Set direction and priorities for the project | Demonstrated responsibility and excellent technical judgement for the the project |
+| Member | Active contributor in the community | Sponsored by 2 reviewers and multiple contributions to the code |
+| Reviewer | Review contributions from other members | History of review and authorship of the code |
+| Approver | Contributions acceptance approval| Highly experienced active reviewer and contributor to the code |
+| Code repo owners | Set direction and priorities for the project | Demonstrated responsibility and excellent technical judgement for the the content of the repo's |
 
 ## CLA
 
