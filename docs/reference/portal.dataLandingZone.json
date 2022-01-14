@@ -603,7 +603,7 @@
                                     "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
                                     "options": {
-                                        "text": "Specify the Virtual network and subnet CIDR range for your Data Landing Zone. Please make sure that the address space is not overlapping with the address space of your Data Management Zone and your other Data Landing Zones.",
+                                        "text": "Specify the Virtual network and subnet CIDR range for your Data Landing Zone. Please make sure that the address space is not overlapping with the address space of your Data Management Landing Zone and your other Data Landing Zones.",
                                         "link": {
                                             "label": "",
                                             "uri": ""
@@ -961,7 +961,7 @@
                         },
                         {
                             "name": "dataManagementZoneVnetConfiguration",
-                            "label": "Data Management Zone Virtual Network Configuration",
+                            "label": "Data Management Landing Zone Virtual Network Configuration",
                             "type": "Microsoft.Common.Section",
                             "visible": true,
                             "elements": [
@@ -970,7 +970,7 @@
                                     "type": "Microsoft.Common.InfoBox",
                                     "visible": true,
                                     "options": {
-                                        "text": "Please select the Vnet of your Data Management Zone to peer it with your Data Landing Zone. Please peer the new Data Landing Zone Vnet to the Vnets of the existing Data Landing Zones manually after this deployment succeeded.",
+                                        "text": "Please select the Vnet of your Data Management Landing Zone to peer it with your Data Landing Zone. Please peer the new Data Landing Zone Vnet to the Vnets of the existing Data Landing Zones manually after this deployment succeeded.",
                                         "style": "Info"
                                     }
                                 },
@@ -984,11 +984,11 @@
                                 },
                                 {
                                     "name": "dataManagementZoneSub",
-                                    "label": "Data Management Zone Subscription",
+                                    "label": "Data Management Landing Zone Subscription",
                                     "type": "Microsoft.Common.DropDown",
                                     "visible": true,
                                     "defaultValue": "",
-                                    "toolTip": "Select the Subscription of your Data Management Zone.",
+                                    "toolTip": "Select the Subscription of your Data Management Landing Zone.",
                                     "multiselect": false,
                                     "selectAll": false,
                                     "filter": true,
@@ -1009,11 +1009,11 @@
                                 },
                                 {
                                     "name": "dataManagementZoneVirtualNetwork",
-                                    "label": "Data Management Zone Virtual Network",
+                                    "label": "Data Management Landing Zone Virtual Network",
                                     "type": "Microsoft.Common.DropDown",
                                     "visible": true,
                                     "defaultValue": "",
-                                    "toolTip": "Select the Virtual Network of your Data Management Zone.",
+                                    "toolTip": "Select the Virtual Network of your Data Management Landing Zone.",
                                     "multiselect": false,
                                     "selectAll": false,
                                     "filter": true,
@@ -1226,7 +1226,7 @@
                                     "type": "Microsoft.Common.DropDown",
                                     "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
                                     "defaultValue": "",
-                                    "toolTip": "Select the Subscription of your Private DNS Zones. If you have deployed the Data Management Zone with a Firewall and Private DNS Zones then select the subscription that you have used for your Data Management Zone.",
+                                    "toolTip": "Select the Subscription of your Private DNS Zones. If you have deployed the Data Management Landing Zone with a Firewall and Private DNS Zones then select the subscription that you have used for your Data Management Landing Zone.",
                                     "multiselect": false,
                                     "selectAll": false,
                                     "filter": true,
