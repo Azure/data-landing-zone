@@ -12,5 +12,6 @@
         'apiVersions Should Be Recent'
         'Parameters Must Be Referenced'
         'Variables Must Be Referenced'
+        'URIs Should Be Properly Constructed'
     )
 }
