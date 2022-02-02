@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "6542674684264803931"
+      "templateHash": "1511805043645479529"
     }
   },
   "parameters": {
@@ -448,7 +448,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "16882101118127557101"
+              "templateHash": "13883560175464909401"
             }
           },
           "parameters": {
@@ -723,53 +723,6 @@
                       "access": "Allow",
                       "priority": 130,
                       "direction": "Inbound",
-                      "sourcePortRanges": [],
-                      "destinationPortRanges": [],
-                      "sourceAddressPrefixes": [],
-                      "destinationAddressPrefixes": []
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "type": "Microsoft.Network/networkSecurityGroups",
-              "apiVersion": "2020-11-01",
-              "name": "[format('{0}-adfssis-nsg', parameters('prefix'))]",
-              "location": "[parameters('location')]",
-              "tags": "[parameters('tags')]",
-              "properties": {
-                "securityRules": [
-                  {
-                    "name": "AllowBatchNodeManagement",
-                    "properties": {
-                      "description": "Required for Azure SSIS with public IP.",
-                      "protocol": "Tcp",
-                      "sourcePortRange": "*",
-                      "destinationPortRange": "29876-29877",
-                      "sourceAddressPrefix": "BatchNodeManagement",
-                      "destinationAddressPrefix": "*",
-                      "access": "Allow",
-                      "priority": 110,
-                      "direction": "Inbound",
-                      "sourcePortRanges": [],
-                      "destinationPortRanges": [],
-                      "sourceAddressPrefixes": [],
-                      "destinationAddressPrefixes": []
-                    }
-                  },
-                  {
-                    "name": "AllowAzureCloud",
-                    "properties": {
-                      "description": "Required for Azure SSIS workers to access Azure services, such as Azure Storage and Azure Event Hubs.",
-                      "protocol": "Tcp",
-                      "sourcePortRange": "*",
-                      "destinationPortRange": "443",
-                      "sourceAddressPrefix": "VirtualNetwork",
-                      "destinationAddressPrefix": "AzureCloud",
-                      "access": "Allow",
-                      "priority": 120,
-                      "direction": "Outbound",
                       "sourcePortRanges": [],
                       "destinationPortRanges": [],
                       "sourceAddressPrefixes": [],
@@ -1178,7 +1131,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "18313384142239512916"
+              "templateHash": "15321614578444699909"
             }
           },
           "parameters": {
@@ -1237,7 +1190,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "7953887992371664532"
+                      "templateHash": "12505067730214864691"
                     }
                   },
                   "parameters": {
@@ -1264,7 +1217,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.KeyVault/vaults",
-                      "apiVersion": "2021-04-01-preview",
+                      "apiVersion": "2021-06-01-preview",
                       "name": "[parameters('keyvaultName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -1283,6 +1236,7 @@
                           "ipRules": [],
                           "virtualNetworkRules": []
                         },
+                        "publicNetworkAccess": "Disabled",
                         "sku": {
                           "family": "A",
                           "name": "standard"
@@ -4292,7 +4246,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "7539544899333460771"
+              "templateHash": "6475176560452078151"
             }
           },
           "parameters": {
@@ -4433,7 +4387,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "7953887992371664532"
+                      "templateHash": "12505067730214864691"
                     }
                   },
                   "parameters": {
@@ -4460,7 +4414,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.KeyVault/vaults",
-                      "apiVersion": "2021-04-01-preview",
+                      "apiVersion": "2021-06-01-preview",
                       "name": "[parameters('keyvaultName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -4479,6 +4433,7 @@
                           "ipRules": [],
                           "virtualNetworkRules": []
                         },
+                        "publicNetworkAccess": "Disabled",
                         "sku": {
                           "family": "A",
                           "name": "standard"
@@ -4581,7 +4536,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "7953887992371664532"
+                      "templateHash": "12505067730214864691"
                     }
                   },
                   "parameters": {
@@ -4608,7 +4563,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.KeyVault/vaults",
-                      "apiVersion": "2021-04-01-preview",
+                      "apiVersion": "2021-06-01-preview",
                       "name": "[parameters('keyvaultName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -4627,6 +4582,7 @@
                           "ipRules": [],
                           "virtualNetworkRules": []
                         },
+                        "publicNetworkAccess": "Disabled",
                         "sku": {
                           "family": "A",
                           "name": "standard"
