@@ -30,7 +30,7 @@ var purviewResourceAccessRules = {
 var resourceAccessRules = empty(purviewId) ? synapseResourceAccessrules : union(synapseResourceAccessrules, array(purviewResourceAccessRules))
 
 // Resources
-resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+resource storageExternal 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: storageNameCleaned
   location: location
   tags: tags
@@ -44,7 +44,9 @@ resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   properties: {
     accessTier: 'Hot'
     allowBlobPublicAccess: false
+    allowCrossTenantReplication: false
     allowSharedKeyAccess: false
+    defaultToOAuthAuthentication: true
     encryption: {
       keySource: 'Microsoft.Storage'
       requireInfrastructureEncryption: false
@@ -67,6 +69,9 @@ resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
         }
       }
     }
+    immutableStorageWithVersioning: {
+      enabled: false
+    }
     isHnsEnabled: false
     isNfsV3Enabled: false
     largeFileSharesState: 'Disabled'
@@ -78,6 +83,7 @@ resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
       virtualNetworkRules: []
       resourceAccessRules: resourceAccessRules
     }
+    publicNetworkAccess: 'Disabled'
     // routingPreference: {  // Not supported for thsi account
     //   routingChoice: 'MicrosoftRouting'
     //   publishInternetEndpoints: false
@@ -87,7 +93,7 @@ resource storageExternal 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   }
 }
 
-resource storageExternalManagementPolicies 'Microsoft.Storage/storageAccounts/managementPolicies@2021-02-01' = {
+resource storageExternalManagementPolicies 'Microsoft.Storage/storageAccounts/managementPolicies@2021-06-01' = {
   parent: storageExternal
   name: 'default'
   properties: {
@@ -150,7 +156,7 @@ resource storageExternalManagementPolicies 'Microsoft.Storage/storageAccounts/ma
   }
 }
 
-resource storageExternalBlobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-02-01' = {
+resource storageExternalBlobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-06-01' = {
   parent: storageExternal
   name: 'default'
   properties: {
@@ -167,10 +173,10 @@ resource storageExternalBlobServices 'Microsoft.Storage/storageAccounts/blobServ
     //   retentionInDays: 7
     // }
     // defaultServiceVersion: ''
-    // deleteRetentionPolicy: {
-    //   enabled: true
-    //   days: 7
-    // }
+    deleteRetentionPolicy: {
+      enabled: true
+      days: 7
+    }
     // isVersioningEnabled: true
     // lastAccessTimeTrackingPolicy: {
     //   name: 'AccessTimeTracking'
@@ -187,7 +193,7 @@ resource storageExternalBlobServices 'Microsoft.Storage/storageAccounts/blobServ
   }
 }
 
-resource storageExternalFileSystems 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' = [for fileSytemName in fileSytemNames: {
+resource storageExternalFileSystems 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-06-01' = [for fileSytemName in fileSytemNames: {
   parent: storageExternalBlobServices
   name: fileSytemName
   properties: {

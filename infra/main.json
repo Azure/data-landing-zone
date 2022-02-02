@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "6542674684264803931"
+      "templateHash": "3843144394042674388"
     }
   },
   "parameters": {
@@ -2678,7 +2678,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "16664940655471776009"
+              "templateHash": "1278385076163611463"
             }
           },
           "parameters": {
@@ -2772,7 +2772,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "2297446507511138895"
+                      "templateHash": "9514805346555719957"
                     }
                   },
                   "parameters": {
@@ -2855,7 +2855,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Storage/storageAccounts",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[variables('storageNameCleaned')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -2869,7 +2869,9 @@
                       "properties": {
                         "accessTier": "Hot",
                         "allowBlobPublicAccess": false,
+                        "allowCrossTenantReplication": false,
                         "allowSharedKeyAccess": false,
+                        "defaultToOAuthAuthentication": true,
                         "encryption": {
                           "keySource": "Microsoft.Storage",
                           "requireInfrastructureEncryption": false,
@@ -2892,6 +2894,9 @@
                             }
                           }
                         },
+                        "immutableStorageWithVersioning": {
+                          "enabled": false
+                        },
                         "isHnsEnabled": true,
                         "isNfsV3Enabled": false,
                         "largeFileSharesState": "Disabled",
@@ -2903,12 +2908,13 @@
                           "virtualNetworkRules": [],
                           "resourceAccessRules": "[variables('resourceAccessRules')]"
                         },
+                        "publicNetworkAccess": "Disabled",
                         "supportsHttpsTrafficOnly": true
                       }
                     },
                     {
                       "type": "Microsoft.Storage/storageAccounts/managementPolicies",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "policy": {
@@ -2952,7 +2958,7 @@
                     },
                     {
                       "type": "Microsoft.Storage/storageAccounts/blobServices",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "containerDeleteRetentionPolicy": {
@@ -2961,6 +2967,10 @@
                         },
                         "cors": {
                           "corsRules": []
+                        },
+                        "deleteRetentionPolicy": {
+                          "enabled": true,
+                          "days": 7
                         }
                       },
                       "dependsOn": [
@@ -2973,7 +2983,7 @@
                         "count": "[length(parameters('fileSystemNames'))]"
                       },
                       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}/{2}', variables('storageNameCleaned'), 'default', parameters('fileSystemNames')[copyIndex()])]",
                       "properties": {
                         "publicAccess": "None",
@@ -3142,7 +3152,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "2297446507511138895"
+                      "templateHash": "9514805346555719957"
                     }
                   },
                   "parameters": {
@@ -3225,7 +3235,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Storage/storageAccounts",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[variables('storageNameCleaned')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -3239,7 +3249,9 @@
                       "properties": {
                         "accessTier": "Hot",
                         "allowBlobPublicAccess": false,
+                        "allowCrossTenantReplication": false,
                         "allowSharedKeyAccess": false,
+                        "defaultToOAuthAuthentication": true,
                         "encryption": {
                           "keySource": "Microsoft.Storage",
                           "requireInfrastructureEncryption": false,
@@ -3262,6 +3274,9 @@
                             }
                           }
                         },
+                        "immutableStorageWithVersioning": {
+                          "enabled": false
+                        },
                         "isHnsEnabled": true,
                         "isNfsV3Enabled": false,
                         "largeFileSharesState": "Disabled",
@@ -3273,12 +3288,13 @@
                           "virtualNetworkRules": [],
                           "resourceAccessRules": "[variables('resourceAccessRules')]"
                         },
+                        "publicNetworkAccess": "Disabled",
                         "supportsHttpsTrafficOnly": true
                       }
                     },
                     {
                       "type": "Microsoft.Storage/storageAccounts/managementPolicies",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "policy": {
@@ -3322,7 +3338,7 @@
                     },
                     {
                       "type": "Microsoft.Storage/storageAccounts/blobServices",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "containerDeleteRetentionPolicy": {
@@ -3331,6 +3347,10 @@
                         },
                         "cors": {
                           "corsRules": []
+                        },
+                        "deleteRetentionPolicy": {
+                          "enabled": true,
+                          "days": 7
                         }
                       },
                       "dependsOn": [
@@ -3343,7 +3363,7 @@
                         "count": "[length(parameters('fileSystemNames'))]"
                       },
                       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}/{2}', variables('storageNameCleaned'), 'default', parameters('fileSystemNames')[copyIndex()])]",
                       "properties": {
                         "publicAccess": "None",
@@ -3512,7 +3532,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "2297446507511138895"
+                      "templateHash": "9514805346555719957"
                     }
                   },
                   "parameters": {
@@ -3595,7 +3615,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Storage/storageAccounts",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[variables('storageNameCleaned')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -3609,7 +3629,9 @@
                       "properties": {
                         "accessTier": "Hot",
                         "allowBlobPublicAccess": false,
+                        "allowCrossTenantReplication": false,
                         "allowSharedKeyAccess": false,
+                        "defaultToOAuthAuthentication": true,
                         "encryption": {
                           "keySource": "Microsoft.Storage",
                           "requireInfrastructureEncryption": false,
@@ -3632,6 +3654,9 @@
                             }
                           }
                         },
+                        "immutableStorageWithVersioning": {
+                          "enabled": false
+                        },
                         "isHnsEnabled": true,
                         "isNfsV3Enabled": false,
                         "largeFileSharesState": "Disabled",
@@ -3643,12 +3668,13 @@
                           "virtualNetworkRules": [],
                           "resourceAccessRules": "[variables('resourceAccessRules')]"
                         },
+                        "publicNetworkAccess": "Disabled",
                         "supportsHttpsTrafficOnly": true
                       }
                     },
                     {
                       "type": "Microsoft.Storage/storageAccounts/managementPolicies",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "policy": {
@@ -3692,7 +3718,7 @@
                     },
                     {
                       "type": "Microsoft.Storage/storageAccounts/blobServices",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "containerDeleteRetentionPolicy": {
@@ -3701,6 +3727,10 @@
                         },
                         "cors": {
                           "corsRules": []
+                        },
+                        "deleteRetentionPolicy": {
+                          "enabled": true,
+                          "days": 7
                         }
                       },
                       "dependsOn": [
@@ -3713,7 +3743,7 @@
                         "count": "[length(parameters('fileSystemNames'))]"
                       },
                       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}/{2}', variables('storageNameCleaned'), 'default', parameters('fileSystemNames')[copyIndex()])]",
                       "properties": {
                         "publicAccess": "None",
@@ -3911,7 +3941,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "15595935015946830721"
+              "templateHash": "9692262504205657788"
             }
           },
           "parameters": {
@@ -3989,7 +4019,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "17102192983244728525"
+                      "templateHash": "14744973932505365271"
                     }
                   },
                   "parameters": {
@@ -4046,7 +4076,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Storage/storageAccounts",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[variables('storageNameCleaned')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -4060,7 +4090,9 @@
                       "properties": {
                         "accessTier": "Hot",
                         "allowBlobPublicAccess": false,
+                        "allowCrossTenantReplication": false,
                         "allowSharedKeyAccess": false,
+                        "defaultToOAuthAuthentication": true,
                         "encryption": {
                           "keySource": "Microsoft.Storage",
                           "requireInfrastructureEncryption": false,
@@ -4083,6 +4115,9 @@
                             }
                           }
                         },
+                        "immutableStorageWithVersioning": {
+                          "enabled": false
+                        },
                         "isHnsEnabled": false,
                         "isNfsV3Enabled": false,
                         "largeFileSharesState": "Disabled",
@@ -4094,12 +4129,13 @@
                           "virtualNetworkRules": [],
                           "resourceAccessRules": "[variables('resourceAccessRules')]"
                         },
+                        "publicNetworkAccess": "Disabled",
                         "supportsHttpsTrafficOnly": true
                       }
                     },
                     {
                       "type": "Microsoft.Storage/storageAccounts/managementPolicies",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "policy": {
@@ -4143,7 +4179,7 @@
                     },
                     {
                       "type": "Microsoft.Storage/storageAccounts/blobServices",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}', variables('storageNameCleaned'), 'default')]",
                       "properties": {
                         "containerDeleteRetentionPolicy": {
@@ -4152,6 +4188,10 @@
                         },
                         "cors": {
                           "corsRules": []
+                        },
+                        "deleteRetentionPolicy": {
+                          "enabled": true,
+                          "days": 7
                         }
                       },
                       "dependsOn": [
@@ -4164,7 +4204,7 @@
                         "count": "[length(parameters('fileSytemNames'))]"
                       },
                       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-                      "apiVersion": "2021-02-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[format('{0}/{1}/{2}', variables('storageNameCleaned'), 'default', parameters('fileSytemNames')[copyIndex()])]",
                       "properties": {
                         "publicAccess": "None",
