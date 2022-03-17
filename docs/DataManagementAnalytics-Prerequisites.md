@@ -1,6 +1,6 @@
 # Data Landing Zone - Prerequisites
 
-This template repsitory contains all templates to deploy the Data Landing Zone of the Data Management & Analytics architecture. The Data Landing Zone is a logical construct and a unit of scale in the Data Management & Analytics architecture that enables data retention and execution of data workloads for generating insights and value with data.
+This template repsitory contains all templates to deploy the Data Landing Zone of the Cloud-scale Analytics architecture. The Data Landing Zone is a logical construct and a unit of scale in the Cloud-scale Analytics architecture that enables data retention and execution of data workloads for generating insights and value with data.
 
 ## What will be deployed?
 
