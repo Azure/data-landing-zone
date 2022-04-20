@@ -1,6 +1,6 @@
 # Data Landing Zone - Prerequisites
 
-This template repsitory contains all templates to deploy the Data Landing Zone of the Data Management & Analytics architecture. The Data Landing Zone is a logical construct and a unit of scale in the Data Management & Analytics architecture that enables data retention and execution of data workloads for generating insights and value with data.
+This template repsitory contains all templates to deploy the Data Landing Zone of the Cloud-scale Analytics architecture. The Data Landing Zone is a logical construct and a unit of scale in the Cloud-scale Analytics architecture that enables data retention and execution of data workloads for generating insights and value with data.
 
 ## What will be deployed?
 
@@ -91,7 +91,7 @@ To use the Deploy to Azure Button, please click on the button below:
 
 | Reference implementation   | Description | Deploy to Azure |
 |:---------------------------|:------------|:----------------|
-| Data Management & Analytics Scenario | Deploys a Data Management Landing Zone and one or multiple Data Landing Zones all at once. Provides less options than the the individual Data Management Landing Zone and Data Landing Zone deployment options. Helps you to quickly get started and make yourself familiar with the reference design. For more advanced scenarios, please deploy the artifacts individually. |[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2FdataManagementAnalytics.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fportal.dataManagementAnalytics.json) |
+| Cloud-scale Analytics Scenario | Deploys a Data Management Landing Zone and one or multiple Data Landing Zones all at once. Provides less options than the the individual Data Management Landing Zone and Data Landing Zone deployment options. Helps you to quickly get started and make yourself familiar with the reference design. For more advanced scenarios, please deploy the artifacts individually. |[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2FdataManagementAnalytics.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fportal.dataManagementAnalytics.json) |
 | Data Landing Zone          | Deploys a single Data Landing Zone to a subscription. Please deploy a [Data Management Landing Zone](https://github.com/Azure/data-management-zone) first. |[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-landing-zone%2Fmain%2Finfra%2Fmain.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-landing-zone%2Fmain%2Fdocs%2Freference%2Fportal.dataLandingZone.json) |
 
 Alternatively, click on `Next` to follow the steps required to successfully deploy the Data Landing Zone through GitHub Actions or Azure DevOps.
