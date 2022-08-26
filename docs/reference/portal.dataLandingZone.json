@@ -662,13 +662,13 @@
                                     "type": "Microsoft.Common.TextBox",
                                     "visible": true,
                                     "defaultValue": "10.1.1.0/24",
-                                    "toolTip": "Specify a CIDR range for the public Subnet of the shared Databricks Integration Workspace within the range [24,28].",
+                                    "toolTip": "Specify a CIDR range for the public Subnet of the shared Databricks Integration Workspace within the range [24,26].",
                                     "constraints": {
                                         "required": true,
                                         "validations": [
                                             {
-                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:\/(2[4-8]))$",
-                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,28]."
+                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:\/(2[4-6]))$",
+                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,26]."
                                             },
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 8), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 1)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksIntegrationPublicSubnetAddressPrefix, '/')), '.'), 1))), true)]",
@@ -695,13 +695,13 @@
                                     "type": "Microsoft.Common.TextBox",
                                     "visible": true,
                                     "defaultValue": "10.1.2.0/24",
-                                    "toolTip": "Specify a CIDR range for the private Subnet of the shared Databricks Integration Workspace within the range [24,28].",
+                                    "toolTip": "Specify a CIDR range for the private Subnet of the shared Databricks Integration Workspace within the range [24,26].",
                                     "constraints": {
                                         "required": true,
                                         "validations": [
                                             {
-                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:\/(2[4-8]))$",
-                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,28]."
+                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:\/(2[4-6]))$",
+                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,26]."
                                             },
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 8), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 1)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksIntegrationPrivateSubnetAddressPrefix, '/')), '.'), 1))), true)]",
@@ -728,13 +728,13 @@
                                     "type": "Microsoft.Common.TextBox",
                                     "visible": true,
                                     "defaultValue": "10.1.3.0/24",
-                                    "toolTip": "Specify a CIDR range for the public Subnet of the shared Databricks Product Workspace within the range [24,28].",
+                                    "toolTip": "Specify a CIDR range for the public Subnet of the shared Databricks Product Workspace within the range [24,26].",
                                     "constraints": {
                                         "required": true,
                                         "validations": [
                                             {
-                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:\/(2[4-8]))$",
-                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,28]."
+                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:\/(2[4-6]))$",
+                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,26]."
                                             },
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 8), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 1)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksProductPublicSubnetAddressPrefix, '/')), '.'), 1))), true)]",
@@ -761,13 +761,13 @@
                                     "type": "Microsoft.Common.TextBox",
                                     "visible": true,
                                     "defaultValue": "10.1.4.0/24",
-                                    "toolTip": "Specify a CIDR range for the private Subnet of the shared Databricks Product Workspace within the range [24,28].",
+                                    "toolTip": "Specify a CIDR range for the private Subnet of the shared Databricks Product Workspace within the range [24,26].",
                                     "constraints": {
                                         "required": true,
                                         "validations": [
                                             {
-                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:\/(2[4-8]))$",
-                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,28]."
+                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:\/(2[4-6]))$",
+                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,26]."
                                             },
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 8), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 1)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.databricksProductPrivateSubnetAddressPrefix, '/')), '.'), 1))), true)]",
