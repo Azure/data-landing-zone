@@ -131,6 +131,15 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2021-07-01' = {
         adminPassword: administratorPassword
         computerNamePrefix: take(vmssName, 9)
         customData: loadFileAsBase64('../../../code/installSHIRGateway.ps1')
+        windowsConfiguration: {
+          enableAutomaticUpdates: true
+          patchSettings: {
+            assessmentMode: 'AutomaticByPlatform'
+            enableHotpatching: false
+            patchMode: 'AutomaticByPlatform'
+          }
+          provisionVMAgent: true
+        }
       }
       networkProfile: {
         networkInterfaceConfigurations: [
