@@ -65,7 +65,7 @@ var storageZrsRegions = [
 ]
 
 // Resources
-resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+resource storage 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: storageNameCleaned
   location: location
   tags: tags
@@ -79,7 +79,9 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   properties: {
     accessTier: 'Hot'
     allowBlobPublicAccess: false
+    allowCrossTenantReplication: false
     allowSharedKeyAccess: false
+    defaultToOAuthAuthentication: true
     encryption: {
       keySource: 'Microsoft.Storage'
       requireInfrastructureEncryption: false
@@ -102,6 +104,9 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
         }
       }
     }
+    immutableStorageWithVersioning: {
+      enabled: false
+    }
     isHnsEnabled: true
     isNfsV3Enabled: false
     largeFileSharesState: 'Disabled'
@@ -113,6 +118,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
       virtualNetworkRules: []
       resourceAccessRules: resourceAccessRules
     }
+    publicNetworkAccess: 'Disabled'
     // routingPreference: {  // Not supported for thsi account
     //   routingChoice: 'MicrosoftRouting'
     //   publishInternetEndpoints: false
@@ -122,7 +128,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   }
 }
 
-resource storageManagementPolicies 'Microsoft.Storage/storageAccounts/managementPolicies@2021-02-01' = {
+resource storageManagementPolicies 'Microsoft.Storage/storageAccounts/managementPolicies@2021-06-01' = {
   parent: storage
   name: 'default'
   properties: {
@@ -185,7 +191,7 @@ resource storageManagementPolicies 'Microsoft.Storage/storageAccounts/management
   }
 }
 
-resource storageBlobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-02-01' = {
+resource storageBlobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-06-01' = {
   parent: storage
   name: 'default'
   properties: {
@@ -202,10 +208,10 @@ resource storageBlobServices 'Microsoft.Storage/storageAccounts/blobServices@202
     //   retentionInDays: 7
     // }
     // defaultServiceVersion: ''
-    // deleteRetentionPolicy: {
-    //   enabled: true
-    //   days: 7
-    // }
+    deleteRetentionPolicy: {
+      enabled: true
+      days: 7
+    }
     // isVersioningEnabled: true
     // lastAccessTimeTrackingPolicy: {
     //   name: 'AccessTimeTracking'
@@ -222,7 +228,7 @@ resource storageBlobServices 'Microsoft.Storage/storageAccounts/blobServices@202
   }
 }
 
-resource storageFileSystems 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-02-01' = [for fileSystemName in fileSystemNames: {
+resource storageFileSystems 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-06-01' = [for fileSystemName in fileSystemNames: {
   parent: storageBlobServices
   name: fileSystemName
   properties: {
