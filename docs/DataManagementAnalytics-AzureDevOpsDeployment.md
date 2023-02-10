@@ -16,7 +16,7 @@ In the previous step we have generated a JSON output similar to the following, w
 
 First, you need to create an Azure Resource Manager service connection. To do so, execute the following steps:
 
-1. First, you need to create an Azure DevOps Project. Instructions can be found [here](https://docs.microsoft.com/azure/devops/organizations/projects/create-project?view=azure-devops&tabs=preview-page).
+1. First, you need to create an Azure DevOps Project. Instructions can be found [here](https://learn.microsoft.com/azure/devops/organizations/projects/create-project?view=azure-devops&tabs=preview-page).
 1. In Azure DevOps, open the **Project settings**.
 1. Now, select the **Service connections** page from the project settings page.
 1. Choose **New service connection** and select **Azure Resource Manager**.
@@ -33,7 +33,7 @@ First, you need to create an Azure Resource Manager service connection. To do so
 
     ![Connection DevOps](/docs/images/ConnectionDevOps.png)
 
-More information can be found [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal).
+More information can be found [here](https://learn.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal).
 
 ## Update Parameters
 
@@ -42,7 +42,7 @@ In order to deploy the Infrastructure as Code (IaC) templates to the desired Azu
 - `.ado/workflows/dataLandingZoneDeployment.yml` and
 - `infra/params.dev.json`.
 
-Update these files in a seperate branch and then merge via Pull Request to trigger the initial deployment.
+Update these files in a separate branch and then merge via Pull Request to trigger the initial deployment.
 
 ### Configure `dataLandingZoneDeployment.yml`
 
@@ -61,7 +61,7 @@ The following table explains each of the parameters:
 |:--------------------------------------------|:-------------|:-------------|
 | **AZURE_SUBSCRIPTION_ID**                   | Specifies the subscription ID of the Data Landing Zone where all the resources will be deployed | <div style="width: 36ch">`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`</div> |
 | **AZURE_LOCATION**                          | Specifies the region where you want the resources to be deployed. Please check [Supported Regions](/docs/DataManagementAnalytics-Prerequisites.md#supported-regions). | `northeurope` |
-| **AZURE_RESOURCE_MANAGER _CONNECTION_NAME** | Specifies the resource manager connection name in Azure DevOps. More details on how to create the resource manager service connection in Azure DevOps was described in the previous paragraph or [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal). | `my-connection-name` |
+| **AZURE_RESOURCE_MANAGER _CONNECTION_NAME** | Specifies the resource manager connection name in Azure DevOps. More details on how to create the resource manager service connection in Azure DevOps was described in the previous paragraph or [here](https://learn.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal). | `my-connection-name` |
 
 ### Configure `params.dev.json`
 
@@ -150,7 +150,7 @@ After following the instructions and updating the parameters and variables in yo
 
 **Congratulations!** You have successfully executed all steps to deploy the template into your environment through Azure DevOps.
 
-Now, you can navigate to the pipeline that you have created as part of step 5 and monitor it as each service is deployed. If you run into any issues, please check the [Known Issues](/docs/DataManagementAnalytics-KnownIssues.md) first and open an [issue](https://github.com/Azure/data-landing-zone/issues) if you come accross a potential bug in the repository.
+Now, you can navigate to the pipeline that you have created as part of step 5 and monitor it as each service is deployed. If you run into any issues, please check the [Known Issues](/docs/DataManagementAnalytics-KnownIssues.md) first and open an [issue](https://github.com/Azure/data-landing-zone/issues) if you come across a potential bug in the repository.
 
 >[Previous](/docs/DataManagementAnalytics-ServicePrincipal.md)
 >[Next](/docs/DataManagementAnalytics-KnownIssues.md)
