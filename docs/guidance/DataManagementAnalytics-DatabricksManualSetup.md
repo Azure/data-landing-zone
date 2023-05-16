@@ -23,7 +23,7 @@ In order to simplify the manual setup and configuration of Databricks, we are pr
 
 The following prerequisites are required before executing the Powershell script:
 
-1. First, you have to create an AAD application as described in [this subsection](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/aad/app-aad-token#configure-an-app-in-azure-portal). Please take note of the **Application (client) ID** and the **Directory (tenant) ID** of the AAD application, after executing the steps successfully.
+1. First, you have to create an AAD application as described in [this subsection](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/aad/app-aad-token#configure-an-app-in-azure-portal). Please take note of the **Application (client) ID** and the **Directory (tenant) ID** of the AAD application, after executing the steps successfully.
 1. You need to have **Owner** or **Contributor** access rights to the Databricks workspace.
 
 ## Execution of Powershell script

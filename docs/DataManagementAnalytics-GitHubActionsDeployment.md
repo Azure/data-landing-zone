@@ -12,9 +12,9 @@ In the previous step we have generated a JSON output similar to the following, w
 }
 ```
 
-## Adding Secrets to GitHub respository
+## Adding Secrets to GitHub repository
 
-If you want to use GitHub Actions for deploying the resources, add the JSON output as a [repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) with the name `AZURE_CREDENTIALS` in your GitHub repository:
+If you want to use GitHub Actions for deploying the resources, add the JSON output as a [repository secret](https://learn.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) with the name `AZURE_CREDENTIALS` in your GitHub repository:
 
 ![GitHub Secrets](/docs/images/AzureCredentialsGH.png)
 
@@ -35,7 +35,7 @@ In order to deploy the Infrastructure as Code (IaC) templates to the desired Azu
 - `.github/workflows/dataLandingZoneDeployment.yml` and
 - `infra/params.dev.json`.
 
-Update these files in a seperate branch and then merge via Pull Request to trigger the initial deployment.
+Update these files in a separate branch and then merge via Pull Request to trigger the initial deployment.
 
 ### Configure `dataLandingZoneDeployment.yml`
 
@@ -104,7 +104,7 @@ After following the instructions and updating the parameters and variables in yo
 
 **Congratulations!** You have successfully executed all steps to deploy the template into your environment through GitHub Actions.
 
-Now, you can navigate to the **Actions** tab of the main page of the repository, where you will see a workflow with the name `Data Landing Zone Deployment` running. Click on it to see how it deploys the environment. If you run into any issues, please check the [Known Issues](/docs/DataManagementAnalytics-KnownIssues.md) first and open an [issue](https://github.com/Azure/data-landing-zone/issues) if you come accross a potential bug in the repository.
+Now, you can navigate to the **Actions** tab of the main page of the repository, where you will see a workflow with the name `Data Landing Zone Deployment` running. Click on it to see how it deploys the environment. If you run into any issues, please check the [Known Issues](/docs/DataManagementAnalytics-KnownIssues.md) first and open an [issue](https://github.com/Azure/data-landing-zone/issues) if you come across a potential bug in the repository.
 
 >[Previous](/docs/DataManagementAnalytics-ServicePrincipal.md)
 >[Next](/docs/DataManagementAnalytics-KnownIssues.md)

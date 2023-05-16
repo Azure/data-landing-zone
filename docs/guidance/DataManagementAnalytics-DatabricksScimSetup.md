@@ -7,10 +7,10 @@ Azure Databricks supports SCIM, or System for Cross-domain Identity Management, 
 - Databricks Workspace
 - Global Administrator rights for Azure AD
 
-## Setup Databricks Scim Enterprise Application
+## Setup Databricks SCIM Enterprise Application
 
-1. Generate a Databricks Personal Access Token. A detailed step by step guidance can be found [here](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/authentication#--generate-a-personal-access-token).
-2. Create an AAD Application/Service Principal. A detailed step by step guidance can be found [here](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/aad/app-aad-token#configure-an-app-in-azure-portal). Instead of granting it the `AzureDatabricks` API permission, grant it the following API permissions:
+1. Generate a Databricks Personal Access Token. A detailed step by step guidance can be found [here](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/authentication#--generate-a-personal-access-token).
+2. Create an AAD Application/Service Principal. A detailed step by step guidance can be found [here](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/aad/app-aad-token#configure-an-app-in-azure-portal). Instead of granting it the `AzureDatabricks` API permission, grant it the following API permissions:
     - Microsoft Graph > Application permissions > Directory.Readwrite.All
     - Microsoft Graph > Application permissions > Application.Readwrite.Ownedby
     - Microsoft Graph > Application permissions > Application.ReadWrite.All
@@ -34,4 +34,4 @@ Azure Databricks supports SCIM, or System for Cross-domain Identity Management, 
     -GroupIdList @('{objectId1}', '{objectId2}', ...)
 ```
 
-This script will automatically setup the AAD Enterprise Application for the SCIM synch. If you want to synch additional groups to your Databricks workspace, then go to the Enterprise Application with the name `{databricksWorkspaceName}-scim` and follow [these steps](https://docs.microsoft.com/en-us/azure/databricks/administration-guide/users-groups/scim/aad#assign-users-and-groups-to-the-application).
+This script will automatically setup the AAD Enterprise Application for the SCIM synch. If you want to synch additional groups to your Databricks workspace, then go to the Enterprise Application with the name `{databricksWorkspaceName}-scim` and follow [these steps](https://learn.microsoft.com/en-us/azure/databricks/administration-guide/users-groups/scim/aad#assign-users-and-groups-to-the-application).
