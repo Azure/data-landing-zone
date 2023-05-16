@@ -4,7 +4,7 @@ This document provides guidance for Azure Databricks and some of the considerati
 
 ## Enforcing Tags for Cost Management
 
-Cluster tags allow to easily monitor the cost of cloud resources used by various groups in an organization. More information regarding tags can be found [here](https://docs.microsoft.com/en-us/azure/databricks/administration-guide/account-settings/usage-detail-tags-azure#tag-propagation)
+Cluster tags allow to easily monitor the cost of cloud resources used by various groups in an organization. More information regarding tags can be found [here](https://learn.microsoft.com/en-us/azure/databricks/administration-guide/account-settings/usage-detail-tags-azure#tag-propagation)
 
 > **Note:** By default, Azure Databricks applies the following tags to each cluster: **Vendor**, **Creator**, **ClusterName** and **ClusterId**
 
@@ -34,8 +34,8 @@ As a result, when the cluster is created, the VMs provisioned in the Managed Res
 > *These are just notes on how the external Hive metastore is configured for Azure Databricks.
 > This should be incorporated more formally into the documentation.*
 
-- Hive metastore settings are changed by a global init script. This script is managed by the new [Global Init Scripts](https://docs.databricks.com/clusters/init-scripts.html#global-init-scripts) API. As of January, 2021, the new global init scripts API is in public preview. However, Microsoft's official position is that public preview features in Azure Databricks are ready for production environments and are supported by the Support Team. For more details, see:
-[Azure Databricks Preview Releases](https://docs.microsoft.com/en-us/azure/databricks/release-notes/release-types)
+- Hive metastore settings are changed by a global init script. This script is managed by the new [Global Init Scripts](https://learn.databricks.com/clusters/init-scripts.html#global-init-scripts) API. As of January, 2021, the new global init scripts API is in public preview. However, Microsoft's official position is that public preview features in Azure Databricks are ready for production environments and are supported by the Support Team. For more details, see:
+[Azure Databricks Preview Releases](https://learn.microsoft.com/en-us/azure/databricks/release-notes/release-types)
 
 - This solution uses [Azure Database for MySQL](https://azure.microsoft.com/en-us/services/mysql/) to store the Hive metastore. This database was chosen because it is more cost effective and because MySQL is highly compatible with Hive.
 
@@ -44,4 +44,3 @@ As a result, when the cluster is created, the VMs provisioned in the Managed Res
 > *These are just notes on about the Spark Monitoring application and how the JAR files are loaded.*
 
 - Instead of copying pre-built binaries for the Spark Monitoring solution, the deployment process includes a step that will download the source code from GitHub and build it. This creates the JAR files that are then copied to the DBFS. This is handled in a notebook that is executed whenever a new Databricks workspace is provisioned.
-

@@ -1,31 +1,31 @@
 # Data Landing Zone - Prerequisites
 
-This template repsitory contains all templates to deploy the Data Landing Zone of the Cloud-scale Analytics architecture. The Data Landing Zone is a logical construct and a unit of scale in the Cloud-scale Analytics architecture that enables data retention and execution of data workloads for generating insights and value with data.
+This template repository contains all templates to deploy the Data Landing Zone of the Cloud-scale Analytics architecture. The Data Landing Zone is a logical construct and a unit of scale in the Cloud-scale Analytics architecture that enables data retention and execution of data workloads for generating insights and value with data.
 
 ## What will be deployed?
 
-By navigating through the deployment steps, you will deploy the folowing setup in a subscription:
+By navigating through the deployment steps, you will deploy the following setup in a subscription:
 
-> **Note:** Before deploying the resources, we recommend to check registration status of the required resource providers in your subscription. For more information, see [Resource providers for Azure services](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
+> **Note:** Before deploying the resources, we recommend to check registration status of the required resource providers in your subscription. For more information, see [Resource providers for Azure services](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
 
 ![Data Landing Zone](/docs/images/DataLandingZone.png)
 
 The deployment and code artifacts include the following services:
 
-- [Virtual Network](https://docs.microsoft.com/azure/virtual-network/virtual-networks-overview)
-- [Network Security Groups](https://docs.microsoft.com/azure/virtual-network/network-security-groups-overview)
-- [Route Tables](https://docs.microsoft.com/azure/virtual-network/virtual-networks-udr-overview)
-- [Key Vault](https://docs.microsoft.com/azure/key-vault/general)
-- [Storage Account](https://docs.microsoft.com/azure/storage/common/storage-account-overview)
-- [Data Lake Storage Gen2](https://docs.microsoft.com/azure/storage/blobs/data-lake-storage-introduction)
-- [Data Factory](https://docs.microsoft.com/azure/data-factory/)
-- [Self-Hosted Integration Runtime](https://docs.microsoft.com/azure/data-factory/create-self-hosted-integration-runtime)
-- [Log Analytics](https://docs.microsoft.com/azure/azure-monitor/learn/quick-create-workspace)
-- [SQL Server](https://docs.microsoft.com/sql/sql-server/?view=sql-server-ver15)
-- [SQL Database](https://docs.microsoft.com/azure/azure-sql/database/)
-- [Synapse Workspace](https://docs.microsoft.com/azure/synapse-analytics/)
-- [Databricks](https://docs.microsoft.com/azure/databricks/)
-- [Event Hub](https://docs.microsoft.com/azure/event-hubs/)
+- [Virtual Network](https://learn.microsoft.com/azure/virtual-network/virtual-networks-overview)
+- [Network Security Groups](https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview)
+- [Route Tables](https://learn.microsoft.com/azure/virtual-network/virtual-networks-udr-overview)
+- [Key Vault](https://learn.microsoft.com/azure/key-vault/general)
+- [Storage Account](https://learn.microsoft.com/azure/storage/common/storage-account-overview)
+- [Data Lake Storage Gen2](https://learn.microsoft.com/azure/storage/blobs/data-lake-storage-introduction)
+- [Data Factory](https://learn.microsoft.com/azure/data-factory/)
+- [Self-Hosted Integration Runtime](https://learn.microsoft.com/azure/data-factory/create-self-hosted-integration-runtime)
+- [Log Analytics](https://learn.microsoft.com/azure/azure-monitor/learn/quick-create-workspace)
+- [SQL Server](https://learn.microsoft.com/sql/sql-server/?view=sql-server-ver15)
+- [SQL Database](https://learn.microsoft.com/azure/azure-sql/database/)
+- [Synapse Workspace](https://learn.microsoft.com/azure/synapse-analytics/)
+- [Databricks](https://learn.microsoft.com/azure/databricks/)
+- [Event Hub](https://learn.microsoft.com/azure/event-hubs/)
 
 ## Code Structure
 
@@ -77,7 +77,7 @@ Before we start with the deployment, please make sure that you have the followin
 
 - A **Data Management Landing Zone** deployed. For more information, check the [Data Management Landing Zone](https://github.com/Azure/data-management-zone) repository.
 - An Azure subscription. If you don't have an Azure subscription, [create your Azure free account today](https://azure.microsoft.com/free/).
-- [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#owner) access to the subscription to be able to create a service principal and role assignments for it.
+- [User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner) access to the subscription to be able to create a service principal and role assignments for it.
 - For the deployment, please choose one of the **Supported Regions**.
 
 ## Deployment
