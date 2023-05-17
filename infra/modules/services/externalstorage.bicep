@@ -19,7 +19,7 @@ param dataLandingZoneSubscriptionIds array = []
 // Variables
 var storageNameCleaned = replace(storageName, '-', '')
 var storageExternalPrivateEndpointNameBlob = '${storageExternal.name}-blob-private-endpoint'
-var synapseResourceAccessrules = [for subscriptionId in union(dataLandingZoneSubscriptionIds, array(subscription().subscriptionId)): {
+var synapseResourceAccessrules = [for subscriptionId in union(filter(dataLandingZoneSubscriptionIds, dataLandingZoneSubscriptionId => !empty(dataLandingZoneSubscriptionId)), array(subscription().subscriptionId)): {
   tenantId: subscription().tenantId
   resourceId: '/subscriptions/${subscriptionId}/resourceGroups/*/providers/Microsoft.Synapse/workspaces/*'
 }]
