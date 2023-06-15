@@ -36,7 +36,7 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      
+
       # Generate Password
       - name: Generate Password
         id: generate_password_001
@@ -52,28 +52,26 @@ jobs:
           scope: subscription
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/main.json
+          template: ${{ github.workspace }}/infra/main.bicep
           parameters: ${{ github.workspace }}/infra/params.dev.json administratorPassword="${{ steps.generate_password_001.outputs.password }}"
           deploymentMode: Validate
+          deploymentName: "DataLandingZone-${{ github.sha }}"
           failOnStdErr: false
 
       # Deploy Data Landing Zone - what-if
       - name: Deploy Data Landing Zone - what-if
         id: data_landing_zone_whatif
-        uses: azure/CLI@v1
+        uses: azure/arm-deploy@v1
         with:
-          azcliversion: "agentazcliversion"
-          inlineScript: |
-            az account set \
-              --subscription ${{ env.AZURE_SUBSCRIPTION_ID }}
-            
-            az deployment sub what-if \
-              --location ${{ env.AZURE_LOCATION }} \
-              --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
-              --exclude-change-types Ignore NoChange Unsupported \
-              --template-file "${GITHUB_WORKSPACE}/infra/main.json" \
-              --parameters "${GITHUB_WORKSPACE}/infra/params.dev.json" administratorPassword="${{ steps.generate_password_001.outputs.password }}" \
-              --result-format "FullResourcePayloads"
+          scope: subscription
+          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          region: ${{ env.AZURE_LOCATION }}
+          template: ${{ github.workspace }}/infra/main.bicep
+          parameters: ${{ github.workspace }}/infra/params.dev.json administratorPassword="${{ steps.generate_password_001.outputs.password }}"
+          deploymentMode: Incremental
+          deploymentName: "DataLandingZone-${{ github.sha }}"
+          failOnStdErr: false
+          additionalArguments: "--what-if --what-if-exclude-change-types Ignore NoChange Unsupported --what-if-result-format FullResourcePayloads"
 
       # Log out from Azure
       - name: Log out from Azure
@@ -120,9 +118,10 @@ jobs:
           scope: subscription
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/main.json
+          template: ${{ github.workspace }}/infra/main.bicep
           parameters: ${{ github.workspace }}/infra/params.dev.json administratorPassword="${{ steps.generate_password_001.outputs.password }}"
           deploymentMode: Incremental
+          deploymentName: "DataLandingZone-${{ github.sha }}"
           failOnStdErr: false
 
       # Restart MySql Server 001
